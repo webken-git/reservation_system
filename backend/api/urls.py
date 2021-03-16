@@ -4,7 +4,7 @@ from api import views
 app_name = 'api'
 
 urlpatterns = [
-    path('', views.root, name='root'),
+    # path('', views.root, name='root'),
     # path('search/', views.SearchResults.as_view(), name='results'),
     # path('general/', views.GeneralGarbageList.as_view(), name='discharge_general'),
     # path('kitchen/', views.KitchenGarbageList.as_view(), name='discharge_kitchen'),
