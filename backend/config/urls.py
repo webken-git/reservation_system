@@ -15,13 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 
-api_patterns = [
-    path('accounts/', include('accounts.urls')),
+api_uris = [
+    path(('users/'), include('users.urls')),
     path('', include('api.urls')),
+    path('password/reset/', PasswordResetView.as_view()),
+    path('password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+]
+
+doc_uris = [
+    path("api/download/", SpectacularAPIView.as_view(), name='schema'),
+    path("api/", SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(api_patterns)),
+    path('api/', include(api_uris)),
+    path('docs/', include(doc_uris)),
 ]

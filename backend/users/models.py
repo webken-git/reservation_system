@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractUser, UserManager
-from django.utils import timezone
 
 
 class CustomUserManager(UserManager):
@@ -66,7 +65,6 @@ class User(AbstractUser):
           'explicitly assigning them.'
       ),
   )
-  # date_joined = models.DateTimeField('date joined', default=timezone.now)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
