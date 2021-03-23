@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Local
     'api',
     'users',
+    'business_diary',
     # 3rd party
     'rest_framework',
     'rest_framework.authtoken',
@@ -142,6 +143,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [

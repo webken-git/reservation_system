@@ -31,6 +31,7 @@ doc_uris = [
 ]
 
 urlpatterns = [
+    path('admin/business_diary/', include('business_diary.urls')),
     path('admin/', admin.site.urls),
     path('api/', include(api_uris)),
     path('docs/', include(doc_uris)),

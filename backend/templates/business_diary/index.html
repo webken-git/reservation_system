@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "business_diary/index.css" %}">
+{% endblock %}
+
+{% block content %}
+<div id="business_diary">
+    <div class="bd_sidebar">
+        {% for file in docs %}
+            {% include "business_diary/sidebar_contents.html" with directory=file%}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block nav_sidebar %}
+    <div>a</div>
+{% endblock %}
