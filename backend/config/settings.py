@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Local
     'api',
     'users',
+    'business_diary',
     # 3rd party
     'rest_framework',
     'rest_framework.authtoken',
@@ -143,6 +144,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [

@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
-from users import views
+
 
 api_uris = [
     path(('users/'), include('users.urls')),
@@ -31,10 +31,10 @@ api_uris = [
 doc_uris = [
     path("download/api/", SpectacularAPIView.as_view(), name='schema'),
     path("api/", SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('', views.pdf, name='file'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 urlpatterns = [
+    path('admin/business_diary/', include('business_diary.urls')),
     path('admin/', admin.site.urls),
     path('api/', include(api_uris)),
     path('docs/', include(doc_uris)),

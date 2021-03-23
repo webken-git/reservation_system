@@ -5,14 +5,14 @@ from dj_rest_auth.views import LoginView, LogoutView
 from users import views
 
 # app_name = 'users'
-
 urlpatterns = [
+    path('', views.UserList.as_view()),
+    path('<int:pk>/', views.UserDetail.as_view()),
     path('account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
     #     path('change-email/', views.UserEmailUpdate.as_view(), name='change_email'),
-    path('<int:pk>/', views.UserDetail.as_view()),
 
     path('verify-email/',
          VerifyEmailView.as_view(), name='rest_verify_email'),
