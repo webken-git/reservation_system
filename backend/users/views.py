@@ -24,12 +24,12 @@ class UserEmailUpdate(UpdateAPIView):
   lookup_field = 'email'
 
 
-def pdf(request):
-  import glob
-  a = glob.glob("./static/docs/*/*.pdf", recursive=True)
-  b = glob.glob("./static/docs/*/*/*.pdf", recursive=True)
-  a.extend(b)
+# def pdf(request):
+#   import glob
+#   a = glob.glob("./static/docs/*/*.pdf", recursive=True)
+#   b = glob.glob("./static/docs/*/*/*.pdf", recursive=True)
+#   a.extend(b)
 
-  context = {'lists': a}
+#   context = {'lists': a}
 
-  return render(request, 'docs/document_list.html', context)
+#   return render(request, 'docs/document_list.html', context)
