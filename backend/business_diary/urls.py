@@ -4,11 +4,9 @@ from os import listdir
 from django.contrib.admin.sites import AdminSite
 
 app_name = 'business_diary'
-docs = listdir(path='../docs')
 
 admin_site = AdminSite()
 
 urlpatterns = [
     path('', admin_site.admin_view(views.index), name='index'),
-    path('<str:dir>', admin_site.admin_view(views.directory), name='directory')
 ]

@@ -3,15 +3,14 @@
 
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
-<link rel="stylesheet" type="text/css" href="{% static "business_diary/index.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "business_diary/css/index.css" %}">
+<script type="text/javascript" src="{% static "business_diary/js/index.js" %}"></script>
 {% endblock %}
 
 {% block content %}
 <div id="business_diary">
     <div class="bd_sidebar">
-        {% for file in docs %}
-            {% include "business_diary/sidebar_contents.html" with directory=file%}
-        {% endfor %}
+        {% include "business_diary/sidebar_contents.html" with directory=docs path="/static/docs/" hierarchy=1 %}
     </div>
 </div>
 {% endblock %}
