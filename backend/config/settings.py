@@ -143,6 +143,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
@@ -195,4 +196,4 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
-LOGIN_URL = 'https://ac984dbd51b8.ngrok.io/api/users/login'
+LOGIN_URL = 'http://127.0.0.1/api/users/login'
