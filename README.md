@@ -32,7 +32,7 @@ XAMPPを利用する前提で設定方法を記載します。
 ```shell
 1. XAMPPのコントロールパネルでShellを起動
 2. mysql -u root
-3. createdatabase reservation_system;
+3. create database reservation_system default character set utf8;
 4. cmdに戻る
 5. cd reservation_system\backend
 6. Scripts\activate

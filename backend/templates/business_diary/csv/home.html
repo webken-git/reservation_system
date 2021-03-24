@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">ホーム</a>
+    &rsaquo; <a href="{% url 'business_diary:index' %}">業務日誌</a>
+    &rsaquo; {{ title }}
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="csv_home">
+    <h3>アップロードするよ</h3>
+    <form action="{% url 'business_diary:csv_upload' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn" name="button">アップロード</button>
+    </form>
+</div>
+{% endblock %}
