@@ -21,7 +21,7 @@ Python 3.8.3
 6. Scripts\activate
 7. pip install -r requirements.txt
 8. cd config & python generate_secretkey_setting.py > local.py
-. cd ..\frontend & npm install
+9. cd ..\frontend & npm install
 ```
 
 ### use MySQL
