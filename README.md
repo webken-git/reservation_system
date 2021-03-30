@@ -46,15 +46,3 @@ DBをリセットする際のコマンドです。
 1. cd reservation_system\backend
 2. sh reset_mysql.sh
 ```
-
-## 初期データの追加
-
-## user model
-
-email:```websitecreatewak@gmail.com ```
-
-pass: ```hogehoge```
-
-```shell
-python manage.py loaddata .\users\fixtures\data.json
-```
