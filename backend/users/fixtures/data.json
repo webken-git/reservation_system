@@ -1,0 +1,28 @@
+[
+    {
+        "model": "users.user",
+        "id": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$LJE4cCrhxH4d$r+9KMPTdvKVL6vzw3sRnCKmnsPvZUnINia80VlgWgGo=",
+            "last_login": "2021-03-25T00:49:55.993179+09:00",
+            "email": "websitecreatewak@gmail.com",
+            "is_staff": true,
+            "is_active": true,
+            "is_superuser": true,
+            "created_at": "2021-03-25T00:48:56.125829+09:00",
+            "updated_at": "2021-03-25T00:48:56.125829+09:00",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "table": "account_emailaddress",
+        "id": 1,
+        "fields": {
+            "email": "websitecreatewak@gmail.com",
+            "verified": 1,
+            "primary": 1,
+            "user_id": 1
+        }
+    }
+]
