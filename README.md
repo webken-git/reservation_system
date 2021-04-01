@@ -2,9 +2,11 @@
 
 稚内市のスポーツ施設向けの予約システムです。
 
-## 環境
+## 開発環境
 
 Python 3.8.3
+
+Django 3.1.7
 
 ## usage
 
@@ -16,12 +18,7 @@ Python 3.8.3
 1. cd reservation_system
 2. git branch branchname (ex: kitaura, kinoshita)
 3. git checkout branchname
-4. git merge --allow-unrelated-histories origin/kitaura
-5. cd backend & python -m venv .
-6. Scripts\activate
-7. pip install -r requirements.txt
-8. cd config & python generate_secretkey_setting.py > local.py
-11. cd ..\frontend & npm install
+4. sh setting.sh
 ```
 
 ### use MySQL
@@ -31,7 +28,7 @@ XAMPPを利用する前提で設定方法を記載します。
 ```shell
 1. XAMPPのコントロールパネルでMySQLを起動
 2. cmdに戻る
-3. cd reservation_system\backend
+3. cd backend
 4. sh reset_mysql.sh
 5. python manage.py runserver
 ```
@@ -43,7 +40,7 @@ DBをリセットする際のコマンドです。
 既にbackendディレクトリに移動している場合1. は飛ばして大丈夫です。
 
 ```shell
-1. cd reservation_system\backend
+1. cd backend
 2. sh reset_mysql.sh
 ```
 
