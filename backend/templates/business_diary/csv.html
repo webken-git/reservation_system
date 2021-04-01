@@ -9,9 +9,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="csv_home">
+<div class="csv">
     <h3>アップロードするよ</h3>
-    <form action="{% url 'business_diary:csv_upload' %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'business_diary:csv' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form }}
         <button type="submit" class="btn" name="button">アップロード</button>

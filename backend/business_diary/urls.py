@@ -8,6 +8,5 @@ admin_site = AdminSite()
 
 urlpatterns = [
     path('', admin_site.admin_view(views.index), name='index'),
-    path('csv/', admin_site.admin_view(views.csv_home), name='csv_home'),
-    path('csv/upload/', admin_site.admin_view(views.csv_upload), name='csv_upload'),
+    path('csv/', admin_site.admin_view(views.csv_view), name='csv'),
 ]
