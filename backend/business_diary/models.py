@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils import timezone
-
+import uuid
 # Create your models here.
 
 
 class BusinessDiary(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   entry_name = models.CharField('記入者', max_length=10)
   content = models.CharField('業務内容', max_length=50)
   detail = models.TextField('詳細', null=True, blank=True)
