@@ -44,7 +44,7 @@ DBをリセットする際のコマンドです。
 2. sh reset_mysql.sh
 ```
 
-## 初期データの追加
+<!-- ## 初期データの追加
 
 ## user model
 
@@ -54,4 +54,4 @@ pass: ```hogehoge```
 
 ```shell
 python manage.py loaddata .\users\fixtures\data.json
-```
+``` -->

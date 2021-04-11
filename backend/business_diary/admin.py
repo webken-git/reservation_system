@@ -1,5 +1,5 @@
 from django.contrib import admin
-from business_diary.models import BusinessDiary
+from business_diary.models import BusinessDiary, Content
 
 # Register your models here.
 
@@ -10,7 +10,25 @@ from business_diary.models import BusinessDiary
 
 
 # admin.site.register(BusinessDiary, BusinessDiaryAdmin)
-@admin.register(BusinessDiary)
+
+# @admin.register(Content)
+class ContentInline(admin.StackedInline):
+  model = Content
+  extra = 1
+
+
+class ContentAdmin(admin.ModelAdmin):
+  list_display = ('id', 'content', 'detail', 'business_diary')
+  list_display_links = ('id', 'content')
+
+# @admin.register(BusinessDiary)
+
+
 class BusinessDiaryAdmin(admin.ModelAdmin):
-  list_display = ('entry_name', 'content', 'detail', 'start', 'end', 'other', 'created_at', 'updated_at')
-  list_display_links = ('entry_name', 'content')
+  list_display = ('id', 'entry_name', 'start', 'end', 'other', 'created_at', 'updated_at')
+  list_display_links = ('id', 'entry_name')
+  inlines = [ContentInline]
+
+
+admin.site.register(BusinessDiary, BusinessDiaryAdmin)
+admin.site.register(Content, ContentAdmin)
