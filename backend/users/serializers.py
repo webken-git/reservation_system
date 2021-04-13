@@ -31,6 +31,6 @@ class PasswordResetSerializer(serializers.Serializer):
         'use_https': request.is_secure(),
         'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
         'request': request,
-        'html_email_template_name': 'password_reset_email.html',
+        'html_email_template_name': 'registration/password_reset_email.html',
     }
     self.reset_form.save(**opts)
