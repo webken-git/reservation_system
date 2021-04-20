@@ -51,7 +51,7 @@ def index(request):
 
     return dir_dict
 
-  docs = find_all_files("./static/docs")
+  docs = find_all_files("/home/webhok/www/reservation_system/backend/static/docs")
   admin_site = AdminSite()
   context = {
       **admin_site.each_context(request),
@@ -112,7 +112,7 @@ def change_csv_when_creating_business_diary(sender, instance, created, **kwargs)
   business_diaryが追加されたとき、CSVにも追加する
   '''
   if created:
-    output_csv = './static/business_diary/csv/business_diary.csv'
+    output_csv = '/home/webhok/www/reservation_system/backend/static/business_diary/csv/business_diary.csv'
     with open(output_csv, 'a', encoding='utf-8', newline='') as csv_file:
       writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
 
@@ -134,7 +134,7 @@ def overwrite_csv():
   '''
   CSVを上書き
   '''
-  output_csv = './static/business_diary/csv/business_diary.csv'
+  output_csv = '/home/webhok/www/reservation_system/backend/static/business_diary/csv/business_diary.csv'
   bd_contents = Content.objects.all()
 
   with open(output_csv, 'w', encoding='utf-8', newline='') as csv_file:
@@ -172,17 +172,14 @@ def overwrite_csv_when_deleting_business_diary(**kwargs):
   overwrite_csv()
 
 
-def md_to_pdf(file_path):
+def md_to_pdf(file_path, output_html):
   import markdown
-  # from pygments import highlight
-  from pygments.formatters import HtmlFormatter
   import pdfkit
-  import winreg
+#  import winreg
 
-  with open(file_path, 'rt', encoding='utf8') as f:
+  with open(file_path, 'rt', encoding='utf-8') as f:
     text = f.read()
 
-    # style = HtmlFormatter(style='solarized-dark').get_style_defs('.codehilite')
     # md -> html
     md = markdown.Markdown()
     body = md.convert(text)
@@ -195,20 +192,26 @@ def md_to_pdf(file_path):
     #         border-collapse: collapse;
     #         border:1px solid #333;
     #         } </style>'''
+
     html += body + '</body></html>'
-  outfile = file_path + '.pdf'
-  print(outfile)
+    with open(output_html, "w", encoding="utf-8") as g:
+      g.write(html)
+  # outfile = output_pdf + '.pdf'
+  print(output_html)
+  output_pdf = output_html + '.pdf'
 
-  try:
-    with winreg.OpenKeyEx(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\wkhtmltopdf',
-                          access=winreg.KEY_READ | winreg.KEY_WOW64_64KEY) as k:
-      data, regtype = winreg.QueryValueEx(k, "PdfPath")
-      configure = pdfkit.configuration(wkhtmltopdf=data)
-      regtype = regtype
+  # デバイスにwkhtmltopdfがインストールされている場合、htmlをpdfに変換
+#  try:
+#    with winreg.OpenKeyEx(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\wkhtmltopdf',
+#                          access=winreg.KEY_READ | winreg.KEY_WOW64_64KEY) as k:
+#      data, regtype = winreg.QueryValueEx(k, "PdfPath")
+#      configure = pdfkit.configuration(wkhtmltopdf=data)
+#      regtype = regtype
+#
+#      pdfkit.from_string(html, output_pdf)
+#  except FileNotFoundError:
+#    pass
 
-      pdfkit.from_string(html, outfile)
-  except FileNotFoundError:
-    pass
 
 
 @receiver(post_save, sender=Content)
@@ -221,32 +224,30 @@ def generate_markdown(sender, instance, created, **kwargs):
     sdate = str(instance.business_diary.start)
     date = str(datetime.datetime.strptime(sdate, '%Y-%m-%d %H:%M:%S%z').strftime('%Y%m%d'))
 
-    dir_path = './static/docs/business_diary/' + entry_name + '/'
+    dir_path = '/home/webhok/www/reservation_system/backend/static/docs/business_diary/' + entry_name + '/'
     file = date + '_' + entry_name + '.md'
 
     # ディレクトリが存在していない場合作成する
-    os.makedirs(dir_path, exist_ok=True)
+    os.makedirs(dir_path + 'md/', exist_ok=True)
 
-    file_path = os.path.join(dir_path, file)
+    file_path = os.path.join(dir_path + 'md/', file)
 
-    with open(file_path, 'w', encoding='utf8') as md_file:
-      cl = []
-      dl = []
-      cl.append(instance.content)
-      dl.append(instance.detail)
-      # content = instance.content
-      # detail = instance.detail
-      start = str(instance.business_diary.start)
-      end = str(instance.business_diary.end)
+    with open(file_path, 'w', encoding='utf-8') as md_file:
+      contents = Content.objects.filter(business_diary=instance.business_diary.id).values_list('content', 'detail')
+
+      start = str(datetime.datetime.strptime(str(instance.business_diary.start), '%Y-%m-%d %H:%M:%S%z').strftime('%Y-%m-%d %H:%M:%S'))
+      end = str(datetime.datetime.strptime(str(instance.business_diary.end), '%Y-%m-%d %H:%M:%S%z').strftime('%Y-%m-%d %H:%M:%S'))
       other = instance.business_diary.other
-      # created_at = instance.business_diary.created_at
-      # updated_at = instance.business_diary.updated_at
-      file_content = '# 業務日誌\n\n## 記入者\n\n' + entry_name + '\n\n## 業務開始日時\n\n' + start + '\n\n## 業務終了日時\n\n' + end
-      md_file.write(file_content)
-      for (content, detail) in zip(cl, dl):
-        file_content = '\n\n## 業務内容\n\n- ' + content + '\n\t- ' + detail
-        md_file.write(file_content)
-      file_content = '\n\n# その他\n\n' + other
-      md_file.write(file_content)
 
-    md_to_pdf(file_path)
+      # mdファイルに書き込むテキスト
+      file_content = '# 業務日誌\n\n## 記入者\n\n' + entry_name + '\n\n## 業務開始日時\n\n' + start + '\n\n## 業務終了日時\n\n' + end + '\n\n## 業務内容\n\n'
+      md_file.write(file_content)
+      # 動的フォームの部分は1件ずつ書き込む
+      for i in contents:
+        file_content = '- ' + i[0] + '\n\t- ' + i[1] + '\n'
+        md_file.write(file_content)
+      file_content = '\n# その他\n\n' + other
+      md_file.write(file_content)
+    # 出力するhtmlファイルの保存先の指定
+    output_html = dir_path + file + '.html'
+    md_to_pdf(file_path, output_html)

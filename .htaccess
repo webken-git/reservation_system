@@ -1,0 +1,15 @@
+DirectoryIndex index.cgi
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /index.cgi/$1  [L]
+ 
+<Files ~ ".(cgi|xcg)$>
+<Limit GET POST>
+order allow,deny
+allow from all
+</Limit>
+</Files>
+ 
+<Files ~ "^\.(htaccess|htpasswd)$">
+deny from all
+</Files>
