@@ -6,8 +6,9 @@ from users import views
 
 # app_name = 'users'
 urlpatterns = [
-    path('', views.UserList.as_view()),
-    path('<int:pk>/', views.UserDetail.as_view()),
+    path('', views.AuthInfoGetView.as_view()),
+    path('list/', views.UserListView.as_view()),
+    path('<int:pk>/', views.UserDetailView.as_view()),
     path('account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
@@ -24,11 +25,12 @@ urlpatterns = [
 ]
 
 if getattr(settings, 'REST_USE_JWT', False):
-  from rest_framework_simplejwt.views import TokenVerifyView
+  from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
 
   from dj_rest_auth.jwt_auth import get_refresh_view
 
   urlpatterns += [
-      path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+      path('token/', TokenObtainPairView.as_view()),
+      #   path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
       path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
   ]
