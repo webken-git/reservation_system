@@ -1,5 +1,6 @@
 from django.db import models
 from django.core import validators
+from django.db.models.fields.related import ForeignKey
 from phonenumber_field.modelfields import PhoneNumberField
 from users.models import User
 
@@ -10,6 +11,8 @@ from users.models import User
 
 class Approval(models.Model):
   name = models.CharField('状態', max_length=25)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
     return self.name
@@ -29,7 +32,7 @@ class Place(models.Model):
 
 
 class Equipment(models.Model):
-  name = models.CharField('附属設備・器具', max_length=25)
+  name = models.CharField('附属設備・器具', max_length=25, blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -40,7 +43,7 @@ class Equipment(models.Model):
 
 
 class SpecialEquipment(models.Model):
-  name = models.CharField('特別設備', max_length=25)
+  name = models.CharField('特別設備', max_length=25, blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -51,10 +54,10 @@ class SpecialEquipment(models.Model):
 
 
 class Reservation(models.Model):
-  users = models.ForeignKey(
-      User, verbose_name='users',
+  user = models.ForeignKey(
+      User, verbose_name='user',
       blank=True, null=True,
-      related_name='reservations_users',
+      related_name='reservation_user',
       on_delete=models.SET_NULL
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
@@ -76,35 +79,35 @@ class Reservation(models.Model):
   admission_fee = models.IntegerField('入場料の徴収', validators=[
       validators.MinValueValidator(0),
       validators.MaxValueValidator(20000)], blank=True, null=True)
-  places = models.ForeignKey(
-      Place, verbose_name='places',
+  place = models.ForeignKey(
+      Place, verbose_name='place',
       blank=True, null=True,
-      related_name='reservations_places', on_delete=models.SET_NULL
+      related_name='reservation_place', on_delete=models.SET_NULL
   )
-  equipments = models.ForeignKey(
-      Equipment, verbose_name='equipments',
+  equipment = models.ForeignKey(
+      Equipment, verbose_name='equipment',
       blank=True, null=True,
-      related_name='reservations_equipments', on_delete=models.SET_NULL
+      related_name='reservation_equipment', on_delete=models.SET_NULL
   )
-  special_equipments = models.ForeignKey(
-      SpecialEquipment, verbose_name='special_equipments',
+  special_equipment = models.ForeignKey(
+      SpecialEquipment, verbose_name='special_equipment',
       blank=True, null=True,
-      related_name='resercvations_special_equipments', on_delete=models.SET_NULL
+      related_name='resercvation_special_equipment', on_delete=models.SET_NULL
   )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
-    return self.group_name + ' ' + self.reader_name + ' ' + self.contact_name + ' ' + self.address
+    return self.reader_name + ' ' + self.contact_name + ' ' + self.address
 
 # 保存した予約情報テーブル
 
 
 class UserInfo(models.Model):
-  users = models.ForeignKey(
-      User, verbose_name='users',
+  user = models.ForeignKey(
+      User, verbose_name='user',
       blank=True, null=True,
-      related_name='user_info_users',
+      related_name='user_info_user',
       on_delete=models.SET_NULL
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
@@ -120,9 +123,9 @@ class UserInfo(models.Model):
 
 
 class ApprovalApplication(models.Model):
-  reservations = models.ForeignKey(
-      Reservation, verbose_name='reservations',
-      related_name='approval_apps_reservations',
+  reservation = models.ForeignKey(
+      Reservation, verbose_name='reservation',
+      related_name='approval_app_reservation',
       on_delete=models.CASCADE
   )
   usage_fee = models.IntegerField('利用料', validators=[
@@ -135,9 +138,9 @@ class ApprovalApplication(models.Model):
       validators.MinValueValidator(0),
       validators.MaxValueValidator(20000)])
   conditions = models.TextField('承認の条件', max_length=255)
-  approvals = models.ForeignKey(
-      Approval, verbose_name='approvals',
-      related_name='approval_apps_approvals',
+  approval = models.ForeignKey(
+      Approval, verbose_name='approval',
+      related_name='approval_app_approval',
       on_delete=models.PROTECT
   )
   created_at = models.DateTimeField(auto_now_add=True)
@@ -169,14 +172,14 @@ class Age(models.Model):
 
 
 class UsageCategorize(models.Model):
-  usages = models.ManyToManyField(
+  usage = models.ManyToManyField(
       Usage,
-      verbose_name='usages',
-      related_name='usage_categorizes_usages',
+      verbose_name='usage',
+      related_name='usage_categorize_usage',
   )
-  reservations = models.ForeignKey(
-      Reservation, verbose_name='reservations',
-      related_name='usage_categorizes_reservations',
+  reservation = models.ForeignKey(
+      Reservation, verbose_name='reservation',
+      related_name='usage_categorize_reservation',
       on_delete=models.CASCADE
   )
   created_at = models.DateTimeField(auto_now_add=True)
@@ -187,14 +190,14 @@ class UsageCategorize(models.Model):
 
 
 class AgeCategorize(models.Model):
-  ages = models.ManyToManyField(
+  age = models.ManyToManyField(
       Usage,
-      verbose_name='ages',
-      related_name='age_categorizes_usages',
+      verbose_name='age',
+      related_name='age_categorize_usage',
   )
-  reservations = models.ForeignKey(
-      Reservation, verbose_name='reservations',
-      related_name='age_categorizes_reservations',
+  reservation = models.ForeignKey(
+      Reservation, verbose_name='reservation',
+      related_name='age_categorize_reservation',
       on_delete=models.CASCADE
   )
   created_at = models.DateTimeField(auto_now_add=True)
@@ -205,9 +208,9 @@ class AgeCategorize(models.Model):
 
 class DefferdPayment(models.Model):
   reason = models.CharField('後納の理由', max_length=50)
-  reservations = models.ForeignKey(
-      Reservation, verbose_name='reservations',
-      related_name='defferd_payments_reservations',
+  reservation = models.ForeignKey(
+      Reservation, verbose_name='reservation',
+      related_name='defferd_payment_reservation',
       on_delete=models.CASCADE
   )
   created_at = models.DateTimeField(auto_now_add=True)
@@ -215,3 +218,32 @@ class DefferdPayment(models.Model):
 
   def __str__(self):
     return self.reason
+
+
+class FacilityFee(models.Model):
+  place = ForeignKey(
+      Place, verbose_name='place',
+      related_name='facility_fee_place',
+      on_delete=models.CASCADE
+  )
+  age = ForeignKey(
+      Age, verbose_name='age',
+      related_name='facility_fee_age',
+      on_delete=models.CASCADE
+  )
+  is_group = models.BooleanField('is_group', default=False)
+  purpose = models.CharField('使用目的', max_length=15, blank=True, null=True)
+  fee = models.IntegerField('料金')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+
+
+class EquipmentFee(models.Model):
+  equipment = ForeignKey(
+      Equipment, verbose_name='equipment',
+      related_name='equipment_fee_equipment',
+      on_delete=models.CASCADE
+  )
+  fee = models.IntegerField('料金')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)

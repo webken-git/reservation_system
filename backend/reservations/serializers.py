@@ -1,94 +1,138 @@
+from django.db.models import query
 from rest_framework import fields
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from reservations.models import *
 from users.serializers import UserSerializer
 
 
-class ApprovalSerializer(ModelSerializer):
+class ApprovalSerializer(serializers.ModelSerializer):
   class Meta:
     model = Approval
     fields = '__all__'
 
 
-class PlaceSerializer(ModelSerializer):
+class PlaceSerializer(serializers.ModelSerializer):
   class Meta:
     model = Place
     fields = '__all__'
 
 
-class EquipmentSerializer(ModelSerializer):
+class EquipmentSerializer(serializers.ModelSerializer):
   class Meta:
     model = Equipment
     fields = '__all__'
 
 
-class SpecialEquipmentSerializer(ModelSerializer):
+class SpecialEquipmentSerializer(serializers.ModelSerializer):
   class Meta:
     model = SpecialEquipment
     fields = '__all__'
 
 
-class ReservationSerializer(ModelSerializer):
-  users = UserSerializer()
-  places = PlaceSerializer()
-  equipments = EquipmentSerializer()
-  special_equipments = SpecialEquipmentSerializer()
+class ReservationSerializer(serializers.ModelSerializer):
+  user = UserSerializer(read_only=True)
+  user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+  place = PlaceSerializer(read_only=True)
+  place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), write_only=True)
+  equipment = EquipmentSerializer(read_only=True)
+  equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), write_only=True)
+  special_equipment = SpecialEquipmentSerializer(read_only=True)
+  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), write_only=True)
 
   class Meta:
     model = Reservation
     fields = '__all__'
 
 
-class UserInfoSerializer(ModelSerializer):
-  users = UserSerializer()
+class UserInfoSerializer(serializers.ModelSerializer):
+  user = UserSerializer()
 
   class Meta:
     model = UserInfo
     fields = '__all__'
 
 
-class ApprovalApplicationSerializer(ModelSerializer):
-  reservations = ReservationSerializer()
-  approvals = ApprovalSerializer()
+class ApprovalApplicationSerializer(serializers.ModelSerializer):
+  reservation = ReservationSerializer()
+  approval = ApprovalSerializer()
 
   class Meta:
     model = ApprovalApplication
     fields = '__all__'
 
 
-class UsageSerializer(ModelSerializer):
+class UsageSerializer(serializers.ModelSerializer):
   class Meta:
     model = Usage
     fields = '__all__'
 
 
-class AgeSerializer(ModelSerializer):
+class AgeSerializer(serializers.ModelSerializer):
   class Meta:
     model = Age
     fields = '__all__'
 
 
-class UsageCategorizeSerializer(ModelSerializer):
-  usages = UsageSerializer(many=True)
-  reservations = ReservationSerializer()
+class UsageCategorizeSerializer(serializers.ModelSerializer):
+  usage = UsageSerializer(read_only=True, many=True)
+  usage_id = serializers.PrimaryKeyRelatedField(queryset=Usage.objects.all(), write_only=True, many=True)
+  reservation = ReservationSerializer(read_only=True)
+  reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
 
   class Meta:
     model = UsageCategorize
     fields = '__all__'
 
+  def create(self, validated_data):
+    validated_data['usage'] = validated_data.get('usage_id', None)
+    validated_data['reservation'] = validated_data.get('reservation_id', None)
 
-class AgeCategorizeSerializer(ModelSerializer):
-  usages = AgeSerializer(many=True)
-  reservations = ReservationSerializer()
+    del validated_data['usage_id']
+    del validated_data['reservation_id']
+
+    return FacilityFee.objects.create(**validated_data)
+
+
+class AgeCategorizeSerializer(serializers.ModelSerializer):
+  usage = AgeSerializer(many=True)
+  reservation = ReservationSerializer()
 
   class Meta:
     model = AgeCategorize
     fields = '__all__'
 
 
-class DefferdPaymentSerializer(ModelSerializer):
-  reservations = ReservationSerializer()
+class DefferdPaymentSerializer(serializers.ModelSerializer):
+  reservation = ReservationSerializer()
 
   class Meta:
     model = DefferdPayment
+    fields = '__all__'
+
+
+class FacilityFeeSerializer(serializers.ModelSerializer):
+  place = PlaceSerializer(read_only=True)
+  place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), write_only=True)
+  age = AgeSerializer(read_only=True)
+  age_id = serializers.PrimaryKeyRelatedField(queryset=Age.objects.all(), write_only=True)
+
+  class Meta:
+    model = FacilityFee
+    fields = '__all__'
+
+  def create(self, validated_data):
+    validated_data['place'] = validated_data.get('place_id', None)
+    validated_data['age'] = validated_data.get('age_id', None)
+
+    del validated_data['place_id']
+    del validated_data['age_id']
+
+    return FacilityFee.objects.create(**validated_data)
+
+
+class EquipmentFeeSerializer(serializers.ModelSerializer):
+  equipment = EquipmentSerializer()
+
+  class Meta:
+    model = EquipmentFee
     fields = '__all__'

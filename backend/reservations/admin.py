@@ -1,6 +1,6 @@
 from django.contrib import admin
 from reservations.models import (
-    Reservation, UserInfo, Place,
+    EquipmentFee, FacilityFee, Reservation, UserInfo, Place,
     Equipment, SpecialEquipment,
     Approval, ApprovalApplication,
     Age, Usage, DefferdPayment,
@@ -12,7 +12,7 @@ from reservations.models import (
 
 class ReservationAdmin(admin.ModelAdmin):
   list_display = [f.name for f in Reservation._meta.fields]
-  list_display_links = ('id', 'contact_name')
+  list_display_links = ('id', 'user')
 
 
 class UserInfoAdmin(admin.ModelAdmin):
@@ -55,11 +55,6 @@ class UsageAdmin(admin.ModelAdmin):
   list_display_links = ('id', 'name')
 
 
-class DefferdPaymentAdmin(admin.ModelAdmin):
-  list_display = [f.name for f in DefferdPayment._meta.fields]
-  list_display_links = ('id', 'reason')
-
-
 class AgeCategorizeAdmin(admin.ModelAdmin):
   list_display = [f.name for f in AgeCategorize._meta.fields]
   list_display_links = ('id', )
@@ -70,6 +65,21 @@ class UsageCategorizeAdmin(admin.ModelAdmin):
   list_display_links = ('id',)
 
 
+class DefferdPaymentAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in DefferdPayment._meta.fields]
+  list_display_links = ('id', 'reason')
+
+
+class FacilityFeeAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in FacilityFee._meta.fields]
+  list_display_links = ('id', 'place')
+
+
+class EquipmentFeeAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in EquipmentFee._meta.fields]
+  list_display_links = ('id', 'equipment')
+
+
 admin.site.register(Reservation, ReservationAdmin)
 admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(Place, PlaceAdmin)
@@ -77,6 +87,8 @@ admin.site.register(Equipment, EquipmentAdmin)
 admin.site.register(SpecialEquipment, SpecialEquipmentAdmin)
 admin.site.register(Age, AgeAdmin)
 admin.site.register(Usage, UsageAdmin)
-admin.site.register(DefferdPayment, DefferdPaymentAdmin)
 admin.site.register(AgeCategorize, AgeCategorizeAdmin)
 admin.site.register(UsageCategorize, UsageCategorizeAdmin)
+admin.site.register(DefferdPayment, DefferdPaymentAdmin)
+admin.site.register(FacilityFee, FacilityFeeAdmin)
+admin.site.register(EquipmentFee, EquipmentFeeAdmin)

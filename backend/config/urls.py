@@ -20,22 +20,21 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 
-
-api_uris = [
-    path(('users/'), include('users.urls')),
-    path('reservations/', include('reservations.urls')),
-    path('password/reset/', PasswordResetView.as_view()),
-    path('password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+reference_uris = [
+    path('download/', SpectacularAPIView.as_view(), name='schema'),
+    path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
-doc_uris = [
-    path("download/api/", SpectacularAPIView.as_view(), name='schema'),
-    path("api/", SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+api_uris = [
+    path('', include('reservations.urls')),
+    path(('users/'), include('users.urls')),
+    path('password/reset/', PasswordResetView.as_view()),
+    path('password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reference/', include(reference_uris)),
 ]
 
 urlpatterns = [
     path('admin/business_diary/', include('business_diary.urls')),
     path('admin/', admin.site.urls),
     path('api/', include(api_uris)),
-    path('docs/', include(doc_uris)),
 ]

@@ -10,6 +10,25 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 from .serializers import UserSerializer
 
+
+class UserListView(ListCreateAPIView):
+  permission_classes = [IsAuthenticated]
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+
+
+class UserDetailView(RetrieveUpdateDestroyAPIView):
+  permission_classes = [IsAuthenticated]
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+
+
+class UserEmailUpdate(UpdateAPIView):
+  permission_classes = [IsAuthenticated]
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+  lookup_field = 'email'
+
 # ログインユーザー情報を取得
 
 
@@ -32,22 +51,3 @@ class AuthInfoGetView(RetrieveAPIView):
         'updated_at': request.user.updated_at,
         'refresh_token': str(RefreshToken.for_user(user)),
     }, status=HTTP_200_OK)
-
-
-class UserListView(ListCreateAPIView):
-  permission_classes = [IsAuthenticated]
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
-
-
-class UserDetailView(RetrieveUpdateDestroyAPIView):
-  permission_classes = [IsAuthenticated]
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
-
-
-class UserEmailUpdate(UpdateAPIView):
-  permission_classes = [IsAuthenticated]
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
-  lookup_field = 'email'

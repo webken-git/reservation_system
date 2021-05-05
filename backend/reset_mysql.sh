@@ -8,3 +8,5 @@ mysql -uroot -e "create database ${DB_NAME} default character set utf8;"
 
 . Scripts/activate
 python manage.py migrate
+
+# python csv_import.py
