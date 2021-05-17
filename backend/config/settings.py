@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -171,6 +172,13 @@ REST_FRAMEWORK = {
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER':
         'users.serializers.PasswordResetSerializer',
+}
+
+SIMPLE_JWT = {
+    # トークンをJWTに設定
+    'AUTH_HEADER_TYPES': ('JWT',),
+    # トークンの持続時間の設定
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30)
 }
 
 SITE_ID = 1

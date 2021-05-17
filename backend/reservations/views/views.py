@@ -133,3 +133,14 @@ class PlaceReservationViewSet(viewsets.ReadOnlyModelViewSet):
     place_pk = self.kwargs.get('place_pk')
     queryset = Reservation.objects.all().prefetch_related('place')
     return queryset.filter(place=place_pk)
+
+
+class EquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
+  # permission_classes = [IsAuthenticated]
+  serializer_class = ReservationSerializer
+  filter_fields = [f.name for f in Reservation._meta.fields]
+
+  def get_queryset(self):
+    equipment_pk = self.kwargs.get('equipment_pk')
+    queryset = Reservation.objects.all().prefetch_related('equipment')
+    return queryset.filter(equipment=equipment_pk)

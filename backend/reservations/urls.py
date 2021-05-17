@@ -25,23 +25,36 @@ router.register('equipment-fees', views.EquipmentFeeViewSet)
 reservations_router = nested_routers.NestedSimpleRouter(
     router,
     'reservations',
-    lookup='reservations',
+    lookup='reservation',
 )
 
 places_router = nested_routers.NestedSimpleRouter(
     router,
     'places',
-    lookup='places',
+    lookup='place',
+)
+
+equipments_router = nested_routers.NestedSimpleRouter(
+    router,
+    'equipments',
+    lookup='equipment',
 )
 
 places_router.register(
     'reservations',
     views.PlaceReservationViewSet,
-    basename='place-reservations'
+    basename='place-reservations',
+)
+
+equipments_router.register(
+    'reservations',
+    views.EquipmentReservationViewSet,
+    basename='equipment-reservations',
 )
 
 urlpatterns = [
     path('', include(router.urls)),
     path('', include(reservations_router.urls)),
     path('', include(places_router.urls)),
+    path('', include(equipments_router.urls)),
 ]
