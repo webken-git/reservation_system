@@ -200,17 +200,17 @@ EMAIL_HOST_PASSWORD = 'website_create_wak'
 EMAIL_PORT = 587
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+# Userモデルにusernameフィールドは存在しないため以下を追記
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# サインアップ時に確認メールを送信する
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 # ACCOUNT_EMAIL_VERIFICATION = 'none'
-# AUTHENTICATION_METHOD = 'email'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
-# Userモデルにusernameフィールドは存在しないため以下を追記
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-
-LOGIN_URL = 'http://127.0.0.1/api/users/login'
+# サインアップ時の確認メールに記載するログインページのURL
+LOGIN_URL = 'http://127.0.0.1:8000/api/users/login'

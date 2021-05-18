@@ -1,5 +1,8 @@
 /Lib
+/lib
+/bin
 /Scripts
+/Include
 pyvenv.cfg
 
 /config/local.py
