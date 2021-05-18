@@ -62,6 +62,7 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
 
 
 class UsageSerializer(serializers.ModelSerializer):
+
   class Meta:
     model = Usage
     fields = '__all__'
@@ -74,8 +75,8 @@ class AgeSerializer(serializers.ModelSerializer):
 
 
 class UsageCategorizeSerializer(serializers.ModelSerializer):
-  usage = UsageSerializer(read_only=True, many=True)
-  usage_id = serializers.PrimaryKeyRelatedField(queryset=Usage.objects.all(), write_only=True, many=True)
+  usage = UsageSerializer(many=True)
+  # usage_id = serializers.PrimaryKeyRelatedField(queryset=Usage.objects.all(), write_only=True, many=True)
   reservation = ReservationSerializer(read_only=True)
   reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
 
@@ -84,13 +85,24 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
   def create(self, validated_data):
-    validated_data['usage'] = validated_data.get('usage_id', None)
-    validated_data['reservation'] = validated_data.get('reservation_id', None)
+    usage_data = validated_data.pop('usage')
+    usage_categorize = UsageCategorize.objects.create(**validated_data)
+    usage_categorize.save()
 
-    del validated_data['usage_id']
-    del validated_data['reservation_id']
+    for data in usage_data:
+      usages = Usage.objects.filter(id=data['ud']).first()
+      if usages is None:
+        pass
+      usage_categorize.usage.add(data)
+    return usage_categorize
 
-    return FacilityFee.objects.create(**validated_data)
+  #   validated_data['usage'] = validated_data.get('usage_id', None)
+  #   validated_data['reservation'] = validated_data.get('reservation_id', None)
+
+  #   del validated_data['usage_id']
+  #   del validated_data['reservation_id']
+
+  #   return UsageCategorize.objects.create(**validated_data)
 
 
 class AgeCategorizeSerializer(serializers.ModelSerializer):
