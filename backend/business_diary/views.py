@@ -246,7 +246,7 @@ def generate_markdown(sender, instance, created, **kwargs):
       for i in contents:
         file_content = '- ' + i[0] + '\n\t- ' + i[1] + '\n'
         md_file.write(file_content)
-      file_content = '\n# その他\n\n' + other
+      file_content = '\n## その他\n\n' + other
       md_file.write(file_content)
     # 出力するhtmlファイルの保存先の指定
     output_html = dir_path + file + '.html'
