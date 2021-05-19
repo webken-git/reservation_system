@@ -5,10 +5,10 @@ import pytz
 
 # MySQLへの接続
 connect = mysql.connector.connect(
-    db='reservation_system',
-    user='root',
-    passwd='',
-    host='localhost',
+    db='webhok_reservation',
+    user='webhok',
+    passwd='lQ8Fmvx0PT1j',
+    host='mysql57.webhok.sakura.ne.jp',
     charset='utf8'
 )
 cursor = connect.cursor()
@@ -43,10 +43,10 @@ def facility_fee_data(file):
 def reservation_data(file):
   # MySQLへの接続
   connect = mysql.connector.connect(
-      db='reservation_system',
-      user='root',
-      passwd='',
-      host='localhost',
+      db='webhok_reservation',
+      user='webhok',
+      passwd='lQ8Fmvx0PT1j',
+      host='mysql57.webhok.sakura.ne.jp',
       charset='utf8'
   )
   cursor = connect.cursor()

@@ -28,8 +28,8 @@ except ImportError:
   pass
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -219,4 +219,4 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 # サインアップ時の確認メールに記載するログインページのURL
-LOGIN_URL = 'http://127.0.0.1:8000/api/users/login'
+LOGIN_URL = 'https://webhok.net/reservation_system/api/users/login/'
