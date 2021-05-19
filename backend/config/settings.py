@@ -29,6 +29,7 @@ except ImportError:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+#DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -74,7 +75,7 @@ MIDDLEWARE = [
 
 # 追加
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 )
 
 ROOT_URLCONF = 'config.urls'
@@ -104,9 +105,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'reservation_system',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': 'webhok_reservation',
+        'USER': 'webhok',
+        'PASSWORD': 'lQ8Fmvx0PT1j',
+        'HOST': 'mysql57.webhok.sakura.ne.jp',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -151,12 +153,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+STATIC_URL = '/reservation_system/backend/static/'
+#STATIC_ROOT = '/home/webhok/www/reservation_system/backend/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+
+# STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'static'),
+# )
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
@@ -178,7 +184,7 @@ SIMPLE_JWT = {
     # トークンをJWTに設定
     'AUTH_HEADER_TYPES': ('JWT',),
     # トークンの持続時間の設定
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60)
 }
 
 SITE_ID = 1
@@ -194,9 +200,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'websitecreatewak@gmail.com'
-EMAIL_HOST_PASSWORD = 'website_create_wak'
+EMAIL_HOST = 'webhok.sakura.ne.jp'
+EMAIL_HOST_USER = 'noreply@webhok.net'
+EMAIL_HOST_PASSWORD = 'letsgojagariko_0325'
 EMAIL_PORT = 587
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

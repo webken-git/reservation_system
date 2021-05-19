@@ -18,8 +18,7 @@ Django 3.1.7
 1. cd reservation_system
 2. git branch branchname (ex: kitaura, kinoshita)
 3. git checkout branchname
-4. git merge --allow-unrelated-histories origin/kitaura
-5. sh setting.sh
+4. sh setting.sh
 ```
 
 ### use MySQL

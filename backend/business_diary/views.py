@@ -51,7 +51,7 @@ def index(request):
 
     return dir_dict
 
-  docs = find_all_files("./static/docs")
+  docs = find_all_files("/home/webhok/www/reservation_system/backend/static/docs")
   admin_site = AdminSite()
   context = {
       **admin_site.each_context(request),
@@ -114,7 +114,7 @@ def change_csv_when_creating_business_diary(sender, instance, created, **kwargs)
   business_diaryが追加されたとき、CSVにも追加する
   '''
   if created:
-    output_csv = './static/business_diary/csv/business_diary.csv'
+    output_csv = '/home/webhok/www/reservation_system/backend/static/business_diary/csv/business_diary.csv'
     with open(output_csv, 'a', encoding='utf-8', newline='') as csv_file:
       writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
 
@@ -136,7 +136,7 @@ def overwrite_csv():
   '''
   CSVを上書き
   '''
-  output_csv = './static/business_diary/csv/business_diary.csv'
+  output_csv = '/home/webhok/www/reservation_system/backend/static/business_diary/csv/business_diary.csv'
   bd_contents = Content.objects.all()
 
   with open(output_csv, 'w', encoding='utf-8', newline='') as csv_file:
@@ -176,8 +176,13 @@ def overwrite_csv_when_deleting_business_diary(**kwargs):
 
 def md_to_pdf(file_path, output_html):
   import markdown
+<<<<<<< HEAD
   # import pdfkit
   # import winreg
+=======
+  import pdfkit
+#  import winreg
+>>>>>>> 5148086a7a2e4e9c3c120700c387b6251402e7cd
 
   with open(file_path, 'rt', encoding='utf-8') as f:
     text = f.read()
@@ -187,6 +192,7 @@ def md_to_pdf(file_path, output_html):
     body = md.convert(text)
     # HTML書式に合わせる
     html = '<html lang="ja"><meta charset="utf-8"><body>'
+<<<<<<< HEAD
     html += '<style> body { font-size: 1rem; } </style>'
     html += body + '</body></html>'
     with open(output_html, "w", encoding="utf-8") as g:
@@ -206,6 +212,35 @@ def md_to_pdf(file_path, output_html):
   #     pdfkit.from_string(html, output_pdf)
   # except FileNotFoundError:
   #   pass
+=======
+    # Pygmentsで作成したスタイルシートを取り込む
+    html += '<style> body { font-size: 1rem; } </style>'
+    # Tableタグに枠線を付けるためにスタイルを追加
+    # html += '''<style> table,th,td {
+    #         border-collapse: collapse;
+    #         border:1px solid #333;
+    #         } </style>'''
+
+    html += body + '</body></html>'
+    with open(output_html, "w", encoding="utf-8") as g:
+      g.write(html)
+  # outfile = output_pdf + '.pdf'
+  print(output_html)
+  output_pdf = output_html + '.pdf'
+
+  # デバイスにwkhtmltopdfがインストールされている場合、htmlをpdfに変換
+#  try:
+#    with winreg.OpenKeyEx(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\wkhtmltopdf',
+#                          access=winreg.KEY_READ | winreg.KEY_WOW64_64KEY) as k:
+#      data, regtype = winreg.QueryValueEx(k, "PdfPath")
+#      configure = pdfkit.configuration(wkhtmltopdf=data)
+#      regtype = regtype
+#
+#      pdfkit.from_string(html, output_pdf)
+#  except FileNotFoundError:
+#    pass
+
+>>>>>>> 5148086a7a2e4e9c3c120700c387b6251402e7cd
 
 
 @receiver(post_save, sender=Content)
@@ -218,7 +253,7 @@ def generate_markdown(sender, instance, created, **kwargs):
     sdate = str(instance.business_diary.start)
     date = str(datetime.datetime.strptime(sdate, '%Y-%m-%d %H:%M:%S%z').strftime('%Y%m%d'))
 
-    dir_path = './static/docs/business_diary/' + entry_name + '/'
+    dir_path = '/home/webhok/www/reservation_system/backend/static/docs/business_diary/' + entry_name + '/'
     file = date + '_' + entry_name + '.md'
 
     # ディレクトリが存在していない場合作成する
@@ -228,7 +263,11 @@ def generate_markdown(sender, instance, created, **kwargs):
 
     with open(file_path, 'w', encoding='utf-8') as md_file:
       contents = Content.objects.filter(business_diary=instance.business_diary.id).values_list('content', 'detail')
+<<<<<<< HEAD
       # 日付と時刻のデータを編集
+=======
+
+>>>>>>> 5148086a7a2e4e9c3c120700c387b6251402e7cd
       start = str(datetime.datetime.strptime(str(instance.business_diary.start), '%Y-%m-%d %H:%M:%S%z').strftime('%Y-%m-%d %H:%M:%S'))
       end = str(datetime.datetime.strptime(str(instance.business_diary.end), '%Y-%m-%d %H:%M:%S%z').strftime('%Y-%m-%d %H:%M:%S'))
       other = instance.business_diary.other
