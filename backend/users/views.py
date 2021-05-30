@@ -1,18 +1,26 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User
+from rest_framework import status, viewsets, filters
 from rest_framework.generics import (
     ListCreateAPIView, RetrieveUpdateDestroyAPIView,
     RetrieveAPIView, UpdateAPIView
 )
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
+from .models import User
 from .serializers import UserSerializer
 
 
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+  # permission_classes = [IsAuthenticated]
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+  filter_fields = [f.name for f in User._meta.fields]
+
+
 class UserListView(ListCreateAPIView):
-  permission_classes = [IsAuthenticated]
+  permission_classes = [IsAdminUser]
   queryset = User.objects.all()
   serializer_class = UserSerializer
 

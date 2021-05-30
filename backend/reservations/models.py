@@ -64,7 +64,7 @@ class Reservation(models.Model):
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号', unique=True)
+  tel = PhoneNumberField('電話番号')
   is_group = models.BooleanField('is_group', default=False)
   delete_flag = models.BooleanField('delete_flag', default=False)
   start = models.DateTimeField('利用開始日時')
@@ -114,7 +114,7 @@ class UserInfo(models.Model):
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号', unique=True)
+  tel = PhoneNumberField('電話番号')
   is_group = models.BooleanField('is_group', default=False)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -191,7 +191,7 @@ class UsageCategorize(models.Model):
 
 class AgeCategorize(models.Model):
   age = models.ManyToManyField(
-      Usage,
+      Age,
       verbose_name='age',
       related_name='age_categorize_usage',
   )
