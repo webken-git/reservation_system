@@ -113,6 +113,7 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
+        'ATOMIC_REQUESTS': True,    # トランザクション処理の設定
     }
 }
 
