@@ -8,7 +8,7 @@ import GuestRoute from "./components/api/GuestRoute";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/home/Login";
-import MyPage from "./pages/home/MyPage";
+import {MyPage }from "./pages/home/MyPage";
 function Menu() {
   return (
     <nav>
