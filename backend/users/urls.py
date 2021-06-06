@@ -3,10 +3,23 @@ from django.urls import path, re_path
 from dj_rest_auth.registration.views import RegisterView, VerifyEmailView, ConfirmEmailView
 from dj_rest_auth.views import LoginView, LogoutView
 from users import views
+from django.views.decorators.cache import cache_page as view_cach_page
 
-# app_name = 'users'
+TIME_OUTS_30MINUTES = 60 * 30
+TIME_OUTS_1DAY = 60 * 60 * 24
+TIME_OUTS_1MONTH = TIME_OUTS_1DAY * 30
+
+# キャッシュ期間のデフォルトは30分(60s * 30m)
+
+
+def cache_page(view, timeouts=TIME_OUTS_1DAY):
+  # キャッシュする用のmethod
+  return view_cach_page(timeouts)(view)
+
+
+app_name = 'users'
 urlpatterns = [
-    path('', views.UserListView.as_view()),
+    path('', cache_page(views.UserListView.as_view())),
     path('<int:pk>/', views.UserDetailView.as_view()),
     path('auth/', views.AuthInfoGetView.as_view()),
     path('account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),

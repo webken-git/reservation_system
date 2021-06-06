@@ -6,7 +6,6 @@ from rest_framework_nested import routers as nested_routers
 from reservations.views import views
 
 app_name = 'reservations'
-
 router = routers.DefaultRouter()
 router.register('approvals', views.ApprovalViewSet)
 router.register('places', views.PlaceViewSet)
