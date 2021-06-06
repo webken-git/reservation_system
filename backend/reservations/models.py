@@ -130,14 +130,18 @@ class ApprovalApplication(models.Model):
   )
   usage_fee = models.IntegerField('利用料', validators=[
       validators.MinValueValidator(0),
-      validators.MaxValueValidator(20000)])
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
   heating_fee = models.IntegerField('暖房料', validators=[
       validators.MinValueValidator(0),
-      validators.MaxValueValidator(20000)])
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
   electric_fee = models.IntegerField('電気料', validators=[
       validators.MinValueValidator(0),
-      validators.MaxValueValidator(20000)])
-  conditions = models.TextField('承認の条件', max_length=255)
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
+  conditions = models.TextField('承認の条件', max_length=255,
+  blank=True, null=True)
   approval = models.ForeignKey(
       Approval, verbose_name='approval',
       related_name='approval_app_approval',

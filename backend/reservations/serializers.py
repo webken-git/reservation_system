@@ -129,7 +129,12 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
   class Meta:
     model = ApprovalApplication
     fields = '__all__'
-    extra_kwargs = {'conditions': {'required': False}}
+    extra_kwargs = {
+      'usage_fee': {'required': False},
+      'heating_fee': {'required': False},
+      'electric_fee': {'required': False},
+      'conditions': {'required': False}
+      }
 
   def create(self, validated_data):
     validated_data['reservation'] = validated_data.get('reservation_id', None)
@@ -174,8 +179,8 @@ class AgeSerializer(serializers.ModelSerializer):
 class UsageCategorizeSerializer(serializers.ModelSerializer):
   usage = UsageSerializer(many=True, read_only=True)
   usage_id = serializers.PrimaryKeyRelatedField(queryset=Usage.objects.all(), many=True, write_only=True)
-  reservation = ReservationSerializer(read_only=True)
-  reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  # reservation = ReservationSerializer(read_only=True)
+  reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
 
   class Meta:
     model = UsageCategorize
@@ -184,11 +189,11 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
 
   def create(self, validated_data):
     validated_data['usage'] = validated_data.get('usage_id', None)
-    validated_data['reservation'] = validated_data.get('reservation_id', None)
+    # validated_data['reservation'] = validated_data.get('reservation_id', None)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['usage_id']
-    del validated_data['reservation_id']
+    # del validated_data['reservation_id']
 
     # usageの部分をpopして退避
     usage_data = validated_data.pop('usage')
@@ -206,11 +211,11 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
     # 更新処理
     validated_data['usage'] = validated_data.get('usage_id', None)
 
-    instance.reservation = validated_data.get('reservation_id', instance.reservation)
+    # instance.reservation = validated_data.get('reservation_id', instance.reservation)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['usage_id']
-    del validated_data['reservation_id']
+    # del validated_data['reservation_id']
 
     usage_data = validated_data.pop('usage')
     instance.save()
@@ -231,8 +236,8 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
 class AgeCategorizeSerializer(serializers.ModelSerializer):
   age = AgeSerializer(many=True, read_only=True)
   age_id = serializers.PrimaryKeyRelatedField(queryset=Age.objects.all(), many=True, write_only=True)
-  reservation = ReservationSerializer(read_only=True)
-  reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  # reservation = ReservationSerializer(read_only=True)
+  reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
 
   class Meta:
     model = AgeCategorize
@@ -240,11 +245,11 @@ class AgeCategorizeSerializer(serializers.ModelSerializer):
 
   def create(self, validated_data):
     validated_data['age'] = validated_data.get('age_id', None)
-    validated_data['reservation'] = validated_data.get('reservation_id', None)
+    # validated_data['reservation'] = validated_data.get('reservation_id', None)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['age_id']
-    del validated_data['reservation_id']
+    # del validated_data['reservation_id']
 
     age_data = validated_data.pop('age')
     age_categorize = AgeCategorize.objects.create(**validated_data)
@@ -257,10 +262,10 @@ class AgeCategorizeSerializer(serializers.ModelSerializer):
     # 更新処理
     validated_data['age'] = validated_data.get('age_id', None)
 
-    instance.reservation = validated_data.get('reservation_id', instance.reservation)
+    # instance.reservation = validated_data.get('reservation_id', instance.reservation)
     # PrimaryKeyRelatedFieldを削除
     del validated_data['age_id']
-    del validated_data['reservation_id']
+    # del validated_data['reservation_id']
 
     age_data = validated_data.pop('age')
     instance.save()
@@ -269,27 +274,27 @@ class AgeCategorizeSerializer(serializers.ModelSerializer):
     return instance
 
 class DefferdPaymentSerializer(serializers.ModelSerializer):
-  reservation = ReservationSerializer(read_only=True)
-  reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  # reservation = ReservationSerializer(read_only=True)
+  reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
 
   class Meta:
     model = DefferdPayment
     fields = '__all__'
 
   def create(self, validated_data):
-    validated_data['reservation'] = validated_data.get('reservation_id', None)
+    # validated_data['reservation'] = validated_data.get('reservation_id', None)
 
     # PrimaryKeyRelatedFieldを削除
-    del validated_data['reservation_id']
+    # del validated_data['reservation_id']
 
     return DefferdPayment.objects.create(**validated_data)
 
   def update(self, instance, validated_data):
     # 更新処理
-    instance.reservation = validated_data.get('reservation_id', instance.reservation)
+    # instance.reservation = validated_data.get('reservation_id', instance.reservation)
     instance.reason = validated_data.get('reason', instance.reason)
     # PrimaryKeyRelatedFieldを削除
-    del validated_data['reservation_id']
+    # del validated_data['reservation_id']
     instance.save()
 
     return instance
