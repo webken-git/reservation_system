@@ -8,13 +8,14 @@ import GuestRoute from "./components/api/GuestRoute";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/home/Login";
-import {MyPage }from "./pages/home/MyPage";
+import { MyPage }from "./pages/home/MyPage";
+import { ApprovalList } from "./pages/home/ApprovalList";
 function Menu() {
   return (
     <nav>
       <Link to="/login">Login</Link>
       {" "}|{" "}
-      <Link to="/mypage">MyPage</Link>
+      <Link to="/mypage">MyPage</Link> 
     </nav>
   );
 }
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" exact children={<Home />} />
           <GuestRoute path="/login" children={<Login />} />
           <PrivateRoute path="/mypage" children={<MyPage />} />
+          <GuestRoute path="/approvallist" children={<ApprovalList />} />
         </Switch>
       </BrowserRouter>
     </Provider>
