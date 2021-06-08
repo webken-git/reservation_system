@@ -1,0 +1,40 @@
+.sideBox {
+    width: 100%;
+    height: 100vh;
+    background-color: #233B62;
+}
+
+.TitleBox {
+    width: 100%;
+    height: 14%;
+    background-color: #1A8D89;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.TitleString {
+    color: #FFFFFF;
+    font-size: 30px;
+}
+
+.transBox {
+    width: 100%;
+    height: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #707070;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+
+.linkdeco {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
