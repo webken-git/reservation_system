@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from rest_framework import status, viewsets, filters
+from rest_framework import viewsets, filters, response, views
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import (
@@ -13,6 +13,7 @@ import datetime
 import pytz
 from reservations.models import *
 from reservations.serializers import *
+from reservations.views.csv import csv_export
 
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分
@@ -249,11 +250,6 @@ class FacilityFeeViewSet(viewsets.ModelViewSet):
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
-  # @action(detail=True, methods=['post'])
-  # def post(self, request, pk=None):
-  #   queryset = calculate_wrap(request)
-  #   serializer = FacilityFeeSerializer(queryset, many=True)
-  #   return Response(serializer.data)
 
 
 class EquipmentFeeViewSet(viewsets.ModelViewSet):
@@ -540,3 +536,38 @@ class AgeAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
   @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
+
+
+class ApprovalApplicationCsvExportView(views.APIView):
+  # permission_classes = [IsAuthenticated]
+  serializer_class = ApprovalApplicationSerializer
+
+  def post(self, request):
+    csv = csv_export(request)
+    if csv:
+      return response.Response({'path': csv}, status=HTTP_200_OK)
+    else:
+      return response.Response({'detail': '失敗しました。'}, status=HTTP_400_BAD_REQUEST)
+    # serializer = self.serializer_class(data=csv_export(request), many=True)
+    # if serializer:
+    #   serializer.is_valid()
+    #   return response.Response(serializer.data)
+    # else:
+    #   serializer.is_valid()
+    #   return response.Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+class ReservationDeleteView(views.APIView):
+  # permission_classes = [IsAuthenticated]
+  serializer_class = ReservationSerializer
+
+  def delete(self, request):
+    queryset = Reservation.objects.filter(start__range=[request.data['start1'], request.data['start2']])
+
+    if queryset.exists():
+      queryset.delete()
+      return response.Response({'detail': '正常に削除されました。'}, status=HTTP_200_OK)
+    else:
+      serializer = self.serializer_class(data=queryset)
+      serializer.is_valid()
+      return response.Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

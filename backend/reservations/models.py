@@ -140,8 +140,7 @@ class ApprovalApplication(models.Model):
       validators.MinValueValidator(0),
       validators.MaxValueValidator(20000)],
       blank=True, null=True)
-  conditions = models.TextField('承認の条件', max_length=255,
-  blank=True, null=True)
+  conditions = models.TextField('承認の条件', max_length=255, blank=True, null=True)
   approval = models.ForeignKey(
       Approval, verbose_name='approval',
       related_name='approval_app_approval',
