@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
 from django.utils.translation import gettext as _
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
+from dj_rest_auth.serializers import LoginSerializer
 from .models import User
 
 
@@ -34,3 +35,17 @@ class PasswordResetSerializer(serializers.Serializer):
         'html_email_template_name': 'registration/password_reset_email.html',
     }
     self.reset_form.save(**opts)
+
+
+class StaffLoginSerializer(LoginSerializer):
+  def validate_auth_user_status(self, user):
+    if not user.is_staff:
+      msg = _('This user account is not authorized.')
+      raise exceptions.ValidationError(msg)
+
+
+class SuperUserLoginSerializer(LoginSerializer):
+  def validate_auth_user_status(self, user):
+    if not user.is_superuser:
+      msg = _('This user account is not authorized.')
+      raise exceptions.ValidationError(msg)

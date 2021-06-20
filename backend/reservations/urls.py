@@ -139,6 +139,7 @@ ages_router.register(
 )
 
 urlpatterns = [
+    path('reservation-lists/', views.ReservationDeleteView.as_view(), name='reservation-list'),
     path('', include(router.urls)),
     path('', include(approvals_router.urls)),
     path('', include(places_router.urls)),
@@ -148,5 +149,4 @@ urlpatterns = [
     path('', include(usages_router.urls)),
     path('', include(ages_router.urls)),
     path('csv/export/', views.ApprovalApplicationCsvExportView.as_view(), name='csv_export'),
-    path('reservation-lists/', views.ReservationDeleteView.as_view(), name='reservation-list'),
 ]

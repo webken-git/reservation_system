@@ -33,11 +33,16 @@ class Place(models.Model):
 
 class Equipment(models.Model):
   name = models.CharField('附属設備・器具', max_length=25, blank=True, null=True)
+  place = models.ManyToManyField(
+      Place,
+      verbose_name='place',
+      related_name='equipment_place'
+  )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-  def __str__(self):
-    return self.name
+  # def __str__(self):
+  #   return self.name
 
 # 特別設備マスタ
 

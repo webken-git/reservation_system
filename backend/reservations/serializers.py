@@ -18,9 +18,38 @@ class PlaceSerializer(serializers.ModelSerializer):
 
 
 class EquipmentSerializer(serializers.ModelSerializer):
+  place = PlaceSerializer(many=True, read_only=True)
+  place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), many=True, write_only=True)
+
   class Meta:
     model = Equipment
     fields = '__all__'
+
+  def create(self, validated_data):
+    validated_data['place'] = validated_data.get('place_id', None)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    equipment = Equipment.objects.create(**validated_data)
+    equipment.save()
+    equipment.place.set(place_data)
+
+    return equipment
+
+  def update(self, instance, validated_data):
+    # 更新処理
+    validated_data['place'] = validated_data.get('place_id', None)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    instance.save()
+    instance.place.set(place_data)
+
+    return instance
 
 
 class SpecialEquipmentSerializer(serializers.ModelSerializer):
@@ -86,6 +115,7 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     return instance
 
+
 class UserInfoSerializer(serializers.ModelSerializer):
   user = UserSerializer(read_only=True)
   user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
@@ -125,16 +155,15 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
   approval_id = serializers.PrimaryKeyRelatedField(queryset=Approval.objects.all(), write_only=True)
   reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
 
-
   class Meta:
     model = ApprovalApplication
     fields = '__all__'
     extra_kwargs = {
-      'usage_fee': {'required': False},
-      'heating_fee': {'required': False},
-      'electric_fee': {'required': False},
-      'conditions': {'required': False}
-      }
+        'usage_fee': {'required': False},
+        'heating_fee': {'required': False},
+        'electric_fee': {'required': False},
+        'conditions': {'required': False}
+    }
 
   def create(self, validated_data):
     validated_data['reservation'] = validated_data.get('reservation_id', None)
@@ -273,6 +302,7 @@ class AgeCategorizeSerializer(serializers.ModelSerializer):
 
     return instance
 
+
 class DefferdPaymentSerializer(serializers.ModelSerializer):
   # reservation = ReservationSerializer(read_only=True)
   reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
@@ -298,6 +328,7 @@ class DefferdPaymentSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
 
 class FacilityFeeSerializer(serializers.ModelSerializer):
   place = PlaceSerializer(read_only=True)
@@ -332,6 +363,7 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
 
 class EquipmentFeeSerializer(serializers.ModelSerializer):
   equipment = EquipmentSerializer(read_only=True)
