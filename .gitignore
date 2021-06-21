@@ -1,1 +1,10 @@
 node_modules/
+node_modules
+
+/backend/lib/site-packeges
+# /backend/lib/python3.8
+/backend/Scripts
+/backend/pyvenv.cfg
+/backend/bin
+
+/config/local.py

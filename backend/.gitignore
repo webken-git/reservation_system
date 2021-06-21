@@ -1,5 +1,7 @@
-/Lib
+/lib/site-packeges
+/lib/python3.8
 /Scripts
 pyvenv.cfg
+/bin
 
 /config/local.py

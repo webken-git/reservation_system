@@ -22,7 +22,8 @@ http://docs.python.org/lib/module-compileall.html
 """
 
 
-import os, sys
+import os
+import sys
 
 
 sys.path.append('/home/webhok/www/reservation_system/backend/')
