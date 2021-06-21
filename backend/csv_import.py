@@ -14,7 +14,7 @@ connect = mysql.connector.connect(
 cursor = connect.cursor()
 
 
-def master_data(file, table):
+def insert_master_data(file, table):
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
 
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
@@ -25,8 +25,21 @@ def master_data(file, table):
     cursor.execute(sql, (row[0], row[1], now, now))
   f.close()
 
+# 中間テーブル
 
-def facility_fee_data(file):
+
+def intermediate_table(file, table, id1, id2):
+  f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
+
+  reader = csv.reader(f)
+  header = next(reader)
+  for row in reader:
+    sql = "INSERT INTO " + table + "(id, " + id1 + ", " + id2 + ") VALUES(%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], row[2]))
+  f.close()
+
+
+def insert_facility_fee_data(file):
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
   table = 'reservations_facilityfee'
 
@@ -40,7 +53,21 @@ def facility_fee_data(file):
   f.close()
 
 
-def reservation_data(file):
+def insert_equipment_fee_data(file):
+  f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
+  table = 'reservations_equipmentfee'
+
+  now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+
+  reader = csv.reader(f)
+  header = next(reader)
+  for row in reader:
+    sql = "INSERT INTO " + table + "(id, equipment_id, fee, created_at, updated_at) VALUES(%s,%s,%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], row[2], now, now))
+  f.close()
+
+
+def insert_reservation_data(file):
   # MySQLへの接続
   connect = mysql.connector.connect(
       db='reservation_system',
@@ -68,17 +95,20 @@ def reservation_data(file):
   connect.close()
 
 
-master_data('age.csv', "reservations_age")
-master_data('approval.csv', 'reservations_approval')
-master_data('place.csv', 'reservations_place')
-master_data('usage.csv', 'reservations_usage')
-master_data('equipment.csv', 'reservations_equipment')
-master_data('special_equipment.csv', 'reservations_specialequipment')
+insert_master_data('age.csv', "reservations_age")
+insert_master_data('approval.csv', 'reservations_approval')
+insert_master_data('place.csv', 'reservations_place')
+insert_master_data('usage.csv', 'reservations_usage')
+insert_master_data('equipment.csv', 'reservations_equipment')
+insert_master_data('special_equipment.csv', 'reservations_specialequipment')
 
-facility_fee_data('facility_fee.csv')
+intermediate_table('equipment_place.csv', 'reservations_equipment_place', 'equipment_id', 'place_id')
+
+insert_facility_fee_data('facility_fee.csv')
+insert_equipment_fee_data('equipment_fee.csv')
 
 connect.commit()
 cursor.close()
 connect.close()
 
-reservation_data('reservation.csv')
+insert_reservation_data('reservation.csv')

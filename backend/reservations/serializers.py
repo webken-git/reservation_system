@@ -18,9 +18,38 @@ class PlaceSerializer(serializers.ModelSerializer):
 
 
 class EquipmentSerializer(serializers.ModelSerializer):
+  place = PlaceSerializer(many=True, read_only=True)
+  place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), many=True, write_only=True)
+
   class Meta:
     model = Equipment
     fields = '__all__'
+
+  def create(self, validated_data):
+    validated_data['place'] = validated_data.get('place_id', None)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    equipment = Equipment.objects.create(**validated_data)
+    equipment.save()
+    equipment.place.set(place_data)
+
+    return equipment
+
+  def update(self, instance, validated_data):
+    # 更新処理
+    validated_data['place'] = validated_data.get('place_id', None)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    instance.save()
+    instance.place.set(place_data)
+
+    return instance
 
 
 class SpecialEquipmentSerializer(serializers.ModelSerializer):
@@ -53,12 +82,46 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class ApprovalApplicationSerializer(serializers.ModelSerializer):
-  reservation = ReservationSerializer()
-  approval = ApprovalSerializer()
+  reservation = ReservationSerializer(read_only=True)
+  approval = ApprovalSerializer(read_only=True)
+  approval_id = serializers.PrimaryKeyRelatedField(queryset=Approval.objects.all(), write_only=True)
+  reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
 
   class Meta:
     model = ApprovalApplication
     fields = '__all__'
+    extra_kwargs = {
+        'usage_fee': {'required': False},
+        'heating_fee': {'required': False},
+        'electric_fee': {'required': False},
+        'conditions': {'required': False}
+    }
+
+  def create(self, validated_data):
+    validated_data['reservation'] = validated_data.get('reservation_id', None)
+    validated_data['approval'] = validated_data.get('approval_id', None)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['reservation_id']
+    del validated_data['approval_id']
+
+    return ApprovalApplication.objects.create(**validated_data)
+
+  def update(self, instance, validated_data):
+    # 更新処理
+    instance.reservation = validated_data.get('reservation_id', instance.reservation)
+    instance.approval = validated_data.get('approval_id', instance.approval)
+    instance.usage_fee = validated_data.get('usage_fee', instance.usage_fee)
+    instance.heating_fee = validated_data.get('heating_fee', instance.heating_fee)
+    instance.electric_fee = validated_data.get('electric_fee', instance.electric_fee)
+    instance.conditions = validated_data.get('conditions', instance.conditions)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['reservation_id']
+    del validated_data['approval_id']
+    instance.save()
+
+    return instance
 
 
 class UsageSerializer(serializers.ModelSerializer):
