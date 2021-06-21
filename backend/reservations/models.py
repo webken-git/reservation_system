@@ -201,7 +201,7 @@ class AgeCategorize(models.Model):
   age = models.ManyToManyField(
       Age,
       verbose_name='age',
-      related_name='age_categorize_usage',
+      related_name='age_categorize_age',
   )
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',

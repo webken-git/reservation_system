@@ -13,6 +13,12 @@ from users.models import User
 from users.serializers import UserSerializer, StaffLoginSerializer, SuperUserLoginSerializer
 
 
+# スーパーユーザー権限
+class IsSuperUser(IsAdminUser):
+  def has_permission(self, request, view):
+    return bool(request.user and request.user.is_superuser)
+
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
   # permission_classes = [IsAuthenticated]
   queryset = User.objects.all()
