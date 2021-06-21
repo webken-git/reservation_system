@@ -33,11 +33,16 @@ class Place(models.Model):
 
 class Equipment(models.Model):
   name = models.CharField('附属設備・器具', max_length=25, blank=True, null=True)
+  place = models.ManyToManyField(
+      Place,
+      verbose_name='place',
+      related_name='equipment_place'
+  )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-  def __str__(self):
-    return self.name
+  # def __str__(self):
+  #   return self.name
 
 # 特別設備マスタ
 
@@ -136,8 +141,9 @@ class ApprovalApplication(models.Model):
       validators.MaxValueValidator(20000)])
   electric_fee = models.IntegerField('電気料', validators=[
       validators.MinValueValidator(0),
-      validators.MaxValueValidator(20000)])
-  conditions = models.TextField('承認の条件', max_length=255)
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
+  conditions = models.TextField('承認の条件', max_length=255, blank=True, null=True)
   approval = models.ForeignKey(
       Approval, verbose_name='approval',
       related_name='approval_app_approval',
