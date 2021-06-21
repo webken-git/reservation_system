@@ -13,6 +13,8 @@ urlpatterns = [
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
+    path('staff-login/', views.StaffLoginView.as_view()),
+    path('superuser-login/', views.SuperUserLoginView.as_view()),
 
     path('verify-email/',
          VerifyEmailView.as_view(), name='rest_verify_email'),

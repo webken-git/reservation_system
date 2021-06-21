@@ -1,6 +1,8 @@
-/lib/site-packeges
-/lib/python3.8
+/Lib
+/lib
+/bin
 /Scripts
+/Include
 pyvenv.cfg
 /bin
 

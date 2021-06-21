@@ -6,7 +6,6 @@ from rest_framework_nested import routers as nested_routers
 from reservations.views import views
 
 app_name = 'reservations'
-
 router = routers.DefaultRouter()
 router.register('approvals', views.ApprovalViewSet)
 router.register('places', views.PlaceViewSet)
@@ -140,6 +139,7 @@ ages_router.register(
 )
 
 urlpatterns = [
+    path('reservation-lists/', views.ReservationDeleteView.as_view(), name='reservation-list'),
     path('', include(router.urls)),
     path('', include(approvals_router.urls)),
     path('', include(places_router.urls)),
@@ -148,4 +148,5 @@ urlpatterns = [
     path('', include(reservations_router.urls)),
     path('', include(usages_router.urls)),
     path('', include(ages_router.urls)),
+    path('csv/export/', views.ApprovalApplicationCsvExportView.as_view(), name='csv_export'),
 ]
