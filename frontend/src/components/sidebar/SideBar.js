@@ -7,13 +7,13 @@ import './sidebar.scss'
 const SideBar = (props) => {
     return (
         <div className="sideBox">
-            <Title/>
-            <TransitionBox url="/Approval" icon={folder} pagename={"承認リスト"}/>
-            <TransitionBox icon={folder} pagename={"未承認リスト"}/>
-            <TransitionBox icon={folder} pagename={"不承認リスト"}/>
-            <TransitionBox icon={folder} pagename={"キャンセルリスト"}/>
-            <TransitionBox icon={folder} pagename={"ユーザーリスト"}/>
-            <TransitionBox icon={folder} pagename={"カレンダー"}/>
+            <Title url="/TopPage"/>
+            <TransitionBox url="/ApprovalList" icon={folder} pagename={"承認リスト"}/>
+            <TransitionBox url="/UnapprovalList" icon={folder} pagename={"未承認リスト"}/>
+            <TransitionBox url="/DisapprovalList" icon={folder} pagename={"不承認リスト"}/>
+            <TransitionBox url="/CancelList" icon={folder} pagename={"キャンセルリスト"}/>
+            <TransitionBox url="/UserList" icon={folder} pagename={"ユーザーリスト"}/>
+            <TransitionBox url="/Calendar"icon={folder} pagename={"カレンダー"}/>
         </div>
     )
 }
