@@ -1,19 +1,21 @@
 #!/bin/sh
 
-# уГРуГГуВпуВвуГГуГЧуГХуВбуВдуГлуВТф┐ЭхнШуБХуВМуБжуБДуВЛуГЗуВгуГмуВпуГИуГк
-dirpath='/root/backup/mysql/reservation'
+# е╨е├епеве├е╫е╒ебедеыдЄ╩▌┬╕д╡дьд╞дддые╟егеьепе╚еъ
+dirpath='/home/webhok/db/backup/reservation'
 
-# уГХуВбуВдуГлхРНуВТхоЪч╛й(тА╗уВдуГ│уГЭуГ╝уГИуБЧуБЯуБДуГХуВбуВдуГлхРНуБлцЫ╕уБНцПЫуБИуБжуБПуБауБХуБД)
+# е╒ебедеы╠╛дЄ─ъ╡┴(виедеєе▌б╝е╚д╖д┐дде╒ебедеы╠╛д╦╜ёдн┤╣дид╞дпд└д╡дд)
 filename='***'
 
-# DBхРН
-db_name='reservation'
+# DB╠╛
+db_name='webhok_reservation'
 
-# DBуГСуВ╣уГпуГ╝уГЙ
-password='password'
+# DBе╤е╣еяб╝е╔
+user_name='webhok'
+password='lQ8Fmvx0PT1j'
+host='mysql57.webhok.sakura.ne.jp'
 
-# gzуГХуВбуВдуГлуВТшзгхЗН
+# gzе╒ебедеыдЄ▓Є┼р
 gzip -d $dirpath/$filename.sql.gz
 
-# уВдуГ│уГЭуГ╝уГИуВТхоЯшбМ
-mysql -u root --password=$password $db_name < $dirpath/$filename.sql
+# едеєе▌б╝е╚дЄ╝┬╣╘
+mysql -u$user_name -p$password -h $host $db_name < $dirpath/$filename.sql

@@ -31,7 +31,7 @@ except ImportError:
 #DEBUG = True
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['webhok.net']
 
 
 # Application definition
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'corsheaders',
@@ -113,7 +114,6 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
-        'ATOMIC_REQUESTS': True,    # トランザクション処理の設定
     }
 }
 
@@ -216,7 +216,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # サインアップ時に確認メールを送信する
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# ACCOUNT_EMAIL_VERIFICATION = 'none'
+#ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 # サインアップ時の確認メールに記載するログインページのURL

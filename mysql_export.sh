@@ -1,10 +1,11 @@
 #!/bin/sh
 
 # 他のユーザからバックアップを読み込めないようにする
-umask 077
+umask 0077
 
 # バックアップファイルを何日分残しておくか（一ヶ月分）
-period=31
+#period=31
+period=5
 # バックアップファイルを保存するディレクトリ
 dirpath='/home/webhok/db/backup/reservation'
 
@@ -22,5 +23,5 @@ host='mysql57.webhok.sakura.ne.jp'
 mysqldump --opt --default-character-set=binary --no-tablespaces -u$user_name -p$password -h $host $db_name | gzip > $dirpath/$filename.sql.gz
 
 # 古いバックアップファイルを削除
-oldfile=`date --date "$period days ago" +%y%m%d`
+oldfile=`date -v-${period}d +%y%m%d`
 rm $dirpath/$oldfile.sql.gz
