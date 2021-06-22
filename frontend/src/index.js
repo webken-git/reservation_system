@@ -9,7 +9,7 @@ import GuestRoute from "./components/api/GuestRoute";
 import Home from "./pages/home/Home";
 import Login from "./pages/home/Login";
 import MyPage from "./pages/home/MyPage";
-import Top from "./pages/home/Top";
+import Calendar from "./pages/Calendar";
 function Menu() {
   return (
     <nav>
@@ -17,7 +17,7 @@ function Menu() {
       {" "}|{" "}
       <Link to="/mypage">MyPage</Link>
       {" "}|{" "}
-      <Link to="/top">Top</Link>
+      <Link to="/calendar">Calendar</Link>
     </nav>
   );
 }
@@ -31,7 +31,7 @@ function App() {
           <Route path="/" exact children={<Home />} />
           <GuestRoute path="/login" children={<Login />} />
           <PrivateRoute path="/mypage" children={<MyPage />} />
-          <PrivateRoute path="/top" children={<Top />} />
+          <PrivateRoute path="/calendar" children={<Calendar />} />
         </Switch>
       </BrowserRouter>
     </Provider>
