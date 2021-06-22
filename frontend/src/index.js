@@ -25,6 +25,8 @@ function Menu() {
       <Link to="/login">Login</Link>
       {" "}|{" "}
       <Link to="/mypage">MyPage</Link> 
+      {" "}|{" "}
+      <Link to="/calendar">Calendar</Link>
     </nav>
   );
 }
