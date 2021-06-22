@@ -1,8 +1,13 @@
 import React from "react";
+import CancelListBody from "../../components/cancellist/CancelListBody"
 export const CancelList =()=> {
   return (
-    <div>
-      <p>CancelList</p>
+    <div className="list-wrapper">
+      <div className="scroll_box-wrapper">
+        <div className="scroll_box">
+          <CancelListBody/>
+        </div>
+      </div>
     </div>
   )
 }
