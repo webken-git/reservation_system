@@ -1,0 +1,15 @@
+.allbox {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+
+    .sidebar {
+        width:15%;
+        height: 100vh;
+    }
+      
+    .mainbox {
+        width: 85%;
+        height: 100vh;
+    }
+}

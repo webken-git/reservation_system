@@ -12,15 +12,15 @@ const Head = (props) =>{
     const setHomeUpdateFlag = props.setHomeUpdateFlag;
     const count = props.count;
 
-    // useEffect(() => {
-    //     let unmounted = false;
-    //     let year = date.getFullYear();
-    //     let month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
-    //     let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
+    useEffect(() => {
+        let unmounted = false;
+        let year = date.getFullYear();
+        let month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
+        let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
 
-    //     if(!unmounted){
-    //         setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
-    //     }
+        if(!unmounted){
+            setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
+        }
 
         // if((individualOrGroup === "group")&&(cookies.get('selected-group'))){
         //     axios.get(`${process.env.REACT_APP_END_POINT}/api/v1/groupschedulesearch/`, {
@@ -69,8 +69,8 @@ const Head = (props) =>{
         //     });
         // }
         
-    //     return () => { unmounted = true }
-    // }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, count]);
+        return () => { unmounted = true }
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, count]);
 
     //modal
     //グループのスケジュール表示中アラート
@@ -164,7 +164,7 @@ const Head = (props) =>{
         <div className="head">
             <p className="day">{props.day}</p>
             <p className="date"><span className={(new Date(new Date().toDateString()).getTime()===new Date(props.date.toDateString()).getTime() ? "today" : "")}>{props.date.getDate()}</span></p>
-            <div className="allday-schedule">
+            {/* <div className="allday-schedule">
                 {scheduleList.map((schedule)=>{
                     return (
                         <div
@@ -184,7 +184,7 @@ const Head = (props) =>{
                         </div>
                     )
                 })}
-            </div>
+            </div> */}
         </div>
     )
 }
