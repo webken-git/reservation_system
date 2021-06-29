@@ -16,28 +16,18 @@ import { DisapprovalList } from "./pages/home/DisapprovalList";
 import { CancelList } from "./pages/home/CancelList";
 import { UserList } from "./pages/home/UserList";
 import { Calendar } from "./pages/home/Calendar";
+import"./index.css"
 
 import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
 
-function Menu() {
-  return (
-    <nav>
-      <Link to="/login">Login</Link>
-      {" "}|{" "}
-      <Link to="/mypage">MyPage</Link> 
-      {" "}|{" "}
-      <Link to="/calendar">Calendar</Link>
-    </nav>
-  );
-}
+
 
 function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Menu />
         <Switch>
-          <Route path="/" exact children={<Home />} />
+          <Route path="/" exact  children={<Login />} />
           <GuestRoute path="/login" children={<Login />} />
           <SideBarAndHeaderRoute path="/toppage" exact children={<PrivateRoute path="/TopPage" exact children={<TopPage/>} />} />
           <SideBarAndHeaderRoute path="/mypage" exact children={<PrivateRoute path="/MyPage" exact children={<MyPage/>} />} />
