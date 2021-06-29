@@ -9,11 +9,12 @@ filename='***'
 # DB名
 db_name='reservation'
 
-# DBパスワード
+user_name='user'
 password='password'
+host='***'
 
 # gzファイルを解凍
 gzip -d $dirpath/$filename.sql.gz
 
 # インポートを実行
-mysql -u root --password=$password $db_name < $dirpath/$filename.sql
+mysql -u$user_name -p$password -h $host $db_name < $dirpath/$filename.sql

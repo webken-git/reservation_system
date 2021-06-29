@@ -178,6 +178,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    # 'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S.%f%z',
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -205,7 +206,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.AllowAllUsersModelBackend',
 ]
 
-EMAIL_USE_TLS = True
+# EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'websitecreatewak@gmail.com'
 EMAIL_HOST_PASSWORD = 'website_create_wak'

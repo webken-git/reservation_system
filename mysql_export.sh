@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # 他のユーザからバックアップを読み込めないようにする
-umask 077
+umask 0077
 
 # バックアップファイルを何日分残しておくか（一ヶ月分）
 period=31
@@ -14,13 +14,14 @@ filename=`date +%y%m%d`
 # DB名
 db_name='reservation'
 
-# DBパスワード
+user_name='user'
 password='password'
+host='***'
 
 # mysqldump実行（ファイルサイズ圧縮の為gzで圧縮しておきます。）
-mysqldump --opt $db_name --default-character-set=binary -u root --password=$password | gzip > $dirpath/$filename.sql.gz
+mysqldump --opt --default-character-set=binary --no-tablespaces -u$user_name -p$password -h $host $db_name | gzip > $dirpath/$filename.sql.gz
 # mysqldump --opt --all-databases --events --default-character-set=binary -u root --password=パスワード | gzip > $dirpath/$filename.sql.gz
 
 # 古いバックアップファイルを削除
-oldfile=`date --date "$period days ago" +%y%m%d`
+oldfile=`date -v-${period}d +%y%m%d`
 rm -f $dirpath/$oldfile.sql.gz

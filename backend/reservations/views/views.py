@@ -2,17 +2,19 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from rest_framework import viewsets, filters, response, views
+from rest_framework import viewsets, response, views
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import (
     HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR,
     HTTP_405_METHOD_NOT_ALLOWED
 )
+from django_filters import rest_framework as filters
 import datetime
 import pytz
 from reservations.models import *
 from reservations.serializers import *
+from reservations.filters import ReservationFilter
 from reservations.views.csv import csv_export
 
 
@@ -98,15 +100,17 @@ class ReservationViewSet(viewsets.ModelViewSet):
   # permission_classes = [IsAuthenticated]
   queryset = Reservation.objects.all()
   serializer_class = ReservationSerializer
-  filter_fields = [f.name for f in Reservation._meta.fields]
+  # filter_fields = [f.name for f in Reservation._meta.fields]
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_class = ReservationFilter
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
