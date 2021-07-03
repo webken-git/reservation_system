@@ -1,39 +1,37 @@
-// 承認リスト全体のコンポーネント
+// 未承認リスト全体のコンポーネント
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-import ApprovalTable from "./ApprovalTable"
-import './approval.scss'
+import UnApprovalTable from "./UnApprovalTable"
+// import './approval.scss'
 import dayjs from 'dayjs'
 
-const ApprovalListBody = () => { 
-  const [ApprovalListData, setApprovalListData] = useState([]);
-  // 承認リストのデータをAPIから受け取るaxios
-  const GetApporovalList = () => {
-    axios.get('https://webhok.net/reservation_system/api/reservations/9999-01-01T00:00/approval-applications/?approval=2')
+const UnapprovalListBody = () => {
+  const [UnApprovalListData, setUnApprovalListData] = useState([]);
+  // 未承認リストのデータをAPIから受け取るaxios
+  const GetUnApprovalList = () => {
+    axios.get('https://webhok.net/reservation_system/api/reservations/9999-01-01T00:00/approval-applications/?approval=1')
     .then(response => {
       const data = response.data;
-      // console.log(data[0]["reservation"]["place"]["name"]);
       // console.log(data);
-      // 承認リストのデータをuseStateに入れている
-      setApprovalListData(data);
+      // 未承認リストのデータをuseStateに入れている
+      setUnApprovalListData(data);
     })
     .catch((error) => {
       console.log(error);
     })
   }
-
-  // ページレンダリング時に承認リストのデータを受け取っている
+  // ページレンダリング時に未承認リストのデータを受け取っている
   useEffect(() => {
-    GetApporovalList();
+    GetUnApprovalList();
   }, [])
 
   const Table = (
       // データをmapで回している
-      ApprovalListData.map((val, val_index) =>{
+      UnApprovalListData.map((val, val_index) =>{
         return(
-          // 承認リストの中のコンポーネント
-          <ApprovalTable
-            // propsでApprovalTable.jsに承認リストのデータを送っている
+          // 未承認リストの中のコンポーネント
+          <UnApprovalTable
+            // propsでUnApprovalTable.jsに未承認リストのデータを送っている
             key={val_index}
             // dayjsのformatで〇/〇と日付を表示できるようにしている
             date={dayjs(val.reservation.start).format('MM/DD')}
@@ -45,6 +43,7 @@ const ApprovalListBody = () => {
             organizer_number={val.reservation.organizer_number}
             participant_number={val.reservation.participant_number}
             place={val.reservation.place.name}
+            id={val.reservation.id}
           />
         )
     })
@@ -53,7 +52,7 @@ const ApprovalListBody = () => {
       <div>
       <table className="list-body">
         <tr>
-          <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
+          <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td></td><td></td><td></td><td>詳細</td>
         </tr>
         {Table}
       </table>
@@ -61,4 +60,4 @@ const ApprovalListBody = () => {
     )
 }
 
-export default ApprovalListBody
+export default UnapprovalListBody
