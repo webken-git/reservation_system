@@ -1,0 +1,41 @@
+.root {
+    text-align: center;
+    margin-top: 100px;
+
+    .username {
+        // background-color: aqua;
+        padding-bottom: 15px;
+    }
+
+    .password {
+        // background-color: aquamarine;
+        margin-bottom: 25px;
+
+    }
+
+    .inputColumn {
+        width: 20%;
+        /*親要素いっぱい広げる*/
+        padding: 10px 15px;
+        /*ボックスを大きくする*/
+        font-size: 16px;
+        border-radius: 5px;
+        /*ボックス角の丸み*/
+        border: 2px solid #ddd;
+        /*枠線*/
+        box-sizing: border-box;
+
+        /*横幅の解釈をpadding, borderまでとする*/
+    }
+
+    .btn {
+        background: #1A8D89;
+        width: 100px;
+        font-size: 12px;
+        color: #FFFFFF;
+        padding: 10px 0 10px;
+        border-radius: 3px;
+        border: none;
+        /* 枠線を消す */
+    }
+}
