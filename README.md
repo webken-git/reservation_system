@@ -2,10 +2,45 @@
 
 稚内市のスポーツ施設向けの予約システムです。
 
-## 開発環境
+## Usage
 
-Python 3.8.3
+### `backend/web-back/.env` just for development
 
-Django 3.1.7
+```
+touch backend\django\.env
+```
 
-Node.js 14.15.5
+```
+SECRET_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+DEBUG=False
+HOST=db
+USER=user
+EMAIL_HOST='mailhog'
+EMAIL_HOST_USER=None
+EMAIL_HOST_PASSWORD=None
+```
+
+### migration for database
+
+```
+$ docker-compose run --rm django sh -c "python manage.py makemigrations"
+
+$ docker-compose run --rm django sh -c "python manage.py migrate"
+```
+
+### create superuser
+
+```
+docker-compose run --rm django sh -c "python manage.py createsuperuser"
+```
+
+### run server
+
+```
+docker-compose up --build
+
+django:
+http://127.0.0.1:8080/
+mailhog:
+http://127.0.0.1:8025/
+```
