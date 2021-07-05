@@ -5,10 +5,10 @@ import pytz
 
 # MySQLへの接続
 connect = mysql.connector.connect(
-    db='webhok_reservation',
-    user='webhok',
-    passwd='lQ8Fmvx0PT1j',
-    host='mysql57.webhok.sakura.ne.jp',
+    db='reservatioSystem',
+    user=os.environ.get('DATABASE_USER'),
+    passwd=os.environ.get('DATABASE_PASSWORD'),
+    host=os.environ.get('DATABASE_HOST'),
     charset='utf8'
 )
 cursor = connect.cursor()
@@ -70,10 +70,17 @@ def insert_equipment_fee_data(file):
 def insert_reservation_data(file):
   # MySQLへの接続
   connect = mysql.connector.connect(
+<<<<<<< HEAD
       db='webhok_reservation',
       user='webhok',
       passwd='lQ8Fmvx0PT1j',
       host='mysql57.webhok.sakura.ne.jp',
+=======
+      db='reservationSystem',
+      user=os.environ.get('DATABASE_USER'),
+      passwd=os.environ.get('DATABASE_PASSWORD'),
+      host=os.environ.get('DATABASE_HOST'),
+>>>>>>> origin/kitaura
       charset='utf8'
   )
   cursor = connect.cursor()
