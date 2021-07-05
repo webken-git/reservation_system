@@ -5,10 +5,10 @@ import pytz
 
 # MySQLへの接続
 connect = mysql.connector.connect(
-    db='reservation_system',
-    user='root',
-    passwd='',
-    host='localhost',
+    db='reservatioSystem',
+    user=os.environ.get('DATABASE_USER'),
+    passwd=os.environ.get('DATABASE_PASSWORD'),
+    host=os.environ.get('DATABASE_HOST'),
     charset='utf8'
 )
 cursor = connect.cursor()
@@ -70,10 +70,10 @@ def insert_equipment_fee_data(file):
 def insert_reservation_data(file):
   # MySQLへの接続
   connect = mysql.connector.connect(
-      db='reservation_system',
-      user='root',
-      passwd='',
-      host='localhost',
+      db='reservationSystem',
+      user=os.environ.get('DATABASE_USER'),
+      passwd=os.environ.get('DATABASE_PASSWORD'),
+      host=os.environ.get('DATABASE_HOST'),
       charset='utf8'
   )
   cursor = connect.cursor()

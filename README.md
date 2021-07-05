@@ -4,20 +4,10 @@
 
 ## Usage
 
-### `backend/web-back/.env` just for development
+### Create `backend/django/.env`
 
 ```
-touch backend\django\.env
-```
-
-```
-SECRET_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-DEBUG=False
-HOST=db
-USER=user
-EMAIL_HOST='mailhog'
-EMAIL_HOST_USER=None
-EMAIL_HOST_PASSWORD=None
+cp backend\django\.env.example backend\django\.env
 ```
 
 ### migration for database
