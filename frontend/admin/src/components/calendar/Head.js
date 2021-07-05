@@ -18,9 +18,18 @@ const Head = (props) =>{
         let month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
         let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
 
-        if(!unmounted){
-            setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
-        }
+        // axios.get(`${process.env.REACT_APP_API}/reservations/`,{
+        //     params: {
+        //         'start': year+'-'+month+'-'+day,
+        //     }
+        // })
+        // .then(res => {
+        //     console.log(res.data)
+        // })
+        
+        // if(!unmounted){
+        //     setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
+        // }
 
         // if((individualOrGroup === "group")&&(cookies.get('selected-group'))){
         //     axios.get(`${process.env.REACT_APP_END_POINT}/api/v1/groupschedulesearch/`, {
@@ -69,14 +78,14 @@ const Head = (props) =>{
         //     });
         // }
         
-        return () => { unmounted = true }
+        // return () => { unmounted = true }
     }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, count]);
 
     //modal
     //グループのスケジュール表示中アラート
-    const [isOpen, setIsOpen] = useState(false);
-    const [pageX, setPageX] = useState(0);
-    const [pageY, setPageY] = useState(0);
+    // const [isOpen, setIsOpen] = useState(false);
+    // const [pageX, setPageX] = useState(0);
+    // const [pageY, setPageY] = useState(0);
 
     // const groupScheduleAlertStyleGenerator = () => ({
     //     background: 'white',

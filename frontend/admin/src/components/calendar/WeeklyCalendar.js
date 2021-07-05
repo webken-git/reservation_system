@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react"
 import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
+import Content from './Content';
 
 const WeeklyCalendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
@@ -52,13 +53,14 @@ const WeeklyCalendar = (props) =>{
     }, [date]);
 
     return (
-            <div className="calendar">
+            <div className="weekly-calendar">
                 <div className="head-row">
                     <div className="timeline"></div>
 
                     {
                         dateList.map((date, index)=>{
                             return <Head
+                                        key={index}
                                         day={dayList[index]}
                                         date={date}
                             />
@@ -93,202 +95,14 @@ const WeeklyCalendar = (props) =>{
                         <div><p>22</p></div>
                         <div><p>23</p></div>
                     </div>
-                    <div className="content">
-                        <div className="content-span">
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                            <div className="content-div"></div>
-                        </div>
-                    </div>
-                    <div className="content">
-                            <div className="content-span">
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                            </div>
-                        </div>
-                    <div className="content">
-                            <div className="content-span">
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                            </div>
-                        </div>
-                    <div className="content">
-                            <div className="content-span">
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                            </div>
-                        </div>
-                    <div className="content">
-                            <div className="content-span">
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                            </div>
-                        </div>
-                    <div className="content">
-                            <div className="content-span">
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                            </div>
-                        </div>
-                    <div className="content">
-                            <div className="content-span">
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                                <div className="content-div"></div>
-                            </div>
-                        </div>
+                    {
+                        dateList.map((date,index)=>{
+                            return <Content
+                                        key={index}
+                                        date={date}
+                                    />
+                        })
+                    }
                 </div>
             </div>
         );

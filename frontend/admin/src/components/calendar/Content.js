@@ -3,8 +3,8 @@ import axios from 'axios';
 import { withCookies } from 'react-cookie'
 import {v4 as uuidv4} from 'uuid'
 
-import ScheduleBlock from './ScheduleBlock'
-import CreateModalComponent from './CreateModalComponent'
+import ScheduleBlock from './ScheduleBlock';
+// import CreateModalComponent from './CreateModalComponent'
 
 const Content = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
@@ -22,6 +22,22 @@ const Content = (props) =>{
         let year = date.getFullYear();
         let month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
         let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
+
+        axios.get(`${process.env.REACT_APP_API}/reservations/`,{
+            params: {
+                'start': year+'-'+month+'-'+day,
+            }
+        })
+        .then(res => {
+            const scheduleList = res.data;
+            setScheduleList(scheduleList);
+            console.log(res.data)
+        })
+        .catch( error => {
+            console.log(error);
+        });
+
+
         if(!unmounted){
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
             setStringContentDate(year+'-'+month+'-'+day);    
@@ -60,7 +76,7 @@ const Content = (props) =>{
         //         },
         //     })
         //     .then( res => {
-        //         let scheduleList = res.data;
+                // let scheduleList = res.data;
         //         if(!unmounted){
         //             setScheduleList(scheduleList);
         //             //console.log(scheduleList)
@@ -69,9 +85,9 @@ const Content = (props) =>{
         //             count();
         //         }
         //     })
-        //     .catch( error => {
-        //         console.log(error);
-        //     });
+            // .catch( error => {
+            //     console.log(error);
+            // });
         // }
         
         return () => { unmounted = true }
@@ -108,27 +124,27 @@ const Content = (props) =>{
                 <div className="content-div"></div>
                 <div className="content-div"></div>
             </div>
-            <CreateModalComponent
+            {/* <CreateModalComponent
                 stringContentDate={stringContentDate}
                 setHomeUpdateFlag={props.setHomeUpdateFlag}
-            />
+            /> */}
             <div className="schedule-block-column">
             {
-                props.isMain ?
+                // props.isMain ?
                 scheduleList.map((schedule, index) => {
                     return (
                         <ScheduleBlock
-                            key={uuidv4()}
+                            // key={uuidv4()}
                             schedule={schedule}
-                            index={index}
-                            openModal={props.openModal}
-                            setScheduleDict={props.setScheduleDict}
+                            key={index}
+                            // openModal={props.openModal}
+                            // setScheduleDict={props.setScheduleDict}
                             contentDate={contentDate}
-                            individualOrGroup={props.individualOrGroup}
+                            // individualOrGroup={props.individualOrGroup}
                         />
                     )
                 })
-                :null
+                // :null
             }
             </div>
         </div>

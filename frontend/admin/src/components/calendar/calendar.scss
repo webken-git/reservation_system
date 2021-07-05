@@ -1,5 +1,17 @@
 $bordercolor: gainsboro;
 
+.container{
+    display: inline-block;
+    // width: 80%;
+    width: 90%;
+    height: 92vh;
+    vertical-align: top;
+}
+
+.weekly-calendar {
+    height: 100%;
+}
+
 .head-row{
     height: 10%;
 
