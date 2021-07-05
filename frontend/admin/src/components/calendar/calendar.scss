@@ -1,5 +1,18 @@
 $bordercolor: gainsboro;
 
+//追加css
+.container{
+    display: inline-block;
+    // width: 80%;
+    width: 90%;
+    height: 82vh;
+    vertical-align: top;
+}
+
+.weekly-calendar {
+    height: 100%;
+}
+
 .head-row{
     height: 10%;
 

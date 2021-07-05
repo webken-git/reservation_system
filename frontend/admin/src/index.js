@@ -9,14 +9,14 @@ import GuestRoute from "./components/api/GuestRoute";
 import Home from "./pages/home/Home";
 import Login from "./pages/home/Login";
 import { TopPage } from "./pages/home/TopPage";
-import { MyPage }from "./pages/home/MyPage";
+import { MyPage } from "./pages/home/MyPage";
 import { ApprovalList } from "./pages/home/ApprovalList";
 import { UnapprovalList } from "./pages/home/UnapprovalList";
 import { DisapprovalList } from "./pages/home/DisapprovalList";
 import { CancelList } from "./pages/home/CancelList";
 import { UserList } from "./pages/home/UserList";
 import { Calendar } from "./pages/home/Calendar";
-import"./index.css"
+import "./index.css"
 import GetDate from "./components/toppage/GetDate"
 
 import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";

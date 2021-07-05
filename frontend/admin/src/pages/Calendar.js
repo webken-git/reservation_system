@@ -6,7 +6,7 @@ export default function Calendar() {
     const [ date, setDate ] = useState(new Date());
 
     return (
-        <div className="Calendar">
+        <div className="container">
             <WeeklyCalendar date={date} />
         </div>
     )
