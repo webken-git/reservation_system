@@ -7,7 +7,7 @@ import { ApprovalList } from "./ApprovalList"
 import { DisapprovalList } from "./DisapprovalList"
 import { UnapprovalList } from "./UnapprovalList"
 import { BrowserRouter, Switch } from "react-router-dom";
-import PrivateRoute from "./../../components/api/PrivateRoute"
+import PrivateRoute from "../../components/api/PrivateRoute"
 //import './mypage.scss'
 
 export const MyPage =()=> {

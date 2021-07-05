@@ -1,8 +1,8 @@
 import React from 'react'
 import TransitionBox from './TransitionBox'
 import Title from './Title'
-import folder from './../../assets/image/folder.png'
-import calendar from './../../assets/image/calendar_white.png'
+import folder from '../../assets/image/folder.png'
+import calendar from '../../assets/image/calendar_white.png'
 import './sidebar.scss'
 
 // サイドバーに表示するものをまとめたコンポーネント
