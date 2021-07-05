@@ -4,7 +4,7 @@
 
 ## Usage
 
-### `backend/web-back/.env` just for development
+### `backend/django/.env` just for development
 
 ```
 touch backend\django\.env
