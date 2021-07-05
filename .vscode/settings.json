@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "backend\\env\\Scripts\\python.exe",
+    "python.pythonPath": "backend\\django\\env\\Scripts\\python.exe",
     "python.linting.enabled": true, // 文法チェックを行う
     "python.linting.pylintEnabled": false, // pylint は使わない
     "python.linting.pycodestyleEnabled": false, // pep8 は使わない

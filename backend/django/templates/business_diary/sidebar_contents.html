@@ -1,0 +1,19 @@
+{% for file_name,files in directory.items %}
+{% if files %}
+<div class="directory">
+    <div class="file_name" onclick="display_toggle(this, {{ hierarchy }})">
+        &gt;&nbsp;{{ file_name }}
+    </div>
+    <div class="child_directory">
+        {% include "business_diary/sidebar_contents.html" with directory=files path=path|add:file_name|add:"/"
+        hierarchy=hierarchy|add:"1" %}
+    </div>
+</div>
+{% else %}
+<a href="https://webhok.net/reservation_system/backend{{ path|add:file_name }}">
+    <div class="file_name">
+        {{ file_name }}
+    </div>
+</a>
+{% endif %}
+{% endfor %}
