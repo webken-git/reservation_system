@@ -1,0 +1,7 @@
+node_modules/
+
+/backend/env
+# /backend/lib/python3.8
+/backend/bin
+
+/backend/config/local.py
