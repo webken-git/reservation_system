@@ -1,6 +1,6 @@
+// 印刷ボタンのコンポーネント
 import React from 'react'
 import './printingbutton.scss'
-
 const PrintingButton = () => {
     return (
         <div className="printingbutton-wrapper">
