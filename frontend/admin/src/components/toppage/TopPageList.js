@@ -11,18 +11,19 @@ const TopPageList = () => {
     .then(response => {
       const data = response.data;
       var today = dayjs().format('YYYY-MM-DD')
-      // var today = dayjs().add(1, 'y').add(1, 'd').format('YYYY-MM-DD')
-      // var today = dayjs().add(1, 'y').format('YYYY-MM-DD')
+      // var today = dayjs().add(1, 'y').add(19, 'd').format('YYYY-MM-DD')
+      // var today = dayjs().add(1, 'd').format('YYYY-MM-DD')
       // console.log(today)
-      let i = 0
-      var r_start = data[i]["reservation"]["start"]
-      var r_start_format = dayjs(r_start).format('YYYY-MM-DD')
+      // let i = 0
       // console.log(r_start_format)
       // console.log(r_start_format === today)
 
       var todaydata = []
 
-      for(i; data.length > i; i++){
+      for(let i = 0; data.length > i; i++){
+        var r_start = data[i]["reservation"]["start"]
+        var r_start_format = dayjs(r_start).format('YYYY-MM-DD')
+        console.log(r_start_format)
         if(r_start_format === today){
           todaydata.push(data[i])
           setTodayList(todaydata)

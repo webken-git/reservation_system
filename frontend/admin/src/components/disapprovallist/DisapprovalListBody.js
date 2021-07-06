@@ -1,39 +1,39 @@
-// 承認リスト全体のコンポーネント
+// 不承認リスト全体のコンポーネント
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-import ApprovalTable from "./ApprovalTable"
-import './approval.scss'
+import DisApprovalTable from "./DisapprovalTable"
+// import './approval.scss'
 import dayjs from 'dayjs'
 
-const ApprovalListBody = () => { 
-  const [ApprovalListData, setApprovalListData] = useState([]);
-  // 承認リストのデータをAPIから受け取るaxios
-  const GetApporovalList = () => {
-    axios.get('https://webhok.net/reservation_system/api/reservations/9999-01-01T00:00/approval-applications/?approval=2')
+
+const DisapprovalListBody = () => {
+  const [DisApprovalListData, setDisApprovalListData] = useState([]);
+  // 不承認リストのデータをAPIから受け取るaxios
+  const GetDisApprovalList = () => {
+    axios.get('https://webhok.net/reservation_system/api/reservations/9999-01-01T00:00/approval-applications/?approval=3')
     .then(response => {
       const data = response.data;
-      // console.log(data[0]["reservation"]["place"]["name"]);
       // console.log(data);
-      // 承認リストのデータをuseStateに入れている
-      setApprovalListData(data);
+      // 不承認リストのデータをuseStateに入れている
+      setDisApprovalListData(data);
     })
     .catch((error) => {
       console.log(error);
     })
   }
 
-  // ページレンダリング時に承認リストのデータを受け取っている
+  // ページレンダリング時に不承認リストのデータを受け取っている
   useEffect(() => {
-    GetApporovalList();
+    GetDisApprovalList();
   }, [])
 
   const Table = (
-      // データをmapで回している
-      ApprovalListData.map((val, val_index) =>{
+    // データをmapで回している
+      DisApprovalListData.map((val, val_index) =>{
         return(
-          // 承認リストの中のコンポーネント
-          <ApprovalTable
-            // propsでApprovalTable.jsに承認リストのデータを送っている
+          // 不承認リストの中のコンポーネント
+          <DisApprovalTable
+          // propsでDisapprovalTable.jsに不承認リストのデータを送っている
             key={val_index}
             // dayjsのformatで〇/〇と日付を表示できるようにしている
             date={dayjs(val.reservation.start).format('MM/DD')}
@@ -61,4 +61,4 @@ const ApprovalListBody = () => {
     )
 }
 
-export default ApprovalListBody
+export default DisapprovalListBody
