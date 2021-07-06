@@ -2,8 +2,10 @@
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
 import ApprovalTable from "./ApprovalTable"
+import Filter from "./../list/Filter"
 import './approval.scss'
 import dayjs from 'dayjs'
+// import Modal from 'react-modal'
 
 const ApprovalListBody = () => { 
   const [ApprovalListData, setApprovalListData] = useState([]);
@@ -52,6 +54,7 @@ const ApprovalListBody = () => {
     return (
       <div>
       <table className="list-body">
+        {/* <Filter/> */}
         <tr>
           <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
         </tr>
