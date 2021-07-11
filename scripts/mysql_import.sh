@@ -7,7 +7,7 @@ dirpath='/root/backup/mysql/reservation'
 filename='***'
 
 # DB名
-db_name='reservation'
+db_name='reservationSystem'
 
 user_name='user'
 password='password'

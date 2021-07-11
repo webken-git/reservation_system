@@ -14,11 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf import settings
-from django.conf.urls.static import static
+# from django.conf import settings
+# from django.conf.urls.static import static
 from django.urls import path, include
+from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
+from reservations.urls import router as reservations_router
+from application_documents.urls import router as application_documents_router
+from questionnaire.urls import router as questionnaire_router
+
+
+router = routers.DefaultRouter()
+router.registry.extend(reservations_router.registry)
+router.registry.extend(application_documents_router.registry)
+router.registry.extend(questionnaire_router.registry)
 
 reference_uris = [
     path('download/', SpectacularAPIView.as_view(), name='schema'),
@@ -26,7 +36,10 @@ reference_uris = [
 ]
 
 api_uris = [
+    path('', include(router.urls)),
+    path('', include('application_documents.urls')),
     path('', include('reservations.urls')),
+    path('', include('questionnaire.urls')),
     path(('users/'), include('users.urls')),
     path('password/reset/', PasswordResetView.as_view()),
     path('password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),

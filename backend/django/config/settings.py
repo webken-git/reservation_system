@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.basename(BASE_DIR)  # 追加
 
 # .envの読み込み
-load_dotenv(os.path.join(BASE_DIR, '.env'))  # 追加
+load_dotenv()  # 追加
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Local
-    'reservations',
-    'users',
+    'application_documents',
     'business_diary',
+    'reservations',
+    'questionnaire',
+    'users',
     # 3rd party
     'rest_framework',
     'rest_framework.authtoken',
@@ -145,10 +147,10 @@ STATIC_URL = '/static/'
 
 
 # 開発環境下での静的ファイルの参照先
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # 追加
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # 追加
 
 # 本番環境での静的ファイルの参照先
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # 追加
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # 追加
 
 # メディアファイルpath
 # MEDIA_URL = '/media/' # 追加
@@ -197,7 +199,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.AllowAllUsersModelBackend',
 ]
 
-# EMAIL_USE_TLS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

@@ -3,10 +3,10 @@
 . ./.env
 
 # reset MySQL
-mysql -uroot -e "drop database ${DB_NAME};"
-mysql -uroot -e "create database ${DB_NAME} default character set utf8;"
+mysql -uroot -e "drop database ${DATABASE_NAME};"
+mysql -uroot -e "create database ${DATABASE_NAME} default character set utf8;"
 
-. Scripts/activate
+. ../env/Scripts/activate
 python manage.py migrate
 
 # python csv_import.py

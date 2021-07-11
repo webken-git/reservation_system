@@ -2,10 +2,16 @@ import csv
 import mysql.connector
 import datetime
 import pytz
+import os
+from dotenv import load_dotenv  # 追加
+
+
+load_dotenv()  # 追加
+
 
 # MySQLへの接続
 connect = mysql.connector.connect(
-    db='reservatioSystem',
+    db=os.environ.get('DATABASE_NAME'),
     user=os.environ.get('DATABASE_USER'),
     passwd=os.environ.get('DATABASE_PASSWORD'),
     host=os.environ.get('DATABASE_HOST'),
@@ -67,10 +73,10 @@ def insert_equipment_fee_data(file):
   f.close()
 
 
-def insert_reservation_data(file):
+def insert_reservation_data(file, file2):
   # MySQLへの接続
   connect = mysql.connector.connect(
-      db='reservationSystem',
+      db=os.environ.get('DATABASE_NAME'),
       user=os.environ.get('DATABASE_USER'),
       passwd=os.environ.get('DATABASE_PASSWORD'),
       host=os.environ.get('DATABASE_HOST'),
@@ -86,13 +92,36 @@ def insert_reservation_data(file):
   reader = csv.reader(f)
   header = next(reader)
   for row in reader:
-    sql = "INSERT INTO " + table1 + "(id, group_name, reader_name, contact_name, address, tel, is_group, delete_flag, start, end, organizer_number, participant_number, purpose, admission_fee, equipment_id, place_id, special_equipment_id, user_id, created_at, updated_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    cursor.execute(sql, (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], now, now))
+    sql = "INSERT INTO " + table1 + "(group_name, reader_name, contact_name, address, tel, is_group, delete_flag, start, end, organizer_number, participant_number, purpose, admission_fee, equipment_id, place_id, special_equipment_id, user_id, created_at, updated_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], now, now))
+  f.close()
+
+  f = open('./static/reservations/csv/' + file2, 'r', encoding='utf8')
+  table2 = 'reservations_approvalapplication'
+
+  reader = csv.reader(f)
+  header = next(reader)
+  for row in reader:
+    sql = "INSERT INTO " + table2 + "(approval_id, reservation_id, created_at, updated_at) VALUES(%s,%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], now, now))
   f.close()
 
   connect.commit()
   cursor.close()
   connect.close()
+
+
+def insert_document_data(file, table):
+  f = open('./static/application_documents/csv/' + file, 'r', encoding='utf8')
+
+  now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+
+  reader = csv.reader(f)
+  header = next(reader)
+  for row in reader:
+    sql = "INSERT INTO " + table + "(name, url, created_at, updated_at) VALUES(%s,%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], now, now))
+  f.close()
 
 
 insert_master_data('age.csv', "reservations_age")
@@ -107,8 +136,10 @@ intermediate_table('equipment_place.csv', 'reservations_equipment_place', 'equip
 insert_facility_fee_data('facility_fee.csv')
 insert_equipment_fee_data('equipment_fee.csv')
 
+insert_document_data('document.csv', 'application_documents_document')
+
 connect.commit()
 cursor.close()
 connect.close()
 
-insert_reservation_data('reservation.csv')
+insert_reservation_data('reservation.csv', 'approval-application.csv')

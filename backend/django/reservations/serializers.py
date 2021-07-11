@@ -1,5 +1,3 @@
-from django.db.models import query
-from rest_framework import fields
 from rest_framework import serializers
 from reservations.models import *
 from users.serializers import UserSerializer
@@ -238,7 +236,8 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
 
   def update(self, instance, validated_data):
     # 更新処理
-    validated_data['usage'] = validated_data.get('usage_id', None)
+    validated_data['usage'] = validated_data.get('usage_id', instance.usage)
+    instance.reservation = validated_data.get('reservation', instance.reservation)
 
     # instance.reservation = validated_data.get('reservation_id', instance.reservation)
 
@@ -289,7 +288,8 @@ class AgeCategorizeSerializer(serializers.ModelSerializer):
 
   def update(self, instance, validated_data):
     # 更新処理
-    validated_data['age'] = validated_data.get('age_id', None)
+    validated_data['age'] = validated_data.get('age_id', instance.age)
+    instance.reservation = validated_data.get('reservation', instance.reservation)
 
     # instance.reservation = validated_data.get('reservation_id', instance.reservation)
     # PrimaryKeyRelatedFieldを削除
@@ -321,7 +321,7 @@ class DefferdPaymentSerializer(serializers.ModelSerializer):
 
   def update(self, instance, validated_data):
     # 更新処理
-    # instance.reservation = validated_data.get('reservation_id', instance.reservation)
+    instance.reservation = validated_data.get('reservation', instance.reservation)
     instance.reason = validated_data.get('reason', instance.reason)
     # PrimaryKeyRelatedFieldを削除
     # del validated_data['reservation_id']
