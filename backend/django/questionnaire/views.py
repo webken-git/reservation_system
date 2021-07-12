@@ -127,3 +127,93 @@ class QuestionQuestionnaireViewSet(viewsets.ReadOnlyModelViewSet):
   @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
+
+
+class ChoiceQuestionViewSet(viewsets.ReadOnlyModelViewSet):
+  # permission_classes = [IsAuthenticated]
+  serializer_class = QuestionSerializer
+  filter_fields = [f.name for f in Question._meta.fields]
+  filter_fields += ['choice__' + f.name for f in Choice._meta.fields]
+
+  def get_queryset(self):
+    choice_pk = self.kwargs.get('choice_pk')
+    queryset = Question.objects.all().prefetch_related('choice')
+    return queryset.filter(choice=choice_pk)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+
+class QuestionAnswerViewSet(viewsets.ReadOnlyModelViewSet):
+  # permission_classes = [IsAuthenticated]
+  serializer_class = AnswerSerializer
+  filter_fields = [f.name for f in Answer._meta.fields]
+  filter_fields += ['question__' + f.name for f in Question._meta.fields]
+
+  def get_queryset(self):
+    question_pk = self.kwargs.get('question_pk')
+    queryset = Answer.objects.all().prefetch_related('question')
+    return queryset.filter(question=question_pk)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+
+class QuestionnaireAnswerStatusViewSet(viewsets.ReadOnlyModelViewSet):
+  # permission_classes = [IsAuthenticated]
+  serializer_class = AnswerStatusSerializer
+  filter_fields = [f.name for f in AnswerStatus._meta.fields]
+  filter_fields += ['questionnaire__' + f.name for f in Questionnaire._meta.fields]
+  filter_fields += ['answer__' + f.name for f in Answer._meta.fields]
+
+  def get_queryset(self):
+    questionnaire_pk = self.kwargs.get('questionnaire_pk')
+    queryset = AnswerStatus.objects.all().prefetch_related('questionnaire')
+    return queryset.filter(questionnaire=questionnaire_pk)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+
+class AnswerAnswerStatusViewSet(viewsets.ReadOnlyModelViewSet):
+  # permission_classes = [IsAuthenticated]
+  serializer_class = AnswerStatusSerializer
+  filter_fields = [f.name for f in AnswerStatus._meta.fields]
+  filter_fields += ['questionnaire__' + f.name for f in Questionnaire._meta.fields]
+  filter_fields += ['answer__' + f.name for f in Answer._meta.fields]
+
+  def get_queryset(self):
+    answer_pk = self.kwargs.get('answer_pk')
+    queryset = AnswerStatus.objects.all().prefetch_related('answer')
+    return queryset.filter(answer=answer_pk)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)

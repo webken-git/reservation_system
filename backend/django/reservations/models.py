@@ -22,6 +22,7 @@ class Approval(models.Model):
 
 class Place(models.Model):
   name = models.CharField('利用体育施設の名称', max_length=25)
+  number = models.IntegerField('シート数', blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -89,15 +90,15 @@ class Reservation(models.Model):
       blank=True, null=True,
       related_name='reservation_place', on_delete=models.SET_NULL
   )
-  equipment = models.ForeignKey(
+  equipment = models.ManyToManyField(
       Equipment, verbose_name='equipment',
       blank=True, null=True,
-      related_name='reservation_equipment', on_delete=models.SET_NULL
+      related_name='reservation_equipment'
   )
-  special_equipment = models.ForeignKey(
+  special_equipment = models.ManyToManyField(
       SpecialEquipment, verbose_name='special_equipment',
       blank=True, null=True,
-      related_name='resercvation_special_equipment', on_delete=models.SET_NULL
+      related_name='resercvation_special_equipment'
   )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

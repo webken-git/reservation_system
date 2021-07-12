@@ -1,4 +1,4 @@
-id,equipment_id,fee
-1,1,300
-2,2,100
-3,3,100
+equipment_id,fee
+1,300
+2,100
+3,100
