@@ -1,3 +1,8 @@
-/backend/env
 node_modules
-# frontend/
+
+/backend/django/.env
+/backend/env
+/backend/lib
+/backend/Scripts
+/backend/pyvenv.cfg
+/backend/bin

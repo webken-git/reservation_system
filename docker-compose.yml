@@ -1,0 +1,74 @@
+version: "3.7"
+
+services:
+  django:
+    container_name: python-backend
+    env_file: ./backend/django/.env
+    build: ./backend/django/.
+    volumes:
+      - ./backend/django:/code/
+      - static_volume:/code/staticfiles # <-- bind the static volume
+    stdin_open: true
+    tty: true
+    command: gunicorn --bind :8000 config.wsgi:application
+    networks:
+      - backend_network
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - DJANGO_SETTINGS_MODULE=config.local_settings
+      - REDIS_HOST=redis
+    depends_on:
+      - db
+  redis:
+    image: redis:6.0.9-alpine
+    networks:
+      - backend_network
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+  mailhog:
+    image: mailhog/mailhog
+    networks:
+      - backend_network
+    expose:
+      - 1025
+      - 8025
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    restart: unless-stopped
+  backend-server:
+    container_name: nginx_back
+    build:
+      context: ./backend/nginx/.
+      dockerfile: Dockerfile.dev
+    volumes:
+      - static_volume:/code/staticfiles # <-- bind the static volume
+    ports:
+      - "8080:80"
+    depends_on:
+      - django
+    networks:
+      - backend_network
+  db:
+    build: ./mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reservationSystem
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./mysql_volume:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
+volumes:
+  static_volume:

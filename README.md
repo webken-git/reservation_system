@@ -2,57 +2,35 @@
 
 稚内市のスポーツ施設向けの予約システムです。
 
-## 開発環境
+## Usage
 
-Python 3.8.3
+### Create `backend/django/.env`
 
-Django 3.1.7
-
-## usage
-
-### local
-
-以下のコマンドを実行してください。
-
-```shell
-1. cd reservation_system
-2. git branch branchname (ex: kitaura, kinoshita)
-3. git checkout branchname
-4. git merge --allow-unrelated-histories origin/kitaura
-5. sh setting.sh
+```
+cp backend\django\.env.example backend\django\.env
 ```
 
-### use MySQL
+### migration for database
 
-XAMPPを利用する前提で設定方法を記載します。
+```
+$ docker-compose run --rm django sh -c "python manage.py makemigrations"
 
-```shell
-1. XAMPPのコントロールパネルでMySQLを起動
-2. cmdに戻る
-3. cd backend
-4. sh reset_mysql.sh
-5. python manage.py runserver
+$ docker-compose run --rm django sh -c "python manage.py migrate"
 ```
 
-### reset database
+### create superuser
 
-DBをリセットする際のコマンドです。
-
-既にbackendディレクトリに移動している場合1. は飛ばして大丈夫です。
-
-```shell
-1. cd backend
-2. sh reset_mysql.sh
+```
+docker-compose run --rm django sh -c "python manage.py createsuperuser"
 ```
 
-<!-- ## 初期データの追加
+### run server
 
-## user model
+```
+docker-compose up --build
 
-email:```websitecreatewak@gmail.com ```
-
-pass: ```hogehoge```
-
-```shell
-python manage.py loaddata .\users\fixtures\data.json
-``` -->
+django:
+http://127.0.0.1:8080/
+mailhog:
+http://127.0.0.1:8025/
+```
