@@ -189,7 +189,6 @@ SIMPLE_JWT = {
 SITE_ID = 1
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'user'
-AUTH_USER_MODEL = 'users.User'
 
 AUTHENTICATION_BACKENDS = [
     # allauth specific authentication methods, such as login by e-mail
@@ -202,14 +201,20 @@ AUTHENTICATION_BACKENDS = [
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+AUTH_USER_MODEL = 'users.User'
+ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
 # Userモデルにusernameフィールドは存在しないため以下を追記
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
-
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # サインアップ時に確認メールを送信する
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 # ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+# サインアップ時の確認メールに記載するログインページのURL
+LOGIN_URL = 'http://127.0.0.1:8080/account/login'
+# EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''

@@ -6,6 +6,14 @@ from users.models import User
 
 # Create your models here.
 
+
+# 予約停止スケジュールテーブル
+class ReservationSuspensionSchedule(models.Model):
+  start = models.DateTimeField('開始日時')
+  end = models.DateTimeField('終了日時')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+
 # 予約状態マスタ（承認、未承認など）
 
 
@@ -92,12 +100,12 @@ class Reservation(models.Model):
   )
   equipment = models.ManyToManyField(
       Equipment, verbose_name='equipment',
-      blank=True, null=True,
+      blank=True,
       related_name='reservation_equipment'
   )
   special_equipment = models.ManyToManyField(
       SpecialEquipment, verbose_name='special_equipment',
-      blank=True, null=True,
+      blank=True,
       related_name='resercvation_special_equipment'
   )
   created_at = models.DateTimeField(auto_now_add=True)

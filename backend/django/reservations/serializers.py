@@ -3,6 +3,12 @@ from reservations.models import *
 from users.serializers import UserSerializer
 
 
+class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = ReservationSuspensionSchedule
+    fields = '__all__'
+
+
 class ApprovalSerializer(serializers.ModelSerializer):
   class Meta:
     model = Approval
@@ -61,10 +67,10 @@ class ReservationSerializer(serializers.ModelSerializer):
   user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
   place = PlaceSerializer(read_only=True)
   place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), write_only=True)
-  equipment = EquipmentSerializer(read_only=True)
-  equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), write_only=True)
-  special_equipment = SpecialEquipmentSerializer(read_only=True)
-  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), write_only=True)
+  equipment = EquipmentSerializer(many=True, read_only=True)
+  equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), many=True, write_only=True)
+  special_equipment = SpecialEquipmentSerializer(many=True, read_only=True)
+  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), many=True, write_only=True)
 
   class Meta:
     model = Reservation

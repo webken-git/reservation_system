@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from reservations.models import Reservation
+from reservations.models import Reservation, ReservationSuspensionSchedule
 
 
 class ReservationFilter(filters.FilterSet):
@@ -11,6 +11,16 @@ class ReservationFilter(filters.FilterSet):
 
   class Meta:
     model = Reservation
-    # フィルタを列挙する。
-    # デフォルトの検索方法でいいなら、モデルフィールド名のフィルタを直接定義できる。
+    # フィルタを列挙
     fields = [f.name for f in Reservation._meta.fields]
+
+
+class ReservationSuspensionScheduleFilter(filters.FilterSet):
+  # フィルタの定義
+  start = filters.DateFilter(lookup_expr='exact')
+  end = filters.DateFilter(lookup_expr='exact')
+
+  class Meta:
+    model = ReservationSuspensionSchedule
+    # フィルタを列挙
+    fields = [f.name for f in ReservationSuspensionSchedule._meta.fields]
