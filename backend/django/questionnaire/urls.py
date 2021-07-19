@@ -37,10 +37,34 @@ answer_router = nested_routers.NestedSimpleRouter(
     lookup='answer'
 )
 
+choice_router.register(
+    'questions',
+    views.ChoiceQuestionViewSet,
+    basename='choice-question',
+)
+
 question_router.register(
     'questionnaire',
     views.QuestionQuestionnaireViewSet,
     basename='question-questionnaire'
+)
+
+question_router.register(
+    'answers',
+    views.QuestionAnswerViewSet,
+    basename='question-answer'
+)
+
+questionnaire_router.register(
+    'answer-statuses',
+    views.QuestionnaireAnswerStatusViewSet,
+    basename='questionnaire-answer-status'
+)
+
+answer_router.register(
+    'answer-statuses',
+    views.AnswerAnswerStatusViewSet,
+    basename='answer-answer-status'
 )
 
 urlpatterns = [

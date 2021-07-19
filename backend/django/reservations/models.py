@@ -6,6 +6,16 @@ from users.models import User
 
 # Create your models here.
 
+# スケージュール管理テーブル
+
+
+class Schedule(models.Model):
+  start = models.DateTimeField('利用開始日時')
+  end = models.DateTimeField('利用終了日時')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+
+
 # 予約状態マスタ（承認、未承認など）
 
 
@@ -22,6 +32,7 @@ class Approval(models.Model):
 
 class Place(models.Model):
   name = models.CharField('利用体育施設の名称', max_length=25)
+  number = models.IntegerField('シート数', blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -41,8 +52,8 @@ class Equipment(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-  # def __str__(self):
-  #   return self.name
+  def __str__(self):
+    return self.name
 
 # 特別設備マスタ
 
@@ -89,15 +100,15 @@ class Reservation(models.Model):
       blank=True, null=True,
       related_name='reservation_place', on_delete=models.SET_NULL
   )
-  equipment = models.ForeignKey(
-      Equipment, verbose_name='equipment',
-      blank=True, null=True,
-      related_name='reservation_equipment', on_delete=models.SET_NULL
+  equipment = models.ManyToManyField(
+      Equipment,
+      verbose_name='equipment',
+      related_name='reservation_equipment'
   )
-  special_equipment = models.ForeignKey(
-      SpecialEquipment, verbose_name='special_equipment',
-      blank=True, null=True,
-      related_name='resercvation_special_equipment', on_delete=models.SET_NULL
+  special_equipment = models.ManyToManyField(
+      SpecialEquipment,
+      verbose_name='special_equipment',
+      related_name='resercvation_special_equipment'
   )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
