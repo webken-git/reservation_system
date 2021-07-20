@@ -14,7 +14,10 @@ import datetime
 import pytz
 from reservations.models import *
 from reservations.serializers import *
-from reservations.filters import ReservationFilter
+from reservations.filters import (
+    ReservationFilter, ReservationSuspensionScheduleFilter,
+    ApprovalApplicationFilter
+)
 from reservations.csv import csv_export
 
 
@@ -28,19 +31,21 @@ TIME_OUTS_1MONTH = TIME_OUTS_1DAY * 30
 # Create your views here.
 
 
-class ScheduleViewSet(viewsets.ModelViewSet):
+class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
   # permission_classes = [IsAuthenticated]
-  queryset = Schedule.objects.all()
-  serializer_class = ScheduleSerializer
-  filter_fields = [f.name for f in Schedule._meta.fields]
+  queryset = ReservationSuspensionSchedule.objects.all()
+  serializer_class = ReservationSuspensionScheduleSerializer
+  # filter_fields = [f.name for f in Reservation._meta.fields]
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_class = ReservationSuspensionScheduleFilter
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1DAY))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1DAY))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
@@ -122,12 +127,12 @@ class ReservationViewSet(viewsets.ModelViewSet):
   filter_class = ReservationFilter
 
   def create(self, request, *args, **kwargs):
-    schedules = Schedule.objects.all()
-    for shedule in schedules:
-      if str(shedule.start) <= request.data['start'] <= str(shedule.end):
-        return response.Response({'error': {'入力された期間は予約できません。'}})
-      elif str(shedule.start) <= request.data['end'] <= str(shedule.end):
-        return response.Response({'error': {'入力された期間は予約できません。'}})
+    schedules = ReservationSuspensionSchedule.objects.all()
+    for schedule in schedules:
+      if str(schedule.start) <= request.data['start'] <= str(schedule.end):
+        return response.Response({'error': {'入力された日時は予約できません。'}})
+      elif str(schedule.start) <= request.data['end'] <= str(schedule.end):
+        return response.Response({'error': {'入力された日時は予約できません。'}})
       else:
         return super().create(request, *args, **kwargs)
 
@@ -163,17 +168,16 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   # permission_classes = [IsAuthenticated]
   queryset = ApprovalApplication.objects.all()
   serializer_class = ApprovalApplicationSerializer
-  filter_fields = [f.name for f in ApprovalApplication._meta.fields]
-  filter_fields += ['approval__' + f.name for f in Approval._meta.fields]
-  filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_class = ApprovalApplicationFilter
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 

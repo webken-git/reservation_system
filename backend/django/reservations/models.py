@@ -6,15 +6,13 @@ from users.models import User
 
 # Create your models here.
 
-# スケージュール管理テーブル
 
-
-class Schedule(models.Model):
-  start = models.DateTimeField('利用開始日時')
-  end = models.DateTimeField('利用終了日時')
+# 予約停止スケジュールテーブル
+class ReservationSuspensionSchedule(models.Model):
+  start = models.DateTimeField('開始日時')
+  end = models.DateTimeField('終了日時')
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
-
 
 # 予約状態マスタ（承認、未承認など）
 
@@ -101,13 +99,13 @@ class Reservation(models.Model):
       related_name='reservation_place', on_delete=models.SET_NULL
   )
   equipment = models.ManyToManyField(
-      Equipment,
-      verbose_name='equipment',
+      Equipment, verbose_name='equipment',
+      blank=True,
       related_name='reservation_equipment'
   )
   special_equipment = models.ManyToManyField(
-      SpecialEquipment,
-      verbose_name='special_equipment',
+      SpecialEquipment, verbose_name='special_equipment',
+      blank=True,
       related_name='resercvation_special_equipment'
   )
   created_at = models.DateTimeField(auto_now_add=True)
@@ -146,10 +144,12 @@ class ApprovalApplication(models.Model):
   )
   usage_fee = models.IntegerField('利用料', validators=[
       validators.MinValueValidator(0),
-      validators.MaxValueValidator(20000)])
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
   heating_fee = models.IntegerField('暖房料', validators=[
       validators.MinValueValidator(0),
-      validators.MaxValueValidator(20000)])
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
   electric_fee = models.IntegerField('電気料', validators=[
       validators.MinValueValidator(0),
       validators.MaxValueValidator(20000)],

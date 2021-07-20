@@ -7,7 +7,7 @@ from reservations import views
 
 app_name = 'reservations'
 router = routers.SimpleRouter()
-router.register('schedules', views.ScheduleViewSet)
+router.register('reservation-suspension-schedules', views.ReservationSuspensionScheduleViewSet)
 router.register('approvals', views.ApprovalViewSet)
 router.register('places', views.PlaceViewSet)
 router.register('equipments', views.EquipmentViewSet)

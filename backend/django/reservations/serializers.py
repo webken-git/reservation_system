@@ -3,9 +3,9 @@ from reservations.models import *
 from users.serializers import UserSerializer
 
 
-class ScheduleSerializer(serializers.ModelSerializer):
+class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
   class Meta:
-    model = Schedule
+    model = ReservationSuspensionSchedule
     fields = '__all__'
 
 
