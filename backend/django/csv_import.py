@@ -126,8 +126,9 @@ intermediate_table('equipment_place.csv', 'reservations_equipment_place', 'equip
 connect.commit()
 
 insert_facility_fee_data('facility_fee.csv')
+insert_facility_fee_data('facility_fee2.csv')
 insert_equipment_fee_data('equipment_fee.csv')
-insert_document_data('document.csv', 'application_documents_document')
+# insert_document_data('document.csv', 'application_documents_document')
 insert_reservation_data('reservation.csv')
 connect.commit()
 insert_approval_application_data('approval-application.csv')
