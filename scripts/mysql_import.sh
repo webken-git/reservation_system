@@ -18,4 +18,8 @@ host='mysql57.webhok.sakura.ne.jp'
 gzip -d $dirpath/$filename.sql.gz
 
 # インポートを実行
+<<<<<<< HEAD:scripts/mysql_import.sh
 mysql -u$user_name -p$password -h $host $db_name < $dirpath/$filename.sql
+=======
+mysql -u$user_name -p$password -h $host $db_name < $dirpath/$filename.sql
+>>>>>>> origin/kitaura:scripts/mysql_import.sh

@@ -3,10 +3,11 @@ from django.urls import path
 from django.urls.conf import include
 from rest_framework import routers
 from rest_framework_nested import routers as nested_routers
-from reservations.views import views
+from reservations import views
 
 app_name = 'reservations'
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
+router.register('reservation-suspension-schedules', views.ReservationSuspensionScheduleViewSet)
 router.register('approvals', views.ApprovalViewSet)
 router.register('places', views.PlaceViewSet)
 router.register('equipments', views.EquipmentViewSet)
@@ -139,7 +140,7 @@ ages_router.register(
 )
 
 urlpatterns = [
-    path('reservation-lists/', views.ReservationDeleteView.as_view(), name='reservation-list'),
+    path('reservation-list/', views.ReservationDeleteView.as_view(), name='reservation-list'),
     path('', include(router.urls)),
     path('', include(approvals_router.urls)),
     path('', include(places_router.urls)),
@@ -149,4 +150,8 @@ urlpatterns = [
     path('', include(usages_router.urls)),
     path('', include(ages_router.urls)),
     path('csv/export/', views.ApprovalApplicationCsvExportView.as_view(), name='csv_export'),
+<<<<<<< HEAD
 ]
+=======
+]
+>>>>>>> origin/kitaura

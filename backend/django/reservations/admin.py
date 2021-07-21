@@ -4,10 +4,16 @@ from reservations.models import (
     Equipment, SpecialEquipment,
     Approval, ApprovalApplication,
     Age, Usage, DefferdPayment,
-    AgeCategorize, UsageCategorize
+    AgeCategorize, UsageCategorize,
+    ReservationSuspensionSchedule
 )
 
 # Register your models here.
+
+
+class ReservationSuspensionScheduleAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in ReservationSuspensionSchedule._meta.fields]
+  list_display_links = ('id', 'start')
 
 
 class ReservationAdmin(admin.ModelAdmin):
@@ -80,6 +86,7 @@ class EquipmentFeeAdmin(admin.ModelAdmin):
   list_display_links = ('id', 'equipment')
 
 
+admin.site.register(ReservationSuspensionSchedule, ReservationSuspensionScheduleAdmin)
 admin.site.register(Reservation, ReservationAdmin)
 admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(Place, PlaceAdmin)
