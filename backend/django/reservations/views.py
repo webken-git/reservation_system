@@ -14,7 +14,10 @@ import datetime
 import pytz
 from reservations.models import *
 from reservations.serializers import *
-from reservations.filters import ReservationFilter, ReservationSuspensionScheduleFilter
+from reservations.filters import (
+    ReservationFilter, ReservationSuspensionScheduleFilter,
+    ApprovalApplicationFilter
+)
 from reservations.csv import csv_export
 
 
@@ -165,17 +168,16 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   # permission_classes = [IsAuthenticated]
   queryset = ApprovalApplication.objects.all()
   serializer_class = ApprovalApplicationSerializer
-  filter_fields = [f.name for f in ApprovalApplication._meta.fields]
-  filter_fields += ['approval__' + f.name for f in Approval._meta.fields]
-  filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_class = ApprovalApplicationFilter
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
