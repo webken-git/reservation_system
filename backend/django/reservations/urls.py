@@ -8,13 +8,16 @@ from reservations import views
 app_name = 'reservations'
 router = routers.SimpleRouter()
 router.register('reservation-suspension-schedules', views.ReservationSuspensionScheduleViewSet)
+router.register('csv-export', views.ApprovalApplicationCsvExportViewSet)
 router.register('approvals', views.ApprovalViewSet)
 router.register('places', views.PlaceViewSet)
 router.register('equipments', views.EquipmentViewSet)
 router.register('special-equipments', views.SpecialEquipmentViewSet)
 router.register('reservations', views.ReservationViewSet)
+router.register('reservation-lists', views.ReservationDeleteViewSet)
 router.register('userinfo', views.UserInfoViewSet)
 router.register('approval-applications', views.ApprovalApplicationViewSet)
+router.register('unapproval-counts', views.UnapprovalCountsViewSet)
 router.register('usages', views.UsageViewSet)
 router.register('ages', views.AgeViewSet)
 router.register('usage-categorizes', views.UsageCategorizeViewSet)
@@ -140,7 +143,6 @@ ages_router.register(
 )
 
 urlpatterns = [
-    path('reservation-list/', views.ReservationDeleteView.as_view(), name='reservation-list'),
     path('', include(router.urls)),
     path('', include(approvals_router.urls)),
     path('', include(places_router.urls)),
@@ -149,5 +151,4 @@ urlpatterns = [
     path('', include(reservations_router.urls)),
     path('', include(usages_router.urls)),
     path('', include(ages_router.urls)),
-    path('csv/export/', views.ApprovalApplicationCsvExportView.as_view(), name='csv_export'),
 ]

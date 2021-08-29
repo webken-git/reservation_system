@@ -1,15 +1,13 @@
-from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from rest_framework import viewsets, response, status, views
-from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
 from questionnaire.models import Choice, Question, Questionnaire, Answer, AnswerStatus
 from questionnaire.serializers import (
     ChoiceSerializer, QuestionSerializer, QuestionnaireSerializer,
     AnswerSerializer, AnswerStatusSerializer
 )
+from users import permissions
 
 
 # キャッシュの期限
@@ -18,10 +16,15 @@ TIME_OUTS_30MINUTES = 60 * 30  # 30分
 
 
 class ChoiceViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Choice.objects.all()
   serializer_class = ChoiceSerializer
   filter_fields = [f.name for f in Choice._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_30MINUTES))
@@ -35,11 +38,16 @@ class ChoiceViewSet(viewsets.ModelViewSet):
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Question.objects.all()
   serializer_class = QuestionSerializer
   filter_fields = [f.name for f in Question._meta.fields]
   filter_fields += ['choice__' + f.name for f in Choice._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_30MINUTES))
@@ -53,11 +61,16 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
 
 class QuestionnaireViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Questionnaire.objects.all()
   serializer_class = QuestionnaireSerializer
   filter_fields = [f.name for f in Questionnaire._meta.fields]
   filter_fields += ['question__' + f.name for f in Question._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_30MINUTES))
@@ -71,11 +84,16 @@ class QuestionnaireViewSet(viewsets.ModelViewSet):
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Answer.objects.all()
   serializer_class = AnswerSerializer
   filter_fields = [f.name for f in Answer._meta.fields]
   filter_fields += ['question__' + f.name for f in Question._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['destroy'],
+      permissions.IsAuthenticated: ['update', 'partial_update', 'create'],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_30MINUTES))
@@ -89,12 +107,17 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
 
 class AnswerStatusViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = AnswerStatus.objects.all()
   serializer_class = AnswerStatusSerializer
   filter_fields = [f.name for f in AnswerStatus._meta.fields]
   filter_fields += ['questionnaire__' + f.name for f in Questionnaire._meta.fields]
   filter_fields += ['answer__' + f.name for f in Answer._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['destroy'],
+      permissions.IsAuthenticated: ['update', 'partial_update', 'create'],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_30MINUTES))
@@ -108,10 +131,15 @@ class AnswerStatusViewSet(viewsets.ModelViewSet):
 
 
 class QuestionQuestionnaireViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = QuestionnaireSerializer
   filter_fields = [f.name for f in Questionnaire._meta.fields]
   filter_fields += ['question__' + f.name for f in Question._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     question_pk = self.kwargs.get('question_pk')
@@ -130,10 +158,15 @@ class QuestionQuestionnaireViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ChoiceQuestionViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = QuestionSerializer
   filter_fields = [f.name for f in Question._meta.fields]
   filter_fields += ['choice__' + f.name for f in Choice._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     choice_pk = self.kwargs.get('choice_pk')
@@ -152,10 +185,15 @@ class ChoiceQuestionViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class QuestionAnswerViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = AnswerSerializer
   filter_fields = [f.name for f in Answer._meta.fields]
   filter_fields += ['question__' + f.name for f in Question._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     question_pk = self.kwargs.get('question_pk')
@@ -174,11 +212,16 @@ class QuestionAnswerViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class QuestionnaireAnswerStatusViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = AnswerStatusSerializer
   filter_fields = [f.name for f in AnswerStatus._meta.fields]
   filter_fields += ['questionnaire__' + f.name for f in Questionnaire._meta.fields]
   filter_fields += ['answer__' + f.name for f in Answer._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     questionnaire_pk = self.kwargs.get('questionnaire_pk')
@@ -197,11 +240,16 @@ class QuestionnaireAnswerStatusViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class AnswerAnswerStatusViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = AnswerStatusSerializer
   filter_fields = [f.name for f in AnswerStatus._meta.fields]
   filter_fields += ['questionnaire__' + f.name for f in Questionnaire._meta.fields]
   filter_fields += ['answer__' + f.name for f in Answer._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     answer_pk = self.kwargs.get('answer_pk')

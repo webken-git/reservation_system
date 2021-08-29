@@ -1,4 +1,6 @@
+from django.db.models import query
 from rest_framework import serializers
+from rest_framework.relations import ManyRelatedField
 from reservations.models import *
 from users.serializers import UserSerializer
 
@@ -209,6 +211,29 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class UnapprovalCountsSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = ApprovalApplication
+    fields = ['count', 'start', 'data']
+
+  count = serializers.SerializerMethodField('get_count')
+  start = serializers.SerializerMethodField('get_start')
+  data = serializers.SerializerMethodField('get_data')
+
+  def get_count(self, obj):
+    return ApprovalApplication.objects.filter(approval=1, reservation__start=obj['reservation__start']).count()
+
+  def get_start(self, obj):
+    query = ApprovalApplication.objects.filter(approval=1, reservation__start=obj['reservation__start'])
+    serializer = ApprovalApplicationSerializer(query, many=True)
+    return serializer.data[0]['reservation']['start']
+
+  def get_data(self, obj):
+    query = ApprovalApplication.objects.filter(approval=1, reservation__start=obj['reservation__start'])
+    serializer = ApprovalApplicationSerializer(query, many=True)
+    return serializer.data
 
 
 class UsageSerializer(serializers.ModelSerializer):

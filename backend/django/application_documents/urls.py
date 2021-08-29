@@ -7,9 +7,8 @@ app_name = 'application_documents'
 
 router = routers.SimpleRouter()
 router.register('documents', views.DocumentViewSet)
+router.register('new-documents', views.CreateNewDocumentViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('test', views.a, name='test')
-    path('new-documents/', views.CreateNewDocumentView.as_view()),
 ]

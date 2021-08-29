@@ -21,6 +21,9 @@ cursor = connect.cursor()
 
 
 def insert_master_data(file, table):
+  """
+  マスターデータ
+  """
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
 
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
@@ -31,10 +34,11 @@ def insert_master_data(file, table):
     cursor.execute(sql, (row[0], now, now))
   f.close()
 
-# 中間テーブル
-
 
 def intermediate_table(file, table, id1, id2):
+  """
+  中間テーブル
+  """
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
 
   reader = csv.reader(f)
@@ -46,6 +50,9 @@ def intermediate_table(file, table, id1, id2):
 
 
 def insert_facility_fee_data(file):
+  """
+  施設料金データ
+  """
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
   table = 'reservations_facilityfee'
 
@@ -60,6 +67,9 @@ def insert_facility_fee_data(file):
 
 
 def insert_equipment_fee_data(file):
+  """
+  設備料金データ
+  """
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
   table = 'reservations_equipmentfee'
 
@@ -74,6 +84,9 @@ def insert_equipment_fee_data(file):
 
 
 def insert_reservation_data(file):
+  """
+  予約データ
+  """
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
   table1 = 'reservations_reservation'
 
@@ -88,6 +101,9 @@ def insert_reservation_data(file):
 
 
 def insert_approval_application_data(file):
+  """
+  予約の承認状況データ
+  """
   f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
   table = 'reservations_approvalapplication'
 
@@ -102,6 +118,9 @@ def insert_approval_application_data(file):
 
 
 def insert_document_data(file, table):
+  """
+  申請書マスタ
+  """
   f = open('./static/application_documents/csv/' + file, 'r', encoding='utf8')
 
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Local
+    'announcements',
     'application_documents',
     'business_diary',
     'reservations',
