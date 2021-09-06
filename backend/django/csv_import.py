@@ -117,6 +117,22 @@ def insert_approval_application_data(file):
   f.close()
 
 
+def insert_categorize_data(file, table):
+  """
+  利用区分及び年齢区分データ
+  """
+  f = open('./static/reservations/csv/' + file, 'r', encoding='utf8')
+
+  now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+
+  reader = csv.reader(f)
+  header = next(reader)
+  for row in reader:
+    sql = "INSERT INTO " + table + "(reservation_id, created_at, updated_at) VALUES(%s,%s,%s)"
+    cursor.execute(sql, (row[0], now, now))
+  f.close()
+
+
 def insert_document_data(file, table):
   """
   申請書マスタ
@@ -149,6 +165,11 @@ insert_equipment_fee_data('equipment_fee.csv')
 insert_reservation_data('reservation.csv')
 connect.commit()
 insert_approval_application_data('approval-application.csv')
+insert_categorize_data('usage-categorize.csv', 'reservations_usagecategorize')
+insert_categorize_data('age-categorize.csv', 'reservations_agecategorize')
+connect.commit()
+intermediate_table('usage-categorize_usage.csv', 'reservations_usagecategorize_usage', 'usagecategorize_id', 'usage_id')
+intermediate_table('age-categorize_age.csv', 'reservations_agecategorize_age', 'agecategorize_id', 'age_id')
 insert_document_data('document.csv', 'application_documents_document')
 connect.commit()
 cursor.close()
