@@ -249,14 +249,14 @@ class AgeSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 
-class UsageCategorizeSerializer(serializers.ModelSerializer):
+class UsageCategorySerializer(serializers.ModelSerializer):
   usage = UsageSerializer(many=True, read_only=True)
   usage_id = serializers.PrimaryKeyRelatedField(queryset=Usage.objects.all(), many=True, write_only=True)
   # reservation = ReservationSerializer(read_only=True)
   reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
 
   class Meta:
-    model = UsageCategorize
+    model = UsageCategory
     fields = '__all__'
     # depth = 1
 
@@ -270,15 +270,15 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
 
     # usageの部分をpopして退避
     usage_data = validated_data.pop('usage')
-    usage_categorize = UsageCategorize.objects.create(**validated_data)
-    usage_categorize.save()
+    usage_category = UsageCategory.objects.create(**validated_data)
+    usage_category.save()
     # for data in usage_data:
     #   usages = Usage.objects.filter(id=data['id']).first()
     #   if usages is None:
     #     data = Usage.objects.create(**usage_data)
-    usage_categorize.usage.set(usage_data)
+    usage_category.usage.set(usage_data)
 
-    return usage_categorize
+    return usage_category
 
   def update(self, instance, validated_data):
     # 更新処理
@@ -305,14 +305,14 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
     return instance
 
 
-class AgeCategorizeSerializer(serializers.ModelSerializer):
+class AgeCategorySerializer(serializers.ModelSerializer):
   age = AgeSerializer(many=True, read_only=True)
   age_id = serializers.PrimaryKeyRelatedField(queryset=Age.objects.all(), many=True, write_only=True)
   # reservation = ReservationSerializer(read_only=True)
   reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
 
   class Meta:
-    model = AgeCategorize
+    model = AgeCategory
     fields = '__all__'
 
   def create(self, validated_data):
@@ -324,11 +324,11 @@ class AgeCategorizeSerializer(serializers.ModelSerializer):
     # del validated_data['reservation_id']
 
     age_data = validated_data.pop('age')
-    age_categorize = AgeCategorize.objects.create(**validated_data)
-    age_categorize.save()
-    age_categorize.age.set(age_data)
+    age_category = AgeCategory.objects.create(**validated_data)
+    age_category.save()
+    age_category.age.set(age_data)
 
-    return age_categorize
+    return age_category
 
   def update(self, instance, validated_data):
     # 更新処理

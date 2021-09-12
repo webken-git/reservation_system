@@ -25,33 +25,36 @@ class Command(BaseCommand):
 
     approval_data = ApprovalApplication.objects.filter(approval=2, reservation__start__year=now.strftime('%Y'), reservation__start__month=now.strftime('%m'), reservation__start__day=now.strftime('%d'))
 
-    load_dotenv()
+    if approval_data:
+      load_dotenv()
 
-    s = SMTP(os.getenv('EMAIL_HOST'), 1025)
-    s.starttls()
-    # s.ehlo()
-    s.login(os.getenv('EMAIL_HOST_USER'), os.getenv('EMAIL_HOST_PASSWORD'))
+      s = SMTP(os.getenv('EMAIL_HOST'), os.getenv('EMAIL_PORT'))
+      s.starttls()
+      # s.ehlo()
+      s.login(os.getenv('EMAIL_HOST_USER'), os.getenv('EMAIL_HOST_PASSWORD'))
 
-    for data in approval_data:
-      """件名"""
-      subject = "リマインドメール：予約された施設の利用日が近づいています"
+      for data in approval_data:
+        """件名"""
+        subject = "ご予約の確認/稚内市みどりスポーツパーク"
 
-      """本文"""
-      message = data.reservation.contact_name + "　様<br><br>緑スポーツパークの古川です。<br><br>先日予約された「" + data.reservation.place.name + "（" + data.reservation.start.strftime('%Y年%#m月%d日 %H:%M:%S') + "）」の4日前となりました。<br><br>忘れずにお越しくださいますようお願い申し上げます。<br><br>お待ちしております。"
+        """本文"""
+        message = data.reservation.contact_name + "　様<br><br>" + data.reservation.place.name + "のご予約ありがとうございました。<br><br>ご予約の【4日前】となりましたので、<br>念のためお知らせ申し上げます。<br><br>＝＝＝＝＝＝予約詳細＝＝＝＝＝＝<br>連絡者名： " + data.reservation.contact_name + "<br>電話番号： " + data.reservation.tel + "<br>日時： " + data.reservation.start.strftime('%Y年%#m月%d日 %H:%M') + " ～ " + data.reservation.end.strftime('%H:%M') + "<br>施設： " + data.reservation.place.name + "<br>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝<br><br>当日は、" + data.reservation.contact_name + "様にお会いできますことを心よりお待ちしております。<br>どうぞお気をつけてお越しくださいませ。<br><br>みどりスポーツパーク"
 
-      """送信元メールアドレス"""
-      from_email = os.getenv('EMAIL_HOST_USER')
+        """送信元メールアドレス"""
+        from_email = os.getenv('EMAIL_HOST_USER')
 
-      """宛先メールアドレス"""
-      to_email = data.reservation.user.email
+        """宛先メールアドレス"""
+        to_email = data.reservation.user.email
 
-      msg = MIMEText(message, "html")
-      msg["Subject"] = subject
-      msg["To"] = to_email
-      msg["From"] = from_email
+        msg = MIMEText(message, "html")
+        msg["Subject"] = subject
+        msg["To"] = to_email
+        msg["From"] = from_email
 
-      # メール送信
-      s.send_message(msg)
+        # メール送信
+        s.send_message(msg)
 
-      self.stdout.write(self.style.SUCCESS('"%s' % to_email + '" 宛にメールを送信しました。'))
-    s.quit()
+        self.stdout.write(self.style.SUCCESS('"%s' % to_email + '" 宛にメールを送信しました。'))
+      s.quit()
+    else:
+      return "データがありませんでした。"

@@ -30,7 +30,8 @@ class Approval(models.Model):
 
 class Place(models.Model):
   name = models.CharField('利用体育施設の名称', max_length=25)
-  number = models.IntegerField('シート数', blank=True, null=True)
+  max = models.IntegerField(
+      '最大シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -50,8 +51,8 @@ class Equipment(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-  # def __str__(self):
-  #   return self.name
+  def __str__(self):
+    return self.name
 
 # 特別設備マスタ
 
@@ -98,6 +99,8 @@ class Reservation(models.Model):
       blank=True, null=True,
       related_name='reservation_place', on_delete=models.SET_NULL
   )
+  place_number = models.IntegerField(
+      'シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
   equipment = models.ManyToManyField(
       Equipment, verbose_name='equipment',
       blank=True,
@@ -188,15 +191,15 @@ class Age(models.Model):
 # 利用区分テーブル
 
 
-class UsageCategorize(models.Model):
+class UsageCategory(models.Model):
   usage = models.ManyToManyField(
       Usage,
       verbose_name='usage',
-      related_name='usage_categorize_usage',
+      related_name='usage_category_usage',
   )
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',
-      related_name='usage_categorize_reservation',
+      related_name='usage_category_reservation',
       on_delete=models.CASCADE
   )
   created_at = models.DateTimeField(auto_now_add=True)
@@ -206,15 +209,15 @@ class UsageCategorize(models.Model):
 # 年齢区分テーブル
 
 
-class AgeCategorize(models.Model):
+class AgeCategory(models.Model):
   age = models.ManyToManyField(
       Age,
       verbose_name='age',
-      related_name='age_categorize_age',
+      related_name='age_category_age',
   )
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',
-      related_name='age_categorize_reservation',
+      related_name='age_category_reservation',
       on_delete=models.CASCADE
   )
   created_at = models.DateTimeField(auto_now_add=True)

@@ -1,11 +1,16 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 from rest_framework import viewsets, response, views, status, mixins
 from rest_framework.decorators import action
 from django_filters import rest_framework as filters
 import datetime
 import pytz
+import os
+from dotenv import load_dotenv
 from users import permissions
 from reservations.models import *
 from reservations.serializers import *
@@ -208,8 +213,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],
-      permissions.IsAuthenticated: ['update', 'partial_update', 'create'],
-      permissions.AllowAny: ['list', 'retrieve']
+      permissions.IsAuthenticated: ['partial_update', 'create'],
+      permissions.AllowAny: ['list', 'retrieve', 'update', ]
   }
 
   # @method_decorator(vary_on_cookie)
@@ -221,6 +226,44 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
+
+  def update(self, request, *args, **kwargs):
+    super().update(request, *args, **kwargs)
+
+    data = ApprovalApplication.objects.filter(reservation__id=request.data['reservation_id'], approval__id=request.data['approval_id'])
+
+    """送信元メールアドレス"""
+    load_dotenv()
+    from_email = os.getenv('EMAIL_HOST_USER')
+
+    """宛先メールアドレス"""
+    to_email = data[0].reservation.user.email
+    context = {
+        "reservation": {
+            "contact_name": data[0].reservation.contact_name,
+            "tel": data[0].reservation.tel,
+            "place": data[0].reservation.place.name,
+            "start": data[0].reservation.start.strftime('%Y年%#m月%d日 %H:%M'),
+            "end": data[0].reservation.end.strftime('%H:%M'),
+        },
+    }
+    if request.data['approval_id'] == '2':
+      # HTMLファイルを読み込む
+      html_content = render_to_string("reservations/email/reservation_approval_message.html", context)
+      # HTMLタグを取り除く
+      text_content = strip_tags(html_content)
+      # メール送信
+      send_mail(
+          subject="【重要】本予約完了のご連絡/稚内市みどりスポーツパーク",
+          message=text_content,
+          from_email=from_email,
+          recipient_list=[to_email],
+          html_message=html_content
+      )
+    else:
+      pass
+    return response.Response(super().update(request, *args, **kwargs).data, status=status.HTTP_200_OK)
+    # return response.Response({'detail': request.data['approval_id']}, status=status.HTTP_200_OK)
 
 
 class UnapprovalCountsViewSet(
@@ -293,10 +336,10 @@ class AgeViewSet(viewsets.ModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class UsageCategorizeViewSet(viewsets.ModelViewSet):
-  queryset = UsageCategorize.objects.all()
-  serializer_class = UsageCategorizeSerializer
-  filter_fields = [f.name for f in UsageCategorize._meta.fields]
+class UsageCategoryViewSet(viewsets.ModelViewSet):
+  queryset = UsageCategory.objects.all()
+  serializer_class = UsageCategorySerializer
+  filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
@@ -316,10 +359,10 @@ class UsageCategorizeViewSet(viewsets.ModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class AgeCategorizeViewSet(viewsets.ModelViewSet):
-  queryset = AgeCategorize.objects.all()
-  serializer_class = AgeCategorizeSerializer
-  filter_fields = [f.name for f in AgeCategorize._meta.fields]
+class AgeCategoryViewSet(viewsets.ModelViewSet):
+  queryset = AgeCategory.objects.all()
+  serializer_class = AgeCategorySerializer
+  filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
@@ -600,9 +643,9 @@ class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class ReservationUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  serializer_class = UsageCategorizeSerializer
-  filter_fields = [f.name for f in UsageCategorize._meta.fields]
+class ReservationUsageCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = UsageCategorySerializer
+  filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
@@ -613,7 +656,7 @@ class ReservationUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
 
   def get_queryset(self):
     reservation_pk = self.kwargs.get('reservation_pk')
-    queryset = UsageCategorize.objects.all().prefetch_related('reservation')
+    queryset = UsageCategory.objects.all().prefetch_related('reservation')
     return queryset.filter(reservation=reservation_pk)
 
   @method_decorator(vary_on_cookie)
@@ -627,9 +670,9 @@ class ReservationUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class ReservationAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  serializer_class = AgeCategorizeSerializer
-  filter_fields = [f.name for f in AgeCategorize._meta.fields]
+class ReservationAgeCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = AgeCategorySerializer
+  filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
@@ -640,7 +683,7 @@ class ReservationAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
 
   def get_queryset(self):
     reservation_pk = self.kwargs.get('reservation_pk')
-    queryset = AgeCategorize.objects.all().prefetch_related('reservation')
+    queryset = AgeCategory.objects.all().prefetch_related('reservation')
     return queryset.filter(reservation=reservation_pk)
 
   @method_decorator(vary_on_cookie)
@@ -681,9 +724,9 @@ class ReservationDefferdPaymentViewSet(viewsets.ReadOnlyModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class UsageUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  serializer_class = UsageCategorizeSerializer
-  filter_fields = [f.name for f in UsageCategorize._meta.fields]
+class UsageUsageCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = UsageCategorySerializer
+  filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
@@ -694,7 +737,7 @@ class UsageUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
 
   def get_queryset(self):
     usage_pk = self.kwargs.get('usage_pk')
-    queryset = UsageCategorize.objects.all().prefetch_related('usage')
+    queryset = UsageCategory.objects.all().prefetch_related('usage')
     return queryset.filter(usage=usage_pk)
 
   @method_decorator(vary_on_cookie)
@@ -708,9 +751,9 @@ class UsageUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class AgeAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  serializer_class = AgeCategorizeSerializer
-  filter_fields = [f.name for f in AgeCategorize._meta.fields]
+class AgeAgeCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = AgeCategorySerializer
+  filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
@@ -721,7 +764,7 @@ class AgeAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
 
   def get_queryset(self):
     age_pk = self.kwargs.get('age_pk')
-    queryset = AgeCategorize.objects.all().prefetch_related('age')
+    queryset = AgeCategory.objects.all().prefetch_related('age')
     return queryset.filter(age=age_pk)
 
   @method_decorator(vary_on_cookie)

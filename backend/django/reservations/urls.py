@@ -20,8 +20,8 @@ router.register('approval-applications', views.ApprovalApplicationViewSet)
 router.register('unapproval-counts', views.UnapprovalCountsViewSet)
 router.register('usages', views.UsageViewSet)
 router.register('ages', views.AgeViewSet)
-router.register('usage-categorizes', views.UsageCategorizeViewSet)
-router.register('age-categorizes', views.AgeCategorizeViewSet)
+router.register('usage-categories', views.UsageCategoryViewSet)
+router.register('age-categories', views.AgeCategoryViewSet)
 router.register('defferd-payments', views.DefferdPaymentViewSet)
 router.register('facility-fees', views.FacilityFeeViewSet)
 router.register('equipment-fees', views.EquipmentFeeViewSet)
@@ -113,15 +113,15 @@ reservations_router.register(
 )
 
 reservations_router.register(
-    'usage-categorizes',
-    views.ReservationUsageCategorizeViewSet,
-    basename='reservation-usage-categorizes'
+    'usage-categories',
+    views.ReservationUsageCategoryViewSet,
+    basename='reservation-usage-categories'
 )
 
 reservations_router.register(
-    'age-categorizes',
-    views.ReservationAgeCategorizeViewSet,
-    basename='reservation-age-categorizes'
+    'age-categories',
+    views.ReservationAgeCategoryViewSet,
+    basename='reservation-age-categories'
 )
 
 reservations_router.register(
@@ -131,15 +131,15 @@ reservations_router.register(
 )
 
 usages_router.register(
-    'usage-categorizes',
-    views.UsageUsageCategorizeViewSet,
-    basename='usage-usage-categorizes'
+    'usage-categories',
+    views.UsageUsageCategoryViewSet,
+    basename='usage-usage-categories'
 )
 
 ages_router.register(
-    'age-categorizes',
-    views.AgeAgeCategorizeViewSet,
-    basename='age-age-categorizes'
+    'age-categories',
+    views.AgeAgeCategoryViewSet,
+    basename='age-age-categories'
 )
 
 urlpatterns = [

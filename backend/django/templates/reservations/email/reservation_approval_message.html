@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <p>{{ reservation.contact_name }} 様</p>
+
+    <p>この度はご予約いただき誠にありがとうございます。</p>
+
+    <p>下記の内容で本予約が完了されました。</p>
+
+    <p>＝＝＝＝＝＝予約詳細＝＝＝＝＝＝<br>
+    <div>連絡者名： {{ reservation.contact_name }}</div>
+    <div>電話番号： {{ reservation.tel }}</div>
+    <div>日時： {{ reservation.start }} ～ {{ reservation.end }}</div>
+    <div>施設： {{ reservation.place }}</div>
+    ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</p>
+
+    <p>当日は、{{ reservation.contact_name }}様にお会いできますことを心よりお待ちしております。</p>
+
+    <p>どうぞお気をつけてお越しくださいませ。</p>
+
+    <div>--</div>
+    <div><a itemprop="email" href="mailto:info@wmsp.info">info@wmsp.info</a></div>
+    <div>TEL： <a href="tel:0162734125">0162-73-4125</a></div>
+    <div>
+        <a href="https://goo.gl/maps/NtMfnnGtjYS2Q2yn7">
+            <div>〒097-0004</div>
+            <div>稚内市緑３丁目14番１号</div>
+            <div>稚内市みどりスポーツパーク</div>
+        </a>
+    </div>
+</body>
+
+</html>

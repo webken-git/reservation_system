@@ -220,5 +220,5 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 # サインアップ時の確認メールに記載するログインページのURL
-LOGIN_URL = 'http://127.0.0.1:8080/account/login'
+LOGIN_URL = '/account/login'
 # EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''
