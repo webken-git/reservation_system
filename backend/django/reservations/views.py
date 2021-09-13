@@ -213,8 +213,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],
-      permissions.IsAuthenticated: ['partial_update', 'create'],
-      permissions.AllowAny: ['list', 'retrieve', 'update', ]
+      permissions.IsAuthenticated: ['partial_update', ],
+      permissions.AllowAny: ['list', 'retrieve', 'update', 'create']
   }
 
   # @method_decorator(vary_on_cookie)
@@ -227,10 +227,42 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
+  def create(self, request, *args, **kwargs):
+    if ApprovalApplication.objects.filter(reservation=request.data['reservation_id']).exists():
+      return response.Response({'error': 'リクエストされたreservation_idが追加されているデータが既に存在しています。'})
+    else:
+      super().create(request, *args, **kwargs)
+      data = ApprovalApplication.objects.filter(reservation__id=request.data['reservation_id'], approval__id=request.data['approval_id'])
+
+      """送信元メールアドレス"""
+      load_dotenv()
+      from_email = os.getenv('EMAIL_HOST_USER')
+
+      """宛先メールアドレス"""
+      to_email = data[0].reservation.user.email
+      context = {
+          "reservation": {
+              "contact_name": data[0].reservation.contact_name,
+              "tel": data[0].reservation.tel,
+              "place": data[0].reservation.place.name,
+              "start": data[0].reservation.start.strftime('%Y年%#m月%d日 %H:%M'),
+              "end": data[0].reservation.end.strftime('%H:%M'),
+          },
+      }
+
+      # メール送信
+      send_mail(
+          subject="予約手続き完了のご連絡/稚内市みどりスポーツパーク",
+          message=render_to_string("reservations/email/reservation_complete_message.txt", context),
+          from_email=from_email,
+          recipient_list=[to_email],
+      )
+      return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
+
   def update(self, request, *args, **kwargs):
     super().update(request, *args, **kwargs)
 
-    data = ApprovalApplication.objects.filter(reservation__id=request.data['reservation_id'], approval__id=request.data['approval_id'])
+    data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
 
     """送信元メールアドレス"""
     load_dotenv()
@@ -247,23 +279,18 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
             "end": data[0].reservation.end.strftime('%H:%M'),
         },
     }
+
     if request.data['approval_id'] == '2':
-      # HTMLファイルを読み込む
-      html_content = render_to_string("reservations/email/reservation_approval_message.html", context)
-      # HTMLタグを取り除く
-      text_content = strip_tags(html_content)
       # メール送信
       send_mail(
           subject="【重要】本予約完了のご連絡/稚内市みどりスポーツパーク",
-          message=text_content,
+          message=render_to_string("reservations/email/reservation_approval_message.txt", context),
           from_email=from_email,
           recipient_list=[to_email],
-          html_message=html_content
       )
     else:
       pass
-    return response.Response(super().update(request, *args, **kwargs).data, status=status.HTTP_200_OK)
-    # return response.Response({'detail': request.data['approval_id']}, status=status.HTTP_200_OK)
+    return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
 
 class UnapprovalCountsViewSet(

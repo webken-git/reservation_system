@@ -38,7 +38,7 @@ class Command(BaseCommand):
         subject = "ご予約の確認/稚内市みどりスポーツパーク"
 
         """本文"""
-        message = data.reservation.contact_name + "　様<br><br>" + data.reservation.place.name + "のご予約ありがとうございました。<br><br>ご予約の【4日前】となりましたので、<br>念のためお知らせ申し上げます。<br><br>＝＝＝＝＝＝予約詳細＝＝＝＝＝＝<br>連絡者名： " + data.reservation.contact_name + "<br>電話番号： " + data.reservation.tel + "<br>日時： " + data.reservation.start.strftime('%Y年%#m月%d日 %H:%M') + " ～ " + data.reservation.end.strftime('%H:%M') + "<br>施設： " + data.reservation.place.name + "<br>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝<br><br>当日は、" + data.reservation.contact_name + "様にお会いできますことを心よりお待ちしております。<br>どうぞお気をつけてお越しくださいませ。<br><br>みどりスポーツパーク"
+        message = data.reservation.contact_name + "　様<br><br>" + data.reservation.place.name + "のご予約ありがとうございました。<br><br>ご予約の【4日前】となりましたので、<br>念のためお知らせ申し上げます。<br><br>--------------------------<br>連絡者名： " + data.reservation.contact_name + "<br>電話番号： " + data.reservation.tel + "<br>日時： " + data.reservation.start.strftime('%Y年%#m月%d日 %H:%M') + " ～ " + data.reservation.end.strftime('%H:%M') + "<br>施設： " + data.reservation.place.name + "<br>--------------------------<br><br>当日は、" + data.reservation.contact_name + "様にお会いできますことを心よりお待ちしております。<br>どうぞお気をつけてお越しくださいませ。<br><br>みどりスポーツパーク"
 
         """送信元メールアドレス"""
         from_email = os.getenv('EMAIL_HOST_USER')
