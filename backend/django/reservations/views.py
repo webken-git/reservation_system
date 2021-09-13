@@ -1,7 +1,7 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from rest_framework import viewsets, response, status, mixins
 from rest_framework.decorators import action
@@ -250,12 +250,14 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       }
 
       # メール送信
-      send_mail(
+      email = EmailMessage(
           subject="予約手続き完了のご連絡/稚内市みどりスポーツパーク",
-          message=render_to_string("reservations/email/reservation_complete_message.txt", context),
+          body=render_to_string("reservations/email/reservation_complete_message.txt", context),
           from_email=from_email,
-          recipient_list=[to_email],
+          to=[to_email],
+          bcc=[from_email]
       )
+      email.send()
       return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
   def update(self, request, *args, **kwargs):
@@ -281,23 +283,27 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
     if request.data['approval_id'] == '2':
       # メール送信
-      send_mail(
+      email = EmailMessage(
           subject="【重要】本予約完了のご連絡/稚内市みどりスポーツパーク",
-          message=render_to_string("reservations/email/reservation_approval_message.txt", context),
+          body=render_to_string("reservations/email/reservation_approval_message.txt", context),
           from_email=from_email,
-          recipient_list=[to_email],
+          to=[to_email],
+          bcc=[from_email]
       )
+      email.send()
     elif request.data['approval_id'] == '3':
       """
       予約が不承認された場合
       """
       # メール送信
-      send_mail(
+      email = EmailMessage(
           subject="【重要】予約不承認のお詫び/稚内市みどりスポーツパーク",
-          message=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
+          body=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
           from_email=from_email,
-          recipient_list=[to_email],
+          to=[to_email],
+          bcc=[from_email]
       )
+      email.send()
     elif ApprovalApplication.objects.filter(reservation__user=request.user.id, reservation=request.data['reservation_id'], approval=4).exists():
       """
       利用者側からキャンセルされた場合
