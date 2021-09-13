@@ -1,10 +1,9 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.core.mail import send_mail
-from django.utils.html import strip_tags
+from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
-from rest_framework import viewsets, response, views, status, mixins
+from rest_framework import viewsets, response, status, mixins
 from rest_framework.decorators import action
 from django_filters import rest_framework as filters
 import datetime
@@ -213,17 +212,17 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],
-      permissions.IsAuthenticated: ['partial_update', ],
-      permissions.AllowAny: ['list', 'retrieve', 'update', 'create']
+      permissions.IsAuthenticated: ['partial_update', 'update', 'create'],
+      permissions.AllowAny: ['list', 'retrieve']
   }
 
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
@@ -288,9 +287,47 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           from_email=from_email,
           recipient_list=[to_email],
       )
+    elif request.data['approval_id'] == '3':
+      """
+      予約が不承認された場合
+      """
+      # メール送信
+      send_mail(
+          subject="【重要】予約不承認のお詫び/稚内市みどりスポーツパーク",
+          message=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
+          from_email=from_email,
+          recipient_list=[to_email],
+      )
+    elif ApprovalApplication.objects.filter(reservation__user=request.user.id, reservation=request.data['reservation_id'], approval=4).exists():
+      """
+      利用者側からキャンセルされた場合
+      """
+      # メール送信
+      email = EmailMessage(
+          subject="予約キャンセル手続き完了のご連絡/稚内市みどりスポーツパーク",
+          body=render_to_string("reservations/email/user_side_cancel_message.txt", context, request),
+          from_email=from_email,
+          to=[to_email],
+          bcc=[from_email]
+      )
+      email.send()
+    elif request.user.id != ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=4)[0].reservation.user.id\
+            and User.objects.filter(id=request.user.id, is_staff=True).exists():
+      """
+      施設側からキャンセルされた場合
+      """
+      # メール送信
+      email = EmailMessage(
+          subject="予約キャンセルのお詫び/稚内市みどりスポーツパーク",
+          body=render_to_string("reservations/email/facility_side_cancel_message.txt", context),
+          from_email=from_email,
+          to=[to_email],
+          bcc=[from_email]
+      )
+      email.send()
     else:
       pass
-    return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
+    return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_201_CREATED)
 
 
 class UnapprovalCountsViewSet(
