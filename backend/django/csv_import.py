@@ -76,8 +76,8 @@ def insert_facility_fee_data(file):
   reader = csv.reader(f)
   header = next(reader)
   for row in reader:
-    sql = "INSERT INTO " + table + "(place_id, age_id, is_group, purpose, fee, created_at, updated_at) VALUES(%s,%s,%s,%s,%s,%s,%s)"
-    cursor.execute(sql, (row[0], row[1], row[2], row[3], row[4], now, now))
+    sql = "INSERT INTO " + table + "(place_id, age_id, is_group, time, purpose, fee, created_at, updated_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], row[2], row[3], row[4], row[5], now, now))
   f.close()
 
 
@@ -175,7 +175,7 @@ connect.commit()
 intermediate_table('equipment_place.csv', 'reservations_equipment_place', 'equipment_id', 'place_id')
 connect.commit()
 
-insert_facility_fee_data('facility_fee.csv')
+insert_facility_fee_data('facility_fee_v2.csv')
 insert_equipment_fee_data('equipment_fee.csv')
 insert_reservation_data('reservation.csv')
 connect.commit()

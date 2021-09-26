@@ -252,6 +252,7 @@ class FacilityFee(models.Model):
       on_delete=models.CASCADE
   )
   is_group = models.BooleanField('is_group', default=False)
+  time = models.CharField('時間帯', max_length=15, blank=True, null=True)
   purpose = models.CharField('使用目的', max_length=15, blank=True, null=True)
   fee = models.IntegerField('料金')
   created_at = models.DateTimeField(auto_now_add=True)
