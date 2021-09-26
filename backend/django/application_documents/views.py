@@ -9,7 +9,7 @@ import docx
 from users import permissions
 from application_documents.models import *
 from application_documents.serializers import DocumentSerializer
-from reservations.models import ApprovalApplication, UsageCategorize, AgeCategorize
+from reservations.models import ApprovalApplication, UsageCategory, AgeCategory
 
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分
@@ -29,8 +29,8 @@ def create_new_word(request):
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
   query = Document.objects.filter(id=request.data['id'])
   approval_applications = ApprovalApplication.objects.filter(id=request.data['approvalapplication_id'])
-  usage_categorizes = UsageCategorize.objects.filter(reservation__id=approval_applications[0].reservation.id)
-  age_categorizes = AgeCategorize.objects.filter(reservation__id=approval_applications[0].reservation.id)
+  usage_categorizes = UsageCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)
+  age_categorizes = AgeCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)
   number = 1
   contact_name = approval_applications[0].reservation.contact_name
   approval = approval_applications[0].approval.name

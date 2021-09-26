@@ -132,6 +132,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 LANGUAGE_CODE = 'ja'
 
 TIME_ZONE = 'Asia/Tokyo'
@@ -221,5 +223,5 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 # サインアップ時の確認メールに記載するログインページのURL
-LOGIN_URL = '/account/login/'
+LOGIN_URL = '/account/login'
 # EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''

@@ -34,12 +34,13 @@ class AuthInfoGetView(RetrieveAPIView):
   ログインユーザー情報を取得
   """
   serializer_class = UserSerializer
-  permission_classes = [permissions.ActionBasedPermission]
-  action_permissions = {
-      permissions.IsAdminUser: [],
-      permissions.IsAuthenticated: ['retrieve'],
-      permissions.AllowAny: []
-  }
+  permission_classes = [permissions.IsAuthenticated]
+  # permission_classes = [permissions.ActionBasedPermission]
+  # action_permissions = {
+  #     permissions.IsAdminUser: [],
+  #     permissions.IsAuthenticated: ['retrieve'],
+  #     permissions.AllowAny: ['list']
+  # }
 
   def get(self, request, format=None):
     user = User.objects.get(id=request.user.id)
