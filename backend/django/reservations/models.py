@@ -158,6 +158,7 @@ class ApprovalApplication(models.Model):
       validators.MaxValueValidator(20000)],
       blank=True, null=True)
   conditions = models.TextField('承認の条件', max_length=255, blank=True, null=True)
+  cancellation_reason = models.TextField('取り消しの理由', max_length=255, blank=True, null=True)
   approval = models.ForeignKey(
       Approval, verbose_name='approval',
       related_name='approval_app_approval',
@@ -165,6 +166,7 @@ class ApprovalApplication(models.Model):
   )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+
 
 # 利用区分マスタ
 

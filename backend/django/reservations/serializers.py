@@ -118,6 +118,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.participant_number = validated_data.get('participant_number', instance.participant_number)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.admission_fee = validated_data.get('admission_fee', instance.admission_fee)
+    instance.place_number = validated_data.get('place_number', instance.place_number)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['user_id']
@@ -183,7 +184,8 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
         'usage_fee': {'required': False},
         'heating_fee': {'required': False},
         'electric_fee': {'required': False},
-        'conditions': {'required': False}
+        'conditions': {'required': False},
+        'cancellation_reason': {'required': False}
     }
 
   def create(self, validated_data):
@@ -204,6 +206,7 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.heating_fee = validated_data.get('heating_fee', instance.heating_fee)
     instance.electric_fee = validated_data.get('electric_fee', instance.electric_fee)
     instance.conditions = validated_data.get('conditions', instance.conditions)
+    instance.cancellation_reason = validated_data.get('cancellation_reason', instance.cancellation_reason)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['reservation_id']
@@ -398,6 +401,7 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
     instance.place = validated_data.get('place_id', instance.place)
     instance.age = validated_data.get('age_id', instance.age)
     instance.is_group = validated_data.get('is_group', instance.is_group)
+    instance.time = validated_data.get('time', instance.time)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.fee = validated_data.get('fee', instance.fee)
     # PrimaryKeyRelatedFieldを削除
