@@ -1,3 +1,4 @@
+from django import forms
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -7,9 +8,9 @@ import pytz
 import os
 import docx
 from users import permissions
-from application_documents.models import *
-from application_documents.serializers import DocumentSerializer
-from reservations.models import ApprovalApplication, UsageCategory, AgeCategory
+from application_documents.models import DocumentTemplate, Document
+from application_documents.serializers import DocumentTemplateSerializer, DocumentSerializer
+from reservations.models import ApprovalApplication, DefferdPayment, UsageCategory, AgeCategory
 
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分
@@ -28,15 +29,15 @@ def create_new_word(request):
   """
   必須フォームフィールド:
   id: Documents テーブル id
-  approvalapplication_id: approval applications テーブル id
+  approval_application: approval applications テーブル id
   任意:
   number: 書類の発行番号
   """
   BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
-  query = Document.objects.filter(id=request.data['id'])
+  query = DocumentTemplate.objects.filter(id=request.data['id'])
   # DBから検索
-  approval_applications = ApprovalApplication.objects.filter(id=request.data['approvalapplication_id'])
+  approval_applications = ApprovalApplication.objects.filter(id=request.data['approval_application_id'])
   usage_categorizes = UsageCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)
   age_categorizes = AgeCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)
   # 記入内容データ
@@ -192,22 +193,27 @@ def create_new_word(request):
       if equipment:
         tbl.rows[7].cells[1].paragraphs[0].text = insert_string(tbl.rows[7].cells[1].paragraphs[0].text, 3, str(equipment)).replace("'", '').replace('[', '').replace(']　　　　　　　　　　　　　　　　　　', '')
       else:
-        tbl.rows[9].cells[1].paragraphs[0].text = tbl.rows[9].cells[1].paragraphs[0].text.replace('無', '✓無')
+        tbl.rows[7].cells[1].paragraphs[0].text = tbl.rows[7].cells[1].paragraphs[0].text.replace('無', '✓無')
       if special_equipment:
         tbl.rows[8].cells[1].paragraphs[0].text = insert_string(tbl.rows[8].cells[1].paragraphs[0].text, 3, str(special_equipment)).replace("'", '').replace('[', '').replace(']　　　　　　　　　　　', '')
       else:
-        tbl.rows[9].cells[1].paragraphs[0].text = tbl.rows[9].cells[1].paragraphs[0].text.replace('無', '✓無')
+        tbl.rows[8].cells[1].paragraphs[0].text = tbl.rows[8].cells[1].paragraphs[0].text.replace('無', '✓無')
       if admission_fee:
         tbl.rows[9].cells[1].paragraphs[0].text = tbl.rows[9].cells[1].paragraphs[0].text.replace('円', str(admission_fee) + '円')
       else:
         tbl.rows[9].cells[1].paragraphs[0].text = tbl.rows[9].cells[1].paragraphs[0].text.replace('無', '✓無')
+      if conditions:
+        tbl.rows[13].cells[1].paragraphs[0].text = tbl.rows[13].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
     elif query[0].name == '稚内市体育施設使用等承認取消し等決定通知書':
-      tbl.rows[0].cells[0].paragraphs[0].text = insert_string(tbl.rows[0].cells[0].paragraphs[0].text, 4, str(number))
-      tbl.rows[0].cells[0].paragraphs[1].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
-      tbl.rows[0].cells[0].paragraphs[2].text = insert_string(tbl.rows[0].cells[0].paragraphs[2].text, 6, contact_name)
-      tbl.rows[0].cells[0].paragraphs[9].text = tbl.rows[0].cells[0].paragraphs[9].text.replace('　　年', str(now.year) + ' 年').replace('　月', str(now.month) + ' 月').replace('　日', str(now.day) + ' 日').replace('第　　　　号', '第　' + str(number) + '　号')
-      tbl.rows[5].cells[1].paragraphs[0].text = insert_string(tbl.rows[5].cells[1].paragraphs[0].text, 0, purpose)
-      tbl.rows[6].cells[0].paragraphs[2].text = insert_string(tbl.rows[6].cells[0].paragraphs[2].text, 0, cancellation_reason)
+      if cancellation_reason:
+        tbl.rows[0].cells[0].paragraphs[0].text = insert_string(tbl.rows[0].cells[0].paragraphs[0].text, 4, str(number))
+        tbl.rows[0].cells[0].paragraphs[1].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
+        tbl.rows[0].cells[0].paragraphs[2].text = insert_string(tbl.rows[0].cells[0].paragraphs[2].text, 6, contact_name)
+        tbl.rows[0].cells[0].paragraphs[9].text = tbl.rows[0].cells[0].paragraphs[9].text.replace('　　年', str(now.year) + ' 年').replace('　月', str(now.month) + ' 月').replace('　日', str(now.day) + ' 日').replace('第　　　　号', '第　' + str(number) + '　号')
+        tbl.rows[5].cells[1].paragraphs[0].text = insert_string(tbl.rows[5].cells[1].paragraphs[0].text, 0, purpose)
+        tbl.rows[6].cells[0].paragraphs[2].text = insert_string(tbl.rows[6].cells[0].paragraphs[2].text, 0, str(cancellation_reason))
+      else:
+        return {'error': 'approval-applicationテーブルにあるcancellation_reasonフィールドの値が未入力です。'}
     elif query[0].name == '稚内市体育施設使用等承認申請書':
       tbl.rows[5].cells[3].paragraphs[0].text = insert_string(tbl.rows[5].cells[3].paragraphs[0].text, 0, purpose)
       tbl.rows[6].cells[3].paragraphs[0].text = tbl.rows[6].cells[3].paragraphs[0].text.replace('者　　', '者　' + str(organizer_number)).replace('員　　', '員　' + str(participant_number))
@@ -223,11 +229,25 @@ def create_new_word(request):
         tbl.rows[9].cells[3].paragraphs[0].text = tbl.rows[9].cells[3].paragraphs[0].text.replace('円', str(admission_fee) + '円')
       else:
         tbl.rows[9].cells[3].paragraphs[0].text = tbl.rows[9].cells[3].paragraphs[0].text.replace('無', '✓無')
-      tbl.rows[16].cells[1].paragraphs[0].text = tbl.rows[16].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
+      if conditions:
+        tbl.rows[16].cells[1].paragraphs[0].text = tbl.rows[16].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
+      else:
+        return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
     elif query[0].name == '稚内市体育施設使用料等後納承認（不承認）通知書':
-      pass
+      q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
+      tbl.rows[6].cells[1].paragraphs[1].text = insert_string(tbl.rows[6].cells[1].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+      if conditions:
+        tbl.rows[7].cells[1].paragraphs[0].text = tbl.rows[7].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
+      else:
+        return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
     elif query[0].name == '稚内市体育施設使用料等後納申請書':
-      pass
+      q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
+      tbl.rows[6].cells[3].paragraphs[1].text = insert_string(tbl.rows[6].cells[3].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+      if conditions:
+        tbl.rows[10].cells[3].paragraphs[0].text = tbl.rows[10].cells[3].paragraphs[0].text.replace('）', '）\n' + str(conditions))
+      else:
+        return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
+
   else:
     return {'error': 'docxファイルの指定が違います。'}
   doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d_') + query[0].name + '.docx')
@@ -236,10 +256,10 @@ def create_new_word(request):
   # return {'path': tbl.rows[16].cells[0].paragraphs[0].text}
 
 
-class DocumentViewSet(viewsets.ModelViewSet):
-  queryset = Document.objects.all()
-  serializer_class = DocumentSerializer
-  filter_fields = [f.name for f in Document._meta.fields]
+class DocumentTemplateViewSet(viewsets.ModelViewSet):
+  queryset = DocumentTemplate.objects.all()
+  serializer_class = DocumentTemplateSerializer
+  filter_fields = [f.name for f in DocumentTemplate._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
@@ -254,21 +274,18 @@ class DocumentViewSet(viewsets.ModelViewSet):
     headers = self.get_success_headers(serializer.data)
     return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-  @ method_decorator(vary_on_cookie)
-  @ method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @ method_decorator(vary_on_cookie)
-  @ method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class CreateNewDocumentViewSet(
-        mixins.CreateModelMixin,
-        mixins.DestroyModelMixin,
-        viewsets.GenericViewSet):
+class DocumentViewSet(viewsets.ModelViewSet):
   """
   申請書の作成と削除
   """
@@ -276,17 +293,19 @@ class CreateNewDocumentViewSet(
   serializer_class = DocumentSerializer
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
-      permissions.IsAdminUser: [],
-      permissions.IsAuthenticated: ['destroy'],
-      permissions.AllowAny: ['create']
+      permissions.IsAdminUser: ['list', 'retrieve', 'update', 'partial_update'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['create', 'destroy']
   }
 
   def create(self, request, *args, **kwargs):
     new_document = create_new_word(request)
     if new_document:
+      # super().create(request, *args, **kwargs)
       return response.Response(new_document, status=status.HTTP_200_OK)
     else:
       return response.Response({'message': '失敗しました。'}, status=status.HTTP_400_BAD_REQUEST)
 
   def destroy(self, request, *args, **kwargs):
+    # super().destroy(request, *args, **kwargs)
     return response.Response({'message': '削除しました。'}, status=status.HTTP_200_OK)
