@@ -15,7 +15,7 @@ from reservations.models import *
 from reservations.serializers import *
 from reservations.filters import (
     ReservationFilter, ReservationSuspensionScheduleFilter,
-    ApprovalApplicationFilter
+    ApprovalApplicationFilter, SwaggerQueryStringFilter
 )
 from reservations.csv import csv_export
 
@@ -679,6 +679,13 @@ class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+    「現在～指定した日付」の範囲の予約データを検索する。
+    現在の日付はdatetime.nowで取得する。
+    そのため、物凄い先の未来の日付を指定して検索すると期日が過ぎていないデータを取得可能。
+    ~/api/reservatios/9999-01-01T00:00（指定した日付）/approval-applications/
+    の様に利用すると良いかと。
+  """
   serializer_class = ApprovalApplicationSerializer
   filter_fields = [f.name for f in ApprovalApplication._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
@@ -690,13 +697,6 @@ class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   }
 
   def get_queryset(self):
-    """
-    「現在～指定した日付」の範囲の予約データを検索する。
-    現在の日付はdatetime.nowで取得する。
-    そのため、物凄い先の未来の日付を指定して検索すると期日が過ぎていないデータを取得可能。
-    ~/api/reservatios/9999-01-01T00:00（指定した日付）/approval-applications/
-    の様に利用すると良いかと。
-    """
     date = self.kwargs.get('reservation_pk')
     now = str(datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
     queryset = ApprovalApplication.objects.all().prefetch_related('reservation')
@@ -878,8 +878,14 @@ class ApprovalApplicationCsvExportViewSet(
 class ReservationDeleteViewSet(
         mixins.DestroyModelMixin,
         viewsets.GenericViewSet):
+  """
+  日時を指定し、指定された期間のデータを全て削除する。
+  start1および、start2という名前のパラメータを送り、
+  start1 ～ start2の期間のデータを削除。
+  """
   queryset = Reservation.objects
-  serializer_class = ReservationSerializer
+  serializer_class = ReservationParameterSerializer
+  filter_backends = (SwaggerQueryStringFilter, )
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],

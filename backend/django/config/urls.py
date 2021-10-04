@@ -19,6 +19,7 @@ from django.conf import settings
 from django.urls import path, include, re_path
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework_swagger.views import get_swagger_view
 from dj_rest_auth.registration.views import RegisterView, VerifyEmailView, ConfirmEmailView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView, LoginView, LogoutView
 from users import views
@@ -36,9 +37,10 @@ router.registry.extend(announcements_router.registry)
 router.registry.extend(application_documents_router.registry)
 router.registry.extend(questionnaire_router.registry)
 
+schema_view = get_swagger_view(title='API Lists')
 reference_uris = [
-    path('download/', SpectacularAPIView.as_view(), name='schema'),
-    path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    # path('download/', SpectacularAPIView.as_view(), name='schema'),
+    path('', schema_view),
 ]
 
 api_uris = [

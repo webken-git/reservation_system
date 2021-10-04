@@ -137,6 +137,19 @@ class ReservationSerializer(serializers.ModelSerializer):
     return instance
 
 
+class ReservationParameterSerializer(serializers.Serializer):
+  # reservation = ReservationSerializer(read_only=True)
+  # approval = ApprovalSerializer(read_only=True)
+  # approval_id = serializers.PrimaryKeyRelatedField(queryset=Approval.objects.all(), write_only=True)
+  # reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  start1 = serializers.DateTimeField(help_text='開始(yyyy-mm-ddTH:M:S.fz)', required=True)
+  start2 = serializers.DateTimeField(help_text='終了(yyyy-mm-ddTH:M:S.fz)', required=True)
+
+  class Meta:
+    model = Reservation
+    fields = '__all__'
+
+
 class UserInfoSerializer(serializers.ModelSerializer):
   user = UserSerializer(read_only=True)
   user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)

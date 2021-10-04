@@ -25,6 +25,9 @@ def insert_string(string, index, add_string):
 
 
 def create_new_word(request):
+  """
+  documentsテーブルのid
+  """
   BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
   query = Document.objects.filter(id=request.data['id'])

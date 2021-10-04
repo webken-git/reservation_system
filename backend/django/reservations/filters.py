@@ -2,6 +2,8 @@ from django_filters import rest_framework as filters
 from reservations.models import (
     Approval, Reservation, Place, ReservationSuspensionSchedule, ApprovalApplication,
 )
+from rest_framework.filters import BaseFilterBackend
+import coreapi
 
 
 class ReservationFilter(filters.FilterSet):
@@ -40,3 +42,16 @@ class ApprovalApplicationFilter(filters.FilterSet):
     fields += ['approval__' + f.name for f in Approval._meta.fields]
     fields += ['reservation__' + f.name for f in Reservation._meta.fields]
     fields += ['reservation__place__' + f.name for f in Place._meta.fields]
+
+
+class SwaggerQueryStringFilter(BaseFilterBackend):
+  """
+  create query string parameter for swagger
+  """
+
+  def get_schema_fields(self, view):
+    fields = []
+    for key, value in view.serializer_class._declared_fields.items():
+      field = coreapi.Field(name=key, description=value.help_text, required=value.required, location="query",)
+      fields.append(field)
+    return fields

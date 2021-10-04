@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'phonenumber_field',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -91,6 +92,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
         },
     },
 ]
@@ -169,7 +173,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     # 'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S.%f%z',
 }
@@ -223,4 +227,5 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 # サインアップ時の確認メールに記載するログインページのURL
 LOGIN_URL = '/account/login'
+LOGOUT_URL = '/account/logout'
 # EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''
