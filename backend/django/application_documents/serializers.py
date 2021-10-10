@@ -23,19 +23,22 @@ class DocumentSerializer(serializers.ModelSerializer):
         'file_name': {'required': False}
     }
 
+  # def create(self, validated_data):
+  #   validated_data['approval_application'] = validated_data.get('approval_application_id', None)
+  #   # validated_data['file_name'] = views.create_new_word()
+
+  #   # PrimaryKeyRelatedFieldを削除
+  #   del validated_data['approval_application_id']
+
+  #   data = validated_data.pop('approval_application')
+  #   document = Document.objects.create(**validated_data)
+  #   document.save()
+  #   # document.approval_application.set(data)
+
+  #   return document
+
   def create(self, validated_data):
-    validated_data['approval_application'] = validated_data.get('approval_application_id', None)
-    # validated_data['file_name'] = views.create_new_word()
-
-    # PrimaryKeyRelatedFieldを削除
-    del validated_data['approval_application_id']
-
-    data = validated_data.pop('approval_application')
-    document = Document.objects.create(**validated_data)
-    document.save()
-    document.approval_application.set(data)
-
-    return document
+    return super().create(validated_data)
 
   def update(self, instance, validated_data):
     # 更新処理

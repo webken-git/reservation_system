@@ -18,10 +18,11 @@ class DocumentTemplate(models.Model):
 
 class Document(models.Model):
   number = models.IntegerField('発行番号', blank=True, null=True)
-  file_name = models.CharField('ファイル名', max_length=30)
+  file_name = models.CharField('ファイル名', max_length=150)
   approval_application = models.ForeignKey(
       ApprovalApplication, verbose_name='document_approvalapplication',
       related_name='document_approvalapplication',
+      blank=True, null=True,
       on_delete=models.CASCADE
   )
   created_at = models.DateTimeField(auto_now_add=True)

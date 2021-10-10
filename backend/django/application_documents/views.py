@@ -247,13 +247,10 @@ def create_new_word(request):
         tbl.rows[10].cells[3].paragraphs[0].text = tbl.rows[10].cells[3].paragraphs[0].text.replace('）', '）\n' + str(conditions))
       else:
         return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
-
   else:
     return {'error': 'docxファイルの指定が違います。'}
-  doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d_') + query[0].name + '.docx')
-  # doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx')
-  return '/backend/django/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx'
-  # return {'path': tbl.rows[16].cells[0].paragraphs[0].text}
+  doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx')
+  return '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx'
 
 
 class DocumentTemplateViewSet(viewsets.ModelViewSet):
@@ -293,19 +290,30 @@ class DocumentViewSet(viewsets.ModelViewSet):
   serializer_class = DocumentSerializer
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
-      permissions.IsAdminUser: ['list', 'retrieve', 'update', 'partial_update'],
+      permissions.IsAdminUser: ['update', 'partial_update'],
       permissions.IsAuthenticated: [],
-      permissions.AllowAny: ['create', 'destroy']
+      permissions.AllowAny: ['create', 'destroy', 'list', 'retrieve', ]
   }
 
-  def create(self, request, *args, **kwargs):
-    new_document = create_new_word(request)
-    if new_document:
-      # super().create(request, *args, **kwargs)
-      return response.Response(new_document, status=status.HTTP_200_OK)
+  def perform_create(self, serializer):
+    file_name = create_new_word(self.request)
+    if 'error' in file_name:
+      return response.Response(file_name, status=status.HTTP_200_OK)
     else:
-      return response.Response({'message': '失敗しました。'}, status=status.HTTP_400_BAD_REQUEST)
+      serializer.save(
+          number=self.request.data['number'],
+          file_name=file_name,
+          approval_application_id=self.request.data['approval_application_id']
+      )
+      return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
   def destroy(self, request, *args, **kwargs):
-    # super().destroy(request, *args, **kwargs)
-    return response.Response({'message': '削除しました。'}, status=status.HTTP_200_OK)
+    instance = self.get_object()
+    serializer = self.get_serializer(instance)
+    self.perform_destroy(instance)
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.remove(BASE_DIR + serializer.data['file_name'])
+    return response.Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+  def perform_destroy(self, instance):
+    instance.delete()
