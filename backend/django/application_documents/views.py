@@ -290,9 +290,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
   serializer_class = DocumentSerializer
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
-      permissions.IsAdminUser: ['update', 'partial_update'],
-      permissions.IsAuthenticated: [],
-      permissions.AllowAny: ['create', 'destroy', 'list', 'retrieve', ]
+      permissions.IsAdminUser: ['list', 'retrieve', 'update', 'partial_update'],
+      permissions.IsAuthenticated: ['create', 'destroy', ],
+      permissions.AllowAny: []
   }
 
   def perform_create(self, serializer):
