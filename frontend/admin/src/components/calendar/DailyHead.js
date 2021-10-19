@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {withCookies} from 'react-cookie'
-const Head = (props) =>{
+const DailyHead = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
     const [ contentDate, setContentDate ] = useState(new Date());
 

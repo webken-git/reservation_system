@@ -16,7 +16,9 @@ const SideBar = (props) => {
             <TransitionBox url="/DisapprovalList" icon={folder} pagename={"不承認リスト"}/>
             <TransitionBox url="/CancelList" icon={folder} pagename={"キャンセルリスト"}/>
             <TransitionBox url="/UserList" icon={folder} pagename={"ユーザーリスト"}/>
-            <TransitionBox url="/calendar"icon={calendar} pagename={"カレンダー"}/>
+            <TransitionBox url="/weeklycalendar"icon={calendar} pagename={"ウィークリーカレンダー"}/>
+            <TransitionBox url="/dailycalendar"icon={calendar} pagename={"デイリーカレンダー"}/>
+            <TransitionBox url="/monthlycalendar"icon={calendar} pagename={"マンスリーカレンダー"}/>
         </div>
     )
 }

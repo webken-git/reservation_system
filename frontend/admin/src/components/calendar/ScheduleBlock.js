@@ -16,20 +16,20 @@ const ScheduleBlock = (props) =>{
     useEffect(()=>{
         let unmounted = false;
         if(!unmounted){
-            setStartHours(Number(props.schedule.start.substr(11, 2)));
-            setEndHours(Number(props.schedule.end.substr(11, 2)));
-            setStartMinutes(Number(props.schedule.start.substr(14, 2)));
-            setEndMinutes(Number(props.schedule.end.substr(14, 2)));
-            let startDate = new Date(Number(props.schedule.start.substr(0, 4)),
-                            Number(props.schedule.start.substr(5, 2))-1,
-                            Number(props.schedule.start.substr(8, 2)));
+            setStartHours(Number(props.schedule.reservation.start.substr(11, 2)));
+            setEndHours(Number(props.schedule.reservation.end.substr(11, 2)));
+            setStartMinutes(Number(props.schedule.reservation.start.substr(14, 2)));
+            setEndMinutes(Number(props.schedule.reservation.end.substr(14, 2)));
+            let startDate = new Date(Number(props.schedule.reservation.start.substr(0, 4)),
+                            Number(props.schedule.reservation.start.substr(5, 2))-1,
+                            Number(props.schedule.reservation.start.substr(8, 2)));
             setStartDate(startDate);
-            let endDate = new Date(Number(props.schedule.end.substr(0, 4)),
-                Number(props.schedule.end.substr(5, 2))-1,
-                Number(props.schedule.end.substr(8, 2)));
+            let endDate = new Date(Number(props.schedule.reservation.end.substr(0, 4)),
+                Number(props.schedule.reservation.end.substr(5, 2))-1,
+                Number(props.schedule.reservation.end.substr(8, 2)));
             setEndDate(endDate);
 
-            if(props.schedule.repeat_interval !== 1){
+            if(props.schedule.reservation.repeat_interval !== 1){
                 let scheduleStartDate = "";
                 let scheduleEndDate = "";
                 scheduleStartDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate());
@@ -78,9 +78,21 @@ const ScheduleBlock = (props) =>{
 
         return () => { unmounted = true }
     }, [props.schedule, props.contentDate])
+
+    let backgroundColor;
+
+    if(props.schedule.approval.name == "承認"){
+        backgroundColor = "blue";
+    } else if(props.schedule.approval.name == "未承認"){
+        backgroundColor = "tomato";
+    } else if(props.schedule.approval.name == "不承認"){
+        backgroundColor = "gray";
+    } else if(props.schedule.approval.name == "キャンセル"){
+        backgroundColor = "red";
+    }
     
     const styleGenerator = useCallback((top, height) => ({
-        backgroundColor: props.schedule.color,
+        backgroundColor: backgroundColor,
         top: top ? top+'vh' : '0vh',
         height: height ? height+'vh' : '0vh',
     }), [props.schedule.color]);
@@ -161,21 +173,33 @@ const ScheduleBlock = (props) =>{
         }
     }
 
-    return (
+    if((props.schedule.approval.name != "不承認") && (props.schedule.approval.name != "不承認")){
+        return (
         <div
             className="schedule-block"
             onClick={modalHandle}
             style={styleGeneratorHandler()}
         >
             {props.schedule.repeat_interval === 1 ? (
-                <p>{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.start.substr(5, 2))+"月"+Number(props.schedule.start.substr(8, 2))+"日")}{props.schedule.start_time.substr(11, 5)}{((startDate < props.contentDate)||(props.contentDate < endDate)) && (<br/>)}~{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.end.substr(5, 2))+"月"+Number(props.schedule.end.substr(8, 2))+"日")}{props.schedule.end.substr(11, 5)}</p>
+                <p>{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.start.substr(5, 2))+"月"+Number(props.schedule.start.substr(8, 2))+"日")}{props.schedule.start_time.substr(11, 5)}{((startDate < props.contentDate)||(props.contentDate < endDate)) && (<br/>)}~{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.reservation.end.substr(5, 2))+"月"+Number(props.schedule.reservation.end.substr(8, 2))+"日")}{props.schedule.reservation.end.substr(11, 5)}</p>
             ) : (
-                <p>{((scheduleStartDate < props.contentDate)||(props.contentDate < scheduleEndDate)) && ((scheduleStartDate.getMonth()+1)+"月"+(scheduleStartDate.getDate())+"日")}{props.schedule.start.substr(11, 5)}{((scheduleStartDate < props.contentDate)||(props.contentDate < scheduleEndDate)) && (<br/>)}~{((scheduleStartDate < props.contentDate)||(props.contentDate < scheduleEndDate)) && ((scheduleEndDate.getMonth()+1)+"月"+scheduleEndDate.getDate()+"日")}{props.schedule.end.substr(11, 5)}</p>
+                <p>{((scheduleStartDate < props.contentDate)||(props.contentDate < scheduleEndDate)) && ((scheduleStartDate.getMonth()+1)+"月"+(scheduleStartDate.getDate())+"日")}{props.schedule.reservation.start.substr(11, 5)}{((scheduleStartDate < props.contentDate)||(props.contentDate < scheduleEndDate)) && (<br/>)}~{((scheduleStartDate < props.contentDate)||(props.contentDate < scheduleEndDate)) && ((scheduleEndDate.getMonth()+1)+"月"+scheduleEndDate.getDate()+"日")}{props.schedule.reservation.end.substr(11, 5)}</p>
             )}
-            <span>
+            {props.schedule.reservation.is_group === false ? (
+                <span>
+                    <p>{props.schedule.reservation.place.name}</p>
+                    <p>{props.schedule.reservation.reader_name}</p>
+                </span>
+            ) : (
+                <span>
+                    <p>{props.schedule.reservation.place.name}</p>
+                    <p>{props.schedule.reservation.group_name}</p>
+                </span>
+            )}
+            {/* <span>
                 <p>{props.schedule.place.name}</p>
                 <p>{props.schedule.group_name}</p>
-            </span>
+            </span> */}
             {/* {props.individualOrGroup === "individual" && (
                 <span>
                     <p>{props.schedule.place.name}</p>
@@ -188,7 +212,9 @@ const ScheduleBlock = (props) =>{
                 </div>
             )} */}
         </div>
-    )
+    )} else {
+        return null
+    }
 }
 
 export default withCookies(ScheduleBlock);

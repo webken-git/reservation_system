@@ -6,7 +6,7 @@ import {v4 as uuidv4} from 'uuid'
 import ScheduleBlock from './ScheduleBlock';
 // import CreateModalComponent from './CreateModalComponent'
 
-const Content = (props) =>{
+const DailyContent = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
     const [ contentDate, setContentDate ] = useState(new Date());
     const [ stringContentDate, setStringContentDate ] = useState("");
@@ -153,4 +153,4 @@ const Content = (props) =>{
     )
 }
 
-export default withCookies(Content);
+export default withCookies(DailyContent);
