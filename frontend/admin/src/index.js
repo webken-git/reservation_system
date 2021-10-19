@@ -20,6 +20,7 @@ import"./index.css"
 import GetDate from "./components/toppage/GetDate"
 
 import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
+import SideBarRoute from "./components/rooter/SideBarRoute";
 
 
 
@@ -37,7 +38,7 @@ function App() {
           <SideBarAndHeaderRoute pagename="未承認リスト"　path="/unapprovalList" exact children={<PrivateRoute path="/unapprovalList" exact children={<UnapprovalList/>} />} />
           <SideBarAndHeaderRoute pagename="キャンセルリスト" path="/cancellist" exact children={<PrivateRoute path="/cancelList" exact children={<CancelList/>} />} />
           <SideBarAndHeaderRoute pagename="ユーザーリスト" path="/userlist" exact children={<PrivateRoute path="/userlist" exact children={<UserList/>} />} />
-          <SideBarAndHeaderRoute pagename="カレンダー" path="/calendar" exact children={<PrivateRoute path="/calendar" exact children={<Calendar/>} />} />
+          <SideBarRoute path="/calendar" exact children={<PrivateRoute path="/calendar" exact children={<Calendar/>} />} />
         </Switch>
       </BrowserRouter>
     </Provider>
