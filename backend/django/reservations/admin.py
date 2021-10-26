@@ -4,7 +4,7 @@ from reservations.models import (
     Equipment, SpecialEquipment,
     Approval, ApprovalApplication,
     Age, Usage, DefferdPayment,
-    AgeCategorize, UsageCategorize,
+    AgeCategory, UsageCategory,
     ReservationSuspensionSchedule
 )
 
@@ -61,13 +61,13 @@ class UsageAdmin(admin.ModelAdmin):
   list_display_links = ('id', 'name')
 
 
-class AgeCategorizeAdmin(admin.ModelAdmin):
-  list_display = [f.name for f in AgeCategorize._meta.fields]
+class AgeCategoryAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in AgeCategory._meta.fields]
   list_display_links = ('id', )
 
 
-class UsageCategorizeAdmin(admin.ModelAdmin):
-  list_display = [f.name for f in UsageCategorize._meta.fields]
+class UsageCategoryAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in UsageCategory._meta.fields]
   list_display_links = ('id',)
 
 
@@ -94,8 +94,8 @@ admin.site.register(Equipment, EquipmentAdmin)
 admin.site.register(SpecialEquipment, SpecialEquipmentAdmin)
 admin.site.register(Age, AgeAdmin)
 admin.site.register(Usage, UsageAdmin)
-admin.site.register(AgeCategorize, AgeCategorizeAdmin)
-admin.site.register(UsageCategorize, UsageCategorizeAdmin)
+admin.site.register(AgeCategory, AgeCategoryAdmin)
+admin.site.register(UsageCategory, UsageCategoryAdmin)
 admin.site.register(DefferdPayment, DefferdPaymentAdmin)
 admin.site.register(FacilityFee, FacilityFeeAdmin)
 admin.site.register(EquipmentFee, EquipmentFeeAdmin)

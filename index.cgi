@@ -1,4 +1,4 @@
-#!/home/webhok/www/reservation_system/backend/bin/python
+#!/home/webhok/www/reservation_system/backend/env/bin/python
 # encoding: utf-8
 """
 django-.cgi
@@ -26,8 +26,7 @@ import os
 import sys
 
 
-sys.path.append('/home/webhok/www/reservation_system/backend/')
-
+sys.path.append('/home/webhok/www/reservation_system/backend/django/')
 
 import cgitb
 cgitb.enable()

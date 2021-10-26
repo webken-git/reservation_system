@@ -1,17 +1,16 @@
-from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from rest_framework import viewsets, response, views
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from rest_framework import viewsets, response, status, mixins
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.status import (
-    HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR,
-    HTTP_405_METHOD_NOT_ALLOWED
-)
 from django_filters import rest_framework as filters
 import datetime
 import pytz
+import os
+from dotenv import load_dotenv
+from users import permissions
 from reservations.models import *
 from reservations.serializers import *
 from reservations.filters import (
@@ -23,6 +22,7 @@ from reservations.csv import csv_export
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分
 TIME_OUTS_5MINUTES = 60 * 5
+TIME_OUTS_1HOUR = 60 * 60
 # UserInfoなどのデータ変更はあまりないAPIのキャッシュの期限は1日
 TIME_OUTS_1DAY = 60 * 60 * 24
 # マスターデータのキャッシュの期限は30日
@@ -32,99 +32,129 @@ TIME_OUTS_1MONTH = TIME_OUTS_1DAY * 30
 
 
 class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = ReservationSuspensionSchedule.objects.all()
   serializer_class = ReservationSuspensionScheduleSerializer
   # filter_fields = [f.name for f in Reservation._meta.fields]
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ReservationSuspensionScheduleFilter
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
   # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class ApprovalViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Approval.objects.all()
   serializer_class = ApprovalSerializer
   filter_fields = [f.name for f in Approval._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class PlaceViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Place.objects.all()
   serializer_class = PlaceSerializer
   filter_fields = [f.name for f in Place._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class EquipmentViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Equipment.objects.all()
   serializer_class = EquipmentSerializer
   filter_fields = [f.name for f in Equipment._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class SpecialEquipmentViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = SpecialEquipment.objects.all()
   serializer_class = SpecialEquipmentSerializer
   filter_fields = [f.name for f in SpecialEquipment._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Reservation.objects.all()
   serializer_class = ReservationSerializer
   # filter_fields = [f.name for f in Reservation._meta.fields]
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ReservationFilter
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['destroy'],
+      permissions.IsAuthenticated: ['update', 'partial_update', 'create'],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def create(self, request, *args, **kwargs):
     schedules = ReservationSuspensionSchedule.objects.all()
@@ -141,35 +171,185 @@ class ReservationViewSet(viewsets.ModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class UserInfoViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = UserInfo.objects.all()
   serializer_class = UserInfoSerializer
   filter_fields = [f.name for f in UserInfo._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create', 'destroy'],
+      permissions.AllowAny: []
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1DAY))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1DAY))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1DAY))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
+def extract_date(entity):
+  'extracts the starting date from an entity'
+  return entity.reservation.start.date()
+
+
 class ApprovalApplicationViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = ApprovalApplication.objects.all()
   serializer_class = ApprovalApplicationSerializer
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ApprovalApplicationFilter
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['destroy'],
+      permissions.IsAuthenticated: ['partial_update', 'update', 'create'],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
+
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+  def create(self, request, *args, **kwargs):
+    if ApprovalApplication.objects.filter(reservation=request.data['reservation_id']).exists():
+      return response.Response({'error': 'リクエストされたreservation_idが追加されているデータが既に存在しています。'})
+    else:
+      super().create(request, *args, **kwargs)
+      data = ApprovalApplication.objects.filter(reservation__id=request.data['reservation_id'], approval__id=request.data['approval_id'])
+
+      """送信元メールアドレス"""
+      load_dotenv()
+      from_email = os.getenv('EMAIL_HOST_USER')
+
+      """宛先メールアドレス"""
+      to_email = data[0].reservation.user.email
+      context = {
+          "reservation": {
+              "contact_name": data[0].reservation.contact_name,
+              "tel": data[0].reservation.tel,
+              "place": data[0].reservation.place.name,
+              "start": data[0].reservation.start.strftime('%Y年%#m月%d日 %H:%M'),
+              "end": data[0].reservation.end.strftime('%H:%M'),
+          },
+      }
+
+      # メール送信
+      email = EmailMessage(
+          subject="予約手続き完了のご連絡/稚内市みどりスポーツパーク",
+          body=render_to_string("reservations/email/reservation_complete_message.txt", context),
+          from_email=from_email,
+          to=[to_email],
+          bcc=[from_email]
+      )
+      email.send()
+      return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
+
+  def update(self, request, *args, **kwargs):
+    super().update(request, *args, **kwargs)
+
+    data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
+
+    """送信元メールアドレス"""
+    load_dotenv()
+    from_email = os.getenv('EMAIL_HOST_USER')
+
+    """宛先メールアドレス"""
+    to_email = data[0].reservation.user.email
+    context = {
+        "reservation": {
+            "contact_name": data[0].reservation.contact_name,
+            "tel": data[0].reservation.tel,
+            "place": data[0].reservation.place.name,
+            "start": data[0].reservation.start.strftime('%Y年%#m月%d日 %H:%M'),
+            "end": data[0].reservation.end.strftime('%H:%M'),
+        },
+    }
+
+    if request.data['approval_id'] == '2':
+      # メール送信
+      email = EmailMessage(
+          subject="【重要】本予約完了のご連絡/稚内市みどりスポーツパーク",
+          body=render_to_string("reservations/email/reservation_approval_message.txt", context),
+          from_email=from_email,
+          to=[to_email],
+          bcc=[from_email]
+      )
+      email.send()
+    elif request.data['approval_id'] == '3':
+      """
+      予約が不承認された場合
+      """
+      # メール送信
+      email = EmailMessage(
+          subject="【重要】予約不承認のお詫び/稚内市みどりスポーツパーク",
+          body=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
+          from_email=from_email,
+          to=[to_email],
+          bcc=[from_email]
+      )
+      email.send()
+    elif ApprovalApplication.objects.filter(reservation__user=request.user.id, reservation=request.data['reservation_id'], approval=4).exists():
+      """
+      利用者側からキャンセルされた場合
+      """
+      # メール送信
+      email = EmailMessage(
+          subject="予約キャンセル手続き完了のご連絡/稚内市みどりスポーツパーク",
+          body=render_to_string("reservations/email/user_side_cancel_message.txt", context, request),
+          from_email=from_email,
+          to=[to_email],
+          bcc=[from_email]
+      )
+      email.send()
+    elif request.user.id != ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=4)[0].reservation.user.id\
+            and User.objects.filter(id=request.user.id, is_staff=True).exists():
+      """
+      施設側からキャンセルされた場合
+      """
+      # メール送信
+      email = EmailMessage(
+          subject="予約キャンセルのお詫び/稚内市みどりスポーツパーク",
+          body=render_to_string("reservations/email/facility_side_cancel_message.txt", context),
+          from_email=from_email,
+          to=[to_email],
+          bcc=[from_email]
+      )
+      email.send()
+    else:
+      pass
+    return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_201_CREATED)
+
+
+class UnapprovalCountsViewSet(
+        mixins.RetrieveModelMixin,
+        mixins.ListModelMixin,
+        viewsets.GenericViewSet):
+  queryset = ApprovalApplication.objects.filter(approval=1).values('reservation__start').order_by('reservation__start').distinct()
+  serializer_class = UnapprovalCountsSerializer
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_class = ApprovalApplicationFilter
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   # @method_decorator(vary_on_cookie)
   # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
@@ -183,132 +363,175 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
 
 class UsageViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Usage.objects.all()
   serializer_class = UsageSerializer
   filter_fields = [f.name for f in Usage._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class AgeViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = Age.objects.all()
   serializer_class = AgeSerializer
   filter_fields = [f.name for f in Age._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)@method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class UsageCategorizeViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
-  queryset = UsageCategorize.objects.all()
-  serializer_class = UsageCategorizeSerializer
-  filter_fields = [f.name for f in UsageCategorize._meta.fields]
+class UsageCategoryViewSet(viewsets.ModelViewSet):
+  queryset = UsageCategory.objects.all()
+  serializer_class = UsageCategorySerializer
+  filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create', 'destroy'],
+      permissions.AllowAny: []
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class AgeCategorizeViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
-  queryset = AgeCategorize.objects.all()
-  serializer_class = AgeCategorizeSerializer
-  filter_fields = [f.name for f in AgeCategorize._meta.fields]
+class AgeCategoryViewSet(viewsets.ModelViewSet):
+  queryset = AgeCategory.objects.all()
+  serializer_class = AgeCategorySerializer
+  filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create', 'destroy'],
+      permissions.AllowAny: []
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class DefferdPaymentViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = DefferdPayment.objects.all()
   serializer_class = DefferdPaymentSerializer
   filter_fields = [f.name for f in DefferdPayment._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['destroy'],
+      permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create'],
+      permissions.AllowAny: []
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class FacilityFeeViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = FacilityFee.objects.all()
   serializer_class = FacilityFeeSerializer
   filter_fields = [f.name for f in FacilityFee._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
+    self.queryset = FacilityFee.objects.all().values('place__name').order_by('place__name').distinct()
+    self.serializer_class = GetFacilityFeeSerializer
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class EquipmentFeeViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
   queryset = EquipmentFee.objects.all()
   serializer_class = EquipmentFeeSerializer
   filter_fields = [f.name for f in EquipmentFee._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @method_decorator(vary_on_cookie)
   @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
+
+
 # ----Nested router----
 
 
 class ApprovalApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = ApprovalApplicationSerializer
   filter_fields = [f.name for f in ApprovalApplication._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     approval_pk = self.kwargs.get('approval_pk')
@@ -320,16 +543,21 @@ class ApprovalApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class PlaceReservationViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = ReservationSerializer
   filter_fields = [f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     place_pk = self.kwargs.get('place_pk')
@@ -341,16 +569,21 @@ class PlaceReservationViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class PlaceFacilityFeeViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = FacilityFeeSerializer
   filter_fields = [f.name for f in FacilityFee._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     place_pk = self.kwargs.get('place_pk')
@@ -362,16 +595,21 @@ class PlaceFacilityFeeViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class EquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = ReservationSerializer
   filter_fields = [f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     equipment_pk = self.kwargs.get('equipment_pk')
@@ -383,16 +621,21 @@ class EquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class EquipmentEquipmentFeeViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = EquipmentFeeSerializer
   filter_fields = [f.name for f in EquipmentFee._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     equipment_pk = self.kwargs.get('equipment_pk')
@@ -404,16 +647,21 @@ class EquipmentEquipmentFeeViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = ReservationSerializer
   filter_fields = [f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     special_equipment_pk = self.kwargs.get('special_equipment_pk')
@@ -425,8 +673,8 @@ class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
@@ -434,10 +682,15 @@ class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = ApprovalApplicationSerializer
   filter_fields = [f.name for f in ApprovalApplication._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     """
@@ -452,26 +705,31 @@ class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ApprovalApplication.objects.all().prefetch_related('reservation')
     return queryset.filter(reservation__start__range=[now, date])
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class ReservationUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
-  serializer_class = UsageCategorizeSerializer
-  filter_fields = [f.name for f in UsageCategorize._meta.fields]
+class ReservationUsageCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = UsageCategorySerializer
+  filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     reservation_pk = self.kwargs.get('reservation_pk')
-    queryset = UsageCategorize.objects.all().prefetch_related('reservation')
+    queryset = UsageCategory.objects.all().prefetch_related('reservation')
     return queryset.filter(reservation=reservation_pk)
 
   @method_decorator(vary_on_cookie)
@@ -479,21 +737,26 @@ class ReservationUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class ReservationAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
-  serializer_class = AgeCategorizeSerializer
-  filter_fields = [f.name for f in AgeCategorize._meta.fields]
+class ReservationAgeCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = AgeCategorySerializer
+  filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     reservation_pk = self.kwargs.get('reservation_pk')
-    queryset = AgeCategorize.objects.all().prefetch_related('reservation')
+    queryset = AgeCategory.objects.all().prefetch_related('reservation')
     return queryset.filter(reservation=reservation_pk)
 
   @method_decorator(vary_on_cookie)
@@ -501,17 +764,22 @@ class ReservationAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
 class ReservationDefferdPaymentViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
   serializer_class = DefferdPaymentSerializer
   filter_fields = [f.name for f in DefferdPayment._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     reservation_pk = self.kwargs.get('reservation_pk')
@@ -523,21 +791,26 @@ class ReservationDefferdPaymentViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class UsageUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
-  serializer_class = UsageCategorizeSerializer
-  filter_fields = [f.name for f in UsageCategorize._meta.fields]
+class UsageUsageCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = UsageCategorySerializer
+  filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     usage_pk = self.kwargs.get('usage_pk')
-    queryset = UsageCategorize.objects.all().prefetch_related('usage')
+    queryset = UsageCategory.objects.all().prefetch_related('usage')
     return queryset.filter(usage=usage_pk)
 
   @method_decorator(vary_on_cookie)
@@ -545,21 +818,26 @@ class UsageUsageCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class AgeAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
-  # permission_classes = [IsAuthenticated]
-  serializer_class = AgeCategorizeSerializer
-  filter_fields = [f.name for f in AgeCategorize._meta.fields]
+class AgeAgeCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+  serializer_class = AgeCategorySerializer
+  filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   def get_queryset(self):
     age_pk = self.kwargs.get('age_pk')
-    queryset = AgeCategorize.objects.all().prefetch_related('age')
+    queryset = AgeCategory.objects.all().prefetch_related('age')
     return queryset.filter(age=age_pk)
 
   @method_decorator(vary_on_cookie)
@@ -567,22 +845,30 @@ class AgeAgeCategorizeViewSet(viewsets.ReadOnlyModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
 
-class ApprovalApplicationCsvExportView(views.APIView):
-  # permission_classes = [IsAuthenticated]
+class ApprovalApplicationCsvExportViewSet(
+        mixins.CreateModelMixin,
+        viewsets.GenericViewSet):
+  queryset = ApprovalApplication.objects
   serializer_class = ApprovalApplicationSerializer
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['create'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: []
+  }
 
-  def post(self, request):
+  def create(self, request, *args, **kwargs):
     csv = csv_export(request)
     if csv:
-      return response.Response({'path': csv}, status=HTTP_200_OK)
+      return response.Response({'path': csv}, status=status.HTTP_200_OK)
     else:
-      return response.Response({'detail': '失敗しました。'}, status=HTTP_400_BAD_REQUEST)
+      return response.Response({'detail': '失敗しました。'}, status=status.HTTP_400_BAD_REQUEST)
     # serializer = self.serializer_class(data=csv_export(request), many=True)
     # if serializer:
     #   serializer.is_valid()
@@ -592,17 +878,25 @@ class ApprovalApplicationCsvExportView(views.APIView):
     #   return response.Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-class ReservationDeleteView(views.APIView):
-  # permission_classes = [IsAuthenticated]
+class ReservationDeleteViewSet(
+        mixins.DestroyModelMixin,
+        viewsets.GenericViewSet):
+  queryset = Reservation.objects
   serializer_class = ReservationSerializer
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: []
+  }
 
-  def delete(self, request):
+  def destroy(self, request, *args, **kwargs):
     queryset = Reservation.objects.filter(start__range=[request.data['start1'], request.data['start2']])
 
     if queryset.exists():
       queryset.delete()
-      return response.Response({'detail': '正常に削除されました。'}, status=HTTP_200_OK)
+      return response.Response({'detail': '正常に削除されました。'}, status=status.HTTP_200_OK)
     else:
       serializer = self.serializer_class(data=queryset)
       serializer.is_valid()
-      return response.Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+      return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -24,6 +24,7 @@ from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView, Logi
 from users import views
 from users.urls import router as users_router
 from reservations.urls import router as reservations_router
+from announcements.urls import router as announcements_router
 from application_documents.urls import router as application_documents_router
 from questionnaire.urls import router as questionnaire_router
 
@@ -31,6 +32,7 @@ from questionnaire.urls import router as questionnaire_router
 router = routers.DefaultRouter()
 router.registry.extend(users_router.registry)
 router.registry.extend(reservations_router.registry)
+router.registry.extend(announcements_router.registry)
 router.registry.extend(application_documents_router.registry)
 router.registry.extend(questionnaire_router.registry)
 
@@ -41,7 +43,7 @@ reference_uris = [
 
 api_uris = [
     path('', include(router.urls)),
-    path('', include('application_documents.urls')),
+    # path('', include('application_documents.urls')),
     path('', include('reservations.urls')),
     path('', include('questionnaire.urls')),
     path('reference/', include(reference_uris)),

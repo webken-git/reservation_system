@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "eject",
+			"path": "frontend/admin/",
+			"problemMatcher": [],
+			"label": "npm: eject - frontend/admin",
+			"detail": "react-scripts eject"
+		}
+	]
+}

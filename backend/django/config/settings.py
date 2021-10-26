@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Local
+    'announcements',
     'application_documents',
     'business_diary',
     'reservations',
@@ -78,7 +79,10 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,6 +131,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 LANGUAGE_CODE = 'ja'
 
@@ -217,5 +223,5 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 # サインアップ時の確認メールに記載するログインページのURL
-LOGIN_URL = '/account/login/'
+LOGIN_URL = '/account/login'
 # EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''

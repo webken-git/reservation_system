@@ -1,4 +1,6 @@
+from django.db.models import query
 from rest_framework import serializers
+from rest_framework.relations import ManyRelatedField
 from reservations.models import *
 from users.serializers import UserSerializer
 
@@ -117,6 +119,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.participant_number = validated_data.get('participant_number', instance.participant_number)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.admission_fee = validated_data.get('admission_fee', instance.admission_fee)
+    instance.place_number = validated_data.get('place_number', instance.place_number)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['user_id']
@@ -182,7 +185,8 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
         'usage_fee': {'required': False},
         'heating_fee': {'required': False},
         'electric_fee': {'required': False},
-        'conditions': {'required': False}
+        'conditions': {'required': False},
+        'cancellation_reason': {'required': False}
     }
 
   def create(self, validated_data):
@@ -203,6 +207,7 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.heating_fee = validated_data.get('heating_fee', instance.heating_fee)
     instance.electric_fee = validated_data.get('electric_fee', instance.electric_fee)
     instance.conditions = validated_data.get('conditions', instance.conditions)
+    instance.cancellation_reason = validated_data.get('cancellation_reason', instance.cancellation_reason)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['reservation_id']
@@ -210,6 +215,29 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class UnapprovalCountsSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = ApprovalApplication
+    fields = ['count', 'start', 'data']
+
+  count = serializers.SerializerMethodField('get_count')
+  start = serializers.SerializerMethodField('get_start')
+  data = serializers.SerializerMethodField('get_data')
+
+  def get_count(self, obj):
+    return ApprovalApplication.objects.filter(approval=1, reservation__start=obj['reservation__start']).count()
+
+  def get_start(self, obj):
+    query = ApprovalApplication.objects.filter(approval=1, reservation__start=obj['reservation__start'])
+    serializer = ApprovalApplicationSerializer(query, many=True)
+    return serializer.data[0]['reservation']['start']
+
+  def get_data(self, obj):
+    query = ApprovalApplication.objects.filter(approval=1, reservation__start=obj['reservation__start'])
+    serializer = ApprovalApplicationSerializer(query, many=True)
+    return serializer.data
 
 
 class UsageSerializer(serializers.ModelSerializer):
@@ -225,14 +253,14 @@ class AgeSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 
-class UsageCategorizeSerializer(serializers.ModelSerializer):
+class UsageCategorySerializer(serializers.ModelSerializer):
   usage = UsageSerializer(many=True, read_only=True)
   usage_id = serializers.PrimaryKeyRelatedField(queryset=Usage.objects.all(), many=True, write_only=True)
   # reservation = ReservationSerializer(read_only=True)
   reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
 
   class Meta:
-    model = UsageCategorize
+    model = UsageCategory
     fields = '__all__'
     # depth = 1
 
@@ -246,15 +274,15 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
 
     # usageの部分をpopして退避
     usage_data = validated_data.pop('usage')
-    usage_categorize = UsageCategorize.objects.create(**validated_data)
-    usage_categorize.save()
+    usage_category = UsageCategory.objects.create(**validated_data)
+    usage_category.save()
     # for data in usage_data:
     #   usages = Usage.objects.filter(id=data['id']).first()
     #   if usages is None:
     #     data = Usage.objects.create(**usage_data)
-    usage_categorize.usage.set(usage_data)
+    usage_category.usage.set(usage_data)
 
-    return usage_categorize
+    return usage_category
 
   def update(self, instance, validated_data):
     # 更新処理
@@ -281,14 +309,14 @@ class UsageCategorizeSerializer(serializers.ModelSerializer):
     return instance
 
 
-class AgeCategorizeSerializer(serializers.ModelSerializer):
+class AgeCategorySerializer(serializers.ModelSerializer):
   age = AgeSerializer(many=True, read_only=True)
   age_id = serializers.PrimaryKeyRelatedField(queryset=Age.objects.all(), many=True, write_only=True)
   # reservation = ReservationSerializer(read_only=True)
   reservation = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all())
 
   class Meta:
-    model = AgeCategorize
+    model = AgeCategory
     fields = '__all__'
 
   def create(self, validated_data):
@@ -300,11 +328,11 @@ class AgeCategorizeSerializer(serializers.ModelSerializer):
     # del validated_data['reservation_id']
 
     age_data = validated_data.pop('age')
-    age_categorize = AgeCategorize.objects.create(**validated_data)
-    age_categorize.save()
-    age_categorize.age.set(age_data)
+    age_category = AgeCategory.objects.create(**validated_data)
+    age_category.save()
+    age_category.age.set(age_data)
 
-    return age_categorize
+    return age_category
 
   def update(self, instance, validated_data):
     # 更新処理
@@ -374,6 +402,7 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
     instance.place = validated_data.get('place_id', instance.place)
     instance.age = validated_data.get('age_id', instance.age)
     instance.is_group = validated_data.get('is_group', instance.is_group)
+    instance.time = validated_data.get('time', instance.time)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.fee = validated_data.get('fee', instance.fee)
     # PrimaryKeyRelatedFieldを削除
@@ -382,6 +411,26 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class GetFacilityFeeSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = FacilityFee
+    fields = ['place', 'data']
+
+  place = serializers.SerializerMethodField('get_place')
+  data = serializers.SerializerMethodField('get_data')
+
+  def get_place(self, obj):
+    query = FacilityFee.objects.filter(place__name=obj['place__name'])
+    serializer = FacilityFeeSerializer(query, many=True)
+    return serializer.data[0]['place']['name']
+
+  def get_data(self, obj):
+    query = FacilityFee.objects.filter(place__name=obj['place__name'])
+    serializer = FacilityFeeSerializer(query, many=True)
+    return serializer.data
 
 
 class EquipmentFeeSerializer(serializers.ModelSerializer):
