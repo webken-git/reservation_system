@@ -150,8 +150,4 @@ urlpatterns = [
     path('', include(usages_router.urls)),
     path('', include(ages_router.urls)),
     path('csv/export/', views.ApprovalApplicationCsvExportView.as_view(), name='csv_export'),
-<<<<<<< HEAD
 ]
-=======
-]
->>>>>>> origin/kitaura
