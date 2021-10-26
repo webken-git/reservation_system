@@ -190,6 +190,17 @@ class Age(models.Model):
   def __str__(self):
     return self.name
 
+# 時間区分マスタ
+
+
+class Time(models.Model):
+  name = models.CharField('時間区分', max_length=25)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+
+  def __str__(self):
+    return self.name
+
 # 利用区分テーブル
 
 
@@ -253,8 +264,12 @@ class FacilityFee(models.Model):
       related_name='facility_fee_age',
       on_delete=models.CASCADE
   )
+  time = ForeignKey(
+      Time, verbose_name='time',
+      related_name='facility_fee_time',
+      on_delete=models.CASCADE
+  )
   is_group = models.BooleanField('is_group', default=False)
-  time = models.CharField('時間帯', max_length=15, blank=True, null=True)
   purpose = models.CharField('使用目的', max_length=15, blank=True, null=True)
   fee = models.IntegerField('料金')
   created_at = models.DateTimeField(auto_now_add=True)

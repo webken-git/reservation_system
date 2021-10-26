@@ -405,6 +405,27 @@ class AgeViewSet(viewsets.ModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
+class TimeViewSet(viewsets.ModelViewSet):
+  queryset = Time.objects.all()
+  serializer_class = TimeSerializer
+  filter_fields = [f.name for f in Time._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  # @method_decorator(vary_on_cookie)@method_decorator(cache_page(TIME_OUTS_1MONTH))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+
 class UsageCategoryViewSet(viewsets.ModelViewSet):
   queryset = UsageCategory.objects.all()
   serializer_class = UsageCategorySerializer

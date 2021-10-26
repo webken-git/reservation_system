@@ -2,6 +2,18 @@
 {% load account %}
 {% load i18n %}
 
-{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}You're receiving this e-mail because user {{ user_display }} has given your e-mail address to register an account on {{ site_domain }}.
+{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}この度は、{{ site_domain }} にお申込みいただきまして
+誠にありがとうございます。
 
-To confirm this is correct, go to {{ activate_url }}{% endblocktrans %}{% endautoescape %}{% endblock %}
+お申込みいただきましたアカウント情報は以下となります。
+--------------------------
+メールアドレス: {{ user_display }}
+パスワード: 個人情報のため表示を伏せています
+--------------------------
+
+ご本人様確認のため、下記URLにアクセスし
+アカウントの本登録を完了させてください。
+{{ activate_url }}
+
+当メールに心当たりのない場合は、誠に恐れ入りますが
+破棄していただけますよう、よろしくお願いいたします。{% endblocktrans %}{% endautoescape %}{% endblock %}
