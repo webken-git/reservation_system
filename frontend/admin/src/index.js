@@ -22,6 +22,7 @@ import "./index.css"
 import GetDate from "./components/toppage/GetDate"
 
 import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
+import SideBarRoute from "./components/rooter/SideBarRoute";
 
 
 
@@ -32,16 +33,19 @@ function App() {
         <Switch>
           <Route path="/" exact  children={<Login />} />
           <GuestRoute path="/login" children={<Login />} />
-          <SideBarAndHeaderRoute pagename={<GetDate />} path="/toppage" exact children={<PrivateRoute path="/TopPage" exact children={<TopPage/>} />} />
+          <SideBarAndHeaderRoute pagename={<GetDate />} path="/toppage" exact children={<PrivateRoute path="/topPage" exact children={<TopPage/>} />} />
           <SideBarAndHeaderRoute path="/mypage" exact children={<PrivateRoute path="/MyPage" exact children={<MyPage/>} />} />
-          <SideBarAndHeaderRoute pagename="承認リスト" path="/approvalList" exact children={<PrivateRoute path="/ApprovalList" exact children={<ApprovalList/>} />} />
-          <SideBarAndHeaderRoute pagename="不承認リスト" path="/disapprovalList" exact children={<PrivateRoute path="/DisapprovalList" exact children={<DisapprovalList/>} />} />
-          <SideBarAndHeaderRoute pagename="未承認リスト"　path="/unapprovalList" exact children={<PrivateRoute path="/UnapprovalList" exact children={<UnapprovalList/>} />} />
-          <SideBarAndHeaderRoute pagename="キャンセルリスト" path="/cancellist" exact children={<PrivateRoute path="/CancelList" exact children={<CancelList/>} />} />
+          <SideBarAndHeaderRoute pagename="承認リスト" path="/approvalList" exact children={<PrivateRoute path="/approvalList" exact children={<ApprovalList/>} />} />
+          <SideBarAndHeaderRoute pagename="不承認リスト" path="/disapprovalList" exact children={<PrivateRoute path="/disapprovalList" exact children={<DisapprovalList/>} />} />
+          <SideBarAndHeaderRoute pagename="未承認リスト"　path="/unapprovalList" exact children={<PrivateRoute path="/unapprovalList" exact children={<UnapprovalList/>} />} />
+          <SideBarAndHeaderRoute pagename="キャンセルリスト" path="/cancellist" exact children={<PrivateRoute path="/cancelList" exact children={<CancelList/>} />} />
           <SideBarAndHeaderRoute pagename="ユーザーリスト" path="/userlist" exact children={<PrivateRoute path="/userlist" exact children={<UserList/>} />} />
-          <SideBarAndHeaderRoute pagename="ウィークリーカレンダー" path="/weeklycalendar" exact children={<PrivateRoute path="/weeklycalendar" exact children={<Wcalendar/>} />} />
+          {/* <SideBarAndHeaderRoute pagename="ウィークリーカレンダー" path="/weeklycalendar" exact children={<PrivateRoute path="/weeklycalendar" exact children={<Wcalendar/>} />} />
           <SideBarAndHeaderRoute pagename="デイリーカレンダー" path="/dailycalendar" exact children={<PrivateRoute path="/dailycalendar" exact children={<Dcalendar/>} />} />
-          <SideBarAndHeaderRoute pagename="マンスリーカレンダー" path="/monthlycalendar" exact children={<PrivateRoute path="/monthlycalendar" exact children={<Mcalendar/>} />} />
+          <SideBarAndHeaderRoute pagename="マンスリーカレンダー" path="/monthlycalendar" exact children={<PrivateRoute path="/monthlycalendar" exact children={<Mcalendar/>} />} /> */}
+          <SideBarRoute path="/weeklycalendar" exact children={<PrivateRoute path="/weeklycalendar" exact children={<Wcalendar/>} />} />
+          <SideBarRoute path="/dailycalendar" exact children={<PrivateRoute path="/dailycalendar" exact children={<Dcalendar/>} />} />
+          <SideBarRoute path="/monthlycalendar" exact children={<PrivateRoute path="/monthlycalendar" exact children={<Mcalendar/>} />} />
         </Switch>
       </BrowserRouter>
     </Provider>

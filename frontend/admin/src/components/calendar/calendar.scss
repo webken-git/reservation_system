@@ -1,12 +1,16 @@
 $bordercolor: gainsboro;
 // $bordercolor: #eee;
 
+.contents {
+    margin: 0;
+}
+
 //追加css
 .container{
     display: inline-block;
     // width: 80%;
     width: 100%;
-    height: 82vh;
+    height: 95vh;
     vertical-align: top;
 }
 
@@ -16,10 +20,14 @@ $bordercolor: gainsboro;
 
 .weekly-calendar, .daily-calendar {
     height: 100%;
+
+    .header {
+        height: 12%;
+    }
 }
 
 .head-row{
-    height: 10%;
+    // height: 12%;
 
     ::-webkit-scrollbar {
         display: inline;
@@ -228,7 +236,7 @@ $bordercolor: gainsboro;
 
 .daily-calendar{
     .head-row{
-        height: 10%;
+        height: 12%;
     
         ::-webkit-scrollbar {
             display: inline;
@@ -382,7 +390,7 @@ $bordercolor: gainsboro;
     height: 100%;
 
     .header {
-        height: 8%;
+        height: 12%;
         display: flex;
         // justify-content: center; //左右中央揃え
         align-items: center; //上下中央揃え
@@ -403,7 +411,7 @@ $bordercolor: gainsboro;
 
     table {
         width: 100%;
-        height: 92%;
+        height: 86%;
         border: 2px  $bordercolor solid;
         border-collapse: collapse;
 
