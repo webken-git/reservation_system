@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-import React, { Component } from 'react';
-import Calendar from 'react-week-calendar';
-
-import 'react-week-calendar/dist/style.css';
-
-export default class WeekCalendar extends Component {
-    render() {
-        return (
-            <Calendar scaleUnit="60"/>
-        );
-    }
-}
-=======
 // import React from "react";
 // import ReactDOM from 'react-dom';
 // import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
@@ -40,5 +26,3 @@ export default class WeekCalendar extends Component {
 // if (document.getElementById('app')) {
 //     ReactDOM.render(<App />, document.getElementById('app'));
 //   }
-  
->>>>>>> 02f72abd20be50ace78ff92c0c5ae8fd6e9af216
