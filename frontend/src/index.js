@@ -10,6 +10,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/home/Login";
 import MyPage from "./pages/home/MyPage";
 import Top from "./pages/home/Top";
+import WeekCalendar from "./App.js";
 function Menu() {
   return (
     <nav>
@@ -18,6 +19,8 @@ function Menu() {
       <Link to="/mypage">MyPage</Link>
       {" "}|{" "}
       <Link to="/top">Top</Link>
+      {" "}|{" "}
+      <Link to="/calendar">Calendar</Link>
     </nav>
   );
 }
@@ -32,6 +35,7 @@ function App() {
           <GuestRoute path="/login" children={<Login />} />
           <PrivateRoute path="/mypage" children={<MyPage />} />
           <PrivateRoute path="/top" children={<Top />} />
+          <PrivateRoute path="/calendar" children={<WeekCalendar />} />
         </Switch>
       </BrowserRouter>
     </Provider>
