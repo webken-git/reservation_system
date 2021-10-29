@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/auth";
+import styles from "./Login.module.scss";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -17,22 +18,30 @@ export default function Login() {
 
   return (
     <>
-      <h1>Login</h1>
+      <div className={styles.root}>
+      <h1>管理者ログイン</h1>
+      <div className={ styles.username}></div>
       <form onSubmit={submit}>
-        <label htmlFor="username">username</label>
-        <input
+        <div className={ styles.username}>
+            <label htmlFor="username">ユーザーID<br/>
+            </label>
+        <input className={styles.inputColumn}
           type="text"
           value={username}
           onChange={e => setUsername(e.target.value)}
-        />
-        <label htmlFor="password">password</label>
-        <input
+              />
+        </div>
+        <div className={ styles.password}>
+        <label htmlFor="password">パスワード<br/></label>
+            <input className={styles.inputColumn}
           type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
-        />
-        <button type="submit">login</button>
-      </form>
+              />
+          </div>
+          <button className={ styles.btn}type="submit">ログイン</button>
+        </form>
+        </div>
     </>
   );
 }
