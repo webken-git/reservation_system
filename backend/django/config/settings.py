@@ -189,7 +189,12 @@ SIMPLE_JWT = {
     # トークンをJWTに設定
     'AUTH_HEADER_TYPES': ('JWT',),
     # トークンの持続時間の設定
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    # リフレッシュトークンの持続時間の設定
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    # トークンの有効期限の設定
+    'JWT_EXPIRATION_DELTA': timedelta(days=1),
+    'BLACKLIST_AFTER_ROTATION': False,
 }
 
 SITE_ID = 1
