@@ -262,6 +262,12 @@ class AgeSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 
+class TimeSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Time
+    fields = '__all__'
+
+
 class UsageCategorySerializer(serializers.ModelSerializer):
   usage = UsageSerializer(many=True, read_only=True)
   usage_id = serializers.PrimaryKeyRelatedField(queryset=Usage.objects.all(), many=True, write_only=True)
@@ -391,6 +397,8 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
   place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), write_only=True)
   age = AgeSerializer(read_only=True)
   age_id = serializers.PrimaryKeyRelatedField(queryset=Age.objects.all(), write_only=True)
+  time = TimeSerializer(read_only=True)
+  time_id = serializers.PrimaryKeyRelatedField(queryset=Time.objects.all(), write_only=True)
 
   class Meta:
     model = FacilityFee
@@ -399,10 +407,12 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
   def create(self, validated_data):
     validated_data['place'] = validated_data.get('place_id', None)
     validated_data['age'] = validated_data.get('age_id', None)
+    validated_data['time'] = validated_data.get('time_id', None)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['place_id']
     del validated_data['age_id']
+    del validated_data['time_id']
 
     return FacilityFee.objects.create(**validated_data)
 
@@ -410,12 +420,14 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
     # 更新処理
     instance.place = validated_data.get('place_id', instance.place)
     instance.age = validated_data.get('age_id', instance.age)
+    instance.time = validated_data.get('time_id', instance.time)
     instance.is_group = validated_data.get('is_group', instance.is_group)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.fee = validated_data.get('fee', instance.fee)
     # PrimaryKeyRelatedFieldを削除
     del validated_data['place_id']
     del validated_data['age_id']
+    del validated_data['time_id']
     instance.save()
 
     return instance
