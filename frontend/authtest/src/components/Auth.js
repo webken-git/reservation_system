@@ -36,8 +36,14 @@ const Auth = (props) => {
             console.log(cookies('access_token'));
         })
         .catch(err => {
-            console.log(err);
-            setError(err.response);
+            console.log(err.response.data);
+            if(err.response.data.password) {
+                setError(`password: ${err.response.data.password}`);
+            }else if(err.response.data.email) {
+                setError(`email: ${err.response.data.email}`);
+            }else if(err.response.data.non_field_errors) {
+                setError(err.response.data.non_field_errors);
+            }
         });
     }
 
@@ -48,7 +54,7 @@ const Auth = (props) => {
                 <div className="auth__container__form">
                     <form onSubmit={auth}>
                         {
-                            // エラーがあればエラーメッセージを表示（多分どこかミスってる）
+                            // エラーがあればエラーメッセージを表示
                             error &&
                             <div className="auth__container__form__error">
                                 {error}

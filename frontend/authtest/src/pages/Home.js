@@ -26,7 +26,7 @@ const Home = (props) => {
                 setUserList(userList);
             })
             .catch(err => {
-                console.log(err);
+                console.log(err.response.data);
             });
     });
 
@@ -47,9 +47,9 @@ const Home = (props) => {
                                 </Link>
                             </tr>
                         </table>
-                )
-            })
-          }
+                    )
+                })
+            }
         </div>
     )
 }
