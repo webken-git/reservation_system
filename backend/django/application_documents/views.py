@@ -276,8 +276,8 @@ class DocumentTemplateViewSet(viewsets.ModelViewSet):
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
@@ -291,28 +291,39 @@ class DocumentViewSet(viewsets.ModelViewSet):
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['list', 'retrieve', 'update', 'partial_update'],
-      permissions.IsAuthenticated: ['create', 'destroy', ],
-      permissions.AllowAny: []
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['create', 'destroy', ]
   }
+
+  def create(self, request, *args, **kwargs):
+    file_name = create_new_word(self.request)
+    if 'error' in file_name:
+      return response.Response(file_name, status=status.HTTP_400_BAD_REQUEST)
+    else:
+      serializer = self.get_serializer(data=request.data)
+      serializer.is_valid(raise_exception=True)
+      self.perform_create(serializer)
+      headers = self.get_success_headers(serializer.data)
+      return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
   def perform_create(self, serializer):
     file_name = create_new_word(self.request)
-    if 'error' in file_name:
-      return response.Response(file_name, status=status.HTTP_200_OK)
-    else:
-      serializer.save(
-          number=self.request.data['number'],
-          file_name=file_name,
-          approval_application_id=self.request.data['approval_application_id']
-      )
-      return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+    serializer.save(
+        number=self.request.data['number'],
+        file_name=file_name,
+        approval_application_id=self.request.data['approval_application_id']
+    )
+    return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
   def destroy(self, request, *args, **kwargs):
     instance = self.get_object()
     serializer = self.get_serializer(instance)
-    self.perform_destroy(instance)
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    os.remove(BASE_DIR + serializer.data['file_name'])
+    if os.path.exists(BASE_DIR + serializer.data['file_name']):
+      os.remove(BASE_DIR + serializer.data['file_name'])
+    else:
+      pass
+    self.perform_destroy(instance)
     return response.Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
   def perform_destroy(self, instance):

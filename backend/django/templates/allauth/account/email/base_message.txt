@@ -1,7 +1,13 @@
-{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name %}Hello from {{ site_name }}!{% endblocktrans %}
+{% load account %}{% load i18n %}{% autoescape off %}{% user_display user as user_display %}{{ user_display }}　様
 
 {% block content %}{% endblock %}
 
-{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Thank you for using {{ site_name }}!
-{{ site_domain }}{% endblocktrans %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}--
+稚内市みどりスポーツパーク
+https://wmsp.info/
+{{ site_domain }}
+
+■お問い合わせ先
+EMAIL: info@wmsp.info
+TEL: 0162-73-4125{% endblocktrans %}
 {% endautoescape %}

@@ -188,6 +188,8 @@ class Age(models.Model):
   def __str__(self):
     return self.name
 
+# 時間区分マスタ
+
 
 class Time(models.Model):
   name = models.CharField('時間区分', max_length=25)
@@ -196,7 +198,6 @@ class Time(models.Model):
 
   def __str__(self):
     return self.name
-
 
 # 利用区分テーブル
 

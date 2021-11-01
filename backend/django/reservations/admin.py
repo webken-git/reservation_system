@@ -56,6 +56,11 @@ class AgeAdmin(admin.ModelAdmin):
   list_display_links = ('id', 'name')
 
 
+class TimeAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in Time._meta.fields]
+  list_display_links = ('id', 'name')
+
+
 class UsageAdmin(admin.ModelAdmin):
   list_display = [f.name for f in Usage._meta.fields]
   list_display_links = ('id', 'name')

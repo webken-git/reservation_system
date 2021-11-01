@@ -83,6 +83,6 @@ if getattr(settings, 'REST_USE_JWT', False):
 
   account_uris += [
       path('token/', TokenObtainPairView.as_view()),
-      #   path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+      path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
       path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
   ]

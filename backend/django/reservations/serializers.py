@@ -420,7 +420,7 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
     # 更新処理
     instance.place = validated_data.get('place_id', instance.place)
     instance.age = validated_data.get('age_id', instance.age)
-    instance.time = validated_data.get('time_id', instance.time)
+    instance.time = validated_data.get('time_id', instance.age)
     instance.is_group = validated_data.get('is_group', instance.is_group)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.fee = validated_data.get('fee', instance.fee)
@@ -431,6 +431,26 @@ class FacilityFeeSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class GetFacilityFeeSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = FacilityFee
+    fields = ['place', 'data']
+
+  place = serializers.SerializerMethodField('get_place')
+  data = serializers.SerializerMethodField('get_data')
+
+  def get_place(self, obj):
+    query = FacilityFee.objects.filter(place__name=obj['place__name'])
+    serializer = FacilityFeeSerializer(query, many=True)
+    return serializer.data[0]['place']['name']
+
+  def get_data(self, obj):
+    query = FacilityFee.objects.filter(place__name=obj['place__name'])
+    serializer = FacilityFeeSerializer(query, many=True)
+    return serializer.data
 
 
 class EquipmentFeeSerializer(serializers.ModelSerializer):
