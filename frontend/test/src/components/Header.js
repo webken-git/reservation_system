@@ -13,7 +13,7 @@ const Header = (props) => {
   const token = cookies.get('access_token');
   const logout = () => {
     // ログアウト処理を記述
-    axios.post(`${process.env.REACT_APP_END_POINT}account/logout/`, {
+    axios.post(`${process.env.REACT_APP_END_POINT}/account/logout/`, {
       headers: {
         // 'Accept' : 'application/json',
         'Content-Type': "application/json",

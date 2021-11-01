@@ -13,7 +13,7 @@ const Detail = (props) => {
 
     useEffect(() => {
         axios
-            .get(`${process.env.REACT_APP_END_POINT}api/users/${props.match.params.userId}/`, {
+            .get(`${process.env.REACT_APP_END_POINT}/api/users/${props.match.params.userId}/`, {
                 headers: {
                     'Content-Type': "application/json",
                     'Authorization': `JWT ${cookies.get('access_token')}`

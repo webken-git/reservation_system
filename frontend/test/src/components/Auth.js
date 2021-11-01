@@ -23,15 +23,15 @@ const Auth = (props) => {
         formData.append('email', email);
         formData.append('password', password);
 
-        axios.post(`${process.env.REACT_APP_END_POINT}account/login/`, formData, {
+        axios.post(`${process.env.REACT_APP_END_POINT}/account/token/`, formData, {
             headers: {
                 'Content-Type': 'application/json'
             },
         })
         .then(res => {
             // Login Success
-            setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
-            setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+            setCookie('access_token', res.data.access, { path: '/' }, { httpOnly: true });
+            setCookie('refresh_token', res.data.refresh, { path: '/' }, { httpOnly: true });
             window.location.href = '/';
             console.log(cookies('access_token'));
         })
@@ -41,8 +41,8 @@ const Auth = (props) => {
                 setError(`password: ${err.response.data.password}`);
             }else if(err.response.data.email) {
                 setError(`email: ${err.response.data.email}`);
-            }else if(err.response.data.non_field_errors) {
-                setError(err.response.data.non_field_errors);
+            }else if(err.response.data.detail) {
+                setError(err.response.data.detail);
             }
         });
     }

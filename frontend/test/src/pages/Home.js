@@ -14,7 +14,7 @@ const Home = (props) => {
 
     useEffect(() => {
         axios
-            .get(`${process.env.REACT_APP_END_POINT}api/users/`, {
+            .get(`${process.env.REACT_APP_END_POINT}/api/users/`, {
                 headers: {
                     // 'Accept' : 'application/json',
                     'Content-Type': "application/json",

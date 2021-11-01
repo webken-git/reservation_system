@@ -15,7 +15,7 @@ const LoggedIn = (props) => {
         formData.append("token", cookies.get("access_token"));
 
         axios
-        .post(`${process.env.REACT_APP_END_POINT}account/token/verify/`, formData, {
+        .post(`${process.env.REACT_APP_END_POINT}/account/token/verify/`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
