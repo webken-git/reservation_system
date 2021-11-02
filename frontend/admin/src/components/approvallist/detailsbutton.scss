@@ -1,10 +1,9 @@
 詳細ボタンのcss
-.good:before {
-  font-family: "Font Awesome 5 Free";
-  content: '\f00e';
+.details-button {
   font-size: 40px;
   font-weight: 900;
   margin-left: 13px;
+  background-color: skyblue;
 }
 // .detailsbutton {
 //   font-size: 20px;
@@ -17,8 +16,8 @@
     display: flex;
     justify-content: center; 
     .scroll_box {
-      width: 1300px;
-      height: 200px;
+      width: 1550px;
+      height: 500px;
       overflow-y: scroll;
       // white-space: nowrap;
     }
@@ -46,8 +45,16 @@
     display: flex;
     justify-content: center;
   }
+  .title {
+    font-weight: bold;
+    font-size: 20px;
+  }
+  // .contents {
+  //   font-size: 20px;
+  // }
 }
 
 .close {
   color: blue;
+  font-size: 30px;
 }
