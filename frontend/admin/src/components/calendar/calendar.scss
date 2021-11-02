@@ -26,6 +26,21 @@ $bordercolor: gainsboro;
     }
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+
+    .select {
+        .add {
+            background-color: white;
+        }
+    }
+
+    .filter-base {
+        display: flex;
+    }
+}
+
 .head-row{
     // height: 12%;
 

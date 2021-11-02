@@ -12,7 +12,17 @@ const WeeklyCalendar = (props) =>{
     const date = props.date;
     const [ updateFlag, setUpdateFlag ] = useState(false);
     const [ st, setSt ] = useState(0);
+    const [ filterType, setFilterType ] = useState('curling');
     const type = 'week';
+
+    // function filtering (selectText) {
+    //     setFilterType(selectText);
+    // }
+
+    const filtering = (selectText) => {
+        console.log(selectText);
+        setFilterType(selectText);
+    }
 
     useEffect(()=>{
         let unmounted = false;
@@ -60,7 +70,7 @@ const WeeklyCalendar = (props) =>{
         return () => { unmounted = true; }
     }, [date]);
 
-    console.log(dateList);
+    // console.log(filterType);
 
     return (
             <div className="weekly-calendar">
@@ -81,6 +91,15 @@ const WeeklyCalendar = (props) =>{
                     <Select
                         type={type}
                     />
+                    {/* 表示する予約のフィルター選択 */}
+                    <div className="filter-base">
+                        <p>施設名</p>
+                        <select className="filter" onClick={() => filtering(this)}>
+                            <option value="curling" selected>カーリング場</option>
+                            <option value="conference">会議室</option>
+                            <option value="martial-arts">武道場</option>
+                        </select>
+                    </div>
                 </div>
                 <div className="head-row">
                     <div className="timeline"></div>

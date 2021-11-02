@@ -3,6 +3,7 @@ import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
 import DailyContent from './DailyContent';
+import Select from './Select';
 
 const DailyCalendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
@@ -11,6 +12,7 @@ const DailyCalendar = (props) =>{
     const date = props.date;
     const [ updateFlag, setUpdateFlag ] = useState(false);
     const [ st, setSt ] = useState(0);
+    const type = 'day';
 
     // useEffect(()=>{
     //     let unmounted = false;
@@ -70,6 +72,11 @@ const DailyCalendar = (props) =>{
                         <div className="loading">Loading...</div>
                     </div>
                 </div> */}
+                <div className="header">
+                    <Select
+                        type={type}
+                    />
+                </div>
                 <div className="head-row">
                     <div className="timeline"></div>
 

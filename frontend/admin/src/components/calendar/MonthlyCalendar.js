@@ -3,6 +3,7 @@ import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
 import Content from './Content';
+import Select from './Select';
 
 const MonthlyCalendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
@@ -10,6 +11,7 @@ const MonthlyCalendar = (props) =>{
     const [year, setYear] = useState(date.getFullYear())
     const [month, setMonth] = useState(date.getMonth() + 1)
     const calendar = createCalendar(year, month)
+    const type = 'month';
 
     const onClick = (n) => () => {
         const nextMonth = month + n
@@ -27,6 +29,9 @@ const MonthlyCalendar = (props) =>{
     return (
         <div className="monthly-calendar">
             <div className="header">
+                <Select
+                    type={type}
+                />
                 <div className="today"><p>今日</p></div>
                 <div className="button">
                     <button onClick={onClick(-1)}><p>{'prev'}</p></button>
