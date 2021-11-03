@@ -4,9 +4,10 @@ import Cookies from 'js-cookie';
 
 import MainContent from './MainContent';
 import { BrowserRouter, BrowserRouter as Router, Route } from 'react-router-dom';
+import HeaderComponent from './components/Header';
 import Auth from './components/Auth';
 import Home from './pages/Home';
-import Header from './components/Header';
+// import Header from './components/Header';
 import Detail from './pages/Detail';
 import LoggedIn from './components/LoggedIn';
 import LoggedOut from './components/LoggedOut';
@@ -24,6 +25,7 @@ export default class App extends Component {
       <React.Fragment>
         <BrowserRouter>
           <div className="app">
+            <HeaderComponent />
             <MainContent />
           </div>
         </BrowserRouter>

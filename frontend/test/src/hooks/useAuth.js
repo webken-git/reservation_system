@@ -8,8 +8,8 @@ function useAuth() {
     return {
         isAuthenticated: useSelector(selectIsAuthenticated),
         // call action
-        login: () => dispatch(loginUser()),
-        logout: () => dispatch(logoutUser()),
+        loginUser: () => dispatch(loginUser()),
+        logoutUser: () => dispatch(logoutUser()),
     };
 }
 

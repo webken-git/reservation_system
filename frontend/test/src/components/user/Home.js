@@ -1,8 +1,9 @@
 import React from "react";
-import useAuth from "../../hooks/userAuth";
+import useAuth from "../../hooks/useAuth";
 
 import HomeUnauthenticated from "./Home_unauthenticated";
 import HomeAuthenticated from "./Home_authenticated";
+import { Container,Row } from "react-bootstrap";
 
 const Home = () => {
     const { isAuthenticated } = useAuth();
@@ -14,9 +15,11 @@ const Home = () => {
     }
 
     return (
-        <div>
-            {Home_contents}
-        </div>
+        <Container fluid className="inner">
+            <Row className="justify-content-center">
+                {Home_contents}
+            </Row>
+        </Container>
     );
 };
 

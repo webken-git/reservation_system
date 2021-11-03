@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { Button, Col, Jumbotron, Card, ListGroup } from "react-bootstrap";
 
 const Home_unauthenticated = () => {
     const history = useHistory();
@@ -8,10 +9,10 @@ const Home_unauthenticated = () => {
         <div>
             <h1>Home</h1>
             <p>
-                You are not logged in.
+                あなたはログインしていません。
             </p>
             <button onClick={() => history.push("/login")}>
-                Login
+                ログイン
             </button>
         </div>
     );
