@@ -10,9 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import os
-from pathlib import Path
+from corsheaders.defaults import default_headers
 from datetime import timedelta  # 追加
+import os
 from dotenv import load_dotenv  # 追加
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,12 +33,6 @@ load_dotenv()  # 追加
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
     # Local
     'announcements',
     'application_documents',
@@ -46,26 +40,34 @@ INSTALLED_APPS = [
     'reservations',
     'questionnaire',
     'users',
+
     # 3rd party
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters',
-    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'corsheaders',
+    'django_filters',
     'drf_spectacular',
     'phonenumber_field',
+
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',        # 追加
-    'django.middleware.common.CommonMiddleware',    # 追加
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # CORS middleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -132,8 +134,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-
 LANGUAGE_CODE = 'ja'
 
 TIME_ZONE = 'Asia/Tokyo'
@@ -144,84 +144,121 @@ USE_L10N = True
 
 USE_TZ = True
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-# 開発環境下での静的ファイルの参照先
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # 追加
+# MEDIA_URL = '/media/'
+AUTH_USER_MODEL = 'users.User'
 
-# 本番環境での静的ファイルの参照先
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # 追加
+# Session Config
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # ブラウザを閉じてもセッションを破棄しない
+SESSION_COOKIE_AGE = 86400  # 1日経ったら強制的にセッションタイムアウト
 
-# メディアファイルpath
-# MEDIA_URL = '/media/' # 追加
-
+# DRF settings
 
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
+    # 'DEFAULT_PAGINATION_CLASS': 'app.todo.funcs.paginations.CustomPagination',
+    # 'PAGE_SIZE': 10,
+
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.AllowAny',
     # ],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',  # Django REST Framework JWT
+    ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    # 'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S.%f%z',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+# SESSION_COOKIE_SAMESITE = 'None'
+# CSRF_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_SECURE = True
+
+
+# dj-rest-auth settings
+
+REST_AUTH_SERIALIZERS = {
+    # 'PASSWORD_RESET_SERIALIZER':
+    #     'users.serializers.PasswordResetSerializer',
 }
 
-# 追加
+CSRF_COOKIE_NAME = 'csrftoken'
+# CSRF_USE_SESSIONS = True
+
+# REST_SESSION_LOGIN = True
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'jwt-auth'
+OLD_PASSWORD_FIELD_ENABLED = True
+# httpsでのリクエストでないとCookieを送信しない(デフォルトはfalse。本番でTrueにする)
+JWT_AUTH_SECURE = False
+# JWT_AUTH_SAMESITE = 'None'
+# JWTクッキーを認証に使用する際にDRFで無効になっているCSRFチェックを有効にする。
+# JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED = True
+
+
+# django-allauth settings
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    # 'django.contrib.auth.backends.AllowAllUsersModelBackend',
+]
+
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
+# サインアップ時に確認メールを送信する
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+# サインアップ時の確認メールに記載するログインページのURL
+LOGIN_URL = '/account/login'
+# EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SITE_ID = 1
+
+
+SIMPLE_JWT = {
+    # トークンをJWTに設定
+    'AUTH_HEADER_TYPES': ('JWT',),
+    # アクセストークンの持続時間の設定
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    # リフレッシュトークンの持続時間の設定
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=60),
+    'BLACKLIST_AFTER_ROTATION': False,
+}
+
+
+# CORS settings
+
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 )
 
-REST_AUTH_SERIALIZERS = {
-    'PASSWORD_RESET_SERIALIZER':
-        'users.serializers.PasswordResetSerializer',
-}
-
-SIMPLE_JWT = {
-    # トークンをJWTに設定
-    'AUTH_HEADER_TYPES': ('JWT',),
-    # トークンの持続時間の設定
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-}
-
-SITE_ID = 1
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = 'user'
-
-AUTHENTICATION_BACKENDS = [
-    # allauth specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
-    # Needed to login by username in Django admin, regardless of allauth
-    'django.contrib.auth.backends.ModelBackend',
-    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'X-CSRFToken',
+    # 'X-Requested-With',
+    'Content-Type',
+    # 'Accept',
+    'Authorization',
 ]
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-AUTH_USER_MODEL = 'users.User'
-ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
-# Userモデルにusernameフィールドは存在しないため以下を追記
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# サインアップ時に確認メールを送信する
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-
-# サインアップ時の確認メールに記載するログインページのURL
-LOGIN_URL = '/account/login'
-# EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_ALLOW_ALL = True

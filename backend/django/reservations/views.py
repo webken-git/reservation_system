@@ -718,7 +718,7 @@ class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
     「現在～指定した日付」の範囲の予約データを検索する。
     現在の日付はdatetime.nowで取得する。
     そのため、物凄い先の未来の日付を指定して検索すると期日が過ぎていないデータを取得可能。
-    ~/api/reservatios/9999-01-01T00:00（指定した日付）/approval-applications/
+    ~/api/reservations/9999-01-01T00:00（指定した日付）/approval-applications/
     の様に利用すると良いかと。
     """
     date = self.kwargs.get('reservation_pk')
