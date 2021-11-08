@@ -1,10 +1,8 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { isAuthSelector } from "../../store/auth";
 
 function GuestRoute(props) {
-  const isAuth = useSelector(isAuthSelector);
+    const isAuth = props
 
   return isAuth
     ? <Redirect to="/" />
