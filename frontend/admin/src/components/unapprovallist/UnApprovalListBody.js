@@ -15,6 +15,7 @@ const UnapprovalListBody = () => {
       // console.log(data);
       // 未承認リストのデータをuseStateに入れている
       setUnApprovalListData(data);
+      console.log(data)
     })
     .catch((error) => {
       console.log(error);

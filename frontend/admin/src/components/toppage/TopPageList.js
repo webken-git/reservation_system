@@ -10,6 +10,7 @@ const TopPageList = () => {
     axios.get('https://webhok.net/reservation_system/api/reservations/9999-01-01T00:00/approval-applications/?approval=2')
     .then(response => {
       const data = response.data;
+      console.log(data)
       var today = dayjs().format('YYYY-MM-DD')
       // var today = dayjs().add(1, 'y').add(19, 'd').format('YYYY-MM-DD')
       // var today = dayjs().add(1, 'd').format('YYYY-MM-DD')
@@ -31,7 +32,6 @@ const TopPageList = () => {
 
       }
       
-
     })
     .catch((error) => {
       console.log(error);
