@@ -11,24 +11,25 @@ import Cookies from 'universal-cookie'
 const Home = (props) => {
     const cookies = new Cookies();
     const [userList, setUserList] = useState([]);
+    axios.defaults.headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `JWT ${cookies.get('access_token')}`,
+    };
+
+    const pullUserList = async () => {
+        const response = await axios.get(`${process.env.REACT_APP_END_POINT}/api/users/`);
+        try {
+            setUserList(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
-        axios
-            .get(`${process.env.REACT_APP_END_POINT}/api/users/`, {
-                headers: {
-                    // 'Accept' : 'application/json',
-                    'Content-Type': "application/json",
-                    'Authorization': `JWT ${cookies.get('access_token')}`
-                }
-            })
-            .then(res => {
-                const userList = res.data;
-                setUserList(userList);
-            })
-            .catch(err => {
-                console.log(err.response.data);
-            });
-    });
+        pullUserList();
+    }, []);
+
 
     return (
         <div>
