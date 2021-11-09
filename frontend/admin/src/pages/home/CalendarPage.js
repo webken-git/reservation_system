@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
-import WeeklyCalendar from '../../components/calendar/WeeklyCalendar'
+import Calendar from '../../components/calendar/Calendar'
 
-export const Wcalendar =()=> {
+export const CalendarPage =()=> {
     // const [ date, setDate ] = useState(new Date());
     const date = new Date(2021, 3, 1);
     const [ homeUpdateFlag, setHomeUpdateFlag ] = useState(false);
@@ -10,7 +10,7 @@ export const Wcalendar =()=> {
 
     return (
         <div className="container">
-            <WeeklyCalendar
+            <Calendar
                 date={date}
                 isMain={true}
                 // individualOrGroup={props.individualOrGroup}

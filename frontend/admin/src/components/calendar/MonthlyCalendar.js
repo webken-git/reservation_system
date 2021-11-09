@@ -6,12 +6,13 @@ import Content from './Content';
 import Select from './Select';
 
 const MonthlyCalendar = (props) =>{
-    const dayList = ['日', '月', '火', '水', '木', '金', '土'];
+    const dayList = props.dayList;
     const date = props.date;
     const [year, setYear] = useState(date.getFullYear())
     const [month, setMonth] = useState(date.getMonth() + 1)
     const calendar = createCalendar(year, month)
-    const type = 'month';
+    const calendarType = props.calendarType;
+    const setCalendarType = props.setCalendarType;
 
     const onClick = (n) => () => {
         const nextMonth = month + n
@@ -28,7 +29,8 @@ const MonthlyCalendar = (props) =>{
 
     return (
         <div className="monthly-calendar">
-            <div className="header">
+            
+            {/* <div className="header">
                 <Select
                     type={type}
                 />
@@ -38,7 +40,8 @@ const MonthlyCalendar = (props) =>{
                     <button onClick={onClick(1)}><p>{'next'}</p></button>
                 </div>
                 <p>{year+'年'+month+'月'}</p>
-            </div>
+            </div> */}
+
             <table>
                 <tbody>
                     <tr className="day-row">

@@ -10,6 +10,8 @@ const Head = (props) =>{
     const individualOrGroup = props.individualOrGroup;
     const setUpdateFlag = props.setUpdateFlag;
     const setHomeUpdateFlag = props.setHomeUpdateFlag;
+    const count = props.count;
+
 
     useEffect(() => {
         let unmounted = false;
@@ -28,6 +30,7 @@ const Head = (props) =>{
                 setScheduleList(scheduleList);
                 setUpdateFlag(false);
                 setHomeUpdateFlag(false);
+                count();
             }
         })
         .catch( error => {
@@ -86,7 +89,7 @@ const Head = (props) =>{
         // }
         
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag]);
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, count]);
 
     //modal
     //グループのスケジュール表示中アラート

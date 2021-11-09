@@ -20,7 +20,7 @@ const SideBar = (props) => {
             <TransitionBox url="/disapprovalList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"不承認リスト"}/>
             <TransitionBox url="/cancelList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"キャンセルリスト"}/>
             <TransitionBox url="/userList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"ユーザーリスト"}/>
-            <TransitionBox url="/weeklycalendar" icon={<FontAwesomeIcon icon={faCalendarAlt} />} pagename={"カレンダー"}/>
+            <TransitionBox url="/calendar" icon={<FontAwesomeIcon icon={faCalendarAlt} />} pagename={"カレンダー"}/>
         </div>
     )
 }

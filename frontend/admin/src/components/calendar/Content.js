@@ -15,6 +15,9 @@ const Content = (props) =>{
     const individualOrGroup = props.individualOrGroup;
     const setUpdateFlag = props.setUpdateFlag;
     const setHomeUpdateFlag = props.setHomeUpdateFlag;
+    const count = props.count;
+    const setFilterType = props.setFilterType;
+    const filterType = props.filterType;
 
     useEffect(() => {
         let unmounted = false;
@@ -28,6 +31,7 @@ const Content = (props) =>{
         axios.get(`${process.env.REACT_APP_API}/approval-applications/`,{
             params: {
                 'reservation__start': year+'-'+month+'-'+day,
+                'reservation__place__name': filterType
             }
         })
         .then(res => {
@@ -36,9 +40,11 @@ const Content = (props) =>{
             if(!unmounted){
                 const scheduleList = res.data;
                 setScheduleList(scheduleList);
-                // console.log(res.data)
+                console.log(res.data);
+                console.log('filterType:', filterType);
                 setUpdateFlag(false);
                 setHomeUpdateFlag(false);
+                count();
             }
         })
         .catch( error => {
@@ -94,7 +100,7 @@ const Content = (props) =>{
         // }
         
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag]);
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, setFilterType, filterType, count]);
 
     return (
         <div className="content">

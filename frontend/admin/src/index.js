@@ -15,9 +15,7 @@ import { UnapprovalList } from "./pages/home/UnapprovalList";
 import { DisapprovalList } from "./pages/home/DisapprovalList";
 import { CancelList } from "./pages/home/CancelList";
 import { UserList } from "./pages/home/UserList";
-import { Wcalendar } from "./pages/home/WeeklyCalendar";
-import { Dcalendar } from "./pages/home/DailyCalendar";
-import { Mcalendar } from "./pages/home/MonthlyCalendar";
+import { CalendarPage } from "./pages/home/CalendarPage";
 import "./index.css"
 import GetDate from "./components/toppage/GetDate"
 
@@ -40,12 +38,7 @@ function App() {
           <SideBarAndHeaderRoute pagename="未承認リスト"　path="/unapprovalList" exact children={<PrivateRoute path="/unapprovalList" exact children={<UnapprovalList/>} />} />
           <SideBarAndHeaderRoute pagename="キャンセルリスト" path="/cancellist" exact children={<PrivateRoute path="/cancelList" exact children={<CancelList/>} />} />
           <SideBarAndHeaderRoute pagename="ユーザーリスト" path="/userlist" exact children={<PrivateRoute path="/userlist" exact children={<UserList/>} />} />
-          {/* <SideBarAndHeaderRoute pagename="ウィークリーカレンダー" path="/weeklycalendar" exact children={<PrivateRoute path="/weeklycalendar" exact children={<Wcalendar/>} />} />
-          <SideBarAndHeaderRoute pagename="デイリーカレンダー" path="/dailycalendar" exact children={<PrivateRoute path="/dailycalendar" exact children={<Dcalendar/>} />} />
-          <SideBarAndHeaderRoute pagename="マンスリーカレンダー" path="/monthlycalendar" exact children={<PrivateRoute path="/monthlycalendar" exact children={<Mcalendar/>} />} /> */}
-          <SideBarRoute path="/weeklycalendar" exact children={<PrivateRoute path="/weeklycalendar" exact children={<Wcalendar/>} />} />
-          <SideBarRoute path="/dailycalendar" exact children={<PrivateRoute path="/dailycalendar" exact children={<Dcalendar/>} />} />
-          <SideBarRoute path="/monthlycalendar" exact children={<PrivateRoute path="/monthlycalendar" exact children={<Mcalendar/>} />} />
+          <SideBarRoute path="/calendar" exact children={<PrivateRoute path="/calendar" exact children={<CalendarPage/>} />} />
         </Switch>
       </BrowserRouter>
     </Provider>
