@@ -1,0 +1,16 @@
+.header-box {
+    height: 10vh;
+    // background-color: #8fc31fc0;
+    background-color: #ffffff;
+    border: 1px solid #DFDFDF;
+    display: flex;
+
+    .box {
+        width: 80%;
+    }
+
+    .rightside {
+        display: flex;
+        width: 7%;
+    }
+}
