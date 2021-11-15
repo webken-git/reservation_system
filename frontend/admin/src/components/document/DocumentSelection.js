@@ -67,7 +67,6 @@ const DocumentSelection = (props) => {
                             type="checkbox"
                             id={documentTemplate.id}
                             name="checkbox"
-                            checked={checkedItems[documentTemplate.id]}
                             className="form-check-input"
                             {...register("checkbox", { required: true })}
                             value={documentTemplate.id}
@@ -78,7 +77,7 @@ const DocumentSelection = (props) => {
                     </div>
                 );
             })}
-            {errors.checkbox && <p className="text-danger">この項目は必須です</p>}
+            {errors.checkbox && <p className="text-danger">※この項目は必須です</p>}
             <div>
                 <label>発行番号を入力：
                     <input
@@ -91,11 +90,11 @@ const DocumentSelection = (props) => {
                         value={text}
                         onChange={handleTextChange}
                     />
-                    {errors.number && <p className="text-danger">半角数字で入力してください</p>}
+                    {errors.number && <p className="text-danger">※半角数字で入力してください</p>}
                 </label>
             </div>
             <button type="submit" className="modal-open-btn">発行</button>
-            <span> </span>
+            <button type="button" onClick={props.modalToggle} className="modal-close-btn">閉じる</button>
         </form>
     );
 };

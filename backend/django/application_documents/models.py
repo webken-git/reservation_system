@@ -18,6 +18,7 @@ class DocumentTemplate(models.Model):
 
 class Document(models.Model):
   number = models.IntegerField('発行番号', blank=True, null=True)
+  file = models.CharField('ファイル', max_length=150)
   file_name = models.CharField('ファイル名', max_length=150)
   approval_application = models.ForeignKey(
       ApprovalApplication, verbose_name='document_approvalapplication',

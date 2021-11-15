@@ -20,6 +20,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     model = Document
     fields = '__all__'
     extra_kwargs = {
+        'file': {'required': False},
         'file_name': {'required': False}
     }
 

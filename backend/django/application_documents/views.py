@@ -249,8 +249,8 @@ def create_new_word(request):
         return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
   else:
     return {'error': 'docxファイルの指定が違います。'}
-  doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx')
-  return '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx'
+  doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx')
+  return now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx', now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx'
 
 
 class DocumentTemplateViewSet(viewsets.ModelViewSet):
@@ -307,9 +307,10 @@ class DocumentViewSet(viewsets.ModelViewSet):
       return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
   def perform_create(self, serializer):
-    file_name = create_new_word(self.request)
+    file, file_name = create_new_word(self.request)
     serializer.save(
         number=self.request.data['number'],
+        file=file,
         file_name=file_name,
         approval_application_id=self.request.data['approval_application_id']
     )
@@ -319,12 +320,10 @@ class DocumentViewSet(viewsets.ModelViewSet):
     instance = self.get_object()
     serializer = self.get_serializer(instance)
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if os.path.exists(BASE_DIR + serializer.data['file_name']):
-      os.remove(BASE_DIR + serializer.data['file_name'])
-    else:
-      pass
+    if os.path.exists(BASE_DIR + '/static/application_documents/docx/' + instance.file_name):
+      os.remove(BASE_DIR + '/static/application_documents/docx/' + instance.file_name)
     self.perform_destroy(instance)
-    return response.Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+    return response.Response(serializer.data, status=status.HTTP_200_OK)
 
   def perform_destroy(self, instance):
     instance.delete()
