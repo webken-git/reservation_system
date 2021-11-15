@@ -34,8 +34,12 @@ $breakpoints: (
   padding: 20px;
   text-align: center;
   margin: 0 auto;
-
-  form {
+  .text-danger {
+    color: #f00;
+    font-weight: bold;
+  }
+  form,
+  .document-preparation {
     display: inline-block;
     text-align: left;
   }
@@ -64,6 +68,16 @@ $breakpoints: (
   }
 }
 
+.document-preparation-table {
+  border-bottom: #ccc 1px solid;
+  tr {
+    // border-bottom: #707070 1px solid;
+    th {
+      padding: 0.5rem;
+    }
+  }
+}
+
 .modal-open-btn {
   width: 7rem;
   color: #fff;
@@ -83,10 +97,7 @@ $breakpoints: (
   @extend .modal-open-btn;
   border: 1px solid #707070;
   background-color: #707070;
-}
-.modal-close-btn:hover {
-  @extend .modal-open-btn;
-  border: 1px solid #707070;
+  margin-left: 1rem;
 }
 
 .selection-screen-btn {
@@ -97,4 +108,11 @@ $breakpoints: (
 .selection-screen-btn:hover {
   @extend .modal-open-btn;
   border: 1px solid #233b62;
+}
+
+.download-btn {
+  @extend .modal-open-btn;
+  width: auto;
+  // border: 1px solid #1a8d89;
+  // background-color: #1a8d89;
 }

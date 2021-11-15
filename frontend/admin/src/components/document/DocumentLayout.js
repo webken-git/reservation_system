@@ -13,23 +13,17 @@ const DocumentLayout = (props) => {
     const [document, setDocument] = useState([]);
 
     const changeState = (state) => setShowContent(state);
-
     const selectDocument = (document) => setDocument(document);
-
-    let ModalContent = <DocumentSelection />;
-
-    // 表示するコンポーネントを変更
-    if (showContent === "preparation") {
-        ModalContent = <DocumentPreparation changeState={changeState} document={document}/>;
-    } else if (showContent === "selection") {
-        ModalContent = <DocumentSelection changeState={changeState} selectDocument={selectDocument}/>;
-    }
 
     // モーダルの表示状態の変更
     const modalToggle = () => {
         changeState("selection");
         setModalIsOpen(!modalIsOpen);
     }
+
+    // 表示するコンポーネントを変更
+    let ModalContent = showContent == "selection" && <DocumentSelection changeState={changeState} selectDocument={selectDocument} modalToggle={modalToggle} /> || showContent == "preparation" && <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} />;
+
 
     return (
         <>
@@ -42,7 +36,6 @@ const DocumentLayout = (props) => {
                 ariaHideApp={false}
             >
                 {ModalContent}
-                <button onClick={modalToggle} className="modal-close-btn">閉じる</button>
             </ReactModal>
         </>
     );
