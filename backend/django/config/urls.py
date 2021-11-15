@@ -1,5 +1,4 @@
 """config URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
@@ -15,13 +14,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-# from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from rest_framework_swagger.views import get_swagger_view
-from dj_rest_auth.registration.views import RegisterView, VerifyEmailView, ConfirmEmailView
-from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView, LoginView, LogoutView
+from dj_rest_auth.registration.views import VerifyEmailView
+from dj_rest_auth.views import PasswordResetConfirmView
 from users import views
 from users.urls import router as users_router
 from reservations.urls import router as reservations_router
@@ -37,10 +34,9 @@ router.registry.extend(announcements_router.registry)
 router.registry.extend(application_documents_router.registry)
 router.registry.extend(questionnaire_router.registry)
 
-schema_view = get_swagger_view(title='API Lists')
 reference_uris = [
-    # path('download/', SpectacularAPIView.as_view(), name='schema'),
-    path('', schema_view),
+    path('download/', SpectacularAPIView.as_view(), name='schema'),
+    path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
 api_uris = [
@@ -53,20 +49,18 @@ api_uris = [
 
 account_uris = [
     path('auth-user/', views.AuthInfoGetView.as_view()),
-    path('login/', LoginView.as_view()),
-    path('logout/', LogoutView.as_view()),
+    path('allauth/', include('allauth.urls')),
+    path('', include('dj_rest_auth.urls')),  # jwt用
+    path('registration/', include('dj_rest_auth.registration.urls')),  # jwt用
     path('staff-login/', views.StaffLoginView.as_view()),
     path('superuser-login/', views.SuperUserLoginView.as_view()),
-    path('reset/password/', PasswordResetView.as_view()),
-    path('reset/password/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('register/', RegisterView.as_view()),
-    path('confirm/<str:key>/', ConfirmEmailView.as_view()),
-    path('verify-email/',
-         VerifyEmailView.as_view(), name='rest_verify_email'),
-    path('confirm/',
+    path('password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('confirm-email/',
          VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    re_path(r'^confirm/(?P<key>[-:\w]+)/$',
-            VerifyEmailView.as_view(), name='account_confirm_email'),
+    # path('confirm/',
+    #  VerifyEmailView.as_view(), name='account_email_verification_sent'),
+    # re_path(r'^confirm/(?P<key>[-:\w]+)/$',
+    # VerifyEmailView.as_view(), name='account_confirm_email'),
 ]
 
 urlpatterns = [
