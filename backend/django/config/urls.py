@@ -55,7 +55,7 @@ account_uris = [
     path('registration/', include('dj_rest_auth.registration.urls')),  # jwt用
     path('staff-login/', views.StaffLoginView.as_view()),
     path('superuser-login/', views.SuperUserLoginView.as_view()),
-    path('reset/password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('confirm-email/',
          VerifyEmailView.as_view(), name='account_email_verification_sent'),
     # path('confirm/',

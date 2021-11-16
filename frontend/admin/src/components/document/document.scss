@@ -1,0 +1,116 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+.modal-content {
+  position: absolute;
+  top: 40px;
+  left: 20%;
+  right: 20%;
+  bottom: 40px;
+  display: block;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  //   border-radius: 4px;
+  outline: none;
+  padding: 20px;
+  text-align: center;
+  margin: 0 auto;
+  .text-danger {
+    color: #f00;
+    font-weight: bold;
+  }
+  form,
+  .document-preparation {
+    display: inline-block;
+    text-align: left;
+  }
+  @include mq("sp") {
+    left: 40px;
+    right: 40px;
+  }
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.checkbox-container {
+  margin-bottom: 1rem;
+
+  .form-check-input {
+    -ms-transform: scale(1.5, 1.5);
+    -webkit-transform: scale(1.5, 1.5);
+    transform: scale(1.5, 1.5);
+    margin-right: 5px;
+  }
+}
+
+.document-preparation-table {
+  border-bottom: #ccc 1px solid;
+  border-collapse: collapse;
+  th,
+  td {
+    border-bottom: #ccc 1px solid;
+    padding: 0.5rem;
+  }
+}
+
+.modal-open-btn {
+  width: 7rem;
+  color: #fff;
+  border: 1px solid #1a8d89;
+  padding: 9px 17px;
+  background-color: #1a8d89;
+  margin: 3% 0;
+  font-size: 1rem;
+}
+.modal-open-btn:hover {
+  color: #707070;
+  background-color: #fff;
+  transition: color 80ms 190ms, background-color 150ms;
+}
+
+.modal-close-btn {
+  @extend .modal-open-btn;
+  border: 1px solid #707070;
+  background-color: #707070;
+  margin-left: 1rem;
+}
+
+.selection-screen-btn {
+  @extend .modal-open-btn;
+  border: 1px solid #233b62;
+  background-color: #233b62;
+}
+.selection-screen-btn:hover {
+  @extend .modal-open-btn;
+  border: 1px solid #233b62;
+}
+
+.download-btn {
+  @extend .modal-open-btn;
+  width: auto;
+}

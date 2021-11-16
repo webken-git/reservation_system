@@ -10,9 +10,7 @@ var weekJa = new Array("日", "月", "火", "水", "木", "金", "土")
 
 const GetDate = () => {
     return (
-        <div className="getdate">
-            {year}年{month}月{day}日({weekJa[week]})<span className="getdatespan">の予約表</span>
-        </div>
+        <span>{month}月{day}日({weekJa[week]})の予約表</span>
     )
 }
 

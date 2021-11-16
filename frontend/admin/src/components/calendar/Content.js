@@ -16,32 +16,41 @@ const Content = (props) =>{
     const setUpdateFlag = props.setUpdateFlag;
     const setHomeUpdateFlag = props.setHomeUpdateFlag;
     const count = props.count;
+    const setFilterType = props.setFilterType;
+    const filterType = props.filterType;
 
     useEffect(() => {
         let unmounted = false;
         let year = date.getFullYear();
         let month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
         let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
-
-        axios.get(`${process.env.REACT_APP_API}/reservations/`,{
+        if(!unmounted){
+            setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
+            setStringContentDate(year+'-'+month+'-'+day);    
+        }
+        axios.get(`${process.env.REACT_APP_API}/approval-applications/`,{
             params: {
-                'start': year+'-'+month+'-'+day,
+                'reservation__start': year+'-'+month+'-'+day,
+                'reservation__place__name': filterType
             }
         })
         .then(res => {
-            const scheduleList = res.data;
-            setScheduleList(scheduleList);
-            console.log(res.data)
+            let scheduleList = res.data;
+            // console.log(unmounted);
+            if(!unmounted){
+                const scheduleList = res.data;
+                setScheduleList(scheduleList);
+                console.log(res.data);
+                console.log('filterType:', filterType);
+                setUpdateFlag(false);
+                setHomeUpdateFlag(false);
+                count();
+            }
         })
         .catch( error => {
             console.log(error);
         });
 
-
-        if(!unmounted){
-            setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
-            setStringContentDate(year+'-'+month+'-'+day);    
-        }
         // if((individualOrGroup === "group")&&(cookies.get('selected-group'))){
         //     axios.get(`${process.env.REACT_APP_END_POINT}/api/v1/groupschedules/`, {
         //         headers: {
@@ -91,14 +100,13 @@ const Content = (props) =>{
         // }
         
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, count]);
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, setFilterType, filterType, count]);
 
     return (
         <div className="content">
             <div 
                 className="content-span" 
             >
-                <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
@@ -130,21 +138,21 @@ const Content = (props) =>{
             /> */}
             <div className="schedule-block-column">
             {
-                // props.isMain ?
+                props.isMain ?
                 scheduleList.map((schedule, index) => {
                     return (
                         <ScheduleBlock
-                            // key={uuidv4()}
+                            key={uuidv4()}
                             schedule={schedule}
-                            key={index}
+                            index={index}
                             // openModal={props.openModal}
-                            // setScheduleDict={props.setScheduleDict}
+                            setScheduleDict={props.setScheduleDict}
                             contentDate={contentDate}
                             // individualOrGroup={props.individualOrGroup}
                         />
                     )
                 })
-                // :null
+                :null
             }
             </div>
         </div>

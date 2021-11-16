@@ -29,6 +29,8 @@ load_dotenv()  # 追加
 
 # ALLOWED_HOSTS = ['*']
 
+DEBUG = False
+
 
 # Application definition
 
@@ -151,10 +153,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 
-STATIC_URL = '/static/'
+STATIC_URL = '/reservation_system/backend/django/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'users.User'
@@ -175,8 +177,8 @@ REST_FRAMEWORK = {
     # ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',  # Django REST Framework JWT
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
@@ -250,6 +252,7 @@ SIMPLE_JWT = {
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'http://test-reserve.webhok.net',
 )
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
