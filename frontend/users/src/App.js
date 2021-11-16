@@ -1,12 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-import { MyPage }from "./pages/MyPage";
-import { MailAddressChange }from "./pages/MailAddressChange";
+import React from 'react';
+import { BrowserRouter, Switch } from "react-router-dom";
+import MainPage from './pages/MainPage'
+import HeaderRoute from './components/rooter/HeaderRoute';
+import { MyPage } from './pages/MyPage';
+import { MailAddressChange } from './pages/MailAddressChange';
 
 function App() {
   return (
-    <MyPage/>
+    <BrowserRouter>
+      <Switch>
+        {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
+        <HeaderRoute path ="/" exact children={<MainPage/>}/>
+        <HeaderRoute path ="/mypage" exact children={<MyPage/>}/>
+        <HeaderRoute path ="/mailaddresschange" exact children={<MailAddressChange/>}/>
+        {/* <HeaderRoute path ="/mailaddresschange" exact children={<MailAddressChange/>}/> */}
+      </Switch>
+    </BrowserRouter>
   );
 }
 
-export default App;
+// const root = document.querySelector("#root");
+// ReactDOM.render(<App />, root);
+
+export default App

@@ -29,7 +29,7 @@ const DetailsButton = (props) => {
   };
 
   return (
-    <div className="list-button-wrapper">
+    <td className="list-button-wrapper">
       <p calssName="details-button" onClick={() => setIsOpen(true)}>
         <FontAwesomeIcon icon={faSearchPlus} />
       </p>
@@ -60,7 +60,7 @@ const DetailsButton = (props) => {
           </div>
         </div>
       </Modal>
-    </div>
+    </td>
   );
 }
 

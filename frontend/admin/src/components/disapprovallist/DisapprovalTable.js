@@ -6,6 +6,7 @@ import DetailsButton from "../approvallist/DetailsButton";
 const DisApprovalTable = (props) => {
   return(
     <tr>
+      <td><input type="checkbox"/></td>
       {/* 予約日 */}
       <td>{props.date}</td>
       {/* 団体者名 */}
