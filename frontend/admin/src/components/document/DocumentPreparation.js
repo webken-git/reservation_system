@@ -1,47 +1,53 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-// import JSZip from 'jszip';
-// import saveAs from 'file-saver';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import './document.scss';
 
 
 import { DocumentUrl } from "../../utils/documentUrl";
+import Loading from "../loading/Loading";
+
 
 const DocumentPreparation = (props) => {
-    const [documents, setDocuments] = React.useState([]);
-    const [error, setError] = React.useState([]);
+    const [documents, setDocuments] = useState([]);
+    const [error, setError] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [popup, setPopup] = useState("");
 
     const post_DocumentUrl = DocumentUrl.DOCUMENT;
 
+    // チェックボックスで選択された書類を発行
     const createDocument = () => {
         props.document.id.map(async (id) => {
             axios.post(post_DocumentUrl, {
                 id: id,
                 number: props.document.number,
-                approval_application_id: 2,
+                approval_application_id: props.data[0].id,
             })
                 .then(res => {
                     setDocuments([res.data]);
+                    // setError(err.response.data);
+                    // API通信が終わったらloadingをfalseにする
+                    setLoading(false);
                 })
                 .catch(err => {
+                    // APIのエラーメッセージをstateに保存
                     setError(err.response.data);
+                    // API通信が終わったらloadingをfalseにする
+                    setLoading(false);
                 });
         });
     };
 
     // docxファイルをダウンロードする
     const downloadDocument = (url, file_name) => {
-        // const zip = new JSZip();
-        // // const docx = zip.folder("docx");
-        // documents.map((document) => {
-        //     zip.file(`${process.env.REACT_APP_API}/backend/django` + document.file_name, {binary: true});
-        // });
-        // zip.generateAsync({ type: "blob" }).then(function (content) {
-        //     saveAs(content, "document.zip");
-        // });
         const link = document.createElement('a');
-        link.download = file_name;
+        // ファイルのリンク先を設定
         link.href = url;
+        // ファイル名を設定（なぜか上手くいってない）
+        link.download = file_name;
+        // ダウンロードを実行
         link.click();
     };
 
@@ -49,15 +55,37 @@ const DocumentPreparation = (props) => {
     // 戻るボタン押下時、選択画面に戻る
     const returnSelection = () => props.changeState("selection");
 
-    React.useEffect(() => {
+    const copyTextToClipboard = (text) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                // ポップアップを表示
+                setPopup("Copied!");
+                // 2秒後にポップアップを消す
+                setTimeout(() => {
+                    setPopup("");
+                }, 2000);
+            })
+            .catch(err => {
+                setPopup("Failed to copy!");
+                setTimeout(() => {
+                    setPopup("");
+                }, 2000);
+            });
+    };
+
+    useEffect(() => {
         createDocument();
     }, []);
 
 
     return (
+        // loadingがtrueならLoadingを表示、falseならフォームを表示
+        loading ? <Loading /> :
         <div className="document-preparation">
             <div className="document-preparation__header">
                 <h3 className="document-preparation__title">
+                    {/* APIリクエストに成功した場合は発行完了メッセージを表示し、
+                    失敗した場合はエラーメッセージを表示する */}
                     {error.length === 0 ?<>申請書の発行が完了しました。</> :<>{error.error}</>}
                 </h3>
             </div>
@@ -75,7 +103,13 @@ const DocumentPreparation = (props) => {
                         return (
                             <tr key={item.id}>
                                 <th>第{item.number}号</th>
-                                <th>{item.file_name}</th>
+                                <th>
+                                    {item.file_name}
+                                    <button className="copy-btn" onClick={() => copyTextToClipboard(item.file_name)}>
+                                        <FontAwesomeIcon icon={faCopy} size="2x" fixedWidth className="icon" />
+                                    </button>
+                                    {popup.length === 0 ? <></> : <span className="popup">{popup}</span>}
+                                </th>
                                 <th>
                                     <button type="button" className="download-btn" onClick={() => downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}/` + item.file, item.file_name)}>ダウンロード</button>
                                 </th>

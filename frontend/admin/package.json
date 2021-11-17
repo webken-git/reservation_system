@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "dayjs": "^1.10.5",
+    "encoding-japanese": "^1.0.30",
     "font-awesome": "^4.7.0",
     "node": "^16.4.0",
     "node-sass": "^6.0.1",

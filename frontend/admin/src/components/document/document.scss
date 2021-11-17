@@ -18,6 +18,19 @@ $breakpoints: (
   }
 }
 
+/*
+  レスポンシブ対応の記述例
+  .className {
+    width: 100%;
+    @include mq(sp) {
+      width: 50%;
+    }
+    @include mq(tab) {
+      width: 75%;
+    }
+  }
+*/
+
 .modal-content {
   position: absolute;
   top: 40px;
@@ -34,6 +47,7 @@ $breakpoints: (
   padding: 20px;
   text-align: center;
   margin: 0 auto;
+  // font-size: 18px;
   .text-danger {
     color: #f00;
     font-weight: bold;
@@ -46,6 +60,7 @@ $breakpoints: (
   @include mq("sp") {
     left: 40px;
     right: 40px;
+    // font-size: 18px;
   }
 }
 .modal-overlay {
@@ -61,20 +76,29 @@ $breakpoints: (
   margin-bottom: 1rem;
 
   .form-check-input {
-    -ms-transform: scale(1.5, 1.5);
-    -webkit-transform: scale(1.5, 1.5);
-    transform: scale(1.5, 1.5);
-    margin-right: 5px;
+    -ms-transform: scale(1.8, 1.8);
+    -webkit-transform: scale(1.8, 1.8);
+    transform: scale(1.8, 1.8);
+    margin-right: 8px;
+    @include mq("sp") {
+      -ms-transform: scale(1.5, 1.5);
+      -webkit-transform: scale(1.5, 1.5);
+      transform: scale(1.5, 1.5);
+      margin-right: 5px;
+    }
   }
 }
 
 .document-preparation-table {
   border-bottom: #ccc 1px solid;
   border-collapse: collapse;
-  th,
-  td {
+  th {
     border-bottom: #ccc 1px solid;
-    padding: 0.5rem;
+    padding: 1% 3%;
+    width: 5%;
+    @include mq("sp") {
+      padding: 1% 2%;
+    }
   }
 }
 
@@ -86,6 +110,7 @@ $breakpoints: (
   background-color: #1a8d89;
   margin: 3% 0;
   font-size: 1rem;
+  cursor: pointer;
 }
 .modal-open-btn:hover {
   color: #707070;
@@ -113,4 +138,24 @@ $breakpoints: (
 .download-btn {
   @extend .modal-open-btn;
   width: auto;
+}
+
+.copy-btn {
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  .icon:hover {
+    color: #707070;
+  }
+}
+.copy-btn:hover {
+  opacity: 0.5;
+}
+.copy-btn:focus {
+  outline: none;
+}
+
+.popup {
+  font-size: 13px;
+  font-weight: bold;
 }
