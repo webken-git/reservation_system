@@ -8,7 +8,7 @@ import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
 
 
-const DocumentLayout = (props) => {
+const DocumentLayout = () => {
     const unmountRef = useUnmountRef();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [showContent, setShowContent] = useSafeState(unmountRef, "selection");

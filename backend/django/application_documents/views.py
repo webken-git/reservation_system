@@ -320,8 +320,8 @@ class DocumentViewSet(viewsets.ModelViewSet):
     instance = self.get_object()
     serializer = self.get_serializer(instance)
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if os.path.exists(BASE_DIR + '/static/application_documents/docx/' + instance.file_name):
-      os.remove(BASE_DIR + '/static/application_documents/docx/' + instance.file_name)
+    if os.path.exists(BASE_DIR + '/static/application_documents/docx/' + instance.file):
+      os.remove(BASE_DIR + '/static/application_documents/docx/' + instance.file)
     self.perform_destroy(instance)
     return response.Response(serializer.data, status=status.HTTP_200_OK)
 
