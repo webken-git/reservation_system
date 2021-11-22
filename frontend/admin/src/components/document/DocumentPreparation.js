@@ -5,7 +5,7 @@ import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import './document.scss';
 
 
-import { DocumentUrl } from "../../utils/documentUrl";
+import { DocumentUrl } from "../../utils/documentUrls";
 import Loading from "../loading/Loading";
 
 

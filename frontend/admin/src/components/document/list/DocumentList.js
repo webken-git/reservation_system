@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
 
-import { DocumentUrl } from "../../../utils/documentUrl";
+import { DocumentUrl } from "../../../utils/documentUrls";
 import DocumentListItem from "./DocumentListItem";
 import Loading from "../../loading/Loading";
 import useUnmountRef from "../../../hooks/useUnmountRef";

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import './document.scss';
 
-import { DocumentUrl } from "../../utils/documentUrl";
+import { DocumentUrl } from "../../utils/documentUrls";
 import Loading from "../loading/Loading";
 import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
@@ -42,7 +42,7 @@ const DocumentSelection = (props) => {
         setText(e.target.value);
     }
 
-    const onSubmit = (data) => {
+    const onSubmit = () => {
         // チェック状態がtrueのデータを全て配列に格納
         const arrayChild = Object.entries(checkedItems).reduce((acc, [key, value]) => {
             value && acc.push(key);

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
-import { DocumentUrl } from "../../../utils/documentUrl";
+import { DocumentUrl } from "../../../utils/documentUrls";
 import '../document.scss';
 
 const DocumentListItem = (props) => {
