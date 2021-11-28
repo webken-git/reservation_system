@@ -4,12 +4,19 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers, exceptions
 from dj_rest_auth.serializers import LoginSerializer
 from .models import User
+from app_settings.models import AppSettings
 
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
     fields = '__all__'
+
+  # create時に、AppSettingsを作成する
+  # def create(self, validated_data):
+  #   user = super().create(validated_data)
+  #   AppSettings.objects.create(user=user)
+  #   return user
 
 
 class PasswordResetSerializer(serializers.Serializer):
@@ -35,6 +42,10 @@ class PasswordResetSerializer(serializers.Serializer):
         'html_email_template_name': 'registration/password_reset_email.html',
     }
     self.reset_form.save(**opts)
+
+
+class LoginSerializer(LoginSerializer):
+  username = None
 
 
 class StaffLoginSerializer(LoginSerializer):

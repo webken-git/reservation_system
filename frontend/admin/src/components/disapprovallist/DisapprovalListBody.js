@@ -10,7 +10,7 @@ const DisapprovalListBody = () => {
   const [DisApprovalListData, setDisApprovalListData] = useState([]);
   // 不承認リストのデータをAPIから受け取るaxios
   const GetDisApprovalList = () => {
-    axios.get(`${process.env.REACT_APP_API}/reservations/9999-01-01T00:00/approval-applications/?approval=3`)
+    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=3`)
     .then(response => {
       const data = response.data;
       // console.log(data);

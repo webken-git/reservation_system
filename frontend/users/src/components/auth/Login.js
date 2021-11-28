@@ -10,6 +10,8 @@ import { AuthUrls } from "../../utils/authUrls";
 import { RegistrationButton } from './RegistrationButton';
 import logo from '../../assets/image/logo.png';
 import './auth.scss';
+import Cookies from 'js-cookie';
+
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -20,10 +22,29 @@ const Login = () => {
     const [cookie, setCookie] = useCookies();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
+    const GET_USER_DATA = AuthUrls.GET_USER_DATA;
+    const pullData = () => {
+        axios.defaults.withCredentials = true;
+        axios.get(GET_USER_DATA, {
+            headers: {
+                // 'Accept': 'application/json',
+                "Content-Type": "application/json; charset=utf-8",
+                'Authorization': `JWT ${Cookies.get('access_token')}`
+            },
+            withCredentials: true,
+        })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     // ログイン処理
     const url = AuthUrls.LOGIN;
     const onSubmit = () => {
+        axios.defaults.withCredentials = true;
         let formData = new FormData();
 
         // フォームデータを追加
@@ -34,7 +55,7 @@ const Login = () => {
         setError(null);
         axios.post(url, formData, {
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json; charset=utf-8",
             },
             withCredentials: true,
         })
@@ -45,8 +66,11 @@ const Login = () => {
                 // ログイン成功時にはセッションクッキーを設定
                 setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
                 setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+                setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
+                console.log(res.data);
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';
+                // pullData();
             })
             .catch(err => {
                 // ログイン処理が失敗した場合
@@ -54,7 +78,7 @@ const Login = () => {
                 setLoading(false);
                 // エラーメッセージを表示
                 console.log(err);
-                // setError(err.response.data.non_field_errors);
+                setError(err.response.data.non_field_errors);
             });
     };
 

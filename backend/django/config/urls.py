@@ -15,15 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include, re_path
+from django.urls import path, include
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from dj_rest_auth.registration.views import VerifyEmailView
 from dj_rest_auth.views import PasswordResetConfirmView
+# from config.views import (
+#     csrf, TokenObtainView, TokenRefresh,
+#     refresh_get, LoginUserView, LogoutView,
+# )
 from users import views
 from users.urls import router as users_router
 from reservations.urls import router as reservations_router
 from announcements.urls import router as announcements_router
+from app_settings.urls import router as app_settings_router
 from application_documents.urls import router as application_documents_router
 from questionnaire.urls import router as questionnaire_router
 
@@ -32,6 +37,7 @@ router = routers.DefaultRouter()
 router.registry.extend(users_router.registry)
 router.registry.extend(reservations_router.registry)
 router.registry.extend(announcements_router.registry)
+router.registry.extend(app_settings_router.registry)
 router.registry.extend(application_documents_router.registry)
 router.registry.extend(questionnaire_router.registry)
 
@@ -62,6 +68,11 @@ account_uris = [
     #  VerifyEmailView.as_view(), name='account_email_verification_sent'),
     # re_path(r'^confirm/(?P<key>[-:\w]+)/$',
     # VerifyEmailView.as_view(), name='account_confirm_email'),
+    # path('token/', TokenObtainView.as_view(), name='token_obtain_pair'),
+    # path('token/refresh/', refresh_get, name='token_refresh'),
+    # path('token/new/', TokenRefresh.as_view(), name='token_refresh'),
+    # path('logout/', LogoutView.as_view(), name='logout'),
+    # path('login-user/', LoginUserView.as_view(), name='login'),
 ]
 
 urlpatterns = [

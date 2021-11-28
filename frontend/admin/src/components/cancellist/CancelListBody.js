@@ -9,7 +9,7 @@ const CancelListBody = () => {
   const [CancelListData, setCancelListData] = useState([]);
   // キャンセルリストのデータをAPIから受け取るaxios
   const GetCancelList = () => {
-    axios.get(`${process.env.REACT_APP_API}/reservations/9999-01-01T00:00/approval-applications/?approval=4`)
+    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=4`)
     .then(response => {
       const data = response.data;
       // console.log(data);

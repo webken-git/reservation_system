@@ -2,7 +2,9 @@ import React,{ useState, useEffect } from "react";
 import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import FeeList from '../components/feelist/FeeList'
+import FeeList from '../components/feelist/FeeList';
+import { AuthUrls } from "../utils/authUrls";
+import Cookies from 'js-cookie';
 
 const MainPage = () => {
     const [PlaceListData, setPlaceListData] = useState([]);
@@ -10,7 +12,8 @@ const MainPage = () => {
     const [PlaceName, setPlaceName] = useState();
     const [DivideFeeList, setDivideFeeList] = useState();
     const [Age, setAge] = useState();
-    const [Time, setTime] = useState()
+    const [Time, setTime] = useState();
+
 
     //場所データ取得
     const GetPlaceList = () => {
@@ -69,7 +72,7 @@ const MainPage = () => {
     useEffect(() => {
       GetPlaceList();
     }, [])
-    
+
     useEffect(() => {
       GetAge();
     }, [])

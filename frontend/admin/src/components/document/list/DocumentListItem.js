@@ -1,13 +1,17 @@
-import { useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
 import { DocumentUrl } from "../../../utils/documentUrls";
+import Loading from "../../loading/Loading";
+import useUnmountRef from "../../../hooks/useUnmountRef";
+import useSafeState from "../../../hooks/useSafeState";
 import '../document.scss';
 
 const DocumentListItem = (props) => {
-    const [showPopup, setShowPopup] = useState(false);
+    const unmountRef = useUnmountRef();
+    const [showPopup, setShowPopup] = useSafeState(unmountRef, false);
+    const [loading, setLoading] = useSafeState(unmountRef, false);
 
     const copyTextToClipboard = (text) => {
         navigator.clipboard.writeText(text)
@@ -40,8 +44,10 @@ const DocumentListItem = (props) => {
 
     const delete_DocumentUrl = DocumentUrl.DOCUMENT;
     const deleteDocument = (id) => {
+        setLoading(true);
         axios.delete(delete_DocumentUrl + id)
             .then(res => {
+                setLoading(false);
                 // console.log(res.data);
                 setTimeout(() => {
                     window.location.reload();
@@ -53,24 +59,27 @@ const DocumentListItem = (props) => {
     };
 
     return (
-        <tr>
-            <td>{props.document.id}</td>
-            <td>
-                {props.document.file_name}
-                <div className="copy">
-                    <button className="copy-btn" onClick={() => copyTextToClipboard(props.document.file_name)}>
-                        <FontAwesomeIcon icon={faCopy} size="2x" fixedWidth className="icon" />
-                    </button>
-                    <span style={{display: showPopup ? 'table-cell' : 'none'}}>Copied!</span>
-                </div>
-            </td>
-            <td>
-                <button type="button" className="download-btn" onClick={() => downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}/` + props.document.file, props.document.file_name)}>ダウンロード</button>
-            </td>
-            <td>
-                <button type="button" className="delete-btn" onClick={() => deleteDocument(props.document.id)}>削除</button>
-            </td>
-        </tr>
+        <>
+            <tr>
+                <td>{props.document.id}</td>
+                <td>
+                    {props.document.file_name}
+                    <div className="copy">
+                        <button className="copy-btn" onClick={() => copyTextToClipboard(props.document.file_name)}>
+                            <FontAwesomeIcon icon={faCopy} size="2x" fixedWidth className="icon" />
+                        </button>
+                        <span style={{display: showPopup ? 'table-cell' : 'none'}}>Copied!</span>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" className="download-btn" onClick={() => downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}/` + props.document.file, props.document.file_name)}>ダウンロード</button>
+                </td>
+                <td>
+                    <button type="button" className="delete-btn" onClick={() => deleteDocument(props.document.id)}>削除</button>
+                </td>
+            </tr>
+            {loading && <Loading />}
+        </>
     );
 }
 

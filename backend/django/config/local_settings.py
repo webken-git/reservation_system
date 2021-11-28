@@ -1,10 +1,14 @@
 from .settings import *
+import os
+from dotenv import load_dotenv  # 追加
 
+# .envの読み込み
+load_dotenv()  # 追加
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
-
 SECRET_KEY = os.getenv('SECRET_KEY')
+
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
