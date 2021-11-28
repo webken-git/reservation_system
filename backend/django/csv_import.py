@@ -164,6 +164,22 @@ def insert_document_data(file, table):
   f.close()
 
 
+def insert_app_settings(file, table):
+  """
+  マスターデータ
+  """
+  f = open('./static/app_settings/csv/' + file, 'r', encoding='utf8')
+
+  now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+
+  reader = csv.reader(f)
+  header = next(reader)
+  for row in reader:
+    sql = "INSERT INTO " + table + "(user_id, created_at, updated_at) VALUES(%s,%s,%s)"
+    cursor.execute(sql, (row[0], now, now))
+  f.close()
+
+
 insert_master_data('age.csv', "reservations_age")
 insert_master_data('approval.csv', 'reservations_approval')
 insert_place_data('place.csv', 'reservations_place')
@@ -187,6 +203,7 @@ connect.commit()
 intermediate_table('usage-category_usage.csv', 'reservations_usagecategory_usage', 'usagecategory_id', 'usage_id')
 intermediate_table('age-category_age.csv', 'reservations_agecategory_age', 'agecategory_id', 'age_id')
 insert_document_data('document_template.csv', 'application_documents_documenttemplate')
+insert_app_settings('app_settings.csv', 'app_settings_appsettings')
 connect.commit()
 cursor.close()
 connect.close()

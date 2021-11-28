@@ -11,7 +11,7 @@ const ApprovalListBody = () => {
   const [ApprovalListData, setApprovalListData] = useState([]);
   // 承認リストのデータをAPIから受け取るaxios
   const GetApporovalList = () => {
-    axios.get(`${process.env.REACT_APP_API}/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
+    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
     .then(response => {
       const data = response.data;
       // console.log(data[0]["reservation"]["place"]["name"]);

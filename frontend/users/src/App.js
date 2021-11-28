@@ -13,15 +13,10 @@ import { MailAddressChange } from './pages/MailAddressChange';
 import { LoginPage } from './pages/LoginPage';
 import Registration from './components/auth/Registration';
 
-// var csrftoken = Cookies.get('csrftoken');
+var csrftoken = Cookies.get('csrftoken');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
-axios.defaults.headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': `JWT ${Cookies.get('access_token')}`,
-};
 
 function App() {
   return (

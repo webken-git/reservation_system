@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+# from app_settings.models import AppSettings
 
 
 class CustomUserManager(BaseUserManager):

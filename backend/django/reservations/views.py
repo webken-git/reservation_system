@@ -13,11 +13,11 @@ from dotenv import load_dotenv
 from users import permissions
 from reservations.models import *
 from reservations.serializers import *
-from reservations.filters import (
+from reservations.funcs.filters import (
     ReservationFilter, ReservationSuspensionScheduleFilter,
     ApprovalApplicationFilter
 )
-from reservations.csv import csv_export
+from reservations.funcs.csv import csv_export
 
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分

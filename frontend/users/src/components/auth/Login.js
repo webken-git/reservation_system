@@ -10,6 +10,7 @@ import { AuthUrls } from "../../utils/authUrls";
 import { RegistrationButton } from './RegistrationButton';
 import logo from '../../assets/image/logo.png';
 import './auth.scss';
+import Cookies from 'js-cookie';
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -19,7 +20,25 @@ const Login = () => {
     const [error, setError] = useState(null);
     const [cookie, setCookie] = useCookies();
     const { register, handleSubmit, formState: { errors } } = useForm();
+    axios.defaults.withCredentials = true;
 
+    const GET_USER_DATA = AuthUrls.GET_USER_DATA;
+    const pullData = () => {
+        axios.get(GET_USER_DATA, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${Cookies.get('access_token')}`
+            },
+            withCredentials: true,
+        })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     // ログイン処理
     const url = AuthUrls.LOGIN;
@@ -34,7 +53,7 @@ const Login = () => {
         setError(null);
         axios.post(url, formData, {
             headers: {
-                'Content-Type': 'application/json'
+                'Accept': 'application/json',
             },
             withCredentials: true,
         })
@@ -45,8 +64,11 @@ const Login = () => {
                 // ログイン成功時にはセッションクッキーを設定
                 setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
                 setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+                // setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
+                console.log(res.data);
                 // ログイン成功後、とりあえずトップページに遷移
-                window.location.href = '/';
+                // window.location.href = '/';
+                pullData();
             })
             .catch(err => {
                 // ログイン処理が失敗した場合
