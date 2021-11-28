@@ -61,8 +61,8 @@ const ApprovalListBody = () => {
   )
     return (
       <div>
+      <Filter/>
       <table className="list-body">
-        <Filter/>
         <tr>
           <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
         </tr>
