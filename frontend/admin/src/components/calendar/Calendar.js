@@ -6,6 +6,7 @@ import Content from './Content';
 import DailyContent from './DailyContent';
 import Select from './Select';
 import MonthlyCalendar from "./MonthlyCalendar";
+import Loading from "../loading/Loading.js";
 
 const Calendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
@@ -16,6 +17,7 @@ const Calendar = (props) =>{
     const [ st, setSt ] = useState(0);
     const [ filterType, setFilterType ] = useState('カーリング場');
     const [ calendarType, setCalendarType ] = useState('weekly');
+    const [Loading, setLoading] = useState(true);
     
     // 検索する施設名を変数に代入
     const filtering = (e) => {
@@ -123,7 +125,7 @@ const Calendar = (props) =>{
             </div>
 
             {/* ローディング画面 */}
-            <div id="preloader">
+            {/* <div id="preloader">
                 <div className="central">
                     <div className="circle c1"></div>
                     <div className="circle c2"></div>
@@ -135,7 +137,7 @@ const Calendar = (props) =>{
                     <div className="circle c8"></div>
                     <div className="loading">Loading...</div>
                 </div>
-            </div>
+            </div> */}
 
             {calendarType == 'monthly' ? (
                 <MonthlyCalendar
@@ -233,6 +235,7 @@ const Calendar = (props) =>{
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
                                             filterType={filterType}
                                             count={count}
+                                            setLoading={setLoading}
                                         />
                             })
                         ) : (
@@ -249,11 +252,13 @@ const Calendar = (props) =>{
                                 setHomeUpdateFlag={props.setHomeUpdateFlag}
                                 filterType={filterType}
                                 count={count}
+                                setLoading={setLoading}
                             />
                         )}
                     </div>
                 </div>
             )}
+            {Loading && <Loading />}
         </div>
         );
     }

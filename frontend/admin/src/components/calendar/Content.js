@@ -16,6 +16,7 @@ const Content = (props) =>{
     const setHomeUpdateFlag = props.setHomeUpdateFlag;
     const count = props.count;
     const filterType = props.filterType;
+    const setLoading = props.setLoading;
 
     useEffect(() => {
         let unmounted = false;
@@ -43,6 +44,7 @@ const Content = (props) =>{
                 setUpdateFlag(false);
                 setHomeUpdateFlag(false);
                 count();
+                setLoading(true);
             }
         })
         .catch( error => {
