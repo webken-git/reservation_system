@@ -4,7 +4,6 @@ import { withCookies } from 'react-cookie'
 import {v4 as uuidv4} from 'uuid'
 
 import ScheduleBlock from './ScheduleBlock';
-// import CreateModalComponent from './CreateModalComponent'
 
 const Content = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
@@ -16,7 +15,6 @@ const Content = (props) =>{
     const setUpdateFlag = props.setUpdateFlag;
     const setHomeUpdateFlag = props.setHomeUpdateFlag;
     const count = props.count;
-    const setFilterType = props.setFilterType;
     const filterType = props.filterType;
 
     useEffect(() => {
@@ -40,7 +38,7 @@ const Content = (props) =>{
             if(!unmounted){
                 const scheduleList = res.data;
                 setScheduleList(scheduleList);
-                console.log(res.data);
+                console.log('data:', res.data);
                 console.log('filterType:', filterType);
                 setUpdateFlag(false);
                 setHomeUpdateFlag(false);
@@ -50,57 +48,9 @@ const Content = (props) =>{
         .catch( error => {
             console.log(error);
         });
-
-        // if((individualOrGroup === "group")&&(cookies.get('selected-group'))){
-        //     axios.get(`${process.env.REACT_APP_END_POINT}/api/v1/groupschedules/`, {
-        //         headers: {
-        //             'Authorization': `JWT ${cookies.get('schedule-token')}`
-        //         },
-    
-        //         params: {
-        //             'date': year+'-'+month+'-'+day,
-        //             'groupId': cookies.get('selected-group')
-        //         },
-        //     })
-        //     .then( res => {
-        //         const scheduleList = res.data;
-        //         if (!unmounted){
-        //             setScheduleList(scheduleList);
-        //             setUpdateFlag(false);
-        //             setHomeUpdateFlag(false);
-        //             count();
-        //         }
-        //     })
-        //     .catch( error => {
-        //         console.log(error);
-        //     });
-        // }else{
-        //     axios.get(`${process.env.REACT_APP_END_POINT}/api/v1/schedules/`, {
-        //         headers: {
-        //             'Authorization': `JWT ${cookies.get('schedule-token')}`
-        //         },
-    
-        //         params: {
-        //             'date': year+'-'+month+'-'+day
-        //         },
-        //     })
-        //     .then( res => {
-                // let scheduleList = res.data;
-        //         if(!unmounted){
-        //             setScheduleList(scheduleList);
-        //             //console.log(scheduleList)
-        //             setUpdateFlag(false);
-        //             setHomeUpdateFlag(false);
-        //             count();
-        //         }
-        //     })
-            // .catch( error => {
-            //     console.log(error);
-            // });
-        // }
         
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, setFilterType, filterType, count]);
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count]);
 
     return (
         <div className="content">

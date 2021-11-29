@@ -71,16 +71,30 @@ const Calendar = (props) =>{
 
     const count = () => {
         loadCounter = loadCounter + 1;
-        if(loadCounter >= 14){
-            document.getElementById('preloader').classList.add('opacityanime');
-            setTimeout(()=>{
-                if(document.getElementById('preloader')){
-                    document.getElementById('preloader').classList.add('dn');
-                }
-            }, 200)
+        if(calendarType == 'weekly'){
+            if(loadCounter >= 14){
+                document.getElementById('preloader').classList.add('opacityanime');
+                setTimeout(()=>{
+                    if(document.getElementById('preloader')){
+                        document.getElementById('preloader').classList.add('dn');
+                    }
+                }, 200)
+            } else {
+                document.getElementById('preloader').classList.remove('opacityanime');
+                document.getElementById('preloader').classList.remove('dn');
+            }
         } else {
-            document.getElementById('preloader').classList.remove('opacityanime');
-            document.getElementById('preloader').classList.remove('dn');
+            if(loadCounter >= 2){
+                document.getElementById('preloader').classList.add('opacityanime');
+                setTimeout(()=>{
+                    if(document.getElementById('preloader')){
+                        document.getElementById('preloader').classList.add('dn');
+                    }
+                }, 200)
+            } else {
+                document.getElementById('preloader').classList.remove('opacityanime');
+                document.getElementById('preloader').classList.remove('dn');
+            }
         }
     }
 
@@ -164,12 +178,19 @@ const Calendar = (props) =>{
                                     // individualOrGroup={props.individualOrGroup}
                                     homeUpdateFlag={props.homeUpdateFlag}
                                     setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                    count={count}
                                 />
                             )}
                             
                     </div>
 
                     <div className="content-row">
+                        {/* 現在時刻を表示する */}
+                        <div className="now-time" style={{top: st}}>
+                            <div className="circle"></div>
+                            <div className="border"></div>
+                        </div>
+
                         <div className="timeline">
                             <div><p>0</p></div>
                             <div><p>1</p></div>
@@ -210,9 +231,7 @@ const Calendar = (props) =>{
                                             // individualOrGroup={props.individualOrGroup}
                                             homeUpdateFlag={props.homeUpdateFlag}
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                            // setFilterType={setFilterType}
                                             filterType={filterType}
-                                            setFilterType={setFilterType}
                                             count={count}
                                         />
                             })
@@ -228,6 +247,8 @@ const Calendar = (props) =>{
                                 // individualOrGroup={props.individualOrGroup}
                                 homeUpdateFlag={props.homeUpdateFlag}
                                 setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                filterType={filterType}
+                                count={count}
                             />
                         )}
                     </div>
