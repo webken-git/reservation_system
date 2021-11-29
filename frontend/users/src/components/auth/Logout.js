@@ -20,6 +20,7 @@ const Logout = (props) => {
                 // setLoading(false);
                 cookies.remove('access_token');
                 cookies.remove('refresh_token');
+                cookies.remove('user_id');
                 window.location.href = "/";
             })
             .catch(err => {

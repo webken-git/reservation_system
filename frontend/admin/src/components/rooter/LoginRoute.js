@@ -27,6 +27,7 @@ const LoginRoute = (props) => {
             alert("再度ログインしてください");
             cookies.remove("access_token");
             cookies.remove("refresh_token");
+            cookies.remove("user_id");
             window.location.href = "/login";
         });
 
