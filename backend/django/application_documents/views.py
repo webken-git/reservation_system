@@ -249,15 +249,17 @@ def create_new_word(request):
         return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
   else:
     return {'error': 'docxファイルの指定が違います。'}
-  doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx')
-  return '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx'
+  # doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx')
+  # return '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx'
+  doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx')
+  return now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx'
 
 
 class DocumentTemplateViewSet(viewsets.ModelViewSet):
   queryset = DocumentTemplate.objects.all()
   serializer_class = DocumentTemplateSerializer
   filter_fields = [f.name for f in DocumentTemplate._meta.fields]
-  permission_classes = [permissions.ActionBasedPermission]
+  # permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: ['list', 'retrieve'],
@@ -288,7 +290,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
   """
   queryset = Document.objects.all()
   serializer_class = DocumentSerializer
-  permission_classes = [permissions.ActionBasedPermission]
+  # permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['list', 'retrieve', 'update', 'partial_update'],
       permissions.IsAuthenticated: [],

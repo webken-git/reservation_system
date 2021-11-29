@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Switch } from "react-router-dom";
+import MainPage from './pages/MainPage'
+import HeaderRoute from './components/rooter/HeaderRoute';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
+        <HeaderRoute path ="/" exact children={<MainPage/>}/>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
-export default App;
+// const root = document.querySelector("#root");
+// ReactDOM.render(<App />, root);
+
+export default App

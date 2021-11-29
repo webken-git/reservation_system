@@ -7,7 +7,7 @@ import { Form, Button, ButtonToolbar } from "react-bootstrap";
 
 const LoginForm = ({ onSubmit }) => {
   // React Hook Form
-  const { register, handleSubmit, errors, formState } = useForm();
+  const { register, handleSubmit, errors, formState, reset } = useForm();
   // inputタグのクリックイベント無効
   const handleClick = (e) => {
     e.preventDefault();

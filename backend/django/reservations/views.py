@@ -937,8 +937,7 @@ class ReservationDeleteViewSet(
   start1 ～ start2の期間のデータを削除。
   """
   queryset = Reservation.objects
-  serializer_class = ReservationParameterSerializer
-  filter_backends = (SwaggerQueryStringFilter, )
+  serializer_class = ReservationSerializer
   # permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],

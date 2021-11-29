@@ -11,37 +11,37 @@ const Detail = (props) => {
     const cookies = new Cookies();
     const [userList, setUserList] = useState('');
 
+    const pullUser = async () => {
+        const response = await axios.get(`${process.env.REACT_APP_END_POINT}/api/users/${props.match.params.userId}/`, {
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': `JWT ${cookies.get('access_token')}`
+            }
+        });
+        try {
+            setUserList(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
-        axios
-            .get(`${process.env.REACT_APP_END_POINT}/api/users/${props.match.params.userId}/`, {
-                headers: {
-                    'Content-Type': "application/json",
-                    'Authorization': `JWT ${cookies.get('access_token')}`
-                }
-            })
-            .then(res => {
-                const userList = res.data;
-                setUserList(userList);
-            })
-            .catch(err => {
-                console.log(err.response.data);
-            });
-    });
+        pullUser();
+    }, []);
+
 
     return (
         <div>
-
-                        <table key={userList.id}>
-                            <tr>
-                                <td>id</td>
-                                <td>email</td>
-                            </tr>
-                            <tr>
-                                <td>{userList.id}</td>
-                                <td>{userList.email}</td>
-                            </tr>
-                        </table>
-
+            <table key={userList.id}>
+                <tr>
+                    <td>id</td>
+                    <td>email</td>
+                </tr>
+                <tr>
+                    <td>{userList.id}</td>
+                    <td>{userList.email}</td>
+                </tr>
+            </table>
         </div>
     )
 }

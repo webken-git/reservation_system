@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+}
+
+.header {
+    height: 17vh;
+    width: 100vw;
+    background-color: red;
+}
+
+.side {
+    height: 83vh;
+    width: 23vw;
+    text-align: left;
+    background-color: blue;
+}
