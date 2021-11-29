@@ -1,0 +1,91 @@
+@startuml questionnaire_entity-relationship-diagram
+
+scale 1.5
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+
+!define MAIN_ENTITY #E2EFDA-C6E0B4
+!define MAIN_ENTITY_2 #FCE4D6-F8CBAD
+
+!define METAL #F2F2F2-D9D9D9
+!define MASTER_MARK_COLOR AAFFAA
+!define TRANSACTION_MARK_COLOR FFAA00
+
+skinparam class {
+    BackgroundColor METAL
+    BorderColor Black
+    ArrowColor Black
+}
+
+package "予約システム・管理システム共通" as Common {
+    entity "ユーザーテーブル" as users <<M,MASTER_MARK_COLOR>> {
+        + id [pk]
+        --
+        email : email
+        password : char 8-16
+    }
+}
+
+package "アンケートアプリ" as questionnaire_app {
+  entity "アンケートテーブル" as questionnaire <<M,MASTER_MARK_COLOR>> MAIN_ENTITY {
+    + id [pk]
+    --
+    # question [fk]
+    title : char 25
+    overview : char 150
+    deadline : date
+  }
+
+  entity "質問テーブル" as question <<M,MASTER_MARK_COLOR>> MAIN_ENTITY {
+    + id [pk]
+    --
+    # choice_id [fk]
+    question : char 50
+  }
+
+  entity "アンケート_質問テーブル" as qn_q <<T,TRANSACTION_MARK_COLOR>> MAIN_ENTITY_2 {
+    + id [pk]
+    --
+    # questionnaire_id [fk]
+    # question_id [fk]
+  }
+
+  entity "選択肢テーブル" as choice <<M,MASTER_MARK_COLOR>> MAIN_ENTITY {
+    + id [pk]
+    --
+    choice : char 15
+  }
+
+  entity "回答テーブル" as answer <<M,MASTER_MARK_COLOR>> MAIN_ENTITY {
+    + id [pk]
+    --
+    # user_id [fk]
+    # question_id [fk]
+    answer : text
+  }
+
+  entity "回答状況テーブル" as answer_status <<M,MASTER_MARK_COLOR>> MAIN_ENTITY {
+    + id [pk]
+    --
+    # user_id [fk]
+    # questionnaire_id [fk]
+  }
+
+  entity "回答状況_回答テーブル" as as_a <<T,TRANSACTION_MARK_COLOR>> MAIN_ENTITY_2 {
+    + id [pk]
+    --
+    # answer_status_id [fk]
+    # answer_id [fk]
+  }
+}
+
+users             |o--o{    answer
+users             |o--o{    answer_status
+reservations      ||--|{    places
+reservations      ||--|{    equipments
+approval_apps     ||--||    reservations
+approval_apps     ||--|{    approvals
+
+@enduml
