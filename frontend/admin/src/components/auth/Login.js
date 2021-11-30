@@ -44,6 +44,7 @@ const Login = () => {
                 // ログイン成功時にはセッションクッキーを設定
                 setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
                 setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+                setCookie('user_id', res.data.refresh_token, { path: '/' }, { httpOnly: true });
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';
             })

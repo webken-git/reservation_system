@@ -6,7 +6,7 @@ import Content from './Content';
 import DailyContent from './DailyContent';
 import Select from './Select';
 import MonthlyCalendar from "./MonthlyCalendar";
-import Loading from "../loading/Loading.js";
+import Loading from "./../loading/Loading.js";
 
 const Calendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];

@@ -1,9 +1,10 @@
+from django.http.response import JsonResponse
+from django.conf import settings
+from django.middleware.csrf import get_token
 from rest_framework_simplejwt import views as jwt_views, exceptions as jwt_exp
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
 import jwt
-from django.http.response import JsonResponse
-from django.conf import settings
 from .funcs.authentication import CookieHandlerJWTAuthentication
 from users.serializers import UserSerializer
 from users.models import User
@@ -155,3 +156,10 @@ class LogoutView(jwt_views.TokenObtainPairView):
       return None
 
     return Response({"Message": "Logout"}, status=status.HTTP_200_OK)
+<<<<<<< HEAD
+=======
+
+
+def csrf(request):
+  return JsonResponse({'csrfToken': get_token(request)})
+>>>>>>> 7f8f42bffd51c25f98de07cad5bca4c9d4e1de4a
