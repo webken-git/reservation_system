@@ -19,12 +19,17 @@ from dotenv import load_dotenv  # 追加
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.basename(BASE_DIR)  # 追加
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # .envの読み込み
 load_dotenv()  # 追加
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+DEBUG = os.getenv('DEBUG')
 
 
 ALLOWED_HOSTS = ['*']
@@ -35,6 +40,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # Local
     'announcements',
+    'app_settings',
     'application_documents',
     'business_diary',
     'reservations',
@@ -43,7 +49,7 @@ INSTALLED_APPS = [
 
     # 3rd party
     'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -157,7 +163,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'users.User'
@@ -170,16 +176,19 @@ SESSION_COOKIE_AGE = 86400  # 1日経ったら強制的にセッションタイ�
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
-    # 'DEFAULT_PAGINATION_CLASS': 'app.todo.funcs.paginations.CustomPagination',
-    # 'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'reservations.funcs.paginations.CustomPagination',
+    'PAGE_SIZE': 20,
 
     # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.AllowAny',
+    #     'rest_framework.permissions.IsAuthenticated',
     # ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
+        # 'config.funcs.authentication.CookieHandlerJWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',  # Django REST Framework JWT
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
@@ -193,8 +202,8 @@ REST_FRAMEWORK = {
 # dj-rest-auth settings
 
 REST_AUTH_SERIALIZERS = {
-    # 'PASSWORD_RESET_SERIALIZER':
-    #     'users.serializers.PasswordResetSerializer',
+    # 'LOGIN_SERIALIZER': 'users.signin.serializers.LoginSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'users.serializers.PasswordResetSerializer',
 }
 
 CSRF_COOKIE_NAME = 'csrftoken'
@@ -256,12 +265,18 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:3000',
 )
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'X-CSRFToken',
     # 'X-Requested-With',
-    'Content-Type',
+    # 'Content-Type',
     # 'Accept',
-    'Authorization',
+    # 'Authorization',
 ]
 
 CORS_ALLOW_CREDENTIALS = True

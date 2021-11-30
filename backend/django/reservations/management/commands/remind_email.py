@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from email.mime.text import MIMEText
 from smtplib import SMTP
 from reservations.models import ApprovalApplication
+from app_settings.models import AppSettings
 
 # BaseCommandを継承して作成
 
@@ -14,12 +15,8 @@ class Command(BaseCommand):
   # python manage.py help count_entryで表示されるメッセージ
   help = 'Display the number of approval articles'
 
-  # コマンドライン引数を指定します。(argparseモジュール https://docs.python.org/2.7/library/argparse.html)
-  # 今回はblog_idという名前で取得する。（引数は最低でも1個, int型）
-  # def add_arguments(self, parser):
-  #   parser.add_argument('approval_id', nargs='+', type=int)
-
   # コマンドが実行された際に呼ばれるメソッド
+
   def handle(self, *args, **options):
     now = datetime.datetime.now(pytz.timezone('Asia/Tokyo')) + datetime.timedelta(days=4)
 
@@ -34,6 +31,7 @@ class Command(BaseCommand):
       s.login(os.getenv('EMAIL_HOST_USER'), os.getenv('EMAIL_HOST_PASSWORD'))
 
       for data in approval_data:
+        app_settings = AppSettings.objects.get(user=data.user.id, is_receive_reminder_email=True)
         """件名"""
         subject = "ご予約の確認/稚内市みどりスポーツパーク"
 
@@ -44,7 +42,7 @@ class Command(BaseCommand):
         from_email = os.getenv('EMAIL_HOST_USER')
 
         """宛先メールアドレス"""
-        to_email = data.reservation.user.email
+        to_email = app_settings.user.email
 
         msg = MIMEText(message, "html")
         msg["Subject"] = subject

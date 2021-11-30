@@ -1,42 +1,91 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
 .usericonbox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  @include mq(sp) {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    .circle {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background-color: #23AC38;
-    }
-    p {
-        font-size: 30px;
-        color: #ffffff;
-        position: absolute;
-    }
+  }
+  .circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #23ac38;
+  }
+  p {
+    font-size: 30px;
+    color: #ffffff;
+    position: absolute;
+  }
+  p:hover {
+    opacity: 0.5;
+  }
 }
 
 .modal {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    position: absolute;
-    top: 8%;
-    left: 80%;
-    right: 2%;
-    bottom: 65%;
-    background-color: #707070;
-    border-radius: 1rem;
-    border: none;
-    padding: 1.5rem;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  top: 10%;
+  left: 80%;
+  right: 2%;
+  bottom: 65%;
+  background-color: #fff;
+  border-radius: 1%;
+  border: 1px solid #ccc;
+  // border-left: #ccc solid 1px;
+  // border-right: #ccc solid 1px;
+  // border-bottom: #ccc solid 1px;
+  padding: 1.5rem;
+  @include mq(sp) {
+    top: 9%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-top: #ccc solid 1px;
+    border-radius: 0px;
+    // border-left: none;
+    // border-right: none;
+    // border-bottom: none;
+  }
 }
-
-.linkdeco {
-    text-decoration: none;
-    .pagename {
-        color: #ffffff;
-    }
+.modal:focus {
+  outline: none;
 }
-
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  //   background-color: rgba(255, 255, 255, 0.5);
+  @include mq(sp) {
+    // background-color: rgba(0, 0, 0, 0.5);
+  }
+}

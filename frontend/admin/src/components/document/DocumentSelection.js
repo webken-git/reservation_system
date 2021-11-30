@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import './document.scss';
 
-import { DocumentUrl } from "../../utils/documentUrl";
+import { DocumentUrl } from "../../utils/documentUrls";
+import Loading from "../loading/Loading";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
 
 
 const DocumentSelection = (props) => {
-    const [documentTemplateList, setDocumentTemplateList] = useState([]);
-    const [text, setText] = useState("");
+    const unmountRef = useUnmountRef();
+    const [documentTemplateList, setDocumentTemplateList] = useSafeState(unmountRef, []);
+    const [text, setText] = useSafeState(unmountRef, "");
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [checkedItems, setCheckedItems] = useState([]);
+    const [checkedItems, setCheckedItems] = useSafeState(unmountRef, []);
+    const [loading, setLoading] = useSafeState(unmountRef, true);
 
     // 発行する書類のテンプレートのデータを取得する
     const get_documentTemplateUrl = DocumentUrl.DOCUMENT_TEMPLATE;
@@ -21,6 +26,8 @@ const DocumentSelection = (props) => {
         } catch (error) {
             console.log(error);
         }
+        // API通信が終わったらloadingをfalseにする
+        setLoading(false);
     };
 
     // チェックボックスのチェック状態をstateに保存
@@ -35,7 +42,7 @@ const DocumentSelection = (props) => {
         setText(e.target.value);
     }
 
-    const onSubmit = (data) => {
+    const onSubmit = () => {
         // チェック状態がtrueのデータを全て配列に格納
         const arrayChild = Object.entries(checkedItems).reduce((acc, [key, value]) => {
             value && acc.push(key);
@@ -56,6 +63,8 @@ const DocumentSelection = (props) => {
     }, [checkedItems]);
 
     return (
+        // loadingがtrueならLoadingを表示、falseならフォームを表示
+        loading ? <Loading /> :
         <form onSubmit={handleSubmit(onSubmit)}>
             <h3>発行する申請書を選択</h3>
             {documentTemplateList.map((documentTemplate, index) => {
@@ -67,7 +76,6 @@ const DocumentSelection = (props) => {
                             type="checkbox"
                             id={documentTemplate.id}
                             name="checkbox"
-                            checked={checkedItems[documentTemplate.id]}
                             className="form-check-input"
                             {...register("checkbox", { required: true })}
                             value={documentTemplate.id}

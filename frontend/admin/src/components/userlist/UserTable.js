@@ -1,5 +1,6 @@
 // ユーザーリストの中身
 import React from "react";
+import UserDetailsButton from "./UserDetailsButton"
 // import './approval.scss'
 
 const UserTable = (props) => {
@@ -9,6 +10,7 @@ const UserTable = (props) => {
       <td>{props.id}</td>
       {/* メールアドレス */}
       <td>{props.email}</td>
+      <td><UserDetailsButton/></td>
     </tr>
   )
 }

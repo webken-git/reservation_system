@@ -23,6 +23,7 @@ from users import views
 from users.urls import router as users_router
 from reservations.urls import router as reservations_router
 from announcements.urls import router as announcements_router
+from app_settings.urls import router as app_settings_router
 from application_documents.urls import router as application_documents_router
 from questionnaire.urls import router as questionnaire_router
 
@@ -31,6 +32,7 @@ router = routers.DefaultRouter()
 router.registry.extend(users_router.registry)
 router.registry.extend(reservations_router.registry)
 router.registry.extend(announcements_router.registry)
+router.registry.extend(app_settings_router.registry)
 router.registry.extend(application_documents_router.registry)
 router.registry.extend(questionnaire_router.registry)
 
@@ -72,6 +74,7 @@ urlpatterns = [
 
 if getattr(settings, 'REST_USE_JWT', False):
   from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
+#   import config.views as jwt_views
 
   from dj_rest_auth.jwt_auth import get_refresh_view
 
@@ -79,4 +82,8 @@ if getattr(settings, 'REST_USE_JWT', False):
       path('token/', TokenObtainPairView.as_view()),
       path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
       path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
+      #   path('token/create/', jwt_views.TokenObtainView.as_view()),
+      #   path('token/refresh/', jwt_views.refresh_get),
+      #   path('token/user/', jwt_views.LoginUserView.as_view()),
+      #   path('token/logout/', jwt_views.LogoutView.as_view()),
   ]

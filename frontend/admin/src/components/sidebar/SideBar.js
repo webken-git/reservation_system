@@ -14,12 +14,13 @@ const SideBar = (props) => {
     return (
         <div className="sideBox">
             <Title/>
-            <TransitionBox url="/topPage" pagename={<GetDate/>}/>
+            <TransitionBox url="/" pagename={<GetDate/>}/>
             <TransitionBox url="/approvalList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"承認リスト"}/>
             <TransitionBox url="/unapprovalList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"未承認リスト"}/>
             <TransitionBox url="/disapprovalList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"不承認リスト"}/>
             <TransitionBox url="/cancelList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"キャンセルリスト"}/>
             <TransitionBox url="/userList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"ユーザーリスト"}/>
+            <TransitionBox url="/documentList" icon={<FontAwesomeIcon icon={faFolder} />} pagename={"ドキュメントリスト"}/>
             <TransitionBox url="/calendar" icon={<FontAwesomeIcon icon={faCalendarAlt} />} pagename={"カレンダー"}/>
         </div>
     )
