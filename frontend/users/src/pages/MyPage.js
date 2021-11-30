@@ -15,7 +15,7 @@ export const MyPage =()=> {
           <tr className="pass-word">
             <td className="mail-pass-title">パスワード</td>
             <td className="mail-pass-body">***************</td>
-            <td className="change-link">パスワードの変更</td>
+            <td><PageLink url='/passwordchange' namecolor={'#2699FB'} pagename={'パスワードの変更'}/></td>
           </tr>
         </table>
       </div>

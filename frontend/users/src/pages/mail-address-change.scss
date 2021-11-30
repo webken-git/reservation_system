@@ -1,6 +1,22 @@
 .mail-address-change-wrapper {
+  text-align: center;
   // display: flex;
+  // justify-content: center;
+  // align-items: center;
   .title{
     font-size: 20px;
+  }
+  .new-mail-address {
+    width: 20%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid rgb(190, 190, 190);
+    box-sizing: border-box;
+  }
+  .register-buttom-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

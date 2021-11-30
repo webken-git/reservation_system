@@ -4,6 +4,7 @@ import MainPage from './pages/MainPage'
 import HeaderRoute from './components/rooter/HeaderRoute';
 import { MyPage } from './pages/MyPage';
 import { MailAddressChange } from './pages/MailAddressChange';
+import { PassWordChange } from './pages/PassWordChange';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <HeaderRoute path ="/" exact children={<MainPage/>}/>
         <HeaderRoute path ="/mypage" exact children={<MyPage/>}/>
         <HeaderRoute path ="/mailaddresschange" exact children={<MailAddressChange/>}/>
+        <HeaderRoute path ="/passwordchange" exact children={<PassWordChange/>}/>
         {/* <HeaderRoute path ="/mailaddresschange" exact children={<MailAddressChange/>}/> */}
       </Switch>
     </BrowserRouter>
