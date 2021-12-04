@@ -27,7 +27,7 @@ const DailyContent = (props) =>{
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
             setStringContentDate(year+'-'+month+'-'+day);    
         }
-        axios.get(`${process.env.REACT_APP_API}/approval-applications/`,{
+        axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
             params: {
                 'reservation__start': year+'-'+month+'-'+day,
                 'reservation__place__name': filterType
@@ -35,11 +35,12 @@ const DailyContent = (props) =>{
         })
         .then(res => {
             let scheduleList = res.data;
+            setLoading(false);
             // console.log(unmounted);
             if(!unmounted){
                 const scheduleList = res.data;
                 setScheduleList(scheduleList);
-                // console.log(res.data)
+                console.log('daily data:', res.data)
                 setUpdateFlag(false);
                 setHomeUpdateFlag(false);
                 count();

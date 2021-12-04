@@ -13,15 +13,17 @@ const Calendar = (props) =>{
     const [ scheduleDict, setScheduleDict ] = useState({});
     const [ dateList, setDateList ] = useState([]); //表示用のリスト
     const date = props.date;
+    const setDate = props.setDate;
     const [ updateFlag, setUpdateFlag ] = useState(false);
     const [ st, setSt ] = useState(0);
     const [ filterType, setFilterType ] = useState('カーリング場');
     const [ calendarType, setCalendarType ] = useState('weekly');
-    const [Loading, setLoading] = useState(true);
+    const [ loading, setLoading] = useState(true);
     
     // 検索する施設名を変数に代入
     const filtering = (e) => {
         setFilterType(e.target.value);
+        setLoading(true);
         // console.log(e.target.value);
     }
 
@@ -46,6 +48,7 @@ const Calendar = (props) =>{
             }
             if(!unmounted){
                 setDateList(dateList);
+                console.log('dateList:', dateList);
             }
         }
         sortDateList();
@@ -68,37 +71,6 @@ const Calendar = (props) =>{
         return () => { unmounted = true; }
     }, [date, setCalendarType]);
 
-    // ローディング
-    let loadCounter = 0;
-
-    const count = () => {
-        loadCounter = loadCounter + 1;
-        if(calendarType == 'weekly'){
-            if(loadCounter >= 14){
-                document.getElementById('preloader').classList.add('opacityanime');
-                setTimeout(()=>{
-                    if(document.getElementById('preloader')){
-                        document.getElementById('preloader').classList.add('dn');
-                    }
-                }, 200)
-            } else {
-                document.getElementById('preloader').classList.remove('opacityanime');
-                document.getElementById('preloader').classList.remove('dn');
-            }
-        } else {
-            if(loadCounter >= 2){
-                document.getElementById('preloader').classList.add('opacityanime');
-                setTimeout(()=>{
-                    if(document.getElementById('preloader')){
-                        document.getElementById('preloader').classList.add('dn');
-                    }
-                }, 200)
-            } else {
-                document.getElementById('preloader').classList.remove('opacityanime');
-                document.getElementById('preloader').classList.remove('dn');
-            }
-        }
-    }
 
     return (
         <div className="weekly-calendar">
@@ -109,6 +81,11 @@ const Calendar = (props) =>{
                     calendarType={calendarType}
                     setCalendarType={setCalendarType}
                 />
+
+                {/* 日付を変更するボタン */}
+                <div className="date-selector">
+                    <h1>{date.getMonth()}月</h1>
+                </div>
 
                 {/* 表示する予約のフィルター選択 */}
                 <div className="filter-base">
@@ -123,21 +100,6 @@ const Calendar = (props) =>{
                 </div>
 
             </div>
-
-            {/* ローディング画面 */}
-            {/* <div id="preloader">
-                <div className="central">
-                    <div className="circle c1"></div>
-                    <div className="circle c2"></div>
-                    <div className="circle c3"></div>
-                    <div className="circle c4"></div>
-                    <div className="circle c5"></div>
-                    <div className="circle c6"></div>
-                    <div className="circle c7"></div>
-                    <div className="circle c8"></div>
-                    <div className="loading">Loading...</div>
-                </div>
-            </div> */}
 
             {calendarType == 'monthly' ? (
                 <MonthlyCalendar
@@ -164,7 +126,7 @@ const Calendar = (props) =>{
                                             // individualOrGroup={props.individualOrGroup}
                                             homeUpdateFlag={props.homeUpdateFlag}
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                            count={count}
+                                            filterType={filterType}
                                         />
                                 })
                             ) : (
@@ -180,7 +142,7 @@ const Calendar = (props) =>{
                                     // individualOrGroup={props.individualOrGroup}
                                     homeUpdateFlag={props.homeUpdateFlag}
                                     setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                    count={count}
+                                    filterType={filterType}
                                 />
                             )}
                             
@@ -234,12 +196,11 @@ const Calendar = (props) =>{
                                             homeUpdateFlag={props.homeUpdateFlag}
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
                                             filterType={filterType}
-                                            count={count}
                                             setLoading={setLoading}
                                         />
                             })
                         ) : (
-                            <DailyContent
+                            <Content
                                 // key={index}
                                 date={date}
                                 setScheduleDict={setScheduleDict}
@@ -251,14 +212,13 @@ const Calendar = (props) =>{
                                 homeUpdateFlag={props.homeUpdateFlag}
                                 setHomeUpdateFlag={props.setHomeUpdateFlag}
                                 filterType={filterType}
-                                count={count}
                                 setLoading={setLoading}
                             />
                         )}
                     </div>
                 </div>
             )}
-            {Loading && <Loading />}
+            {loading && <Loading />}
         </div>
         );
     }
