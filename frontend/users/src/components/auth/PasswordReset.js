@@ -10,56 +10,43 @@ import useSafeState from '../../hooks/useSafeState';
 import useUnmountRef from '../../hooks/useUnmountRef';
 import './auth.scss';
 
-const AccountDelete = (props) => {
+const PasswordReset = (props) => {
     const unmountRef = useUnmountRef();
     const [loading, setLoading] = useSafeState(unmountRef, false);
-    const [email, setEmail] = useSafeState(unmountRef, '');
     const [password, setPassword] = useSafeState(unmountRef, '');
     const [showPassword, setShowPassword] = useSafeState(unmountRef, false);
-    const [message, setMessage] = useSafeState(unmountRef, '以下の項目を入力して下さい。');
+    const [message, setMessage] = useSafeState(unmountRef, '新規パスワードを入力して下さい。');
     const [error, setError] = useSafeState(unmountRef, null);
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    // 一度アカウントの確認を行い、成功したらアカウントを削除する
-    const url = AuthUrls.TOKEN;
-    const userDeleteUrl = AuthUrls.GET_USER_LIST;
+    const url = `${AuthUrls.RESET_PASSWORD_CONFIRM}${props.uid}/${props.token}/`;
     const onSubmit = () => {
+        console.log(props.uid);
         let formData = new FormData();
-        formData.append('email', email);
-        formData.append('password', password);
+        formData.append('new_password1', password);
+        formData.append('new_password2', password);
+        formData.append('uid', props.uid);
+        formData.append('token', props.token);
         setLoading(true);
-        setMessage('認証中です。');
+        setMessage('新規パスワードを登録しています...');
         axios.post(url, formData, {
             headers: {
+                'X-CSRFToken': Cookies.get('csrftoken'),
                 'Content-Type': 'multipart/form-data'
             },
-            withCredentials: true,
         })
             .then(res => {
-                const userId = Cookies.get('user_id');
-                axios.delete(`${userDeleteUrl}/${userId}`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    withCredentials: true,
-                })
-                    .then(res => {
-                        Cookies.remove('access_token');
-                        Cookies.remove('refresh_token');
-                        Cookies.remove('user_id');
-                        setLoading(false);
-                        setMessage('アカウントを削除しました。');
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 500);
-                    })
-                    .catch(err => {
-                        setLoading(false);
-                    });
+                setLoading(false);
+                setMessage('新規パスワードを登録しました。');
+                setError(null);
+                setTimeout(() => {
+                    window.location.href = '/account';
+                }, 1000);
             })
             .catch(err => {
                 setLoading(false);
-                setError(err.response.data);
+                setMessage('新規パスワードの登録に失敗しました。');
+                // setError(err.response.data.detail);
             });
     };
 
@@ -85,24 +72,6 @@ const AccountDelete = (props) => {
             {error && <p className="auth-page__error">{error}</p>}
             <form className="auth-page__form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="auth-page__form-group">
-                    <label className="auth-page__form-label" htmlFor="email">メールアドレス</label>
-                    {errors.email && <span className="auth-page__form-error">※この項目は必須です</span>}
-                    <input
-                        className="auth-page__form-input"
-                        type="email"
-                        name="email"
-                        placeholder="samlple@example.com"
-                        autoComplete="off"
-                        // id="email"
-                        {...register("email", {
-                            required: true,
-                            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                        })}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="password">パスワード</label>
                     {errors.password && <span className="auth-page__form-error">※この項目は必須です</span>}
                     <div className="auth-page__password">
@@ -125,7 +94,7 @@ const AccountDelete = (props) => {
                     </div>
                 </div>
                 <div className="auth-btn-wrapper">
-                    <button className="btn auth-btn" type="submit">アカウント削除</button>
+                    <button className="btn auth-btn" type="submit">新規パスワード発行</button>
                 </div>
             </form>
             {loading && <Loading />}
@@ -133,4 +102,4 @@ const AccountDelete = (props) => {
     );
 };
 
-export default AccountDelete;
+export default PasswordReset;

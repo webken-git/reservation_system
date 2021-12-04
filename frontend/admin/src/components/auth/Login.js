@@ -44,7 +44,7 @@ const Login = () => {
                 // ログイン成功時にはセッションクッキーを設定
                 setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
                 setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
-                setCookie('user_id', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+                setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';
             })
@@ -53,7 +53,7 @@ const Login = () => {
                 // ローディング画面を非表示
                 setLoading(false);
                 // エラーメッセージを表示
-                console.log(err.response.data.non_field_errors);
+                console.log(err.response.data.detail);
                 setError("このアカウントは管理者権限がありません。");
             });
     };

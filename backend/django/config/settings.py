@@ -76,12 +76,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+FRONTEND_SITE_DOMAIN = 'http://localhost:3000'
+# PASSWORD_RESET_URL = FRONTEND_SITE_DOMAIN + '/account/password/reset/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'templates', 'allauth')
+            os.path.join(BASE_DIR, 'templates', 'allauth'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -213,7 +216,7 @@ CSRF_COOKIE_NAME = 'csrftoken'
 
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'jwt-auth'
-OLD_PASSWORD_FIELD_ENABLED = True
+OLD_PASSWORD_FIELD_ENABLED = False
 # httpsでのリクエストでないとCookieを送信しない(デフォルトはfalse。本番でTrueにする)
 JWT_AUTH_SECURE = False
 # JWT_AUTH_SAMESITE = 'None'

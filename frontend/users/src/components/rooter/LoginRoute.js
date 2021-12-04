@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-import Cookies from 'universal-cookie'
+import Cookies from 'universal-cookie';
 
 import { AuthUrls } from "../../utils/authUrls";
 
@@ -16,19 +16,20 @@ const LoginRoute = (props) => {
         formData.append("token", cookies.get("access_token"));
 
         const url = AuthUrls.TOKEN_VERIFY;
+        const refreshUrl = AuthUrls.TOKEN_REFRESH;
         axios
         .post(url, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         })
-            .catch((error) => {
+            .catch((err) => {
             // トークンが有効期限切れの場合
-            alert("再度ログインしてください");
             cookies.remove("access_token");
             cookies.remove("refresh_token");
             cookies.remove("user_id");
-            window.location.href = "/login";
+            window.location.href = "/";
+            alert("再度ログインしてください");
         });
 
         return props.children;

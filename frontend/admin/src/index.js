@@ -11,11 +11,13 @@ import PrivateRoute from "./components/api/PrivateRoute";
 import GuestRoute from "./components/api/GuestRoute";
 
 import Home from "./pages/home/Home";
-import Login from "./pages/home/Login";
 import { LoginPage } from "./pages/home/LoginPage";
 import Registration from "./components/auth/Registration";
 import { TopPage } from "./pages/home/TopPage";
 import { MyPage } from "./pages/home/MyPage";
+import { AccountDeletePage } from "./pages/home/AccountDeletePage";
+import { VerifyEmailPage } from "./pages/home/VerifyEmailPage";
+import { PasswordResetPage } from "./pages/home/PasswordResetPage";
 import { ApprovalList } from "./pages/home/ApprovalList";
 import { UnapprovalList } from "./pages/home/UnapprovalList";
 import { DisapprovalList } from "./pages/home/DisapprovalList";
@@ -36,7 +38,6 @@ axios.defaults.withCredentials = true;
 axios.defaults.headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Authorization': `JWT ${Cookies.get('access_token')}`,
 };
 
 function App() {
@@ -49,7 +50,21 @@ function App() {
             <LoginRoute>
               <Route path="/registration" exact children={<Registration />} />
               <SideBarAndHeaderRoute pagename={<GetDate />} path="/" exact children={<PrivateRoute path="/" exact children={<TopPage />} />} />
-              <SideBarAndHeaderRoute path="/mypage" exact children={<PrivateRoute path="/MyPage" exact children={<MyPage/>} />} />
+              <Route path="/account"
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <SideBarAndHeaderRoute path={`${url}/`} exact children={<MyPage />} />
+                      {/* <HeaderRoute path={`${url}/email`} exact children={<MailAddressChange />} /> */}
+                      <SideBarAndHeaderRoute path={`${url}/password`} exact children={<VerifyEmailPage />} />
+                      <Route path={`${url}/password/reset/:uid/:token`}>
+                        <SideBarAndHeaderRoute exact children={<PasswordResetPage />} />
+                      </Route>
+                      <SideBarAndHeaderRoute path={`${url}/delete`} exact children={<AccountDeletePage />} />
+                    </Switch>
+                  </>
+                )}
+             />
               <SideBarAndHeaderRoute pagename="承認リスト" path="/approvalList" exact children={<PrivateRoute path="/approvalList" exact children={<ApprovalList/>} />} />
               <SideBarAndHeaderRoute pagename="不承認リスト" path="/disapprovalList" exact children={<PrivateRoute path="/disapprovalList" exact children={<DisapprovalList/>} />} />
               <SideBarAndHeaderRoute pagename="未承認リスト"　path="/unapprovalList" exact children={<PrivateRoute path="/unapprovalList" exact children={<UnapprovalList/>} />} />
