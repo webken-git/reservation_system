@@ -37,7 +37,6 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 axios.defaults.headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
 };
 
 function App() {

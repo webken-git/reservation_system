@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Count
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -37,7 +38,7 @@ class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
   # filter_fields = [f.name for f in Reservation._meta.fields]
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ReservationSuspensionScheduleFilter
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -59,7 +60,7 @@ class ApprovalViewSet(viewsets.ModelViewSet):
   queryset = Approval.objects.all()
   serializer_class = ApprovalSerializer
   filter_fields = [f.name for f in Approval._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -81,7 +82,7 @@ class PlaceViewSet(viewsets.ModelViewSet):
   queryset = Place.objects.all()
   serializer_class = PlaceSerializer
   filter_fields = [f.name for f in Place._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -103,7 +104,7 @@ class EquipmentViewSet(viewsets.ModelViewSet):
   queryset = Equipment.objects.all()
   serializer_class = EquipmentSerializer
   filter_fields = [f.name for f in Equipment._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -125,7 +126,7 @@ class SpecialEquipmentViewSet(viewsets.ModelViewSet):
   queryset = SpecialEquipment.objects.all()
   serializer_class = SpecialEquipmentSerializer
   filter_fields = [f.name for f in SpecialEquipment._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -149,7 +150,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
   # filter_fields = [f.name for f in Reservation._meta.fields]
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ReservationFilter
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],
       permissions.IsAuthenticated: ['update', 'partial_update', 'create'],
@@ -181,7 +182,7 @@ class UserInfoViewSet(viewsets.ModelViewSet):
   queryset = UserInfo.objects.all()
   serializer_class = UserInfoSerializer
   filter_fields = [f.name for f in UserInfo._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create', 'destroy'],
@@ -209,7 +210,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
   serializer_class = ApprovalApplicationSerializer
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ApprovalApplicationFilter
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],
       permissions.IsAuthenticated: ['partial_update', 'update', 'create'],
@@ -336,6 +337,29 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
     return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_201_CREATED)
 
 
+class ApprovalCountMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
+  # yearとmonthを指定して、その月のapproval_applicationの件数を取得する
+  queryset = ApprovalApplication.objects.all()
+  serializer_class = ApprovalCountMonthlySerializer
+
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  def list(self, request, *args, **kwargs):
+    queryset = self.filter_queryset(self.get_queryset())
+    approval = request.query_params.get('approval', None)
+    year = request.query_params.get('year', None)
+    month = request.query_params.get('month', None)
+    if year is None or month is None:
+      return response.Response(status=status.HTTP_400_BAD_REQUEST)
+    else:
+      queryset = queryset.filter(approval=approval, reservation__start__year=year, reservation__start__month=month).values('reservation__start__month').distinct()
+      serializer = self.get_serializer(queryset, many=True)
+      return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+  def retrieve(self, request, *args, **kwargs):
+    return response.Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
 class UnapprovalCountsViewSet(
         mixins.RetrieveModelMixin,
         mixins.ListModelMixin,
@@ -344,7 +368,7 @@ class UnapprovalCountsViewSet(
   serializer_class = UnapprovalCountsSerializer
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ApprovalApplicationFilter
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -366,7 +390,7 @@ class UsageViewSet(viewsets.ModelViewSet):
   queryset = Usage.objects.all()
   serializer_class = UsageSerializer
   filter_fields = [f.name for f in Usage._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -388,7 +412,7 @@ class AgeViewSet(viewsets.ModelViewSet):
   queryset = Age.objects.all()
   serializer_class = AgeSerializer
   filter_fields = [f.name for f in Age._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -409,7 +433,7 @@ class TimeViewSet(viewsets.ModelViewSet):
   queryset = Time.objects.all()
   serializer_class = TimeSerializer
   filter_fields = [f.name for f in Time._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -431,7 +455,7 @@ class UsageCategoryViewSet(viewsets.ModelViewSet):
   serializer_class = UsageCategorySerializer
   filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create', 'destroy'],
@@ -454,7 +478,7 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
   serializer_class = AgeCategorySerializer
   filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create', 'destroy'],
@@ -477,7 +501,7 @@ class DefferdPaymentViewSet(viewsets.ModelViewSet):
   serializer_class = DefferdPaymentSerializer
   filter_fields = [f.name for f in DefferdPayment._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],
       permissions.IsAuthenticated: ['list', 'retrieve', 'update', 'partial_update', 'create'],
@@ -499,7 +523,7 @@ class FacilityFeeViewSet(viewsets.ModelViewSet):
   queryset = FacilityFee.objects.all()
   serializer_class = FacilityFeeSerializer
   filter_fields = [f.name for f in FacilityFee._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -523,7 +547,7 @@ class EquipmentFeeViewSet(viewsets.ModelViewSet):
   queryset = EquipmentFee.objects.all()
   serializer_class = EquipmentFeeSerializer
   filter_fields = [f.name for f in EquipmentFee._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],
@@ -547,7 +571,7 @@ class EquipmentFeeViewSet(viewsets.ModelViewSet):
 class ApprovalApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = ApprovalApplicationSerializer
   filter_fields = [f.name for f in ApprovalApplication._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -573,7 +597,7 @@ class ApprovalApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
 class PlaceReservationViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = ReservationSerializer
   filter_fields = [f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -599,7 +623,7 @@ class PlaceReservationViewSet(viewsets.ReadOnlyModelViewSet):
 class PlaceFacilityFeeViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = FacilityFeeSerializer
   filter_fields = [f.name for f in FacilityFee._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -625,7 +649,7 @@ class PlaceFacilityFeeViewSet(viewsets.ReadOnlyModelViewSet):
 class EquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = ReservationSerializer
   filter_fields = [f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -651,7 +675,7 @@ class EquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
 class EquipmentEquipmentFeeViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = EquipmentFeeSerializer
   filter_fields = [f.name for f in EquipmentFee._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -677,7 +701,7 @@ class EquipmentEquipmentFeeViewSet(viewsets.ReadOnlyModelViewSet):
 class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = ReservationSerializer
   filter_fields = [f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -706,7 +730,7 @@ class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = ApprovalApplicationSerializer
   filter_fields = [f.name for f in ApprovalApplication._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -741,7 +765,7 @@ class ReservationUsageCategoryViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = UsageCategorySerializer
   filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -768,7 +792,7 @@ class ReservationAgeCategoryViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = AgeCategorySerializer
   filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -795,7 +819,7 @@ class ReservationDefferdPaymentViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = DefferdPaymentSerializer
   filter_fields = [f.name for f in DefferdPayment._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -822,7 +846,7 @@ class UsageUsageCategoryViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = UsageCategorySerializer
   filter_fields = [f.name for f in UsageCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -849,7 +873,7 @@ class AgeAgeCategoryViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = AgeCategorySerializer
   filter_fields = [f.name for f in AgeCategory._meta.fields]
   filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
       permissions.IsAuthenticated: [],
@@ -877,7 +901,7 @@ class ApprovalApplicationCsvExportViewSet(
         viewsets.GenericViewSet):
   queryset = ApprovalApplication.objects
   serializer_class = ApprovalApplicationSerializer
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['create'],
       permissions.IsAuthenticated: [],
@@ -904,7 +928,7 @@ class ReservationDeleteViewSet(
         viewsets.GenericViewSet):
   queryset = Reservation.objects
   serializer_class = ReservationSerializer
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['destroy'],
       permissions.IsAuthenticated: [],

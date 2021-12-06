@@ -62,8 +62,8 @@ class PasswordResetSerializer(serializers.Serializer):
     self.reset_form.save(**opts)
 
 
-class LoginSerializer(LoginSerializer):
-  username = None
+# class LoginSerializer(LoginSerializer):
+#   username = None
 
 
 class StaffLoginSerializer(LoginSerializer):

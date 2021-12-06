@@ -22,16 +22,15 @@ const Login = () => {
     const [cookie, setCookie] = useCookies();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const GET_USER_DATA = AuthUrls.GET_USER_DATA;
+    const GET_USER = AuthUrls.GET_USER_DATA;
     const pullData = () => {
-        axios.defaults.withCredentials = true;
-        axios.get(GET_USER_DATA, {
+        axios.get(GET_USER, {
             headers: {
                 // 'Accept': 'application/json',
-                "Content-Type": "application/json; charset=utf-8",
-                'Authorization': `JWT ${Cookies.get('access_token')}`
+                "Content-Type": "application/json",
+                // 'Authorization': `JWT ${Cookies.get('access_token')}`
             },
-            withCredentials: true,
+            // withCredentials: true,
         })
             .then(response => {
                 console.log(response.data);
@@ -44,7 +43,7 @@ const Login = () => {
     // ログイン処理
     const url = AuthUrls.LOGIN;
     const onSubmit = () => {
-        axios.defaults.withCredentials = true;
+        // axios.defaults.withCredentials = true;
         let formData = new FormData();
 
         // フォームデータを追加
@@ -55,18 +54,18 @@ const Login = () => {
         setError(null);
         axios.post(url, formData, {
             headers: {
-                "Content-Type": "application/json; charset=utf-8",
+                "Content-Type": "application/json",
             },
-            withCredentials: true,
+            // withCredentials: true,
         })
             .then(res => {
                 // ログイン処理が成功した場合
                 // ローディング画面を非表示
                 setLoading(false);
                 // ログイン成功時にはセッションクッキーを設定
-                setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
-                setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
-                setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
+                // setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
+                // setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+                // setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
                 console.log(res.data);
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';
