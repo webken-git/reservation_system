@@ -16,16 +16,30 @@ const LoginRoute = (props) => {
         formData.append("token", cookies.get("access_token"));
 
         const url = AuthUrls.TOKEN_VERIFY;
+        const refresh = AuthUrls.TOKEN_REFRESH;
         axios
         .post(url, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         })
+            .then((response) => {
+                axios.post(refresh, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }).then((response) => {
+                    cookies.remove("access_token");
+                    cookies.remove("refresh_token");
+                    cookies.set("access_token", response.data.token, { path: "/" });
+                    cookies.set("refresh_token", response.data.refresh_token, { path: "/" });
+                })
+            })
             .catch((error) => {
             // トークンが有効期限切れの場合
             cookies.remove("access_token");
             cookies.remove("refresh_token");
+            cookies.remove("user_id");
             window.location.href = "/login";
             alert("再度ログインしてください");
         });

@@ -28,10 +28,18 @@ function App() {
           {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
           <HeaderRoute path="/" exact children={<MainPage />} />
           <LoginRoute>
-            <HeaderRoute path ="/mypage" exact children={<MyPage/>}/>
-            <HeaderRoute path ="/mypage/email" exact children={<MailAddressChange/>}/>
+            {/* <HeaderRoute path ="/mypage" exact children={<MyPage/>}/> */}
+            <Route path="/mypage"
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <HeaderRoute path={`${url}`} exact children={<MyPage/>} />
+                    <HeaderRoute path={`${url}/email`} exact children={<MailAddressChange/>}/>
+                  </Switch>
+                </>
+              )}
+            />
           </LoginRoute>
-          {/* <HeaderRoute path ="/mailaddresschange" exact children={<MailAddressChange/>}/> */}
         </Switch>
       </CookiesProvider>
     </BrowserRouter>

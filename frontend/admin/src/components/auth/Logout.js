@@ -20,6 +20,10 @@ const Logout = (props) => {
                 // setLoading(false);
                 cookies.remove('access_token');
                 cookies.remove('refresh_token');
+<<<<<<< HEAD
+=======
+                cookies.remove('user_id');
+>>>>>>> 7f8f42bffd51c25f98de07cad5bca4c9d4e1de4a
                 window.location.href = "/";
             })
             .catch(err => {

@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from corsheaders.defaults import default_headers
 from datetime import timedelta  # 追加
 import os
-from dotenv import load_dotenv  # 追加
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,8 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.basename(BASE_DIR)  # 追加
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# .envの読み込み
-load_dotenv()  # 追加
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -32,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -70,10 +67,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # CORS middleware
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -176,8 +172,8 @@ SESSION_COOKIE_AGE = 86400  # 1日経ったら強制的にセッションタイ�
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
-    'DEFAULT_PAGINATION_CLASS': 'reservations.funcs.paginations.CustomPagination',
-    'PAGE_SIZE': 20,
+    # 'DEFAULT_PAGINATION_CLASS': 'reservations.funcs.paginations.CustomPagination',
+    # 'PAGE_SIZE': 20,
 
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
@@ -189,14 +185,25 @@ REST_FRAMEWORK = {
         # 'config.funcs.authentication.CookieHandlerJWTAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',  # Django REST Framework JWT
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
-# SESSION_COOKIE_SAMESITE = 'None'
+
+SIMPLE_JWT = {
+    # トークンをJWTに設定
+    'AUTH_HEADER_TYPES': ('JWT',),
+    # アクセストークンの持続時間の設定
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    # リフレッシュトークンの持続時間の設定
+    'REFRESH_TOKEN_LIFETIME': timedelta(hour=24),
+    # 'BLACKLIST_AFTER_ROTATION': False,
+}
+
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SAMESITE = 'None'
-# SESSION_COOKIE_SECURE = True
 
 
 # dj-rest-auth settings
@@ -247,23 +254,26 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_ID = 1
 
 
-SIMPLE_JWT = {
-    # トークンをJWTに設定
-    'AUTH_HEADER_TYPES': ('JWT',),
-    # アクセストークンの持続時間の設定
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    # リフレッシュトークンの持続時間の設定
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=60),
-    'BLACKLIST_AFTER_ROTATION': False,
-}
-
-
 # CORS settings
 
-CORS_ORIGIN_WHITELIST = (
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:3000',
+#     'http://127.0.0.1:3000',
+# ]
+
+CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-)
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'localhost:3000',
+    '127.0.0.1',
+]
 
 
 CSRF_TRUSTED_ORIGINS = [
@@ -274,10 +284,7 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'X-CSRFToken',
     # 'X-Requested-With',
-    # 'Content-Type',
-    # 'Accept',
-    # 'Authorization',
+    'Content-Type',
+    'Accept',
+    'Authorization',
 ]
-
-CORS_ALLOW_CREDENTIALS = True
-# CORS_ORIGIN_ALLOW_ALL = True
