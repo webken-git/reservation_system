@@ -20,11 +20,8 @@ const Logout = (props) => {
                 // setLoading(false);
                 cookies.remove('access_token');
                 cookies.remove('refresh_token');
-<<<<<<< HEAD
-=======
                 cookies.remove('user_id');
->>>>>>> 7f8f42bffd51c25f98de07cad5bca4c9d4e1de4a
-                window.location.href = "/";
+                window.location.href = "/login";
             })
             .catch(err => {
                 // setLoading(false);
@@ -33,7 +30,7 @@ const Logout = (props) => {
     }
 
     return (
-        <button type="button" className="btn logout-content" onClick={onSubmit}>
+        <button type="button" className="logout-btn" onClick={onSubmit}>
             ログアウト
         </button>
     );

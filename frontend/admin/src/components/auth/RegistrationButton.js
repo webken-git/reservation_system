@@ -7,7 +7,7 @@ export const RegistrationButton = () => {
         <button type="button" className="registration-link" onClick={() => {
             window.location.href = '/registration';
         }}>
-            新規登録
+            新規ユーザー追加
         </button>
     );
 };

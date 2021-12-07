@@ -28,8 +28,8 @@ const Login = () => {
         axios.get(GET_USER_DATA, {
             headers: {
                 // 'Accept': 'application/json',
-                "Content-Type": "application/json; charset=utf-8",
-                'Authorization': `JWT ${Cookies.get('access_token')}`
+                "Content-Type": "application/json",
+                // 'Authorization': `JWT ${Cookies.get('access_token')}`
             },
             withCredentials: true,
         })
@@ -55,7 +55,7 @@ const Login = () => {
         setError(null);
         axios.post(url, formData, {
             headers: {
-                "Content-Type": "application/json; charset=utf-8",
+                "Content-Type": "application/json",
             },
             withCredentials: true,
         })
@@ -64,9 +64,9 @@ const Login = () => {
                 // ローディング画面を非表示
                 setLoading(false);
                 // ログイン成功時にはセッションクッキーを設定
-                setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
-                setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
-                setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
+                // setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
+                // setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+                // setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
                 console.log(res.data);
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';

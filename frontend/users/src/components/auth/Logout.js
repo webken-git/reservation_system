@@ -13,14 +13,16 @@ const Logout = (props) => {
         // setLoading(true);
         axios.post(url, {
             headers: {
-                'Authorization': `JWT ${cookies.get('access_token')}`
-            }
+                // 'Authorization': `JWT ${cookies.get('access_token')}`
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
         })
             .then(res => {
                 // setLoading(false);
-                cookies.remove('access_token');
-                cookies.remove('refresh_token');
-                cookies.remove('user_id');
+                // cookies.remove('access_token');
+                // cookies.remove('refresh_token');
+                // cookies.remove('user_id');
                 window.location.href = "/";
             })
             .catch(err => {

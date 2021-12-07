@@ -18,13 +18,16 @@ $breakpoints: (
   }
 }
 
+$main-color: #1a8d89;
+$sub-color: #707070;
+
 .btn {
   width: 7rem;
   color: #fff;
-  border: 1px solid #1a8d89;
+  border: 1px solid $main-color;
   // border-radius: 3px;
   padding: 9px 17px;
-  background-color: #1a8d89;
+  background-color: $main-color;
   margin: 3% 0;
   font-size: 1rem;
   cursor: pointer;
@@ -120,17 +123,18 @@ $breakpoints: (
   }
 }
 
-.logout-content {
+.logout-btn {
+  @extend .btn;
   width: 9rem;
   margin-right: 2%;
-  border: #707070 solid 1px;
-  background-color: #707070;
+  border: $sub-color solid 1px;
+  background-color: $sub-color;
 }
 
 .registration-link {
   @extend .btn;
-  border: 1px solid #91c21f;
-  background-color: #91c21f;
+  width: 12rem;
+  height: 3.5rem;
 }
 .login-link {
   @extend .btn;

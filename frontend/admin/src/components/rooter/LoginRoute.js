@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-import Cookies from 'universal-cookie'
+import Cookies from 'universal-cookie';
 
 import { AuthUrls } from "../../utils/authUrls";
 
@@ -16,32 +16,37 @@ const LoginRoute = (props) => {
         formData.append("token", cookies.get("access_token"));
 
         const url = AuthUrls.TOKEN_VERIFY;
-        const refresh = AuthUrls.TOKEN_REFRESH;
+        const refreshUrl = AuthUrls.TOKEN_REFRESH;
         axios
         .post(url, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         })
-            .then((response) => {
-                axios.post(refresh, formData, {
+            .then((res) => {
+                let formData = new FormData();
+                formData.append("refresh", cookies.get("refresh_token"));
+                axios.post(refreshUrl, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
-                    },
-                }).then((response) => {
-                    cookies.remove("access_token");
-                    cookies.remove("refresh_token");
-                    cookies.set("access_token", response.data.token, { path: "/" });
-                    cookies.set("refresh_token", response.data.refresh_token, { path: "/" });
+                        },
                 })
+                .then((res) => {
+                    // アクセストークンを更新
+                    cookies.set('access_token', res.data.access, { path: '/' }, { httpOnly: true });
+                    console.log("アクセストークンを更新しました");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             })
-            .catch((error) => {
+            .catch((err) => {
             // トークンが有効期限切れの場合
-            alert("再度ログインしてください");
             cookies.remove("access_token");
             cookies.remove("refresh_token");
             cookies.remove("user_id");
             window.location.href = "/login";
+            alert("再度ログインしてください");
         });
 
         return props.children;

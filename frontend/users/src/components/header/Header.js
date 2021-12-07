@@ -1,15 +1,18 @@
 import React from 'react'
 import axios from "axios";
-import Cookies from 'universal-cookie'
-import './header.scss'
+import Cookies from 'universal-cookie';
+import './header.scss';
 
-import Logo from './logo/Logo'
-import logo from '../../assets/image/logo.png'
+import Logo from './logo/Logo';
+import logo from '../../assets/image/logo.png';
 
-import UserIcon from './usericon/UserIcon'
-import Cart from './cart/Cart'
-import { faUser } from "@fortawesome/free-solid-svg-icons"
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons"
+import UserIcon from './usericon/UserIcon';
+import Cart from './cart/Cart';
+import { FontAwesomeIcon } from "@fontawsome/fontawesome-svg-core@next";
+import { faCalendar } from "@fontawsome/free-regular-svg-icons@next";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarCheck  } from "@fortawesome/free-regular-svg-icons";
 import { AuthUrls } from "../../utils/authUrls";
 import { LoginButton } from '../auth/LoginButton';
 import { RegistrationButton } from '../auth/RegistrationButton';
@@ -20,23 +23,42 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
-    // アクセストークンが有効かどうかをチェックする
     const url = AuthUrls.TOKEN_VERIFY;
+    const refreshUrl = AuthUrls.TOKEN_REFRESH;
+    // アクセストークンが有効かどうかをチェックする
     const verifyToken = async () => {
         let formData = new FormData();
-        formData.append("token", cookies.get("access_token"));
+        formData.append("token", cookies.get("jwt-auth"));
         // 処理中はローディング画面を表示
         setLoading(true);
 
         axios.post(url, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
-            }
-        }).then(res => {
-            // ログインフラグをtrueにする
-            setIsLoggedIn(true);
-            // ローディング画面を非表示
-            setLoading(false);
+            },
+            withCredentials: true,
+        })
+            .then(res => {
+                // ログインフラグをtrueにする
+                setIsLoggedIn(true);
+                // ローディング画面を非表示
+                setLoading(false);
+                // アクセストークンを更新する
+                // let formData = new FormData();
+                // // formData.append("refresh", cookies.get("refresh_token"));
+                // axios.post(refreshUrl, formData, {
+                //     headers: {
+                //         "Content-Type": "multipart/form-data",
+                //         },
+                // })
+                //     .then((res) => {
+                //         // アクセストークンを更新
+                //         // cookies.set('access_token', res.data.access, { path: '/' }, { httpOnly: true });
+                //         console.log("アクセストークンを更新しました");
+                //     })
+                //     .catch((error) => {
+                //         console.log(error);
+                //     });
         }).catch(err => {
             // ログインフラグをfalseにする
             setIsLoggedIn(false);
@@ -60,19 +82,17 @@ const Header = () => {
                 isLoggedIn ?
                 <div className='rightside'>
                     <UserIcon icon={faUser}/>
-                    <Cart icon={faShoppingCart}/>
+                    <Cart icon={faCalendarCheck} />
                 </div>
                 :
                 <div className='rightside-login'>
                     <LoginButton />
                     <span></span>
-                    <RegistrationButton />
+                        <RegistrationButton />
+                    <Cart icon={faCalendarCheck} />
                 </div>
             }
-            {
-                // loadingがtrueならローディング画面を表示
-                loading ? <Loading /> : null
-            }
+            {loading && <Loading />}
         </div>
     )
 }
