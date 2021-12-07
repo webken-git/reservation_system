@@ -22,16 +22,15 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     axios.defaults.withCredentials = true;
 
-    const GET_USER_DATA = AuthUrls.GET_USER_DATA;
+    const GET_USER = AuthUrls.GET_USER_DATA;
     const pullData = () => {
-        axios.defaults.withCredentials = true;
-        axios.get(GET_USER_DATA, {
+        axios.get(GET_USER, {
             headers: {
                 // 'Accept': 'application/json',
                 "Content-Type": "application/json",
                 // 'Authorization': `JWT ${Cookies.get('access_token')}`
             },
-            withCredentials: true,
+            // withCredentials: true,
         })
             .then(response => {
                 console.log(response.data);
@@ -44,7 +43,7 @@ const Login = () => {
     // ログイン処理
     const url = AuthUrls.LOGIN;
     const onSubmit = () => {
-        axios.defaults.withCredentials = true;
+        // axios.defaults.withCredentials = true;
         let formData = new FormData();
 
         // フォームデータを追加
@@ -57,7 +56,7 @@ const Login = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            withCredentials: true,
+            // withCredentials: true,
         })
             .then(res => {
                 // ログイン処理が成功した場合

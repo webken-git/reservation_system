@@ -19,6 +19,9 @@ var csrftoken = Cookies.get('csrftoken');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
+axios.defaults.headers = {
+  'Content-Type': 'application/json',
+};
 
 function App() {
   return (
