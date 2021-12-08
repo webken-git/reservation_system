@@ -1,8 +1,5 @@
-import { useState } from 'react';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
@@ -15,7 +12,6 @@ const VerifyEmail = () => {
     const [loading, setLoading] = useSafeState(unmountRef, false);
     const [email, setEmail] = useSafeState(unmountRef, '');
     const [message, setMessage] = useSafeState(unmountRef, 'メールアドレスを入力してください。');
-    const [error, setError] = useSafeState(unmountRef, null);
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const url = AuthUrls.RESET_PASSWORD;
@@ -36,7 +32,6 @@ const VerifyEmail = () => {
             })
             .catch(err => {
                 setLoading(false);
-                // setError(err.response.data.message);
             });
     };
 
@@ -45,7 +40,6 @@ const VerifyEmail = () => {
             <div className="link">
                 <h2 className="auth-page__title">{ message }</h2>
             </div>
-            {error && <p className="auth-page__error">{error}</p>}
             <form className="auth-page__form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="email">メールアドレス</label>
@@ -66,7 +60,9 @@ const VerifyEmail = () => {
                     />
                 </div>
                 <div className="auth-btn-wrapper">
-                    <button className="btn auth-btn" type="submit">完了</button>
+                    <button className="back-btn" type="button" onClick={() => window.history.back()}>戻る</button>
+                    <span>　</span>
+                    <button className="verify-btn" type="submit">完了</button>
                 </div>
             </form>
             {loading && <Loading />}

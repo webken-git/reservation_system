@@ -191,6 +191,7 @@ SIMPLE_JWT = {
     # トークンをJWTに設定
     'AUTH_HEADER_TYPES': ('JWT',),
     # アクセストークンの持続時間の設定
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     # リフレッシュトークンの持続時間の設定
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),

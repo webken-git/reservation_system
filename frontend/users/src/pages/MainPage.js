@@ -3,8 +3,7 @@ import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import FeeList from '../components/feelist/FeeList';
-import { AuthUrls } from "../utils/authUrls";
-import Cookies from 'js-cookie';
+
 
 const MainPage = () => {
     const [PlaceListData, setPlaceListData] = useState([]);
