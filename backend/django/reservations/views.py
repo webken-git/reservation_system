@@ -338,26 +338,36 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
 
 class ApprovalCountMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
-  # yearとmonthを指定して、その月のapproval_applicationの件数を取得する
+  # yearとmonthでグループ化して、各年月ごとの予約数を集計する
+  # 必須パラメータ：year, month, approval_id
   queryset = ApprovalApplication.objects.all()
   serializer_class = ApprovalCountMonthlySerializer
 
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     queryset = self.filter_queryset(self.get_queryset())
-    approval = request.query_params.get('approval', None)
-    year = request.query_params.get('year', None)
-    month = request.query_params.get('month', None)
-    if year is None or month is None:
-      return response.Response(status=status.HTTP_400_BAD_REQUEST)
-    else:
-      queryset = queryset.filter(approval=approval, reservation__start__year=year, reservation__start__month=month).values('reservation__start__month').distinct()
-      serializer = self.get_serializer(queryset, many=True)
-      return response.Response(serializer.data, status=status.HTTP_200_OK)
+    serializer = self.get_serializer(queryset, many=True)
+    return response.Response(serializer.data, status=status.HTTP_200_OK)
 
-  def retrieve(self, request, *args, **kwargs):
-    return response.Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+  def get_queryset(self):
+    approval_id = self.request.query_params.get('approval', None)
+    queryset = ApprovalApplication.objects.filter(approval=approval_id).values('reservation__start__year', 'reservation__start__month').annotate(count=Count('reservation__start__year')).order_by('reservation__start__year', 'reservation__start__month')
+    return queryset
+
+  def get_serializer_class(self):
+    if self.action == 'list':
+      return ApprovalCountMonthlySerializer
+    return ApprovalCountMonthlySerializer
+
+  def get_serializer_context(self):
+    return {'request': self.request}
+
+  def get_permissions(self):
+    """
+    listアクションのみ許可
+    """
+    if self.action == 'list':
+      return [permissions.AllowAny()]
+    return [permissions.IsAdminUser()]
 
 
 class UnapprovalCountsViewSet(

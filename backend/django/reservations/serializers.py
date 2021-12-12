@@ -4,6 +4,7 @@ from rest_framework.relations import ManyRelatedField
 from reservations.models import *
 from users.serializers import UserSerializer
 import datetime
+from django.db.models.aggregates import Count
 
 
 class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
@@ -219,46 +220,26 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
 
 class ApprovalCountMonthlySerializer(serializers.ModelSerializer):
   """
-  yearとmonthを指定して、その月のapproval_applicationの件数を取得する
+  年月でグループ化して、各年月ごとの予約数を集計するViewのSerializer
   """
   class Meta:
     model = ApprovalApplication
-    fields = ['count', 'year', 'month', 'approval', 'data']
+    fields = ['year', 'month', 'count']
+    # fields = ['count']
 
-  count = serializers.SerializerMethodField('get_count')
   year = serializers.SerializerMethodField('get_year')
   month = serializers.SerializerMethodField('get_month')
-  approval = serializers.SerializerMethodField('get_approval')
-  data = serializers.SerializerMethodField('get_data')
+  count = serializers.SerializerMethodField('get_count')
 
-  def get_count(self, validated_data):
-    approval = self.context['request'].query_params.get('approval', None)
-    year = self.context['request'].query_params.get('year', None)
-    month = self.context['request'].query_params.get('month', None)
-    count = ApprovalApplication.objects.filter(approval=approval, reservation__start__year=year, reservation__start__month=month).count()
-    return count
+  def get_year(self, obj):
+    return obj['reservation__start__year']
 
-  def get_year(self, validated_data):
-    year = self.context['request'].query_params.get('year', None)
-    return year
+  def get_month(self, obj):
+    return obj['reservation__start__month']
 
-  def get_month(self, validated_data):
-    month = self.context['request'].query_params.get('month', None)
-    return month
-
-  def get_approval(self, validated_data):
-    approval = self.context['request'].query_params.get('approval', None)
-    query = Approval.objects.filter(id=approval)
-    serializer = ApprovalSerializer(query, many=True)
-    return serializer.data[0]['name']
-
-  def get_data(self, validated_data):
-    approval = self.context['request'].query_params.get('approval', None)
-    year = self.context['request'].query_params.get('year', None)
-    month = self.context['request'].query_params.get('month', None)
-    query = ApprovalApplication.objects.filter(approval=approval, reservation__start__year=year, reservation__start__month=month)
-    serializer = ApprovalApplicationSerializer(query, many=True)
-    return serializer.data
+  def get_count(self, obj):
+    approval = self.context['request'].query_params.get('approval')
+    return ApprovalApplication.objects.filter(approval=approval, reservation__start__year=obj['reservation__start__year'], reservation__start__month=obj['reservation__start__month']).count()
 
 
 class UnapprovalCountsSerializer(serializers.ModelSerializer):
