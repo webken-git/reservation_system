@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactModal from "react-modal";
 import './document.scss';
 
@@ -26,8 +26,16 @@ const DocumentLayout = () => {
         setModalIsOpen(!modalIsOpen);
     }
 
+    let ModalContent = null;
+
+    if (showContent === "selection") {
+        ModalContent = <DocumentSelection changeState={changeState} selectDocument={selectDocument} modalToggle={modalToggle} data={data} />;
+    } else if (showContent === "preparation") {
+        ModalContent = <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} data={data} />;
+    }
+
     // 論理演算子を利用し、表示するコンポーネントを変更
-    let ModalContent = showContent == "selection" && <DocumentSelection changeState={changeState} selectDocument={selectDocument} modalToggle={modalToggle} data={data}/> || showContent == "preparation" && <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} data={data}/>;
+    // let ModalContent = showContent === "selection" && <DocumentSelection changeState={changeState} selectDocument={selectDocument} modalToggle={modalToggle} data={data}/> || showContent === "preparation" && <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} data={data}/>;
 
 
     return (

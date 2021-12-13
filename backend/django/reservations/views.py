@@ -756,7 +756,7 @@ class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
     の様に利用すると良いかと。
     """
     date = self.kwargs.get('reservation_pk')
-    now = str(datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
+    now = str(datetime.datetime.now(pytz.timezone('Asia/Tokyo')).strftime('%Y-%m-%dT%H:%M'))
     queryset = ApprovalApplication.objects.all().prefetch_related('reservation')
     return queryset.filter(reservation__start__range=[now, date])
 

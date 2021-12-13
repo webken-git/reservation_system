@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
 
@@ -31,7 +30,6 @@ const PasswordReset = (props) => {
         setMessage('新規パスワードを登録しています...');
         axios.post(url, formData, {
             headers: {
-                'X-CSRFToken': Cookies.get('csrftoken'),
                 'Content-Type': 'multipart/form-data'
             },
         })
