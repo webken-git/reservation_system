@@ -1,5 +1,5 @@
 import React from "react";
-import SideBarAndHeaderRoute from "../../components/rooter/SideBarAndHeaderRoute"
+import SideAndHeader from "../../components/rooter/SideAndHeader"
 import SideBar from "../../components/sidebar/SideBar";
 import Header from "../../components/header/Header";
 import { TopPage } from "./TopPage";

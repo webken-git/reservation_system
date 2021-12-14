@@ -29,7 +29,6 @@ const TopPageList = () => {
           todaydata.push(data[i])
           setTodayList(todaydata)
         }
-
       }
       
     })
