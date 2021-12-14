@@ -3,11 +3,11 @@
 	"tasks": [
 		{
 			"type": "npm",
-			"script": "start",
+			"script": "eject",
 			"path": "frontend/admin/",
 			"problemMatcher": [],
-			"label": "npm: start - frontend/admin",
-			"detail": "react-scripts start"
+			"label": "npm: eject - frontend/admin",
+			"detail": "react-scripts eject"
 		}
 	]
 }

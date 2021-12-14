@@ -1,0 +1,9 @@
+node_modules
+__pycache__
+
+/backend/django/.env
+/backend/env
+/backend/lib
+/backend/Scripts
+/backend/pyvenv.cfg
+/backend/bin

@@ -8,13 +8,8 @@ import { DisapprovalList } from "./DisapprovalList"
 import { UnapprovalList } from "./UnapprovalList"
 import { BrowserRouter, Switch } from "react-router-dom";
 import PrivateRoute from "../../components/api/PrivateRoute"
-import { Test } from "../../components/api/test";
 //import './mypage.scss'
-export const MyPage = () => {
-  return(
-    <div>
-      <h1>MyPage</h1>
-      <Test/>
-    </div>
-  )
-  }
+
+export const MyPage =()=> {
+  return <h1>MyPage</h1>;
+}

@@ -1,22 +1,14 @@
 import React from "react";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import Errortest from "../../components/error/Errortest";
-
-export const TopPage = () => {
-  useEffect(() => {
-    const api = axios
-      .get(`${process.env.REACT_APP_LOGIN}/account/auth-user/`)
-      .then((res) => {
-        console.log(res.data);
-      });
-    console.log(api);
-  }, []);
-
-  return (
-    <div>
-      <p>TopPage</p>
-      {/* <Test/> */}
+import TopPageList from "../../components/toppage/TopPageList"
+import './approvallist.scss'
+export const TopPage =()=> {
+    return (
+    <div className="list-wrapper">
+        <div className="scroll_box-wrapper">
+            <div className="scroll_box">
+                <TopPageList/>
+            </div> 
+        </div> 
     </div>
-  );
-};
+    )
+}

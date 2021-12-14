@@ -15,7 +15,7 @@ const SideBarRoute = (props) => {
         <Route
             exact path={children.props.path}
             children={
-                <div>
+                <>
                     <div className="allbox">
                         <div className="sidebar">
                             <SideBar/>
@@ -27,7 +27,7 @@ const SideBarRoute = (props) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </>
             }
         />
     )
