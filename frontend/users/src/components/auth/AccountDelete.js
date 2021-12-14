@@ -125,7 +125,9 @@ const AccountDelete = (props) => {
                     </div>
                 </div>
                 <div className="auth-btn-wrapper">
-                    <button className="btn auth-btn" type="submit">アカウント削除</button>
+                    <button className="back-btn" type="button" onClick={() => window.history.back()}>戻る</button>
+                    <span>　</span>
+                    <button className="auth-btn" type="submit">アカウント削除</button>
                 </div>
             </form>
             {loading && <Loading />}

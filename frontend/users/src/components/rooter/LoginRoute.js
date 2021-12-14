@@ -1,42 +1,35 @@
-import React from "react";
 import axios from "axios";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { Redirect } from "react-router-dom";
-import Cookies from 'universal-cookie';
-
 import { AuthUrls } from "../../utils/authUrls";
+import authState from "../../recoil/auth/atom";
 
 const LoginRoute = (props) => {
-    // const cookies = new Cookies();
-    // // トークンが有効か確認
-    // if (cookies.get("access_token")) {
-    //     // トークンが有効ならログインしていると判断
-    //     // axios.defaults.headers.common["Authorization"] = props.cookies.get("token");
+    const auth = useRecoilValue(authState);
+    const setAuth = useSetRecoilState(authState);
 
-    //     let formData = new FormData();
-    //     formData.append("token", cookies.get("access_token"));
+    // トークンが有効か確認
+    const GET_USER = AuthUrls.GET_USER_DATA;
+    const loginCheck = () => {
+        axios.get(GET_USER)
+            .catch((err) => {
+                // トークンが無効な場合、authStateをfalseにする
+                if (err.response.status === 401) {
+                    setAuth({
+                        isAuthenticated: false,
+                    });
+                    alert("再度ログインしてください");
+                }
 
-    //     const url = AuthUrls.TOKEN_VERIFY;
-    //     const refreshUrl = AuthUrls.TOKEN_REFRESH;
-    //     axios
-    //     .post(url, formData, {
-    //         headers: {
-    //             "Content-Type": "multipart/form-data",
-    //         },
-    //     })
-    //         .catch((err) => {
-    //         // トークンが有効期限切れの場合
-    //         cookies.remove("access_token");
-    //         cookies.remove("refresh_token");
-    //         cookies.remove("user_id");
-    //         window.location.href = "/";
-    //         alert("再度ログインしてください");
-    //     });
+            });
+    };
+    loginCheck();
 
-    //     return props.children;
-    // } else {
-    //     // トークンが無効ならログインしていないと判断
-    //     return <Redirect to="/login" />;
-    // }
-}
+    if(auth.isAuthenticated === true) {
+        return props.children;
+    } else {
+        return <Redirect to="/login" />;
+    }
+};
 
 export default LoginRoute;

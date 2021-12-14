@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { CookiesProvider } from 'react-cookie';
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
@@ -15,7 +14,7 @@ import { LoginPage } from './pages/LoginPage';
 import Registration from './components/auth/Registration';
 import { AccountDeletePage } from './pages/AccountDeletePage';
 
-var csrftoken = Cookies.get('csrftoken');
+// var csrftoken = Cookies.get('csrftoken');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;

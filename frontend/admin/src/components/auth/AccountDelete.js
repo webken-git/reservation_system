@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
 
@@ -21,7 +20,8 @@ const AccountDelete = (props) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     // 一度アカウントの確認を行い、成功したらアカウントを削除する
-    const url = AuthUrls.TOKEN;
+    const GET_USER = AuthUrls.GET_USER_DATA;
+    const 
     const userDeleteUrl = AuthUrls.GET_USER_LIST;
     const onSubmit = () => {
         let formData = new FormData();
@@ -36,7 +36,7 @@ const AccountDelete = (props) => {
             withCredentials: true,
         })
             .then(res => {
-                const userId = Cookies.get('user_id');
+                // const userId = Cookies.get('user_id');
                 axios.delete(`${userDeleteUrl}/${userId}`, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -44,9 +44,6 @@ const AccountDelete = (props) => {
                     withCredentials: true,
                 })
                     .then(res => {
-                        Cookies.remove('access_token');
-                        Cookies.remove('refresh_token');
-                        Cookies.remove('user_id');
                         setLoading(false);
                         setMessage('アカウントを削除しました。');
                         setTimeout(() => {
@@ -125,6 +122,8 @@ const AccountDelete = (props) => {
                     </div>
                 </div>
                 <div className="auth-btn-wrapper">
+                    <button className="back-btn" type="button" onClick={() => window.history.back()}>戻る</button>
+                    <span>　</span>
                     <button className="btn auth-btn" type="submit">アカウント削除</button>
                 </div>
             </form>

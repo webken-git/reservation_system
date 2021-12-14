@@ -115,6 +115,14 @@ $sub-color: #707070;
 
   .auth-btn-wrapper {
     text-align: center;
+    .back-btn {
+      @extend .btn;
+      background-color: $sub-color;
+      border: $sub-color solid 1px;
+    }
+    .verify-btn {
+      @extend .btn;
+    }
     .auth-btn {
       @extend .btn;
       width: 10rem;
@@ -129,6 +137,22 @@ $sub-color: #707070;
   margin-right: 2%;
   border: $sub-color solid 1px;
   background-color: $sub-color;
+}
+
+.logout-container {
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+  text-decoration: none;
+  @include mq(tab) {
+    font-size: 16px;
+  }
+  @include mq(sp) {
+    font-size: 25px;
+  }
+}
+.logout-container:hover {
+  text-decoration: underline;
 }
 
 .registration-link {

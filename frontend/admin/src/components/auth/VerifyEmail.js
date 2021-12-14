@@ -42,9 +42,9 @@ const VerifyEmail = () => {
 
     return (
         <div className="auth-page">
-            <div className="link">
+            {/* <div className="link"> */}
                 <h2 className="auth-page__title">{ message }</h2>
-            </div>
+            {/* </div> */}
             {error && <p className="auth-page__error">{error}</p>}
             <form className="auth-page__form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="auth-page__form-group">
@@ -66,7 +66,9 @@ const VerifyEmail = () => {
                     />
                 </div>
                 <div className="auth-btn-wrapper">
-                    <button className="btn auth-btn" type="submit">完了</button>
+                    <button className="back-btn" type="button" onClick={() => window.history.back()}>戻る</button>
+                    <span>　</span>
+                    <button className="verify-btn" type="submit">完了</button>
                 </div>
             </form>
             {loading && <Loading />}
