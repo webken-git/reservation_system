@@ -1,7 +1,5 @@
 import React from 'react'
 import './header.scss'
-import { Link } from 'react-router-dom'
-import Logout from '../auth/Logout'
 import UserIcon from './usericon/UserIcon'
 
 // ヘッダーはサイドバーのTitleコンポーネントの右横の部分を指す

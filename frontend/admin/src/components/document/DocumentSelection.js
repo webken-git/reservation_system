@@ -60,6 +60,7 @@ const DocumentSelection = (props) => {
 
     useEffect(() => {
         pullDocumentTemplateList();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [checkedItems]);
 
     return (

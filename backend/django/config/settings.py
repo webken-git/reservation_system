@@ -175,10 +175,10 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         # 'config.funcs.authentication.CookieHandlerJWTAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
@@ -189,11 +189,12 @@ SIMPLE_JWT = {
     # トークンをJWTに設定
     'AUTH_HEADER_TYPES': ('JWT',),
     # アクセストークンの持続時間の設定
-    # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     # リフレッシュトークンの持続時間の設定
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     # 'BLACKLIST_AFTER_ROTATION': False,
+    'ROTATE_REFRESH_TOKENS': True,
 }
 
 SESSION_COOKIE_SAMESITE = 'None'

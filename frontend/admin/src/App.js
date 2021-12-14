@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 import { CookiesProvider } from 'react-cookie';
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LoginRoute from "./components/rooter/LoginRoute";
 
 import { LoginPage } from "./pages/home/LoginPage";
