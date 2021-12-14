@@ -1,6 +1,10 @@
 .linkdeco {
   text-decoration: none;
   .pagename {
-      color: #ffffff;
+    color: #000;
+    font-size: 20px;
   }
+}
+.linkdeco:hover {
+  text-decoration: underline;
 }

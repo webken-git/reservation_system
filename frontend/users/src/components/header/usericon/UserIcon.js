@@ -3,22 +3,28 @@ import './usericon.scss'
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import PageLink from '../../pagelink/PageLink';
+import Logout from '../../auth/Logout';
 
 Modal.setAppElement('#root');
 
 const UserIcon = (props) => {
-    const [modalIsOpen, setIsOpen] = useState(false)
-    
+    const [modalIsOpen, setIsOpen] = useState(false);
+
     return (
         <div>
             <div className='usericonbox' onClick={() => setIsOpen(true)}>
                 <div className='circle'></div>
-                <p><FontAwesomeIcon icon={props.icon}/></p> 
+                <p><FontAwesomeIcon icon={props.icon} /></p>
             </div>
-            <Modal className='modal' isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)}>
+            <Modal
+                className='modal'
+                overlayClassName='overlay'
+                isOpen={modalIsOpen}
+                onRequestClose={() => setIsOpen(false)}
+            >
                 <PageLink url='/mypage' pagename={'マイページ'}/>
-                <PageLink url='/mypage' pagename={'ログアウト'}/>
-                <PageLink url='/mypage' pagename={'予約一覧'}/>
+                <PageLink url='/mypage' pagename={'予約一覧'} />
+                <Logout/>
             </Modal>
         </div>
     )

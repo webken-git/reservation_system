@@ -2,6 +2,7 @@ import React from 'react'
 import './header.scss'
 import RogoutButton from './rogoutbutton/RogoutButton'
 import { Link } from 'react-router-dom'
+import Logout from '../auth/Logout'
 
 // ヘッダーはサイドバーのTitleコンポーネントの右横の部分を指す
 // ヘッダーの下に承認リストページやユーザーリストページなどが表示される
@@ -14,10 +15,12 @@ const Header = (props) => {
             <div className="header">
                 <div className="header_title">{props.pagename}</div>
                 {/* 各ページにあった名前に変更できるようにpropsにする */}
-                 <Link style={{ textDecoration: 'none',color: 'black' }}to="/Login" >
-                <div className="rogoutbtn"><RogoutButton btn_title="ログアウト" />
+                {/* <Link style={{ textDecoration: 'none',color: 'black' }}to="/Login" >
+                    <div className="rogoutbtn">
+                        <RogoutButton btn_title="ログアウト" />
                     </div>
-                    </Link>
+                </Link> */}
+                <Logout />
             </div>
         </div>
     )

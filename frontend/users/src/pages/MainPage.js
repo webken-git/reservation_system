@@ -2,7 +2,9 @@ import React,{ useState, useEffect } from "react";
 import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import FeeList from '../components/feelist/FeeList'
+import FeeList from '../components/feelist/FeeList';
+import { AuthUrls } from "../utils/authUrls";
+import Cookies from 'js-cookie';
 
 const MainPage = () => {
     const [PlaceListData, setPlaceListData] = useState([]);
@@ -10,8 +12,9 @@ const MainPage = () => {
     const [PlaceName, setPlaceName] = useState();
     const [DivideFeeList, setDivideFeeList] = useState();
     const [Age, setAge] = useState();
-    const [Time, setTime] = useState()
-    
+    const [Time, setTime] = useState();
+
+
     //場所データ取得
     const GetPlaceList = () => {
       axios.get('https://webhok.net/reservation_system/api/places/')
@@ -27,7 +30,7 @@ const MainPage = () => {
 
     //料金表データ取得
     const GetFeeList = () => {
-      axios.get(`${process.env.REACT_APP_API}/facility-fees/`)
+      axios.get(`${process.env.REACT_APP_API}/api/facility-fees/`)
       .then(response => {
         const feelists = response.data;
         setFeeListData(feelists);
@@ -40,7 +43,7 @@ const MainPage = () => {
 
     //年齢データの取得
     const GetAge = () => {
-      axios.get(`${process.env.REACT_APP_API}/ages/`)
+      axios.get(`${process.env.REACT_APP_API}/api/ages/`)
       .then(response => {
         const ages = response.data;
         setAge(ages)
@@ -52,7 +55,7 @@ const MainPage = () => {
 
     //時間区分の取得
     const GetTime = () => {
-      axios.get(`${process.env.REACT_APP_API}/times/`)
+      axios.get(`${process.env.REACT_APP_API}/api/times/`)
       .then(response => {
         const times = response.data;
         setTime(times)
@@ -69,7 +72,7 @@ const MainPage = () => {
     useEffect(() => {
       GetPlaceList();
     }, [])
-    
+
     useEffect(() => {
       GetAge();
     }, [])
@@ -103,7 +106,7 @@ const MainPage = () => {
         )
     })
 
-    
+
     return (
         <Tabs>
             <TabList>
