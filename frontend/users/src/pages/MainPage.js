@@ -6,15 +6,16 @@ import FeeList from '../components/feelist/FeeList'
 
 const MainPage = () => {
     const [PlaceListData, setPlaceListData] = useState([]);
-    const [FeeListData, setFeeListData] = useState();
-    const [PlaceName, setPlaceName] = useState();
-    const [DivideFeeList, setDivideFeeList] = useState();
-    const [Age, setAge] = useState();
-    const [Time, setTime] = useState()
+    const [FeeListData, setFeeListData] = useState([]);
+    const [PlaceName, setPlaceName] = useState([]);
+    const [DivideFeeList, setDivideFeeList] = useState([]);
+    const [Age, setAge] = useState([]);
+    const [Time, setTime] = useState([]);
+    const [Usage, setUsage] = useState([]);
     
     //場所データ取得
     const GetPlaceList = () => {
-      axios.get('https://webhok.net/reservation_system/api/places/')
+      axios.get(`${process.env.REACT_APP_API}/places/`)
       .then(response => {
         const placelists = response.data;
         setPlaceListData(placelists)
@@ -31,7 +32,7 @@ const MainPage = () => {
       .then(response => {
         const feelists = response.data;
         setFeeListData(feelists);
-        setDivideFeeList(feelists[1]);
+        setDivideFeeList(feelists[1].data);
       })
       .catch((error) => {
         console.log(error);
@@ -62,20 +63,23 @@ const MainPage = () => {
       })
     }
 
+    const GetUsage = () => {
+      axios.get(`${process.env.REACT_APP_API}/usages`)
+      .then(response => {
+        const usages = response.data;
+        setUsage(usages)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
+
     useEffect(() => {
       GetFeeList();
-    }, [])
-
-    useEffect(() => {
       GetPlaceList();
-    }, [])
-    
-    useEffect(() => {
       GetAge();
-    }, [])
-
-    useEffect(() => {
       GetTime();
+      GetUsage();
     }, [])
 
     const divide = (pn) => {
@@ -84,25 +88,24 @@ const MainPage = () => {
         return fld.place === pn
       })
       return (
-        setDivideFeeList(divide_feelist[0])
+        setDivideFeeList(divide_feelist[0].data)
       )
     }
 
-    const tab = PlaceListData.map((place) => {
+    const tab = PlaceListData.map((place, p_id) => {
       return (
-          <Tab onClick={() => divide(place.name)}>{place.name}</Tab>
+          <Tab key={p_id} onClick={() => divide(place.name)}>{place.name}</Tab>
       )
     })
 
-    const tabitems = PlaceListData.map((place) => {
+    const tabitems = PlaceListData.map((place, p_id) => {
         return (
             <TabPanel>
-              <FeeList feelist={DivideFeeList} age={Age} time={Time}/>
+              <FeeList key={p_id} feelist={DivideFeeList} age={Age} time={Time} usage={Usage}/>
             </TabPanel>
 
         )
     })
-
     
     return (
         <Tabs>
