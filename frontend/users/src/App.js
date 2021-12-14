@@ -25,6 +25,9 @@ axios.defaults.headers = {
 function App() {
   return (
     <BrowserRouter>
+      <Switch>
+        {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
+      </Switch>
       <CookiesProvider>
         <Switch>
           <Route path="/login" exact children={<LoginPage />} />

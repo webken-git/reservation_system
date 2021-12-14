@@ -7,6 +7,18 @@ import dayjs from 'dayjs'
 // import "react-datepicker/dist/react-datepicker.css"
 
 const Filter = () => {
+  <tr>
+    <select required>
+    <option value="" hidden>Choose</option>
+    <option value="1">cat</option>
+    <option value="2">dog</option>
+    <option value="3">rabbit</option>
+    <option value="4">squirrel</option>
+    </select>
+  </tr>
+
+
+
   // const initialDate = new Date()
   // const [startDate, setStartDate] = useState(initialDate)
   // const handleChange = (date) => {

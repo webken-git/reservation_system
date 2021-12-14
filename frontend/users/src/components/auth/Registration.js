@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
