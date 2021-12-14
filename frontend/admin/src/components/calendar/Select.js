@@ -1,19 +1,14 @@
 import { useEffect } from 'react';
 import { withCookies } from 'react-cookie'
-import { Link } from 'react-router-dom'
 
 const Select = (props) =>{
     const type = props.type;
-    const host = window.location.host;
-    const protocol = window.location.protocol;
-    const calendarType = props.calendartype;
     const setCalendarType = props.setCalendarType;
 
     // console.log(type);
     // console.log(type != null);
 
     function jump(link) {
-        // window.location.href = protocol + '//' + host + '/' + link + 'calendar';
         setCalendarType(link);
     }
 

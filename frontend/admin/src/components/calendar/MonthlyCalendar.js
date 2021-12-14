@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from "react"
 import axios from "axios"
 import './calendar.scss'
-import Head from './Head';
-import Content from './Content';
-import Select from './Select';
+// import Head from './Head';
+// import Content from './Content';
+// import Select from './Select';
 
 const MonthlyCalendar = (props) =>{
     const dayList = props.dayList;
     const date = props.date;
+    const [approvalList, setApprovalList] = useState([]);
     const [year, setYear] = useState(date.getFullYear())
     const [month, setMonth] = useState(date.getMonth() + 1)
     const calendar = createCalendar(year, month)
-    const calendarType = props.calendarType;
-    const setCalendarType = props.setCalendarType;
+    const setLoading = props.setLoading;
+    // const calendarType = props.calendarType;
+    // const setCalendarType = props.setCalendarType;
 
     const onClick = (n) => () => {
         const nextMonth = month + n
@@ -27,20 +29,43 @@ const MonthlyCalendar = (props) =>{
         }
     }
 
+    useEffect(()=>{
+        let unmounted = false;
+        axios.get(`${process.env.REACT_APP_API}/api/approval-count-monthly/`, {
+            params: {
+                'approval': 1,
+            }
+        })
+        .then(res => {
+            const approvalList = res.data;
+            console.log('approvalList: ', approvalList);
+            setLoading(false);
+
+            if(!unmounted){
+                setApprovalList(approvalList);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+        return () => { unmounted = true }
+    }, [year, month]);
+
     return (
         <div className="monthly-calendar">
             
-            {/* <div className="header">
-                <Select
+            <div className="header">
+                {/* <Select
                     type={type}
-                />
+                /> */}
                 <div className="today"><p>今日</p></div>
                 <div className="button">
                     <button onClick={onClick(-1)}><p>{'prev'}</p></button>
                     <button onClick={onClick(1)}><p>{'next'}</p></button>
                 </div>
-                <p>{year+'年'+month+'月'}</p>
-            </div> */}
+                {/* <p>{year+'年'+month+'月'}</p> */}
+            </div>
 
             <table>
                 <tbody>

@@ -1,19 +1,23 @@
 import React, {useEffect, useState} from "react"
-import axios from "axios"
+// import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
 import Content from './Content';
-import DailyContent from './DailyContent';
 import Select from './Select';
 import MonthlyCalendar from "./MonthlyCalendar";
 import Loading from "./../loading/Loading.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const Calendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
-    const [ scheduleDict, setScheduleDict ] = useState({});
+    // const [ scheduleDict, setScheduleDict ] = useState({});
     const [ dateList, setDateList ] = useState([]); //表示用のリスト
     const date = props.date;
-    const setDate = props.setDate;
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    // const setDate = props.setDate;
     const [ updateFlag, setUpdateFlag ] = useState(false);
     const [ st, setSt ] = useState(0);
     const [ filterType, setFilterType ] = useState('カーリング場');
@@ -26,6 +30,11 @@ const Calendar = (props) =>{
         setLoading(true);
         // console.log(e.target.value);
     }
+
+    // const onClick = (n) => () => {
+    //     const nextDay = day + n
+    //     if()
+    // }
 
     useEffect(()=>{
         let unmounted = false;
@@ -48,7 +57,7 @@ const Calendar = (props) =>{
             }
             if(!unmounted){
                 setDateList(dateList);
-                console.log('dateList:', dateList);
+                // console.log('dateList:', dateList);
             }
         }
         sortDateList();
@@ -66,14 +75,14 @@ const Calendar = (props) =>{
             top: st,
             left: 0,
             behavior: 'smooth'
-          });
+        });
 
         return () => { unmounted = true; }
     }, [date, setCalendarType]);
 
 
     return (
-        <div className="weekly-calendar">
+        <div className="calendar-base">
             <div className="header">
 
                 {/* 表示するカレンダーの種類 */}
@@ -82,16 +91,22 @@ const Calendar = (props) =>{
                     setCalendarType={setCalendarType}
                 />
 
-                {/* 日付を変更するボタン */}
+                {/* 日付表示・変更するボタン */}
                 <div className="date-selector">
-                    <h1>{date.getMonth()}月</h1>
+                    <div className="last-button">
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </div>
+                    <p>{month}月</p>
+                    <div className="next-button">
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </div>
                 </div>
 
-                {/* 表示する予約のフィルター選択 */}
+                {/* 表示する予約の施設選択 */}
                 <div className="filter-base">
                     <p>施設名</p>
-                    <select className="filter" onChange={(e) => filtering(e)}>
-                        <option value="カーリング場" selected>カーリング場</option>
+                    <select className="filter" defaultValue="カーリング場" onChange={(e) => filtering(e)}>
+                        <option value="カーリング場">カーリング場</option>
                         <option value="小会議室">小会議室</option>
                         <option value="中会議室">中会議室</option>
                         <option value="武道場">武道場</option>
@@ -99,26 +114,31 @@ const Calendar = (props) =>{
                     </select>
                 </div>
 
+                <div className="stop">
+                    <button>予約停止</button>
+                </div>
+
             </div>
 
-            {calendarType == 'monthly' ? (
+            {calendarType === 'monthly' ? (
                 <MonthlyCalendar
                     dayList={dayList}
                     date={date}
                     setCalendarType={setCalendarType}
                     calendarType={calendarType}
+                    setLoading={setLoading}
                 />
             ) : (
                 <div className="main">
                     <div className="head-row">
                         <div className="timeline"></div>
-                        {calendarType == 'weekly' ? (
+                        {calendarType === 'weekly' ? (
                             dateList.map((date, index)=>{
                                 return <Head
                                             key={index}
                                             day={dayList[index]}
                                             date={date}
-                                            setScheduleDict={setScheduleDict}
+                                            // setScheduleDict={setScheduleDict}
                                             // openModal={openModal}
                                             updateFlag={updateFlag}
                                             setUpdateFlag={setUpdateFlag}
@@ -134,7 +154,7 @@ const Calendar = (props) =>{
                                     // key={index}
                                     // day={dayList[index]}
                                     date={date}
-                                    setScheduleDict={setScheduleDict}
+                                    // setScheduleDict={setScheduleDict}
                                     // openModal={openModal}
                                     updateFlag={updateFlag}
                                     setUpdateFlag={setUpdateFlag}
@@ -182,12 +202,12 @@ const Calendar = (props) =>{
                             <div><p>23</p></div>
                         </div>
 
-                        {calendarType == 'weekly' ? (
+                        {calendarType === 'weekly' ? (
                             dateList.map((date,index)=>{
                                 return <Content
                                             key={index}
                                             date={date}
-                                            setScheduleDict={setScheduleDict}
+                                            // setScheduleDict={setScheduleDict}
                                             // openModal={openModal}
                                             updateFlag={updateFlag}
                                             setUpdateFlag={setUpdateFlag}
@@ -203,7 +223,7 @@ const Calendar = (props) =>{
                             <Content
                                 // key={index}
                                 date={date}
-                                setScheduleDict={setScheduleDict}
+                                // setScheduleDict={setScheduleDict}
                                 // openModal={openModal}
                                 updateFlag={updateFlag}
                                 setUpdateFlag={setUpdateFlag}

@@ -8,7 +8,7 @@ import ScheduleBlock from './ScheduleBlock';
 const Content = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
     const [ contentDate, setContentDate ] = useState(new Date());
-    const [ stringContentDate, setStringContentDate ] = useState("");
+    // const [ stringContentDate, setStringContentDate ] = useState("");
     const date = props.date;
     const cookies = props.cookies;
     const individualOrGroup = props.individualOrGroup;
@@ -25,7 +25,7 @@ const Content = (props) =>{
         let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
         if(!unmounted){
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
-            setStringContentDate(year+'-'+month+'-'+day);    
+            // setStringContentDate(year+'-'+month+'-'+day);    
         }
         axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
             params: {
@@ -34,14 +34,13 @@ const Content = (props) =>{
             }
         })
         .then(res => {
-            let scheduleList = res.data;
+            const scheduleList = res.data;
             setLoading(false);
             // console.log(unmounted);
             if(!unmounted){
-                const scheduleList = res.data;
                 setScheduleList(scheduleList);
-                console.log('data:', res.data);
-                console.log('filterType:', filterType);
+                // console.log('data:', res.data);
+                // console.log('filterType:', filterType);
                 setUpdateFlag(false);
                 setHomeUpdateFlag(false);
             }
@@ -51,7 +50,7 @@ const Content = (props) =>{
         });
         
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count]);
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading]);
 
     return (
         <div className="content">

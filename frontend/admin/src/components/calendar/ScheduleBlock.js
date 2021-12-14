@@ -21,8 +21,8 @@ const ScheduleBlock = (props) =>{
             setStartMinutes(Number(props.schedule.reservation.start.substr(14, 2)));
             setEndMinutes(Number(props.schedule.reservation.end.substr(14, 2)));
             let startDate = new Date(Number(props.schedule.reservation.start.substr(0, 4)),
-                            Number(props.schedule.reservation.start.substr(5, 2))-1,
-                            Number(props.schedule.reservation.start.substr(8, 2)));
+                Number(props.schedule.reservation.start.substr(5, 2))-1,
+                Number(props.schedule.reservation.start.substr(8, 2)));
             setStartDate(startDate);
             let endDate = new Date(Number(props.schedule.reservation.end.substr(0, 4)),
                 Number(props.schedule.reservation.end.substr(5, 2))-1,
@@ -81,13 +81,13 @@ const ScheduleBlock = (props) =>{
 
     let backgroundColor;
 
-    if(props.schedule.approval.name == "承認"){
+    if(props.schedule.approval.name === "承認"){
         backgroundColor = "blue";
-    } else if(props.schedule.approval.name == "未承認"){
+    } else if(props.schedule.approval.name === "未承認"){
         backgroundColor = "tomato";
-    } else if(props.schedule.approval.name == "不承認"){
+    } else if(props.schedule.approval.name === "不承認"){
         backgroundColor = "gray";
-    } else if(props.schedule.approval.name == "キャンセル"){
+    } else if(props.schedule.approval.name === "キャンセル"){
         backgroundColor = "red";
     }
     
@@ -95,7 +95,7 @@ const ScheduleBlock = (props) =>{
         backgroundColor: backgroundColor,
         top: top ? top+'vh' : '0vh',
         height: height ? height+'vh' : '0vh',
-    }), [props.schedule.color]);
+    }), [backgroundColor]);
 
     const styleGeneratorHandler = useCallback(() =>{
         let top = (startHours*6)+2+startMinutes*0.1;
@@ -134,50 +134,50 @@ const ScheduleBlock = (props) =>{
 
     //modal
     //グループのスケジュール表示中アラート
-    const [isOpen, setIsOpen] = useState(false);
-    const [pageX, setPageX] = useState(0);
-    const [pageY, setPageY] = useState(0);
+    // const [isOpen, setIsOpen] = useState(false);
+    // const [pageX, setPageX] = useState(0);
+    // const [pageY, setPageY] = useState(0);
 
-    const groupScheduleAlertStyleGenerator = () => ({
-        background: 'white',
-        borderColor: 'gray',
-        borderStyle: 'solid',
-        borderWidth: '1px',
-        borderRadius: '0.3em',
-        color: 'black',
-        position: 'fixed',
-        width: '20vw',
-        transform: 'translate(-50%, -50%)',
-        padding: '10px',
-        top: pageY,
-        left: pageX,
-        zIndex: '3',
-        whiteSpace: 'pre-wrap',
-    });
+    // const groupScheduleAlertStyleGenerator = () => ({
+    //     background: 'white',
+    //     borderColor: 'gray',
+    //     borderStyle: 'solid',
+    //     borderWidth: '1px',
+    //     borderRadius: '0.3em',
+    //     color: 'black',
+    //     position: 'fixed',
+    //     width: '20vw',
+    //     transform: 'translate(-50%, -50%)',
+    //     padding: '10px',
+    //     top: pageY,
+    //     left: pageX,
+    //     zIndex: '3',
+    //     whiteSpace: 'pre-wrap',
+    // });
 
-    function modalHandle(event){
-        if(props.individualOrGroup === "individual"){
-            if(props.schedule.repeat_interval === 1){
-                props.setScheduleDict(props.schedule);
-            }else{
-                props.setScheduleDict({...props.schedule, "scheduleStartDate": scheduleStartDate, "scheduleEndDate": scheduleEndDate});
-            }
-            props.openModal();    
-        }else{
-            setPageX(event.pageX > window.innerWidth * 0.9 ? window.innerWidth * 0.9 : event.pageX);
-            setPageY(event.pageY > window.innerHeight * 0.95 ? window.innerHeight * 0.95 : event.pageY);
-            setIsOpen(true);
-            setTimeout(()=>{
-                setIsOpen(false);
-            }, 1000);
-        }
-    }
+    // function modalHandle(event){
+    //     if(props.individualOrGroup === "individual"){
+    //         if(props.schedule.repeat_interval === 1){
+    //             props.setScheduleDict(props.schedule);
+    //         }else{
+    //             props.setScheduleDict({...props.schedule, "scheduleStartDate": scheduleStartDate, "scheduleEndDate": scheduleEndDate});
+    //         }
+    //         props.openModal();    
+    //     }else{
+    //         setPageX(event.pageX > window.innerWidth * 0.9 ? window.innerWidth * 0.9 : event.pageX);
+    //         setPageY(event.pageY > window.innerHeight * 0.95 ? window.innerHeight * 0.95 : event.pageY);
+    //         setIsOpen(true);
+    //         setTimeout(()=>{
+    //             setIsOpen(false);
+    //         }, 1000);
+    //     }
+    // }
 
-    if((props.schedule.approval.name != "不承認") && (props.schedule.approval.name != "不承認")){
+    if((props.schedule.approval.name !== "不承認") && (props.schedule.approval.name !== "不承認")){
         return (
         <div
             className="schedule-block"
-            onClick={modalHandle}
+            // onClick={modalHandle}
             style={styleGeneratorHandler()}
         >
             {props.schedule.repeat_interval === 1 ? (
