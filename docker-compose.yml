@@ -45,7 +45,7 @@ services:
     volumes:
       - static_volume:/code/staticfiles # <-- bind the static volume
     ports:
-      - "8080:80"
+      - "8000:80"
     depends_on:
       - django
     networks:

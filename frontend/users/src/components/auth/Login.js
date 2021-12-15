@@ -1,17 +1,17 @@
+import React from 'react'
 import { useState } from "react";
 import axios from "axios";
+import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
-import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
+import authState from "../../recoil/auth/atom";
 import { RegistrationButton } from './RegistrationButton';
 import logo from '../../assets/image/logo.png';
 import './auth.scss';
-import Cookies from 'js-cookie';
-
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -19,32 +19,12 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
-    const [cookie, setCookie] = useCookies();
     const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const GET_USER_DATA = AuthUrls.GET_USER_DATA;
-    const pullData = () => {
-        axios.defaults.withCredentials = true;
-        axios.get(GET_USER_DATA, {
-            headers: {
-                // 'Accept': 'application/json',
-                "Content-Type": "application/json; charset=utf-8",
-                'Authorization': `JWT ${Cookies.get('access_token')}`
-            },
-            withCredentials: true,
-        })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
+    const setAuthState = useSetRecoilState(authState);
 
     // ログイン処理
     const url = AuthUrls.LOGIN;
     const onSubmit = () => {
-        axios.defaults.withCredentials = true;
         let formData = new FormData();
 
         // フォームデータを追加
@@ -55,22 +35,18 @@ const Login = () => {
         setError(null);
         axios.post(url, formData, {
             headers: {
-                "Content-Type": "application/json; charset=utf-8",
+                "Content-Type": "application/json",
             },
-            withCredentials: true,
         })
             .then(res => {
                 // ログイン処理が成功した場合
                 // ローディング画面を非表示
                 setLoading(false);
-                // ログイン成功時にはセッションクッキーを設定
-                setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
-                setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
-                setCookie('user_id', res.data.user.pk, { path: '/' }, { httpOnly: true });
-                console.log(res.data);
+                setAuthState({
+                    isAuthenticated: true,
+                });
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';
-                // pullData();
             })
             .catch(err => {
                 // ログイン処理が失敗した場合

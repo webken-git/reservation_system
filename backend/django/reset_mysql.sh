@@ -6,7 +6,7 @@
 mysql -uroot -e "drop database ${DATABASE_NAME};"
 mysql -uroot -e "create database ${DATABASE_NAME} default character set utf8;"
 
-. ../env/Scripts/activate
+. ../env/bin/activate
 python manage.py migrate
 
 # python csv_import.py

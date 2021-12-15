@@ -27,6 +27,9 @@ $breakpoints: (
 
   .box {
     width: 80%;
+    @include mq(sp) {
+      width: 50%;
+    }
   }
 
   .rightside {

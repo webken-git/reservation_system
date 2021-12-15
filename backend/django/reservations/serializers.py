@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rest_framework.relations import ManyRelatedField
 from reservations.models import *
 from users.serializers import UserSerializer
+import datetime
+from django.db.models.aggregates import Count
 
 
 class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
@@ -118,7 +120,6 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.participant_number = validated_data.get('participant_number', instance.participant_number)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.admission_fee = validated_data.get('admission_fee', instance.admission_fee)
-    instance.place_number = validated_data.get('place_number', instance.place_number)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['user_id']
@@ -136,6 +137,19 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.special_equipment.set(special_equipment_data)
 
     return instance
+
+
+class ReservationParameterSerializer(serializers.Serializer):
+  # reservation = ReservationSerializer(read_only=True)
+  # approval = ApprovalSerializer(read_only=True)
+  # approval_id = serializers.PrimaryKeyRelatedField(queryset=Approval.objects.all(), write_only=True)
+  # reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  start1 = serializers.DateTimeField(help_text='開始(yyyy-mm-ddTH:M:S.fz)', required=True)
+  start2 = serializers.DateTimeField(help_text='終了(yyyy-mm-ddTH:M:S.fz)', required=True)
+
+  class Meta:
+    model = Reservation
+    fields = '__all__'
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -184,8 +198,7 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
         'usage_fee': {'required': False},
         'heating_fee': {'required': False},
         'electric_fee': {'required': False},
-        'conditions': {'required': False},
-        'cancellation_reason': {'required': False}
+        'conditions': {'required': False}
     }
 
   def create(self, validated_data):
@@ -206,7 +219,6 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.heating_fee = validated_data.get('heating_fee', instance.heating_fee)
     instance.electric_fee = validated_data.get('electric_fee', instance.electric_fee)
     instance.conditions = validated_data.get('conditions', instance.conditions)
-    instance.cancellation_reason = validated_data.get('cancellation_reason', instance.cancellation_reason)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['reservation_id']
@@ -214,6 +226,30 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class ApprovalCountMonthlySerializer(serializers.ModelSerializer):
+  """
+  年月でグループ化して、各年月ごとの予約数を集計するViewのSerializer
+  """
+  class Meta:
+    model = ApprovalApplication
+    fields = ['year', 'month', 'count']
+    # fields = ['count']
+
+  year = serializers.SerializerMethodField('get_year')
+  month = serializers.SerializerMethodField('get_month')
+  count = serializers.SerializerMethodField('get_count')
+
+  def get_year(self, obj):
+    return obj['reservation__start__year']
+
+  def get_month(self, obj):
+    return obj['reservation__start__month']
+
+  def get_count(self, obj):
+    approval = self.context['request'].query_params.get('approval')
+    return ApprovalApplication.objects.filter(approval=approval, reservation__start__year=obj['reservation__start__year'], reservation__start__month=obj['reservation__start__month']).count()
 
 
 class UnapprovalCountsSerializer(serializers.ModelSerializer):

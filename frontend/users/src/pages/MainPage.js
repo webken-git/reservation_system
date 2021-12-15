@@ -3,10 +3,8 @@ import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import FeeList from '../components/feelist/FeeList';
-import { AuthUrls } from "../utils/authUrls";
-import Cookies from 'js-cookie';
-import { ReservationForm } from "../components/resevationform/ReservationForm";
-import { GetAgeGroupData } from "../components/resevationform/ReservationForm";
+
+
 const MainPage = () => {
     const [PlaceListData, setPlaceListData] = useState([]);
     const [FeeListData, setFeeListData] = useState();
@@ -68,10 +66,20 @@ const MainPage = () => {
 
     useEffect(() => {
       GetFeeList();
-      GetAge();
+    }, [])
+
+    useEffect(() => {
       GetPlaceList();
+    }, [])
+
+    useEffect(() => {
+      GetAge();
+    }, [])
+
+    useEffect(() => {
       GetTime();
     }, [])
+
     const divide = (pn) => {
       setPlaceName(pn)
       const divide_feelist = FeeListData.filter(fld => {
@@ -106,7 +114,7 @@ const MainPage = () => {
             <p>{PlaceName}です</p>
 
             {/* <FeeList data={divide_feelist}/> */}
-        <ReservationForm  />
+
             {tabitems}
         </Tabs>
     )

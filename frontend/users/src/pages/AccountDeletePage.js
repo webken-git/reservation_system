@@ -1,7 +1,7 @@
 import React from "react";
 
-import AccountConfirm from "../components/auth/AccountConfirm";
+import AccountDelete from "../components/auth/AccountDelete";
 
 export const AccountDeletePage = () => {
-    return <AccountConfirm />;
+    return <AccountDelete />;
 };
