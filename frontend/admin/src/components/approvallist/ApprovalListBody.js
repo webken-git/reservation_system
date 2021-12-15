@@ -37,9 +37,10 @@ const ApprovalListBody = () => {
           <ApprovalTable
             // propsでApprovalTable.jsに承認リストのデータを送っている
             key={val_index}
+            id={val.id}
             // dayjsのformatで〇/〇と日付を表示できるようにしている
             date={dayjs(val.reservation.start).format('YYYY-MM-DD')}
-            group_name={val.reservation.group_name}
+            contact_name={val.reservation.contact_name}
             reader_name={val.reservation.reader_name}
             contact_name={val.reservation.contact_name}
             tel={val.reservation.tel}

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { Redirect } from "react-router-dom";
 import { AuthUrls } from "../../utils/authUrls";
 import authState from "../../recoil/auth/atom";
+import reseravationState from "../../recoil/reservation/atom";
 
 const LoginRoute = (props) => {
     const [auth, setAuth] = useRecoilState(authState);
+    const resetReservationState = useResetRecoilState(reseravationState);
     const [user, setUser] = useState([]);
     // トークンが有効か確認
     const GET_USER = AuthUrls.GET_USER_DATA;
@@ -18,6 +20,7 @@ const LoginRoute = (props) => {
             .catch((err) => {
                 // トークンが無効な場合、authStateをfalseにする
                 if (err.response.status === 401) {
+                    resetReservationState();
                     setAuth({
                         isAuthenticated: false,
                     });
