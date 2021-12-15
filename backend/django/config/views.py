@@ -156,7 +156,10 @@ class LogoutView(jwt_views.TokenObtainPairView):
       return None
 
     return Response({"Message": "Logout"}, status=status.HTTP_200_OK)
+<<<<<<< HEAD
+=======
 
 
 def csrf(request):
   return JsonResponse({'csrfToken': get_token(request)})
+>>>>>>> 7f8f42bffd51c25f98de07cad5bca4c9d4e1de4a

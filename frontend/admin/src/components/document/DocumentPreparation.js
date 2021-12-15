@@ -33,6 +33,7 @@ const DocumentPreparation = (props) => {
                     // setError(err.response.data);
                     // API通信が終わったらloadingをfalseにする
                     setLoading(false);
+                    resetRecoilState();
                 })
                 .catch(err => {
                     // APIのエラーメッセージをstateに保存

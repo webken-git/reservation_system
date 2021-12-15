@@ -20,7 +20,6 @@ const PasswordReset = (props) => {
 
     const url = `${AuthUrls.RESET_PASSWORD_CONFIRM}${props.uid}/${props.token}/`;
     const onSubmit = () => {
-        console.log(props.uid);
         let formData = new FormData();
         formData.append('new_password1', password);
         formData.append('new_password2', password);
@@ -72,7 +71,7 @@ const PasswordReset = (props) => {
                 <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="password">パスワード</label>
                     {errors.password && <span className="auth-page__form-error">※この項目は必須です</span>}
-                    <div className="auth-page__password">
+                    <div className="password-container">
                         <input
                             className="password"
                             type="password"

@@ -3,13 +3,14 @@ import axios from 'axios';
 import { CookiesProvider } from 'react-cookie';
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import MainPage from './pages/MainPage'
+import MainPage from './pages/MainPage';
 import HeaderRoute from './components/rooter/HeaderRoute';
 import LoginRoute from './components/rooter/LoginRoute';
 import { MyPage } from './pages/MyPage';
 import { MailAddressChange } from './pages/MailAddressChange';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
 import { PasswordResetPage } from './pages/PasswordResetPage';
+import { PassWordChangePage } from './pages/PasswordChangePage';
 import { LoginPage } from './pages/LoginPage';
 import Registration from './components/auth/Registration';
 import { AccountDeletePage } from './pages/AccountDeletePage';
@@ -25,6 +26,9 @@ axios.defaults.headers = {
 function App() {
   return (
     <BrowserRouter>
+      <Switch>
+        {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
+      </Switch>
       <CookiesProvider>
         <Switch>
           <Route path="/login" exact children={<LoginPage />} />
@@ -38,7 +42,8 @@ function App() {
                   <Switch>
                     <HeaderRoute path={`${url}/`} exact children={<MyPage />} />
                     <HeaderRoute path={`${url}/email`} exact children={<MailAddressChange />} />
-                    <HeaderRoute path={`${url}/password`} exact children={<VerifyEmailPage />} />
+                    <HeaderRoute path={`${url}/password`} exact children={<PassWordChangePage />} />
+                    <HeaderRoute path={`${url}/password/verify`} exact children={<VerifyEmailPage />} />
                     <Route path={`${url}/password/reset/:uid/:token`}>
                       <HeaderRoute exact children={<PasswordResetPage />} />
                     </Route>

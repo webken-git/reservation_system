@@ -6,8 +6,8 @@ import './sidebarandheaderroute.scss'
 
 // サイドバーとヘッダーを表示するページに使用するルーティング
 
-{/* <SideBarAndHeaderRoute/>の使い方
-<SideBarAndHeaderRoute pagename="ページの名前(必要なければかかなくてよい)" path="/遷移したいページのファイル名" exact children={<PrivateRoute path="/遷移したいページのファイル名" exact children={<ページ名/>} />} /> */}
+/* <SideBarAndHeaderRoute/>の使い方
+<SideBarAndHeaderRoute pagename="ページの名前(必要なければかかなくてよい)" path="/遷移したいページのファイル名" exact children={<PrivateRoute path="/遷移したいページのファイル名" exact children={<ページ名/>} />} /> */
 
 const SideBarAndHeaderRoute = (props) => {
     const children = props.children;

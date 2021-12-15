@@ -2,11 +2,11 @@ import React from 'react';
 import './getdate.scss'
 
 var today = new Date();
-var year = today.getFullYear();
+// var year = today.getFullYear();
 var month = today.getMonth() + 1;
 var day = today.getDate();
 var week = today.getDay();
-var weekJa = new Array("日", "月", "火", "水", "木", "金", "土")
+var weekJa = ["日", "月", "火", "水", "木", "金", "土"];
 
 const GetDate = () => {
     return (

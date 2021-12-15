@@ -1,5 +1,5 @@
 // 承認リストの中身
-import React, { useState} from "react";
+import React from "react";
 import { useSetRecoilState } from "recoil";
 // import './approval.scss'
 import DetailsButton from "./DetailsButton";

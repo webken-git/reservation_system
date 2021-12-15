@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
@@ -6,43 +6,45 @@ import Content from './Content';
 import DailyContent from './DailyContent';
 import Select from './Select';
 import MonthlyCalendar from "./MonthlyCalendar";
+import Loading from "./../loading/Loading.js";
 
-const Calendar = (props) =>{
+const Calendar = (props) => {
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
-    const [ scheduleDict, setScheduleDict ] = useState({});
-    const [ dateList, setDateList ] = useState([]); //表示用のリスト
+    const [scheduleDict, setScheduleDict] = useState({});
+    const [dateList, setDateList] = useState([]); //表示用のリスト
     const date = props.date;
-    const [ updateFlag, setUpdateFlag ] = useState(false);
-    const [ st, setSt ] = useState(0);
-    const [ filterType, setFilterType ] = useState('カーリング場');
-    const [ calendarType, setCalendarType ] = useState('weekly');
-    
+    const [updateFlag, setUpdateFlag] = useState(false);
+    const [st, setSt] = useState(0);
+    const [filterType, setFilterType] = useState('カーリング場');
+    const [calendarType, setCalendarType] = useState('weekly');
+    const [Loading, setLoading] = useState(true);
+
     // 検索する施設名を変数に代入
     const filtering = (e) => {
         setFilterType(e.target.value);
         // console.log(e.target.value);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         let unmounted = false;
         let dateDict = {};
-        for(let i=0; i<7; i++){
-            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()+i);
-            dateDict['date'+i] = newDate;
+        for (let i = 0; i < 7; i++) {
+            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + i);
+            dateDict['date' + i] = newDate;
         }
-        for(let i=1; i<7; i++){
-            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()-i);
-            dateDict['mdate'+i] = newDate;
+        for (let i = 1; i < 7; i++) {
+            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i);
+            dateDict['mdate' + i] = newDate;
         }
-        const sortDateList = () =>{
+        const sortDateList = () => {
             let dateList = [];
-            for(let day = dateDict['date0'].getDay(); day > 0; day--){
-                dateList.push(dateDict['mdate'+day]);
+            for (let day = dateDict['date0'].getDay(); day > 0; day--) {
+                dateList.push(dateDict['mdate' + day]);
             }
-            for(let day = 0; day < (7 - dateDict['date0'].getDay()); day++){
-                dateList.push(dateDict['date'+day]);
+            for (let day = 0; day < (7 - dateDict['date0'].getDay()); day++) {
+                dateList.push(dateDict['date' + day]);
             }
-            if(!unmounted){
+            if (!unmounted) {
                 setDateList(dateList);
             }
         }
@@ -54,14 +56,14 @@ const Calendar = (props) =>{
         let now = new Date();
         let hours = now.getHours() - 4;
         let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-        if(!unmounted){
+        if (!unmounted) {
             setSt(margin + blockHeight * now.getHours());
         }
         document.getElementsByClassName('content-row')[0].scrollTo({
             top: st,
             left: 0,
             behavior: 'smooth'
-          });
+        });
 
         return () => { unmounted = true; }
     }, [date, setCalendarType]);
@@ -71,16 +73,30 @@ const Calendar = (props) =>{
 
     const count = () => {
         loadCounter = loadCounter + 1;
-        if(loadCounter >= 14){
-            document.getElementById('preloader').classList.add('opacityanime');
-            setTimeout(()=>{
-                if(document.getElementById('preloader')){
-                    document.getElementById('preloader').classList.add('dn');
-                }
-            }, 200)
+        if (calendarType == 'weekly') {
+            if (loadCounter >= 14) {
+                document.getElementById('preloader').classList.add('opacityanime');
+                setTimeout(() => {
+                    if (document.getElementById('preloader')) {
+                        document.getElementById('preloader').classList.add('dn');
+                    }
+                }, 200)
+            } else {
+                document.getElementById('preloader').classList.remove('opacityanime');
+                document.getElementById('preloader').classList.remove('dn');
+            }
         } else {
-            document.getElementById('preloader').classList.remove('opacityanime');
-            document.getElementById('preloader').classList.remove('dn');
+            if (loadCounter >= 2) {
+                document.getElementById('preloader').classList.add('opacityanime');
+                setTimeout(() => {
+                    if (document.getElementById('preloader')) {
+                        document.getElementById('preloader').classList.add('dn');
+                    }
+                }, 200)
+            } else {
+                document.getElementById('preloader').classList.remove('opacityanime');
+                document.getElementById('preloader').classList.remove('dn');
+            }
         }
     }
 
@@ -109,7 +125,7 @@ const Calendar = (props) =>{
             </div>
 
             {/* ローディング画面 */}
-            <div id="preloader">
+            {/* <div id="preloader">
                 <div className="central">
                     <div className="circle c1"></div>
                     <div className="circle c2"></div>
@@ -121,7 +137,7 @@ const Calendar = (props) =>{
                     <div className="circle c8"></div>
                     <div className="loading">Loading...</div>
                 </div>
-            </div>
+            </div> */}
 
             {calendarType == 'monthly' ? (
                 <MonthlyCalendar
@@ -135,26 +151,10 @@ const Calendar = (props) =>{
                     <div className="head-row">
                         <div className="timeline"></div>
                         {calendarType == 'weekly' ? (
-                            dateList.map((date, index)=>{
+                            dateList.map((date, index) => {
                                 return <Head
-                                            key={index}
-                                            day={dayList[index]}
-                                            date={date}
-                                            setScheduleDict={setScheduleDict}
-                                            // openModal={openModal}
-                                            updateFlag={updateFlag}
-                                            setUpdateFlag={setUpdateFlag}
-                                            isMain={props.isMain}
-                                            // individualOrGroup={props.individualOrGroup}
-                                            homeUpdateFlag={props.homeUpdateFlag}
-                                            setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                            count={count}
-                                        />
-                                })
-                            ) : (
-                                <Head
-                                    // key={index}
-                                    // day={dayList[index]}
+                                    key={index}
+                                    day={dayList[index]}
                                     date={date}
                                     setScheduleDict={setScheduleDict}
                                     // openModal={openModal}
@@ -164,12 +164,35 @@ const Calendar = (props) =>{
                                     // individualOrGroup={props.individualOrGroup}
                                     homeUpdateFlag={props.homeUpdateFlag}
                                     setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                    count={count}
                                 />
-                            )}
-                            
+                            })
+                        ) : (
+                            <Head
+                                // key={index}
+                                // day={dayList[index]}
+                                date={date}
+                                setScheduleDict={setScheduleDict}
+                                // openModal={openModal}
+                                updateFlag={updateFlag}
+                                setUpdateFlag={setUpdateFlag}
+                                isMain={props.isMain}
+                                // individualOrGroup={props.individualOrGroup}
+                                homeUpdateFlag={props.homeUpdateFlag}
+                                setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                count={count}
+                            />
+                        )}
+
                     </div>
 
                     <div className="content-row">
+                        {/* 現在時刻を表示する */}
+                        <div className="now-time" style={{ top: st }}>
+                            <div className="circle"></div>
+                            <div className="border"></div>
+                        </div>
+
                         <div className="timeline">
                             <div><p>0</p></div>
                             <div><p>1</p></div>
@@ -198,23 +221,22 @@ const Calendar = (props) =>{
                         </div>
 
                         {calendarType == 'weekly' ? (
-                            dateList.map((date,index)=>{
+                            dateList.map((date, index) => {
                                 return <Content
-                                            key={index}
-                                            date={date}
-                                            setScheduleDict={setScheduleDict}
-                                            // openModal={openModal}
-                                            updateFlag={updateFlag}
-                                            setUpdateFlag={setUpdateFlag}
-                                            isMain={props.isMain}
-                                            // individualOrGroup={props.individualOrGroup}
-                                            homeUpdateFlag={props.homeUpdateFlag}
-                                            setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                            // setFilterType={setFilterType}
-                                            filterType={filterType}
-                                            setFilterType={setFilterType}
-                                            count={count}
-                                        />
+                                    key={index}
+                                    date={date}
+                                    setScheduleDict={setScheduleDict}
+                                    // openModal={openModal}
+                                    updateFlag={updateFlag}
+                                    setUpdateFlag={setUpdateFlag}
+                                    isMain={props.isMain}
+                                    // individualOrGroup={props.individualOrGroup}
+                                    homeUpdateFlag={props.homeUpdateFlag}
+                                    setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                    filterType={filterType}
+                                    count={count}
+                                    setLoading={setLoading}
+                                />
                             })
                         ) : (
                             <DailyContent
@@ -228,13 +250,17 @@ const Calendar = (props) =>{
                                 // individualOrGroup={props.individualOrGroup}
                                 homeUpdateFlag={props.homeUpdateFlag}
                                 setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                filterType={filterType}
+                                count={count}
+                                setLoading={setLoading}
                             />
                         )}
                     </div>
                 </div>
             )}
+            {/* {Loading && <Loading />} */}
         </div>
-        );
-    }
+    );
+}
 
-    export default Calendar;
+export default Calendar;
