@@ -51,7 +51,6 @@ const DisapprovalListBody = () => {
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
           id={val.reservation.id}
-          purpose={val.reservation.purpose}
           admission_fee={val.reservation.admission_fee}
           />
         )
@@ -59,11 +58,23 @@ const DisapprovalListBody = () => {
   )
     return (
       <div>
-      <table className="list-body">
-        <tr>
-          <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
-        </tr>
-        {Table}
+        <table className="list-body">
+          <thead>
+            <tr>
+              <td></td>
+              <td>日付</td>
+              <td>団体者名</td>
+              <td>代表者名</td>
+              <td>個人/団体</td>
+              <td>時間</td>
+              <td>人数</td>
+              <td>場所</td>
+              <td>詳細</td>
+            </tr>
+          </thead>
+          <tbody>
+            {Table}
+          </tbody>
       </table>
     </div>
     )

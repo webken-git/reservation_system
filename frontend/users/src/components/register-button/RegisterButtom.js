@@ -6,9 +6,9 @@ import './register-buttom.scss';
 const RegisterButtom = () => {
   return (
     <div className="register-buttom-wrapper">
-      <p className="register-buttom">登録する</p>
+      <button type="button" className="auth-btn">登録する</button>
     </div>
-  )  
+  )
 }
 
 export default RegisterButtom

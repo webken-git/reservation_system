@@ -22,9 +22,15 @@ const UserIcon = (props) => {
                 isOpen={modalIsOpen}
                 onRequestClose={() => setIsOpen(false)}
             >
-                <PageLink url='/account' pagename={'マイページ'}/>
-                <PageLink url='/account' pagename={'予約一覧'} />
-                <Logout/>
+                <span onClick={() => setIsOpen(false)}>
+                    <PageLink url='/account' pagename={'マイページ'} />
+                </span>
+                <span onClick={() => setIsOpen(false)}>
+                    <PageLink url='/account' pagename={'予約一覧'} />
+                </span>
+                <span onClick={() => setIsOpen(false)}>
+                    <Logout />
+                </span>
             </Modal>
         </div>
     )

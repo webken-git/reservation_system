@@ -12,12 +12,10 @@ const CancelListBody = () => {
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=4`)
       .then(response => {
         const data = response.data;
-        // console.log(data);
         // キャンセルリストのデータをuseStateに入れている
         setCancelListData(data);
       })
       .catch((error) => {
-        console.log(error);
       })
   }
 
@@ -49,7 +47,6 @@ const CancelListBody = () => {
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
           id={val.reservation.id}
-          purpose={val.reservation.purpose}
           admission_fee={val.reservation.admission_fee}
         />
       )
@@ -58,10 +55,22 @@ const CancelListBody = () => {
   return (
     <div>
       <table className="list-body">
-        <tr>
-          <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td></td><td>詳細</td>
-        </tr>
-        {Table}
+        <thead>
+          <tr>
+            <td>日付</td>
+            <td>団体者名</td>
+            <td>代表者名</td>
+            <td>個人/団体</td>
+            <td>時間</td>
+            <td>人数</td>
+            <td>場所</td>
+            <td></td>
+            <td>詳細</td>
+          </tr>
+        </thead>
+        <tbody>
+          {Table}
+        </tbody>
       </table>
     </div>
   )

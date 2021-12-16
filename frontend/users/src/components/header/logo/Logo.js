@@ -9,7 +9,7 @@ const Logo = (props) => {
 
     return (
         <div className='logobox' onClick={handleClick}>
-            <img src={props.logo}/>
+            <img src={props.logo} alt='logo' />
         </div>
     )
 }

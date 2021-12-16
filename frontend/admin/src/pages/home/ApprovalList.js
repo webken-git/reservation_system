@@ -6,16 +6,16 @@ import DocumentLayout from "../../components/document/DocumentLayout";  // 申�
 
 export const ApprovalList =()=> {
     return (
-    <div className="list-wrapper">
-        <div className="scroll_box-wrapper">
-            <div className="scroll_box">
-                {/* 承認リスト全体コンポーネント */}
-                <ApprovalListBody/>
+        <div className="list-wrapper">
+            <div className="printingbutton-wrapper-wrapper">
+                <DocumentLayout/>
+            </div>
+            <div className="scroll_box-wrapper">
+                <div className="scroll_box">
+                    {/* 承認リスト全体コンポーネント */}
+                    <ApprovalListBody/>
+                </div>
             </div>
         </div>
-        <div className="printingbutton-wrapper-wrapper">
-            <DocumentLayout/>
-        </div>
-    </div>
     )
 }

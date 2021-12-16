@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactModal from "react-modal";
 import './document.scss';
 
@@ -10,10 +10,9 @@ import useSafeState from "../../hooks/useSafeState";
 
 const DocumentLayout = () => {
     const unmountRef = useUnmountRef();
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useSafeState(unmountRef, false);
     const [showContent, setShowContent] = useSafeState(unmountRef, "selection");
-    const [document, setDocument] = useState([]);
-    const [data, setData] = useState([{contact_name: "山田太郎", id: 2}]);
+    const [document, setDocument] = useSafeState(unmountRef, []);
 
     // モーダル内のコンテンツを切り替える関数
     const changeState = (state) => setShowContent(state);
@@ -29,9 +28,9 @@ const DocumentLayout = () => {
     let ModalContent = null;
 
     if (showContent === "selection") {
-        ModalContent = <DocumentSelection changeState={changeState} selectDocument={selectDocument} modalToggle={modalToggle} data={data} />;
+        ModalContent = <DocumentSelection changeState={changeState} selectDocument={selectDocument} modalToggle={modalToggle}  />;
     } else if (showContent === "preparation") {
-        ModalContent = <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} data={data} />;
+        ModalContent = <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} />;
     }
 
     // 論理演算子を利用し、表示するコンポーネントを変更
