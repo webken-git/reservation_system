@@ -3,7 +3,7 @@ import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
 import Content from './Content';
-import DailyContent from './DailyContent';
+// import DailyContent from './DailyContent';
 import Select from './Select';
 import MonthlyCalendar from "./MonthlyCalendar";
 import Loading from "./../loading/Loading.js";
@@ -24,7 +24,7 @@ const Calendar = (props) =>{
     const filtering = (e) => {
         setFilterType(e.target.value);
         setLoading(true);
-        // console.log(e.target.value);
+        console.log(e.target.value);
     }
 
     useEffect(()=>{
@@ -84,7 +84,7 @@ const Calendar = (props) =>{
 
                 {/* 日付を変更するボタン */}
                 <div className="date-selector">
-                    <h1>{date.getMonth()}月</h1>
+                    <h1>{date.getMonth() + 1}月</h1>
                 </div>
 
                 {/* 表示する予約のフィルター選択 */}

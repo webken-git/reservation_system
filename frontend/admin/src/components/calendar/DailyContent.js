@@ -17,6 +17,8 @@ const DailyContent = (props) =>{
     const setHomeUpdateFlag = props.setHomeUpdateFlag;
     const count = props.count;
     const filterType = props.filterType;
+    const setLoading = props.setLoading;
+
 
     useEffect(() => {
         let unmounted = false;
