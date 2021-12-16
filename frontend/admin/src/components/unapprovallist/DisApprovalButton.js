@@ -10,7 +10,7 @@ const DisApprovalButton = (props) => {
   const approval = 3
     // データを承認リストに送るaxios
     const DisApporovalSend = () => {
-      axios.put(`${process.env.REACT_APP_API}/approval-applications/` + reservationId + '/', {
+      axios.put(`${process.env.REACT_APP_API}/api/approval-applications/` + reservationId + '/', {
         approval_id: approval,
         reservation_id: reservationId,
         usage_fee: 0,

@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rest_framework.relations import ManyRelatedField
 from reservations.models import *
 from users.serializers import UserSerializer
+import datetime
+from django.db.models.aggregates import Count
 
 
 class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
@@ -214,6 +216,30 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class ApprovalCountMonthlySerializer(serializers.ModelSerializer):
+  """
+  年月でグループ化して、各年月ごとの予約数を集計するViewのSerializer
+  """
+  class Meta:
+    model = ApprovalApplication
+    fields = ['year', 'month', 'count']
+    # fields = ['count']
+
+  year = serializers.SerializerMethodField('get_year')
+  month = serializers.SerializerMethodField('get_month')
+  count = serializers.SerializerMethodField('get_count')
+
+  def get_year(self, obj):
+    return obj['reservation__start__year']
+
+  def get_month(self, obj):
+    return obj['reservation__start__month']
+
+  def get_count(self, obj):
+    approval = self.context['request'].query_params.get('approval')
+    return ApprovalApplication.objects.filter(approval=approval, reservation__start__year=obj['reservation__start__year'], reservation__start__month=obj['reservation__start__month']).count()
 
 
 class UnapprovalCountsSerializer(serializers.ModelSerializer):

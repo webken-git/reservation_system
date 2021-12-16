@@ -1,13 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
-import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
-import { RegistrationButton } from './RegistrationButton';
+import authState from "../../recoil/auth/atom";
 import './auth.scss';
 
 const Login = () => {
@@ -16,8 +16,8 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
-    const [cookie, setCookie] = useCookies();
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const setAuthState = useSetRecoilState(authState);
 
 
     // ログイン処理
@@ -33,18 +33,16 @@ const Login = () => {
         setError(null);
         axios.post(url, formData, {
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            withCredentials: true,
         })
             .then(res => {
                 // ログイン処理が成功した場合
                 // ローディング画面を非表示
                 setLoading(false);
-                // ログイン成功時にはセッションクッキーを設定
-                setCookie('access_token', res.data.access_token, { path: '/' }, { httpOnly: true });
-                setCookie('refresh_token', res.data.refresh_token, { path: '/' }, { httpOnly: true });
-                setCookie('user_id', res.data.refresh_token, { path: '/' }, { httpOnly: true });
+                setAuthState({
+                    isAuthenticated: true,
+                });
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';
             })
@@ -53,8 +51,8 @@ const Login = () => {
                 // ローディング画面を非表示
                 setLoading(false);
                 // エラーメッセージを表示
-                console.log(err.response.data.non_field_errors);
-                setError("このアカウントは管理者権限がありません。");
+                console.log(err);
+                setError(err.response.data.non_field_errors);
             });
     };
 

@@ -40,7 +40,7 @@ const Registration = () => {
                 setSuccess("アカウント作成が完了しました。");
                 // アカウント作成が完了したら0.5秒後にログイン画面に遷移
                 setTimeout(() => {
-                    window.location.href = "/login";
+                    window.location.href = "/userlist";
                 }, 500);
             })
             .catch(err => {

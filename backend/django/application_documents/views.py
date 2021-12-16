@@ -66,8 +66,9 @@ def create_new_word(request):
     doc = docx.Document(file)
     tbl = doc.tables[0]
 
-    if request.data['id'] == '1' or request.data['id'] == '2' or request.data['id'] == '4':
+    if query[0].name == '稚内市体育施設使用等承認（不承認）通知書' or query[0].name == '稚内市体育施設使用等承認取消し等決定通知書' or query[0].name == '稚内市体育施設使用料等後納承認（不承認）通知書':
       number = request.data['number']  # 発行番号
+      tbl.rows[0].cells[0].paragraphs[0].text = tbl.rows[0].cells[0].paragraphs[0].text.replace('第　　　　　号', '第　{}　号'.format(number))
       # 使用（利用）体育施設の名称
       tbl.rows[1].cells[1].paragraphs[0].text = insert_string(tbl.rows[1].cells[1].paragraphs[0].text, 5, place)
       # 使用（利用）区分
@@ -178,7 +179,6 @@ def create_new_word(request):
 
     # 稚内市体育施設使用等承認（不承認）通知書
     if query[0].name == '稚内市体育施設使用等承認（不承認）通知書':
-      tbl.rows[0].cells[0].paragraphs[0].text = insert_string(tbl.rows[0].cells[0].paragraphs[0].text, 4, str(number))
       tbl.rows[0].cells[0].paragraphs[1].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
       tbl.rows[0].cells[0].paragraphs[3].text = insert_string(tbl.rows[0].cells[0].paragraphs[3].text, 6, contact_name)
       tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('　　年', str(now.year) + ' 年').replace('　月', str(now.month) + ' 月').replace('　日', str(now.day) + ' 日')
@@ -204,9 +204,9 @@ def create_new_word(request):
         tbl.rows[9].cells[1].paragraphs[0].text = tbl.rows[9].cells[1].paragraphs[0].text.replace('無', '✓無')
       if conditions:
         tbl.rows[13].cells[1].paragraphs[0].text = tbl.rows[13].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
+    # 稚内市体育施設使用等承認取消し等決定通知書
     elif query[0].name == '稚内市体育施設使用等承認取消し等決定通知書':
       if cancellation_reason:
-        tbl.rows[0].cells[0].paragraphs[0].text = insert_string(tbl.rows[0].cells[0].paragraphs[0].text, 4, str(number))
         tbl.rows[0].cells[0].paragraphs[1].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
         tbl.rows[0].cells[0].paragraphs[2].text = insert_string(tbl.rows[0].cells[0].paragraphs[2].text, 6, contact_name)
         tbl.rows[0].cells[0].paragraphs[9].text = tbl.rows[0].cells[0].paragraphs[9].text.replace('　　年', str(now.year) + ' 年').replace('　月', str(now.month) + ' 月').replace('　日', str(now.day) + ' 日').replace('第　　　　号', '第　' + str(number) + '　号')
@@ -214,6 +214,7 @@ def create_new_word(request):
         tbl.rows[6].cells[0].paragraphs[2].text = insert_string(tbl.rows[6].cells[0].paragraphs[2].text, 0, str(cancellation_reason))
       else:
         return {'error': 'approval-applicationテーブルにあるcancellation_reasonフィールドの値が未入力です。'}
+    # 稚内市体育施設使用等承認申請書
     elif query[0].name == '稚内市体育施設使用等承認申請書':
       tbl.rows[5].cells[3].paragraphs[0].text = insert_string(tbl.rows[5].cells[3].paragraphs[0].text, 0, purpose)
       tbl.rows[6].cells[3].paragraphs[0].text = tbl.rows[6].cells[3].paragraphs[0].text.replace('者　　', '者　' + str(organizer_number)).replace('員　　', '員　' + str(participant_number))
@@ -233,6 +234,7 @@ def create_new_word(request):
         tbl.rows[16].cells[1].paragraphs[0].text = tbl.rows[16].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
       else:
         return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
+    # 稚内市体育施設使用料等後納承認（不承認）通知書
     elif query[0].name == '稚内市体育施設使用料等後納承認（不承認）通知書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
       tbl.rows[6].cells[1].paragraphs[1].text = insert_string(tbl.rows[6].cells[1].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
@@ -240,6 +242,7 @@ def create_new_word(request):
         tbl.rows[7].cells[1].paragraphs[0].text = tbl.rows[7].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
       else:
         return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
+    # 稚内市体育施設使用料等後納申請書
     elif query[0].name == '稚内市体育施設使用料等後納申請書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
       tbl.rows[6].cells[3].paragraphs[1].text = insert_string(tbl.rows[6].cells[3].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)

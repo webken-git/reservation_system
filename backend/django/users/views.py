@@ -24,7 +24,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
   serializer_class = UserSerializer
   filter_fields = [f.name for f in User._meta.fields]
   authentication_classes = [JWTCookieAuthentication]
-  # permission_classes = [permissions.ActionBasedPermission]
+  permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'destroy'],
       permissions.IsAuthenticated: ['list', 'retrieve'],
@@ -37,7 +37,7 @@ class AuthInfoGetView(RetrieveAPIView):
   ログインユーザー情報を取得
   """
   serializer_class = UserSerializer
-  # permission_classes = [permissions.IsAuthenticated]
+  permission_classes = [permissions.IsAuthenticated]
   # permission_classes = [permissions.ActionBasedPermission]
   # action_permissions = {
   #     permissions.IsAdminUser: [],

@@ -1,45 +1,47 @@
 .sideBox {
-    width: 100%;
-    height: 100vh;
-    background-color: #233B62;
+  width: 100%;
+  height: 100vh;
+  background-color: #233b62;
 }
 
 .TitleBox {
-    width: 100%;
-    height: 14%;
-    background-color: #1A8D89;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 14%;
+  background-color: #1a8d89;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .TitleString {
-    color: #FFFFFF;
-    font-size: 30px;
+  color: #ffffff;
+  font-size: 30px;
 }
 
 .transBox {
-    width: 100%;
-    height: 8%;
-    display: flex;
-    border-bottom: 1px solid #707070;
-    color: #FFFFFF;
-    font-size: 20px;
-    p {
-        margin-left: 15px;
-    }
+  width: 100%;
+  height: 8%;
+  display: flex;
+  border-bottom: 1px solid #707070;
+  color: #ffffff;
+  font-size: 20px;
+  p {
+    margin-left: 15px;
+  }
+}
+.transBox:hover {
+  background-color: #707070;
+  cursor: pointer;
 }
 
 .linkdeco {
-    text-decoration: none;
-    color: #FFFFFF;
+  width: 100%;
+  text-decoration: none;
+  color: #ffffff;
 }
 
 .icon {
-    width: 20px;
-    height: 18px;
-    margin-right: 5px;
+  width: 20px;
+  height: 18px;
+  margin-right: 5px;
 }
-
-
-

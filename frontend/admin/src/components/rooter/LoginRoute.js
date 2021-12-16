@@ -1,39 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
 import { Redirect } from "react-router-dom";
-import Cookies from 'universal-cookie'
-
 import { AuthUrls } from "../../utils/authUrls";
+import authState from "../../recoil/auth/atom";
 
 const LoginRoute = (props) => {
-    const cookies = new Cookies();
+    const [auth, setAuth] = useRecoilState(authState);
+    const [user, setUser] = useState([]);
     // トークンが有効か確認
-    if (cookies.get("access_token")) {
-        // トークンが有効ならログインしていると判断
-        // axios.defaults.headers.common["Authorization"] = props.cookies.get("token");
+    const GET_USER = AuthUrls.GET_USER_DATA;
+    const loginCheck = () => {
+        axios.get(GET_USER)
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch((err) => {
+                // トークンが無効な場合、authStateをfalseにする
+                if (err.response.status === 401) {
+                    setAuth({
+                        isAuthenticated: false,
+                    });
+                }
 
-        let formData = new FormData();
-        formData.append("token", cookies.get("access_token"));
+            });
+    };
+    useEffect(() => {
+        loginCheck();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-        const url = AuthUrls.TOKEN_VERIFY;
-        axios
-        .post(url, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-            .catch((error) => {
-            // トークンが有効期限切れの場合
-            alert("再度ログインしてください");
-            cookies.remove("access_token");
-            cookies.remove("refresh_token");
-            cookies.remove("user_id");
-            window.location.href = "/login";
-        });
-
+    // props.childrenにuserをpropsとして渡す
+    if(auth.isAuthenticated === true) {
         return props.children;
     } else {
-        // トークンが無効ならログインしていないと判断
+        // alert("再度ログインしてください");
         return <Redirect to="/login" />;
     }
 }
