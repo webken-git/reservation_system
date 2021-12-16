@@ -1,40 +1,43 @@
 import React from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
 import { Redirect } from "react-router-dom";
-import Cookies from 'universal-cookie'
-
 import { AuthUrls } from "../../utils/authUrls";
+import authState from "../../recoil/auth/atom";
 
 const LoginRoute = (props) => {
-    const cookies = new Cookies();
+    const [auth, setAuth] = useRecoilState(authState);
+    // const [user, setUser] = useState([]);
     // トークンが有効か確認
-    if (cookies.get("access_token")) {
-        // トークンが有効ならログインしていると判断
-        // axios.defaults.headers.common["Authorization"] = props.cookies.get("token");
+    const getUser = AuthUrls.GET_USER_LIST;
+    const logout = AuthUrls.LOGOUT;
+    const loginCheck = () => {
+        axios.get(getUser+"1")
+            .then((res) => {
+                // setUser(res.data);
+            })
+            .catch((err) => {
+                // トークンが無効な場合ログアウト
+                axios.post(logout)
+                    .then(res => {
+                        // ログアウト成功時、authStateをfalseにする
+                        setAuth({
+                            isAuthenticated: false,
+                        });
+                    })
+                    .catch(err => {
+                        // console.log(err);
+                    })
+            });
+    };
+    loginCheck();
 
-        let formData = new FormData();
-        formData.append("token", cookies.get("access_token"));
-
-        const url = AuthUrls.TOKEN_VERIFY;
-        axios
-        .post(url, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-            .catch((error) => {
-            // トークンが有効期限切れの場合
-            alert("再度ログインしてください");
-            cookies.remove("access_token");
-            cookies.remove("refresh_token");
-            cookies.remove("user_id");
-            window.location.href = "/login";
-        });
-
+    // props.childrenにuserをpropsとして渡す
+    if(auth.isAuthenticated === true) {
         return props.children;
     } else {
-        // トークンが無効ならログインしていないと判断
-        return <Redirect to="/login" />;
+        // alert("再度ログインしてください");
+        return <Redirect to="/" />;
     }
 }
 

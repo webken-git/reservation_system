@@ -80,12 +80,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+FRONTEND_SITE_DOMAIN = 'http://localhost:3000'
+# PASSWORD_RESET_URL = FRONTEND_SITE_DOMAIN + '/account/password/reset/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'templates', 'allauth')
+            os.path.join(BASE_DIR, 'templates', 'allauth'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -144,7 +147,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# USE_TZ = True
+USE_TZ = False
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
@@ -156,7 +160,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'users.User'
@@ -178,10 +182,10 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         # 'config.funcs.authentication.CookieHandlerJWTAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
@@ -192,15 +196,18 @@ SIMPLE_JWT = {
     # トークンをJWTに設定
     'AUTH_HEADER_TYPES': ('JWT',),
     # アクセストークンの持続時間の設定
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),
     # リフレッシュトークンの持続時間の設定
-    # 'REFRESH_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     # 'BLACKLIST_AFTER_ROTATION': False,
+    'ROTATE_REFRESH_TOKENS': True,
 }
 
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
 
 
 # dj-rest-auth settings
@@ -267,8 +274,8 @@ CORS_ALLOWED_ORIGINS = [
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'localhost:3000',
-    '127.0.0.1',
+    'http://localhost:3000',
+    'http://127.0.0.1',
 ]
 
 

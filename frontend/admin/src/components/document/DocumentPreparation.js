@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import './document.scss';
 
-
 import { DocumentUrl } from "../../utils/documentUrls";
 import Loading from "../loading/Loading";
+import reservationState from "../../recoil/reservation/atom";
 
 
 const DocumentPreparation = (props) => {
@@ -14,6 +15,8 @@ const DocumentPreparation = (props) => {
     const [error, setError] = useState([]);
     const [loading, setLoading] = useState(true);
     const [popup, setPopup] = useState("");
+    const reservation = useRecoilValue(reservationState);
+    const resetRecoilState = useResetRecoilState(reservationState);
 
     const post_DocumentUrl = DocumentUrl.DOCUMENT;
 
@@ -23,13 +26,14 @@ const DocumentPreparation = (props) => {
             axios.post(post_DocumentUrl, {
                 id: id,
                 number: props.document.number,
-                approval_application_id: props.data[0].id,
+                approval_application_id: reservation.id,
             })
                 .then(res => {
                     setDocuments([res.data]);
                     // setError(err.response.data);
                     // API通信が終わったらloadingをfalseにする
                     setLoading(false);
+                    resetRecoilState();
                 })
                 .catch(err => {
                     // APIのエラーメッセージをstateに保存
@@ -53,7 +57,7 @@ const DocumentPreparation = (props) => {
 
 
     // 戻るボタン押下時、選択画面に戻る
-    const returnSelection = () => props.changeState("selection");
+    // const returnSelection = () => props.changeState("selection");
 
     const copyTextToClipboard = (text) => {
         navigator.clipboard.writeText(text)
@@ -75,6 +79,7 @@ const DocumentPreparation = (props) => {
 
     useEffect(() => {
         createDocument();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -119,7 +124,7 @@ const DocumentPreparation = (props) => {
                     }
                 </tbody>
             </table>
-            <button onClick={returnSelection} className="selection-screen-btn">戻る</button>
+            {/* <button onClick={returnSelection} className="selection-screen-btn">戻る</button> */}
             <button onClick={props.modalToggle} className="modal-close-btn">閉じる</button>
         </div>
     );

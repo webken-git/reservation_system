@@ -3,8 +3,7 @@ import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import FeeList from '../components/feelist/FeeList';
-import { AuthUrls } from "../utils/authUrls";
-import Cookies from 'js-cookie';
+
 
 const MainPage = () => {
     const [PlaceListData, setPlaceListData] = useState([]);
@@ -17,14 +16,13 @@ const MainPage = () => {
 
     //場所データ取得
     const GetPlaceList = () => {
-      axios.get('https://webhok.net/reservation_system/api/places/')
+      axios.get(`${process.env.REACT_APP_API}/api/places/`)
       .then(response => {
         const placelists = response.data;
         setPlaceListData(placelists)
         setPlaceName(placelists[0].name)  //最初の場所名をセット
       })
       .catch((error) => {
-        console.log(error);
       })
     }
 
@@ -37,7 +35,6 @@ const MainPage = () => {
         setDivideFeeList(feelists[1]);
       })
       .catch((error) => {
-        console.log(error);
       })
     }
 
@@ -49,7 +46,6 @@ const MainPage = () => {
         setAge(ages)
       })
       .catch((error) => {
-        console.log(error);
       })
     }
 
@@ -61,7 +57,6 @@ const MainPage = () => {
         setTime(times)
       })
       .catch((error) => {
-        console.log(error);
       })
     }
 
@@ -93,13 +88,13 @@ const MainPage = () => {
 
     const tab = PlaceListData.map((place) => {
       return (
-          <Tab onClick={() => divide(place.name)}>{place.name}</Tab>
+          <Tab onClick={() => divide(place.name)} key={place.id}>{place.name}</Tab>
       )
     })
 
     const tabitems = PlaceListData.map((place) => {
         return (
-            <TabPanel>
+            <TabPanel key={place.id}>
               <FeeList feelist={DivideFeeList} age={Age} time={Time}/>
             </TabPanel>
 

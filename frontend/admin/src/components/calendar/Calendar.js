@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
@@ -8,10 +8,10 @@ import Select from './Select';
 import MonthlyCalendar from "./MonthlyCalendar";
 import Loading from "./../loading/Loading.js";
 
-const Calendar = (props) =>{
+const Calendar = (props) => {
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
-    const [ scheduleDict, setScheduleDict ] = useState({});
-    const [ dateList, setDateList ] = useState([]); //表示用のリスト
+    const [scheduleDict, setScheduleDict] = useState({});
+    const [dateList, setDateList] = useState([]); //表示用のリスト
     const date = props.date;
     const setDate = props.setDate;
     const [ updateFlag, setUpdateFlag ] = useState(false);
@@ -27,26 +27,26 @@ const Calendar = (props) =>{
         console.log(e.target.value);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         let unmounted = false;
         let dateDict = {};
-        for(let i=0; i<7; i++){
-            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()+i);
-            dateDict['date'+i] = newDate;
+        for (let i = 0; i < 7; i++) {
+            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + i);
+            dateDict['date' + i] = newDate;
         }
-        for(let i=1; i<7; i++){
-            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()-i);
-            dateDict['mdate'+i] = newDate;
+        for (let i = 1; i < 7; i++) {
+            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i);
+            dateDict['mdate' + i] = newDate;
         }
-        const sortDateList = () =>{
+        const sortDateList = () => {
             let dateList = [];
-            for(let day = dateDict['date0'].getDay(); day > 0; day--){
-                dateList.push(dateDict['mdate'+day]);
+            for (let day = dateDict['date0'].getDay(); day > 0; day--) {
+                dateList.push(dateDict['mdate' + day]);
             }
-            for(let day = 0; day < (7 - dateDict['date0'].getDay()); day++){
-                dateList.push(dateDict['date'+day]);
+            for (let day = 0; day < (7 - dateDict['date0'].getDay()); day++) {
+                dateList.push(dateDict['date' + day]);
             }
-            if(!unmounted){
+            if (!unmounted) {
                 setDateList(dateList);
                 console.log('dateList:', dateList);
             }
@@ -59,18 +59,52 @@ const Calendar = (props) =>{
         let now = new Date();
         let hours = now.getHours() - 4;
         let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-        if(!unmounted){
+        if (!unmounted) {
             setSt(margin + blockHeight * now.getHours());
         }
         document.getElementsByClassName('content-row')[0].scrollTo({
             top: st,
             left: 0,
             behavior: 'smooth'
-          });
+        });
 
         return () => { unmounted = true; }
     }, [date, setCalendarType]);
 
+<<<<<<< HEAD
+=======
+    // ローディング
+    let loadCounter = 0;
+
+    const count = () => {
+        loadCounter = loadCounter + 1;
+        if (calendarType == 'weekly') {
+            if (loadCounter >= 14) {
+                document.getElementById('preloader').classList.add('opacityanime');
+                setTimeout(() => {
+                    if (document.getElementById('preloader')) {
+                        document.getElementById('preloader').classList.add('dn');
+                    }
+                }, 200)
+            } else {
+                document.getElementById('preloader').classList.remove('opacityanime');
+                document.getElementById('preloader').classList.remove('dn');
+            }
+        } else {
+            if (loadCounter >= 2) {
+                document.getElementById('preloader').classList.add('opacityanime');
+                setTimeout(() => {
+                    if (document.getElementById('preloader')) {
+                        document.getElementById('preloader').classList.add('dn');
+                    }
+                }, 200)
+            } else {
+                document.getElementById('preloader').classList.remove('opacityanime');
+                document.getElementById('preloader').classList.remove('dn');
+            }
+        }
+    }
+>>>>>>> origin/kitaura
 
     return (
         <div className="weekly-calendar">
@@ -113,8 +147,9 @@ const Calendar = (props) =>{
                     <div className="head-row">
                         <div className="timeline"></div>
                         {calendarType == 'weekly' ? (
-                            dateList.map((date, index)=>{
+                            dateList.map((date, index) => {
                                 return <Head
+<<<<<<< HEAD
                                             key={index}
                                             day={dayList[index]}
                                             date={date}
@@ -133,6 +168,10 @@ const Calendar = (props) =>{
                                 <Head
                                     // key={index}
                                     // day={dayList[index]}
+=======
+                                    key={index}
+                                    day={dayList[index]}
+>>>>>>> origin/kitaura
                                     date={date}
                                     setScheduleDict={setScheduleDict}
                                     // openModal={openModal}
@@ -144,13 +183,29 @@ const Calendar = (props) =>{
                                     setHomeUpdateFlag={props.setHomeUpdateFlag}
                                     filterType={filterType}
                                 />
-                            )}
-                            
+                            })
+                        ) : (
+                            <Head
+                                // key={index}
+                                // day={dayList[index]}
+                                date={date}
+                                setScheduleDict={setScheduleDict}
+                                // openModal={openModal}
+                                updateFlag={updateFlag}
+                                setUpdateFlag={setUpdateFlag}
+                                isMain={props.isMain}
+                                // individualOrGroup={props.individualOrGroup}
+                                homeUpdateFlag={props.homeUpdateFlag}
+                                setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                count={count}
+                            />
+                        )}
+
                     </div>
 
                     <div className="content-row">
                         {/* 現在時刻を表示する */}
-                        <div className="now-time" style={{top: st}}>
+                        <div className="now-time" style={{ top: st }}>
                             <div className="circle"></div>
                             <div className="border"></div>
                         </div>
@@ -183,8 +238,9 @@ const Calendar = (props) =>{
                         </div>
 
                         {calendarType == 'weekly' ? (
-                            dateList.map((date,index)=>{
+                            dateList.map((date, index) => {
                                 return <Content
+<<<<<<< HEAD
                                             key={index}
                                             date={date}
                                             setScheduleDict={setScheduleDict}
@@ -198,6 +254,22 @@ const Calendar = (props) =>{
                                             filterType={filterType}
                                             setLoading={setLoading}
                                         />
+=======
+                                    key={index}
+                                    date={date}
+                                    setScheduleDict={setScheduleDict}
+                                    // openModal={openModal}
+                                    updateFlag={updateFlag}
+                                    setUpdateFlag={setUpdateFlag}
+                                    isMain={props.isMain}
+                                    // individualOrGroup={props.individualOrGroup}
+                                    homeUpdateFlag={props.homeUpdateFlag}
+                                    setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                    filterType={filterType}
+                                    count={count}
+                                    setLoading={setLoading}
+                                />
+>>>>>>> origin/kitaura
                             })
                         ) : (
                             <Content
@@ -218,9 +290,13 @@ const Calendar = (props) =>{
                     </div>
                 </div>
             )}
+<<<<<<< HEAD
             {loading && <Loading />}
+=======
+            {/* {Loading && <Loading />} */}
+>>>>>>> origin/kitaura
         </div>
-        );
-    }
+    );
+}
 
-    export default Calendar;
+export default Calendar;

@@ -40,7 +40,7 @@ const Registration = () => {
                 setSuccess("アカウント作成が完了しました。");
                 // アカウント作成が完了したら0.5秒後にログイン画面に遷移
                 setTimeout(() => {
-                    window.location.href = "/login";
+                    window.location.href = "/userlist";
                 }, 500);
             })
             .catch(err => {
@@ -92,7 +92,7 @@ const Registration = () => {
                 <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="password">パスワード</label>
                     {errors.password && <span className="auth-page__form-error">※この項目は必須です</span>}
-                    <div className="auth-page__password">
+                    <div className="password-container">
                         <input
                             className="password"
                             type="password"

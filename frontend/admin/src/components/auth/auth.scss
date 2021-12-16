@@ -18,13 +18,17 @@ $breakpoints: (
   }
 }
 
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
+
 .btn {
   width: 7rem;
   color: #fff;
-  border: 1px solid #1a8d89;
+  border: 1px solid $main-color;
   // border-radius: 3px;
   padding: 9px 17px;
-  background-color: #1a8d89;
+  background-color: $main-color;
   margin: 3% 0;
   font-size: 1rem;
   cursor: pointer;
@@ -91,47 +95,81 @@ $breakpoints: (
     .auth-page__form-input:focus {
       outline: none;
     }
-    .auth-page__password {
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      padding: 10px 10px;
-      margin: 5px 0;
+    .link {
+      text-decoration: none;
+      color: $accent-color;
     }
-    .auth-page__password:focus {
-      outline: #000 solid 1px;
-    }
-    .password {
-      width: 275px;
-      border: none;
-      font-size: large;
-    }
-    .password:focus {
-      outline: none;
+    .link:hover {
+      text-decoration: underline;
     }
   }
 
   .auth-btn-wrapper {
     text-align: center;
-    .auth-btn {
-      @extend .btn;
-      width: 10rem;
-      // margin: 0 auto;
-    }
   }
 }
 
-.logout-content {
+.back-btn {
+  @extend .btn;
+  background-color: $sub-color;
+  border: $sub-color solid 1px;
+}
+.verify-btn {
+  @extend .btn;
+}
+.auth-btn {
+  @extend .btn;
+  width: 10rem;
+  // margin: 0 auto;
+}
+
+.logout-btn {
+  @extend .btn;
   width: 9rem;
   margin-right: 2%;
-  border: #707070 solid 1px;
-  background-color: #707070;
+  border: $sub-color solid 1px;
+  background-color: $sub-color;
+}
+
+.logout-container {
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+  text-decoration: none;
+  @include mq(tab) {
+    font-size: 16px;
+  }
+  @include mq(sp) {
+    font-size: 25px;
+  }
+}
+.logout-container:hover {
+  text-decoration: underline;
 }
 
 .registration-link {
   @extend .btn;
-  border: 1px solid #91c21f;
-  background-color: #91c21f;
+  width: 12rem;
+  height: 3.5rem;
 }
 .login-link {
   @extend .btn;
+}
+
+.password-container {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px 10px;
+  margin: 5px 0;
+}
+.password-container:focus {
+  outline: #000 solid 1px;
+}
+.password {
+  width: 275px;
+  border: none;
+  font-size: large;
+}
+.password:focus {
+  outline: none;
 }

@@ -18,13 +18,17 @@ $breakpoints: (
   }
 }
 
+$main-color: #23ad39;
+$sub-color: #707070;
+$accent-color: #91c21f;
+
 .btn {
   width: 7rem;
   color: #fff;
-  border: 1px solid #23ad39;
+  border: 1px solid $main-color;
   border-radius: 3px;
   padding: 9px 17px;
-  background-color: #23ad39;
+  background-color: $main-color;
   margin: 3% 0;
   font-size: 1rem;
   cursor: pointer;
@@ -71,8 +75,8 @@ $breakpoints: (
       display: inline-block;
       padding: 0 5px;
       margin: 0 0 0 10px;
-      border: 1px solid #91c21f;
-      background-color: #91c21f;
+      border: 1px solid $accent-color;
+      background-color: $accent-color;
     }
   }
 
@@ -102,35 +106,47 @@ $breakpoints: (
     .auth-page__form-input:focus {
       outline: none;
     }
-    .auth-page__password {
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      padding: 10px 10px;
-      margin: 5px 0;
-    }
-    .auth-page__password:focus {
-      outline: #000 solid 1px;
-    }
-    .password {
-      width: 275px;
-      border: none;
-      font-size: large;
-    }
-    .password:focus {
-      outline: none;
-    }
   }
 
   .auth-btn-wrapper {
     text-align: center;
-    .auth-btn {
-      @extend .btn;
-      width: 10rem;
-      border: 1px solid #91c21f;
-      background-color: #91c21f;
-      // margin: 0 auto;
-    }
   }
+}
+
+.back-btn {
+  @extend .btn;
+  background-color: $sub-color;
+  border: $sub-color solid 1px;
+}
+.verify-btn {
+  @extend .btn;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+}
+.auth-btn {
+  @extend .btn;
+  width: 10rem;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+  // margin: 0 auto;
+}
+
+.password-container {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px 10px;
+  margin: 5px 0;
+}
+.password-container:focus {
+  outline: #000 solid 1px;
+}
+.password {
+  width: 275px;
+  border: none;
+  font-size: large;
+}
+.password:focus {
+  outline: none;
 }
 
 .logout-container {
@@ -144,9 +160,20 @@ $breakpoints: (
 
 .registration-link {
   @extend .btn;
-  border: 1px solid #91c21f;
-  background-color: #91c21f;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
 }
 .login-link {
   @extend .btn;
+}
+
+.link {
+  display: flex;
+  justify-content: center;
+  margin: 3% 0;
+  h1 {
+    width: auto;
+    margin: 0;
+    font-weight: normal;
+  }
 }

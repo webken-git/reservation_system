@@ -1,33 +1,65 @@
 // 承認リスト全体のコンポーネント
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ApprovalTable from "./ApprovalTable"
-import Filter from "./../list/Filter"
+// import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"
 import './approval.scss'
 import dayjs from 'dayjs'
 // import Modal from 'react-modal'
 
-const ApprovalListBody = () => { 
-  const [ApprovalListData, setApprovalListData] = useState([]);
-  // 承認リストのデータをAPIから受け取るaxios
-  const GetApporovalList = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
-    .then(response => {
-      const data = response.data;
-      // console.log(data[0]["reservation"]["place"]["name"]);
-      // console.log(data);
-      // 承認リストのデータをuseStateに入れている
-      setApprovalListData(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+const ApprovalListBody = () => {
+  const filtering = (e) => {
+    setFilterType(e.target.value);
   }
 
+  // const filtering = (e) => {
+  //   setDateFilterType(e.target.value);
+  //   // console.log(e.target.value);
+  // }
+
+  const [filterType, setFilterType] = useState();
+  // const [DateFilterType, setDateFilterType] = useState();
+
+  const [ApprovalListData, setApprovalListData] = useState([]);
+  // 承認リストのデータをAPIから受け取るaxios
+  // const GetApporovalList = () => {
+  //   axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
+  //     .then(response => {
+  //       const data = response.data;
+  // console.log(data[0]["reservation"]["place"]["name"]);
+  // console.log(data);
+  // 承認リストのデータをuseStateに入れている
+  //       setApprovalListData(data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     })
+  // }
+
   // ページレンダリング時に承認リストのデータを受け取っている
+  // useEffect(() => {
+  //   GetApporovalList();
+  // }, [])
+
   useEffect(() => {
-    GetApporovalList();
-  }, [])
+    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`, {
+      params: {
+        'reservation__place': filterType
+      }
+      // params: {
+      //   'reservation__start': DateFilterType
+      // }
+    })
+      .then(response => {
+        const data = response.data;
+        // console.log(data[0]["reservation"]["place"]["name"]);
+        // 承認リストのデータをuseStateに入れている
+        setApprovalListData(data);
+      })
+      .catch((error) => {
+      })
+  }, [filterType])
 
   const Table = (
       // データをmapで回している
@@ -37,6 +69,7 @@ const ApprovalListBody = () => {
           <ApprovalTable
             // propsでApprovalTable.jsに承認リストのデータを送っている
             key={val_index}
+            id={val.id}
             // dayjsのformatで〇/〇と日付を表示できるようにしている
             date={dayjs(val.reservation.start).format('YYYY-MM-DD')}
             group_name={val.reservation.group_name}
@@ -52,24 +85,35 @@ const ApprovalListBody = () => {
             organizer_number={val.reservation.organizer_number}
             participant_number={val.reservation.participant_number}
             place={val.reservation.place.name}
-            id={val.reservation.id}
-            purpose={val.reservation.purpose}
+            reservation_id={val.reservation.id}
             admission_fee={val.reservation.admission_fee}
           />
         )
     })
   )
-    return (
-      <div>
+  return (
+    <div>
+      <select className="filter" onChange={(e) => filtering(e)} defaultValue="">
+        <option value="">全部</option>
+        <option value="1">カーリング場</option>
+        <option value="2">大会議室</option>
+        <option value="3">中会議室</option>
+        <option value="4">小会議室</option>
+        <option value="5">アーチェリー場</option>
+        <option value="6">武道場</option>
+      </select>
       <table className="list-body">
-        <Filter/>
-        <tr>
-          <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
-        </tr>
-        {Table}
+        <thead>
+          <tr>
+            <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
+          </tr>
+        </thead>
+        <tbody>
+          {Table}
+        </tbody>
       </table>
     </div>
-    )
+  )
 }
 
 export default ApprovalListBody
