@@ -26,9 +26,9 @@ const ApprovalTable = (props) => {
       {/* 予約日 */}
       <td>{props.date}</td>
       {/* 団体者名 */}
-      <td>{props.contact_name}</td>
+      <td>{props.group_name}</td>
       {/* 代表者名 */}
-      <td>{props.reader_name}</td>
+      <td>{props.contact_name}</td>
       {/* 目的 */}
       <td>{props.purpose}</td>
       {/* 予約時間 */}

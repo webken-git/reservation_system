@@ -34,7 +34,7 @@ const DetailsButton = (props) => {
         <FontAwesomeIcon icon={faSearchPlus} />
       </p>
       <Modal isOpen={modalIsOpen} style={modalStyle}>
-        <div className="list-wrapper">
+        <div className="modal-wrapper">
           <div className="scroll_box-wrapper">
           <p className="close" onClick={() => setIsOpen(false)}>×</p>
             <div className="scroll_box">

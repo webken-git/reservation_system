@@ -7,7 +7,6 @@ import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
 import useSafeState from '../../hooks/useSafeState';
 import useUnmountRef from '../../hooks/useUnmountRef';
-import './auth.scss';
 
 const PasswordReset = (props) => {
     const unmountRef = useUnmountRef();
@@ -92,7 +91,7 @@ const PasswordReset = (props) => {
                     </div>
                 </div>
                 <div className="auth-btn-wrapper">
-                    <button className="btn auth-btn" type="submit">新規パスワード発行</button>
+                    <button className="btn auth-btn" type="submit">パスワード変更</button>
                 </div>
             </form>
             {loading && <Loading />}

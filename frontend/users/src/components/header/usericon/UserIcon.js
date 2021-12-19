@@ -11,10 +11,9 @@ const UserIcon = (props) => {
     const [modalIsOpen, setIsOpen] = useState(false);
 
     return (
-        <div>
-            <div className='usericonbox' onClick={() => setIsOpen(true)}>
-                <div className='circle'></div>
-                <p><FontAwesomeIcon icon={props.icon} /></p>
+        <>
+            <div className="user-icon-container">
+                <FontAwesomeIcon icon={props.icon} size='3x' className='user-icon' onClick={() => setIsOpen(true)} />
             </div>
             <Modal
                 className='modal'
@@ -32,7 +31,7 @@ const UserIcon = (props) => {
                     <Logout />
                 </span>
             </Modal>
-        </div>
+        </>
     )
 }
 

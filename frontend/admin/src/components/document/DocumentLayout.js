@@ -33,9 +33,6 @@ const DocumentLayout = () => {
         ModalContent = <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} />;
     }
 
-    // 論理演算子を利用し、表示するコンポーネントを変更
-    // let ModalContent = showContent === "selection" && <DocumentSelection changeState={changeState} selectDocument={selectDocument} modalToggle={modalToggle} data={data}/> || showContent === "preparation" && <DocumentPreparation changeState={changeState} document={document} modalToggle={modalToggle} data={data}/>;
-
 
     return (
         <>

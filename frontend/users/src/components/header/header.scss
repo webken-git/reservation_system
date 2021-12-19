@@ -19,34 +19,29 @@ $breakpoints: (
 }
 
 .header-box {
+  width: 100%;
   height: 10vh;
-  // background-color: #8fc31fc0;
   background-color: #ffffff;
-  border: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
   display: flex;
+  justify-content: space-between;
 
-  .box {
-    width: 80%;
+  .header-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .rightside {
+  .header-right {
     display: flex;
-    width: 7%;
-  }
-  .rightside-login {
-    display: flex;
-    width: 60%;
-    justify-content: flex-end;
     align-items: center;
     margin-right: 10px;
+  }
+
+  span {
+    margin: 0 10px;
     @include mq(sp) {
-      margin-right: 5px;
-    }
-    span {
-      margin: 0 10px;
-      @include mq(sp) {
-        margin: 0 5px;
-      }
+      margin: 0 5px;
     }
   }
 }

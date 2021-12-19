@@ -1,6 +1,6 @@
 import React from 'react'
 import TransitionBox from './TransitionBox'
-import Title from './Title'
+import Title from './Title';
 import './sidebar.scss'
 import GetDate from './../toppage/GetDate'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"

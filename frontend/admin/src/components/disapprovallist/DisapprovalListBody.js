@@ -1,7 +1,7 @@
 // 不承認リスト全体のコンポーネント
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-import DisApprovalTable from "./DisapprovalTable"
+import ApprovalTable from "../approvallist/ApprovalTable";
 // import './approval.scss'
 import dayjs from 'dayjs'
 
@@ -32,7 +32,7 @@ const DisapprovalListBody = () => {
       DisApprovalListData.map((val, val_index) =>{
         return(
           // 不承認リストの中のコンポーネント
-          <DisApprovalTable
+          <ApprovalTable
           // propsでDisapprovalTable.jsに不承認リストのデータを送っている
           key={val_index}
           // dayjsのformatで〇/〇と日付を表示できるようにしている
@@ -64,7 +64,7 @@ const DisapprovalListBody = () => {
               <td></td>
               <td>日付</td>
               <td>団体者名</td>
-              <td>代表者名</td>
+              <td>連絡者名</td>
               <td>個人/団体</td>
               <td>時間</td>
               <td>人数</td>

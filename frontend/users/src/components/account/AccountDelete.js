@@ -10,7 +10,7 @@ import authState from "../../recoil/auth/atom";
 import { AuthUrls } from "../../utils/authUrls";
 import useSafeState from '../../hooks/useSafeState';
 import useUnmountRef from '../../hooks/useUnmountRef';
-import './auth.scss';
+import '../auth/auth.scss';
 
 const AccountDelete = (props) => {
     const unmountRef = useUnmountRef();
@@ -25,7 +25,7 @@ const AccountDelete = (props) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     // 一度アカウントの確認を行い、成功したらアカウントを削除する
-    const url = AuthUrls.STAFF_LOGIN;
+    const url = AuthUrls.LOGIN;
     const userData = AuthUrls.GET_USER_DATA;
     const logout = AuthUrls.LOGOUT;
     const userDeleteUrl = AuthUrls.GET_USER_LIST;
@@ -63,7 +63,7 @@ const AccountDelete = (props) => {
                 setMessage('アカウント削除処理中です。');
                 // ログアウト
                 logoutUser();
-                axios.delete(`${userDeleteUrl}${user.pk}`, {
+                axios.delete(`${userDeleteUrl}${user.pk}/`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -75,7 +75,7 @@ const AccountDelete = (props) => {
                             setAuthState({
                                 isAuthenticated: false,
                             });
-                            window.location.href = '/login';
+                            window.location.href = '/';
                         }, 500);
                     })
                     .catch(err => {
@@ -158,7 +158,7 @@ const AccountDelete = (props) => {
                 <div className="auth-btn-wrapper">
                     <button className="back-btn" type="button" onClick={() => window.history.back()}>戻る</button>
                     <span>　</span>
-                    <button className="btn auth-btn" type="submit">アカウント削除</button>
+                    <button className="auth-btn" type="submit">アカウント削除</button>
                 </div>
             </form>
             {loading && <Loading />}

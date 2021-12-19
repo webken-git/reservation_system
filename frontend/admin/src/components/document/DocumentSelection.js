@@ -26,7 +26,7 @@ const DocumentSelection = (props) => {
     const pullDocumentTemplateList = async () => {
         // resevationIdが指定されていない場合は終了
         if (reservation.length === 0) {
-            setError("申請書を発行するデータがありません。");
+            setError("申請書を発行するデータが指定されてません。");
         } else {
             setLoading(true);
             try {

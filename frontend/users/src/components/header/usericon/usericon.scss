@@ -18,25 +18,15 @@ $breakpoints: (
   }
 }
 
-.usericonbox {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  .circle {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background-color: #23ac38;
+$main-color: #23ad39;
+$sub-color: #707070;
+$accent-color: #91c21f;
+
+.user-icon-container {
+  .user-icon {
+    color: $main-color;
   }
-  p {
-    font-size: 30px;
-    color: #ffffff;
-    position: absolute;
-  }
-  p:hover {
+  .user-icon:hover {
     opacity: 0.5;
   }
 }
