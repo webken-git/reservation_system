@@ -1,8 +1,9 @@
 // ユーザーリスト全体のコンポーネント
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-import UserTable from "./UserTable"
-// import './detailsbutton.scss'
+import UserTable from "./UserTable";
+// import './detailsbutton.scss';
+import { RegistrationButton } from "../auth/RegistrationButton";
 
 const UserListBody = () => {
   const [UserListData, setUserListData] = useState([]);
@@ -39,18 +40,26 @@ const UserListBody = () => {
 )
 
     return (
-        <div>
-          <table className="list-body">
-            <thead>
-              <tr>
-                <td>id</td><td>メールアドレス</td><td>詳細</td>
-              </tr>
-            </thead>
-            <tbody>
-              {Table}
-            </tbody>
-          </table>
+      <div>
+        <div className="functions">
+          <RegistrationButton />
         </div>
+        <div className="scroll_box-wrapper">
+          {/* スクロールバーボックス */}
+          <div className="scroll_box">
+            <table className="list-body">
+              <thead>
+                <tr>
+                  <td>id</td><td>メールアドレス</td><td>詳細</td>
+                </tr>
+              </thead>
+              <tbody>
+                {Table}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     )
 }
 

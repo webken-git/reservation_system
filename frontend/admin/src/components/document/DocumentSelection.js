@@ -17,7 +17,7 @@ const DocumentSelection = (props) => {
     const [text, setText] = useSafeState(unmountRef, "");
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [checkedItems, setCheckedItems] = useSafeState(unmountRef, []);
-    const [loading, setLoading] = useSafeState(unmountRef, false);
+    const [loading, setLoading] = useSafeState(unmountRef, true);
     const [error, setError] = useSafeState(unmountRef, null);
     const reservation = useRecoilValue(reservationState);
 
@@ -27,8 +27,8 @@ const DocumentSelection = (props) => {
         // resevationIdが指定されていない場合は終了
         if (reservation.length === 0) {
             setError("申請書を発行するデータが指定されてません。");
+            setLoading(false);
         } else {
-            setLoading(true);
             try {
                 const response = await axios.get(get_documentTemplateUrl);
                 setDocumentTemplateList(response.data);

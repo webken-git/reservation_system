@@ -8,6 +8,7 @@ import pytz
 import csv
 import glob
 import os
+from django.conf import settings
 
 
 class Csv:
@@ -16,9 +17,10 @@ class Csv:
     self.request = request
 
   def export(self):
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    BASE_DIR = settings.BASE_DIR
     queryset = ApprovalApplication.objects.order_by('id')
-    data = queryset.filter(approval=self.request.data['approval_id'], reservation__delete_flag=0)
+    data = queryset.filter(approval=self.request.data['approval'], reservation__delete_flag=0)
 
     now = datetime.datetime.now(pytz.timezone('Asia/Tokyo')).strftime('%Y%m%d-%H%M%S_')
     file_path = BASE_DIR + '/static/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
@@ -52,7 +54,7 @@ class Csv:
         approval = i.approval.name
 
         writer.writerow([pk, group_name, reader_name, contact_name, address, tel, is_group, start, end, organizer_number, participant_number, purpose, admission_fee, place, place_number, equipment, special_equipment, created_at, approval])
-    return BASE_DIR + '/static/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
+    return '/static/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
 
 
 def csv_export(request):

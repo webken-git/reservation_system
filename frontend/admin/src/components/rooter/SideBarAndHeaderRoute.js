@@ -25,7 +25,7 @@ const SideBarAndHeaderRoute = (props) => {
                 <>
                     <div className="allbox">
                         <Stack >
-                            <HStack alignItems="start" className='menu' style={{"mergin-top":"0"}}>
+                            <HStack alignItems="start" className='menu' style={{"merginTop":"0"}}>
                                 <Box display={{ base: "none", md: "block" }}>
                                     <div className="sidebar">
                                         <SideBar/>

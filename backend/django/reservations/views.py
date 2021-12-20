@@ -18,7 +18,7 @@ from reservations.models import *
 from reservations.serializers import *
 from reservations.funcs.filters import (
     ReservationFilter, ReservationSuspensionScheduleFilter,
-    ApprovalApplicationFilter
+    ApprovalApplicationFilter, ApprovalFilter
 )
 from reservations.funcs.csv import csv_export
 
@@ -768,8 +768,8 @@ class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = ApprovalApplicationSerializer
-  filter_fields = [f.name for f in ApprovalApplication._meta.fields]
-  filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_class = ApprovalFilter
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],

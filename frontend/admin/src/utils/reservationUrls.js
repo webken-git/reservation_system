@@ -6,4 +6,5 @@ export const ReservationUrl = {
     USAGE_CATEGORY: `${ROOT_URL}/api/usage-categories/`,
     AGE_CATEGORY: `${ROOT_URL}/api/age-categories/`,
     APPROVAL_APPLICATION: `${ROOT_URL}/api/approval-applications/`,
+    CSV_EXPORTS: `${ROOT_URL}/api/csv-export/`,
 };

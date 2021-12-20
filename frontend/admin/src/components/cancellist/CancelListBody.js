@@ -4,6 +4,7 @@ import axios from "axios";
 import CancelTable from "./CancelTable"
 // import './../approvallist/approval.scss'
 import dayjs from 'dayjs'
+import CsvExportButton from "../csvexport/CsvExportButton";
 
 const CancelListBody = () => {
   const [CancelListData, setCancelListData] = useState([]);
@@ -54,24 +55,34 @@ const CancelListBody = () => {
   )
   return (
     <div>
-      <table className="list-body">
-        <thead>
-          <tr>
-            <td>日付</td>
-            <td>団体者名</td>
-            <td>代表者名</td>
-            <td>個人/団体</td>
-            <td>時間</td>
-            <td>人数</td>
-            <td>場所</td>
-            <td></td>
-            <td>詳細</td>
-          </tr>
-        </thead>
-        <tbody>
-          {Table}
-        </tbody>
-      </table>
+      <div className="functions">
+        <span className="space">
+          <CsvExportButton approval={4} />
+        </span>
+      </div>
+      <div className="scroll_box-wrapper">
+        {/* スクロールバーボックス */}
+        <div className="scroll_box">
+          <table className="list-body">
+            <thead>
+              <tr>
+                <td>日付</td>
+                <td>団体者名</td>
+                <td>代表者名</td>
+                <td>個人/団体</td>
+                <td>時間</td>
+                <td>人数</td>
+                <td>場所</td>
+                <td></td>
+                <td>詳細</td>
+              </tr>
+            </thead>
+            <tbody>
+              {Table}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   )
 }

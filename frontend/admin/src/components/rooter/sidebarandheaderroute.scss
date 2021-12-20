@@ -28,9 +28,6 @@ $accent-color: #233b62;
   display: flex;
   overflow-x: hidden;
 
-  .css-n21gh5 > *:not(style) ~ *:not(style) {
-    margin-top: 0;
-  }
   .drawer-menu {
     display: none;
     @include mq("sp") {

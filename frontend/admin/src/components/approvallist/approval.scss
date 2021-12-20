@@ -23,6 +23,7 @@ $sub-color: #707070;
 $accent-color: #233b62;
 
 .scroll_box-wrapper {
+  height: 650px;
   display: flex;
   justify-content: center;
   .scroll_box {
@@ -93,7 +94,10 @@ $accent-color: #233b62;
   }
 }
 
-.printbutton-wrapper {
+.functions {
   // display: flex;
   // justify-content: center;
+  .space {
+    margin: 0 10px;
+  }
 }

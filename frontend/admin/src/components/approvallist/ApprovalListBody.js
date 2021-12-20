@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import './approval.scss'
 import dayjs from 'dayjs'
 import DocumentLayout from "../document/DocumentLayout";
-// import Modal from 'react-modal'
+import CsvExportButton from "../csvexport/CsvExportButton";
 
 const ApprovalListBody = () => {
   const filtering = (e) => {
@@ -94,9 +94,10 @@ const ApprovalListBody = () => {
   )
   return (
     <>
-      <div className="printbutton-wrapper">
+      <div className="functions">
         <select className="filter" onChange={(e) => filtering(e)} defaultValue="">
-          <option value="">全部</option>
+          <option value="">施設選択</option>
+          <option value="">全て</option>
           <option value="1">カーリング場</option>
           <option value="2">大会議室</option>
           <option value="3">中会議室</option>
@@ -104,7 +105,12 @@ const ApprovalListBody = () => {
           <option value="5">アーチェリー場</option>
           <option value="6">武道場</option>
         </select>
-        <DocumentLayout/>
+        <span className="space">
+          <DocumentLayout />
+        </span>
+        <span className="space">
+          <CsvExportButton approval={2} />
+        </span>
       </div>
       <div className="scroll_box-wrapper">
         <div className="scroll_box">

@@ -3,7 +3,9 @@ import React,{ useState, useEffect } from "react";
 import axios from "axios";
 import ApprovalTable from "../approvallist/ApprovalTable";
 // import './approval.scss'
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
+import DocumentLayout from "../document/DocumentLayout";
+import CsvExportButton from "../csvexport/CsvExportButton";
 
 
 const DisapprovalListBody = () => {
@@ -57,26 +59,39 @@ const DisapprovalListBody = () => {
     })
   )
     return (
-      <div>
-        <table className="list-body">
-          <thead>
-            <tr>
-              <td></td>
-              <td>日付</td>
-              <td>団体者名</td>
-              <td>連絡者名</td>
-              <td>個人/団体</td>
-              <td>時間</td>
-              <td>人数</td>
-              <td>場所</td>
-              <td>詳細</td>
-            </tr>
-          </thead>
-          <tbody>
-            {Table}
-          </tbody>
-      </table>
-    </div>
+      <>
+        <div className="functions">
+          <span className="space">
+            <DocumentLayout />
+          </span>
+          <span className="space">
+            <CsvExportButton approval={3} />
+          </span>
+        </div>
+        <div className="scroll_box-wrapper">
+          {/* スクロールバーボックス */}
+          <div className="scroll_box">
+          <table className="list-body">
+            <thead>
+              <tr>
+                <td></td>
+                <td>日付</td>
+                <td>団体者名</td>
+                <td>連絡者名</td>
+                <td>個人/団体</td>
+                <td>時間</td>
+                <td>人数</td>
+                <td>場所</td>
+                <td>詳細</td>
+              </tr>
+            </thead>
+            <tbody>
+              {Table}
+            </tbody>
+            </table>
+          </div>
+        </div>
+    </>
     )
 }
 
