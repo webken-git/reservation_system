@@ -1,0 +1,36 @@
+#business_diary .bd_sidebar{
+    width: 25%;
+    height: 65vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: inline-block;
+    user-select: none;
+}
+
+#business_diary .bd_sidebar .directory{
+    width: 100%;
+}
+
+#business_diary .bd_sidebar .child_directory{
+    box-sizing: border-box;
+    display: none;
+}
+
+#business_diary .bd_sidebar .display{
+    display: block;
+}
+
+#business_diary .bd_sidebar .file_name{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 28px;
+    cursor: pointer;
+}
+
+#business_diary .bd_sidebar .file_name:hover{
+    background-color: whitesmoke;
+}
+

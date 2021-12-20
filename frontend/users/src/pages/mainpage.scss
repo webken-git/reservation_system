@@ -1,0 +1,29 @@
+.list-wrapper {
+    .scroll_box-wrapper {
+      display: flex;
+      justify-content: center; 
+      .scroll_box {
+        width: 100vw;
+        height: 70vh;
+        overflow-y: scroll;
+        // white-space: nowrap;
+      }
+      
+      /* スクロールの幅の設定 */
+      .scroll_box::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      
+      /* スクロールの背景の設定 */
+      .scroll_box::-webkit-scrollbar-track {
+        box-shadow: 0 0 4px #aaa inset;
+      }
+      
+      /* スクロールのつまみ部分の設定 */
+      .scroll_box::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background: gray;  
+      }
+    }
+  }

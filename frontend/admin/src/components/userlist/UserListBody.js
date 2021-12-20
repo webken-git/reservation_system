@@ -8,7 +8,7 @@ const UserListBody = () => {
   const [UserListData, setUserListData] = useState([]);
   // ユーザーリストのデータをAPIから受け取るaxios
   const GetUserList = () => {
-    axios.get('https://webhok.net/reservation_system/api/users/')
+    axios.get(`${process.env.REACT_APP_API}/api/users/`)
     .then(response => {
       const data = response.data;
       // console.log(data);
