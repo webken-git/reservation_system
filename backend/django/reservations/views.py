@@ -263,8 +263,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       email.send()
       return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
-  def update(self, request, *args, **kwargs):
-    super().update(request, *args, **kwargs)
+  def patch(self, request, pk, *args, **kwargs):
+    super().update(request, pk, *args, **kwargs)
 
     data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
 

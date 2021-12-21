@@ -5,7 +5,7 @@ const PageLink = (props) => {
     return (
         <div>
             <Link to={props.url} className='linkdeco'>
-                <p className='pagename' style={{color: props.namecolor}}>{props.pagename}</p>
+                <p className='pagename' style={{ color: props.namecolor }}>{props.pagename}</p>
             </Link>
         </div>
     )
