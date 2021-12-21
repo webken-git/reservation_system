@@ -71,40 +71,6 @@ const Calendar = (props) => {
         return () => { unmounted = true; }
     }, [date, setCalendarType]);
 
-<<<<<<< HEAD
-=======
-    // ローディング
-    let loadCounter = 0;
-
-    const count = () => {
-        loadCounter = loadCounter + 1;
-        if (calendarType == 'weekly') {
-            if (loadCounter >= 14) {
-                document.getElementById('preloader').classList.add('opacityanime');
-                setTimeout(() => {
-                    if (document.getElementById('preloader')) {
-                        document.getElementById('preloader').classList.add('dn');
-                    }
-                }, 200)
-            } else {
-                document.getElementById('preloader').classList.remove('opacityanime');
-                document.getElementById('preloader').classList.remove('dn');
-            }
-        } else {
-            if (loadCounter >= 2) {
-                document.getElementById('preloader').classList.add('opacityanime');
-                setTimeout(() => {
-                    if (document.getElementById('preloader')) {
-                        document.getElementById('preloader').classList.add('dn');
-                    }
-                }, 200)
-            } else {
-                document.getElementById('preloader').classList.remove('opacityanime');
-                document.getElementById('preloader').classList.remove('dn');
-            }
-        }
-    }
->>>>>>> origin/kitaura
 
     return (
         <div className="weekly-calendar">
@@ -149,7 +115,6 @@ const Calendar = (props) => {
                         {calendarType == 'weekly' ? (
                             dateList.map((date, index) => {
                                 return <Head
-<<<<<<< HEAD
                                             key={index}
                                             day={dayList[index]}
                                             date={date}
@@ -168,10 +133,6 @@ const Calendar = (props) => {
                                 <Head
                                     // key={index}
                                     // day={dayList[index]}
-=======
-                                    key={index}
-                                    day={dayList[index]}
->>>>>>> origin/kitaura
                                     date={date}
                                     setScheduleDict={setScheduleDict}
                                     // openModal={openModal}
@@ -240,7 +201,6 @@ const Calendar = (props) => {
                         {calendarType == 'weekly' ? (
                             dateList.map((date, index) => {
                                 return <Content
-<<<<<<< HEAD
                                             key={index}
                                             date={date}
                                             setScheduleDict={setScheduleDict}
@@ -254,22 +214,6 @@ const Calendar = (props) => {
                                             filterType={filterType}
                                             setLoading={setLoading}
                                         />
-=======
-                                    key={index}
-                                    date={date}
-                                    setScheduleDict={setScheduleDict}
-                                    // openModal={openModal}
-                                    updateFlag={updateFlag}
-                                    setUpdateFlag={setUpdateFlag}
-                                    isMain={props.isMain}
-                                    // individualOrGroup={props.individualOrGroup}
-                                    homeUpdateFlag={props.homeUpdateFlag}
-                                    setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                    filterType={filterType}
-                                    count={count}
-                                    setLoading={setLoading}
-                                />
->>>>>>> origin/kitaura
                             })
                         ) : (
                             <Content
@@ -290,11 +234,7 @@ const Calendar = (props) => {
                     </div>
                 </div>
             )}
-<<<<<<< HEAD
             {loading && <Loading />}
-=======
-            {/* {Loading && <Loading />} */}
->>>>>>> origin/kitaura
         </div>
     );
 }
