@@ -107,7 +107,7 @@ const MainPage = () => {
   const tabitems = placeListData.map((place, p_id) => {
     return (
       <TabPanel>
-        <FeeList key={p_id} feelist={divideFeeList} age={age} placename={placeName} />
+        <FeeList key={p_id} feelist={divideFeeList} age={age} placename={placeName} time={time} />
       </TabPanel>
     )
   })
