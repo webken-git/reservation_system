@@ -7,7 +7,6 @@ import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
 import useSafeState from '../../hooks/useSafeState';
 import useUnmountRef from '../../hooks/useUnmountRef';
-import './auth.scss';
 
 const PasswordReset = (props) => {
     const unmountRef = useUnmountRef();
@@ -72,7 +71,7 @@ const PasswordReset = (props) => {
                 <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="password">パスワード</label>
                     {errors.password && <span className="auth-page__form-error">※この項目は必須です</span>}
-                    <div className="auth-page__password">
+                    <div className="password-container">
                         <input
                             className="password"
                             type="password"
@@ -92,7 +91,7 @@ const PasswordReset = (props) => {
                     </div>
                 </div>
                 <div className="auth-btn-wrapper">
-                    <button className="btn auth-btn" type="submit">新規パスワード発行</button>
+                    <button className="btn auth-btn" type="submit">パスワード変更</button>
                 </div>
             </form>
             {loading && <Loading />}

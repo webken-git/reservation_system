@@ -27,35 +27,39 @@ const DocumentList = (props) => {
 
     useEffect(() => {
         pullDocumentList();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        // loading ? <Loading /> :
-        <div className="document-list">
-            {loading ? <Loading /> :
-            <table className="table-striped">
-                <thead>
-                    <tr>
-                        <th>発行番号</th>
-                        <th>ファイル名</th>
-                        <th>ダウンロード</th>
-                        <th>削除</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {documents.map((item) => {
-                        return (
-                            <DocumentListItem
-                                key={item.id}
-                                document={item}
-                                {...props}
-                            />
-                        );
-                    })}
-                </tbody>
-                </table>
-            }
-        </div>
+        <>
+            <div className="scroll_box-wrapper">
+                {/* {loading ? <Loading /> : */}
+                <div className="scroll_box">
+                    <table className="list-body">
+                        <thead>
+                            <tr>
+                                <th>発行番号</th>
+                                <th>ファイル名</th>
+                                <th>ダウンロード</th>
+                                <th>削除</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {documents.map((item) => {
+                                return (
+                                    <DocumentListItem
+                                        key={item.id}
+                                        document={item}
+                                        {...props}
+                                    />
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {loading && <Loading />}
+        </>
     );
 };
 

@@ -17,6 +17,7 @@ const Content = (props) =>{
     const count = props.count;
     const filterType = props.filterType;
     const setLoading = props.setLoading;
+    const approvalFilter = props.approvalFilter;
 
     useEffect(() => {
         let unmounted = false;
@@ -29,6 +30,7 @@ const Content = (props) =>{
         }
         axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
             params: {
+                'approval': approvalFilter,
                 'reservation__start': year+'-'+month+'-'+day,
                 'reservation__place__name': filterType
             }
@@ -50,7 +52,7 @@ const Content = (props) =>{
         });
         
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading]);
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading, approvalFilter]);
 
     return (
         <div className="content">

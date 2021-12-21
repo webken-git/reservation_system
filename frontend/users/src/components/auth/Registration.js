@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
@@ -96,7 +96,7 @@ const Registration = () => {
                 <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="password">パスワード</label>
                     {errors.password && <span className="auth-page__form-error">※この項目は必須です</span>}
-                    <div className="auth-page__password">
+                    <div className="password-container">
                         <input
                             className="password"
                             type="password"

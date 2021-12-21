@@ -11,12 +11,10 @@ const UserListBody = () => {
     axios.get(`${process.env.REACT_APP_API}/api/users/`)
     .then(response => {
       const data = response.data;
-      // console.log(data);
       // ユーザーリストのデータをuseStateに入れている
       setUserListData(data);
     })
     .catch((error) => {
-      console.log(error);
     })
   }
 
@@ -43,10 +41,14 @@ const UserListBody = () => {
     return (
         <div>
           <table className="list-body">
-            <tr>
-              <td>id</td><td>メールアドレス</td><td>詳細</td>
-            </tr>
-            {Table}
+            <thead>
+              <tr>
+                <td>id</td><td>メールアドレス</td><td>詳細</td>
+              </tr>
+            </thead>
+            <tbody>
+              {Table}
+            </tbody>
           </table>
         </div>
     )

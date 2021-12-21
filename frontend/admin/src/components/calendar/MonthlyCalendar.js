@@ -11,6 +11,7 @@ const MonthlyCalendar = (props) =>{
     const [approvalList, setApprovalList] = useState([]);
     const [year, setYear] = useState(date.getFullYear())
     const [month, setMonth] = useState(date.getMonth() + 1)
+    const [approvalFilter, setApprovalFilter] = useState(2);
     const calendar = createCalendar(year, month)
     const setLoading = props.setLoading;
     // const calendarType = props.calendarType;
@@ -29,15 +30,20 @@ const MonthlyCalendar = (props) =>{
         }
     }
 
+
     useEffect(()=>{
+        setLoading(true);
         let unmounted = false;
         axios.get(`${process.env.REACT_APP_API}/api/approval-count-monthly/`, {
             params: {
-                'approval': 1,
+                'approval': approvalFilter,
+                'year': year,
+                'month': month,
             }
         })
         .then(res => {
             const approvalList = res.data;
+            setLoading(false);
             console.log('approvalList: ', approvalList);
             setLoading(false);
 
@@ -50,7 +56,7 @@ const MonthlyCalendar = (props) =>{
         });
 
         return () => { unmounted = true }
-    }, [year, month]);
+    }, [year, month, approvalFilter]);
 
     return (
         <div className="monthly-calendar">
@@ -59,6 +65,7 @@ const MonthlyCalendar = (props) =>{
                 {/* <Select
                     type={type}
                 /> */}
+
                 <div className="today"><p>今日</p></div>
                 <div className="button">
                     <button onClick={onClick(-1)}><p>{'prev'}</p></button>
@@ -79,7 +86,15 @@ const MonthlyCalendar = (props) =>{
                     {calendar.map((week, i) => (
                         <tr key={week.join('')}>
                             {week.map((day, j) => (
-                                <th key={i + j}>{day}</th>
+                                // <th key={i + j}>{day}</th>
+                                <th>
+                                    {day}
+                                    {approvalList.map((approval) => (
+                                        day === approval.day
+                                        ? <p>{approval.count}</p>
+                                        : null
+                                    ))}
+                                </th>
                             ))}
                         </tr>
                     ))}

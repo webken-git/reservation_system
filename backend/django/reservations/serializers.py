@@ -224,11 +224,12 @@ class ApprovalCountMonthlySerializer(serializers.ModelSerializer):
   """
   class Meta:
     model = ApprovalApplication
-    fields = ['year', 'month', 'count']
+    fields = ['year', 'month', 'day', 'count']
     # fields = ['count']
 
   year = serializers.SerializerMethodField('get_year')
   month = serializers.SerializerMethodField('get_month')
+  day = serializers.SerializerMethodField('get_day')
   count = serializers.SerializerMethodField('get_count')
 
   def get_year(self, obj):
@@ -237,9 +238,11 @@ class ApprovalCountMonthlySerializer(serializers.ModelSerializer):
   def get_month(self, obj):
     return obj['reservation__start__month']
 
+  def get_day(self, obj):
+    return obj['reservation__start__day']
+
   def get_count(self, obj):
-    approval = self.context['request'].query_params.get('approval')
-    return ApprovalApplication.objects.filter(approval=approval, reservation__start__year=obj['reservation__start__year'], reservation__start__month=obj['reservation__start__month']).count()
+    return obj['count']
 
 
 class UnapprovalCountsSerializer(serializers.ModelSerializer):

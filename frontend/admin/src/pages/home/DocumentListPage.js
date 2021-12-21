@@ -6,7 +6,7 @@ import '../../components/document/document.scss';
 
 export const DocumentListPage = () => {
     return (
-        <div className="document-list-layout">
+        <div className="list-wrapper">
             <DocumentList />
         </div>
     );

@@ -1,0 +1,128 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+$main-color: #23ad39;
+$sub-color: #707070;
+$accent-color: #91c21f;
+
+// 中央寄せする
+.account-wrapper {
+  margin: 0 5%;
+
+  .title {
+    font-size: 2rem;
+    border-bottom: 2px solid $sub-color;
+  }
+  .mail-pass {
+    display: inline-block;
+    text-align: left;
+
+    font-size: 20px;
+    .mail-pass-body {
+      color: $sub-color;
+    }
+    .change-link {
+      color: #2699fb;
+    }
+    tr {
+      display: block;
+      margin-bottom: 5%;
+      td {
+        width: 300px;
+        @include mq(tab) {
+          // width: 250px;
+        }
+      }
+    }
+  }
+  .change-link {
+    margin: 0;
+  }
+  .account-link {
+    text-decoration: none;
+    color: $sub-color;
+  }
+  .account-link:hover {
+    text-decoration: underline;
+  }
+  @include mq(sp) {
+    .mail-pass {
+      tr {
+        margin-bottom: 10%;
+        display: block;
+        td {
+          display: block;
+        }
+      }
+    }
+  }
+}
+// .modal-content {
+//   position: absolute;
+//   top: 150px;
+//   left: 40%;
+//   right: 40%;
+//   bottom: 300px;
+//   display: block;
+//   border: 1px solid $sub-color;
+//   background-color: #fff;
+//   -webkit-overflow-scrolling: touch;
+//   border-radius: 4px;
+//   @include mq(tab) {
+//     top: 200px;
+//     left: 20%;
+//     right: 20%;
+//     bottom: 300px;
+//   }
+//   @include mq(sp) {
+//     top: 100px;
+//     left: 40px;
+//     right: 40px;
+//     bottom: 300px;
+//   }
+// }
+// .modal-overlay {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   background-color: rgba(0, 0, 0, 0.5);
+// }
+
+// .buttom-modal-wrapper {
+//   margin: 10% 10% 0 10%;
+//   .auth-btn-wrapper {
+//     .back-btn {
+//       width: 8rem;
+//       @include mq(sp) {
+//         width: 6rem;
+//         font-size: 0.5rem;
+//       }
+//     }
+//     .auth-btn {
+//       width: 8rem;
+//       @include mq(sp) {
+//         width: 6rem;
+//         font-size: 0.5rem;
+//       }
+//     }
+//   }
+// }

@@ -1,9 +1,14 @@
 $bordercolor: gainsboro;
 // $bordercolor: #eee;
 
-.contents {
-  margin: 0;
-}
+// $breakpoints: (
+//   // スマホ
+//   "sp": "screen and (max-width: 767px)",
+//   // タブレット
+//   "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+//   // PC
+//   "pc": "screen and (min-width: #{$layout-width-inner})"
+// );
 
 //追加css
 .container {
@@ -14,22 +19,59 @@ $bordercolor: gainsboro;
   vertical-align: top;
 }
 
-.calendar-base ::-webkit-scrollbar,
-.daily-calendar ::-webkit-scrollbar {
+.calendar-base ::-webkit-scrollbar {
   display: none;
 }
 
-.calendar-base,
-.daily-calendar {
+.calendar-base {
   height: 100%;
 
   .header {
-    height: 12%;
+    width: 100%;
+    margin: 0;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #707070;
+
+    .header_title {
+      font-size: 30px;
+      margin-left: 50px;
+      color: #707070;
+    }
+
+    .date-selector {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .filter-base {
+      display: flex;
+      justify-content: space-between;
+    }
+    // .fabars {
+    //   width: 100%;
+    //   margin-left: 10px;
+    //   @include mq(sp) {
+    //     margin-left: 5px;
+    //   }
+    // }
+    // .fabars:hover {
+    //   cursor: pointer;
+    //   color: #707070;
+    // }
   }
 
   .main,
   .monthly-calendar {
     height: 88%;
+  }
+
+  .main {
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 
   .opacityanime {
@@ -41,25 +83,25 @@ $bordercolor: gainsboro;
   }
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
+// .header {
+//   display: flex;
+//   justify-content: space-between;
 
-  .select {
-    .add {
-      background-color: white;
-    }
-  }
+//   .select {
+//     .add {
+//       background-color: white;
+//     }
+//   }
 
-  .date-selector {
-    display: flex;
-    justify-content: space-between;
-  }
+//   .date-selector {
+//     display: flex;
+//     justify-content: space-between;
+//   }
 
-  .filter-base {
-    display: flex;
-  }
-}
+//   .filter-base {
+//     display: flex;
+//   }
+// }
 
 .head-row {
   height: 10%;
@@ -270,156 +312,156 @@ $bordercolor: gainsboro;
   }
 }
 
-.daily-calendar {
-  .head-row {
-    height: 12%;
+// .daily-calendar {
+//   .head-row {
+//     height: 12%;
 
-    ::-webkit-scrollbar {
-      display: inline;
-      width: 5px;
-    }
+//     ::-webkit-scrollbar {
+//       display: inline;
+//       width: 5px;
+//     }
 
-    .timeline {
-      border-bottom: $bordercolor 1px dashed;
-      box-sizing: border-box;
-      display: inline-block;
-      width: 5.5%;
-      height: 100%;
-      vertical-align: top;
-    }
+//     .timeline {
+//       border-bottom: $bordercolor 1px dashed;
+//       box-sizing: border-box;
+//       display: inline-block;
+//       width: 5.5%;
+//       height: 100%;
+//       vertical-align: top;
+//     }
 
-    .head {
-      border-bottom: $bordercolor 1px dashed;
-      box-sizing: border-box;
-      display: inline-block;
-      width: 94.5%;
-      height: 100%;
-      position: relative;
+//     .head {
+//       border-bottom: $bordercolor 1px dashed;
+//       box-sizing: border-box;
+//       display: inline-block;
+//       width: 94.5%;
+//       height: 100%;
+//       position: relative;
 
-      .day {
-        margin-top: 1vh;
-      }
+//       .day {
+//         margin-top: 1vh;
+//       }
 
-      .date {
-        font-size: 2.5vh;
-        text-align: left;
-        position: absolute;
-        top: 3vh;
-        left: 0;
-        width: 100%;
+//       .date {
+//         font-size: 2.5vh;
+//         text-align: left;
+//         position: absolute;
+//         top: 3vh;
+//         left: 0;
+//         width: 100%;
 
-        span {
-          text-align: left;
-        }
-      }
+//         span {
+//           text-align: left;
+//         }
+//       }
 
-      .today {
-        background-color: lightskyblue;
-        color: white;
-        display: inline-block;
-        width: 3.7vh;
-        height: 3.7vh;
-        border-radius: 50%;
-        line-height: 3.7vh;
-        box-sizing: border-box;
-        padding-right: 1px;
-      }
+//       .today {
+//         background-color: lightskyblue;
+//         color: white;
+//         display: inline-block;
+//         width: 3.7vh;
+//         height: 3.7vh;
+//         border-radius: 50%;
+//         line-height: 3.7vh;
+//         box-sizing: border-box;
+//         padding-right: 1px;
+//       }
 
-      p {
-        margin: 0;
-      }
+//       p {
+//         margin: 0;
+//       }
 
-      .allday-schedule {
-        box-sizing: border-box;
-        display: inline-block;
-        width: 100%;
-        height: 2.4vh;
-        overflow: auto;
-        top: 6.8vh;
-        position: absolute;
-        .allday-schedule-content {
-          box-sizing: border-box;
-          border-radius: 0.3em;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-          position: relative;
-          overflow: hidden;
-          cursor: pointer;
-          p {
-            color: white;
-            font-size: 2vh;
-            height: 100%;
-            line-height: 100%;
-            left: 0;
-            width: 100%;
-            position: absolute;
-            margin: 0;
-          }
-        }
-      }
-    }
-  }
+//       .allday-schedule {
+//         box-sizing: border-box;
+//         display: inline-block;
+//         width: 100%;
+//         height: 2.4vh;
+//         overflow: auto;
+//         top: 6.8vh;
+//         position: absolute;
+//         .allday-schedule-content {
+//           box-sizing: border-box;
+//           border-radius: 0.3em;
+//           width: 100%;
+//           height: 100%;
+//           text-align: center;
+//           position: relative;
+//           overflow: hidden;
+//           cursor: pointer;
+//           p {
+//             color: white;
+//             font-size: 2vh;
+//             height: 100%;
+//             line-height: 100%;
+//             left: 0;
+//             width: 100%;
+//             position: absolute;
+//             margin: 0;
+//           }
+//         }
+//       }
+//     }
+//   }
 
-  .content {
-    border-left: $bordercolor 1px solid;
-    box-sizing: border-box;
-    display: inline-block;
-    width: 94.5%;
-    overflow: hidden;
-    position: relative;
-    vertical-align: top;
+//   .content {
+//     border-left: $bordercolor 1px solid;
+//     box-sizing: border-box;
+//     display: inline-block;
+//     width: 94.5%;
+//     overflow: hidden;
+//     position: relative;
+//     vertical-align: top;
 
-    .content-div:first-of-type {
-      margin-top: 2vh;
-    }
+//     .content-div:first-of-type {
+//       margin-top: 2vh;
+//     }
 
-    .content-div {
-      border-top: $bordercolor 1px dashed;
-      box-sizing: border-box;
-      height: 6vh;
-    }
+//     .content-div {
+//       border-top: $bordercolor 1px dashed;
+//       box-sizing: border-box;
+//       height: 6vh;
+//     }
 
-    .create-modal-column {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+//     .create-modal-column {
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 100%;
+//       height: 100%;
+//     }
 
-    .schedule-block-column {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 15%;
-      height: 100%;
-      pointer-events: none;
-    }
+//     .schedule-block-column {
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 15%;
+//       height: 100%;
+//       pointer-events: none;
+//     }
 
-    .schedule-block {
-      background-color: tomato;
-      box-sizing: border-box;
-      border-radius: 0.3em;
-      cursor: pointer;
-      display: inline-block;
-      overflow: hidden;
-      position: absolute;
-      top: -200vh;
-      white-space: nowrap;
-      width: 100%;
-      height: 10vh;
-      vertical-align: top;
-      pointer-events: auto;
-      //z-index: 3;
-      span {
-        font-size: 0.8em;
-        margin: 0;
-        color: whitesmoke;
-      }
-    }
-  }
-}
+//     .schedule-block {
+//       background-color: tomato;
+//       box-sizing: border-box;
+//       border-radius: 0.3em;
+//       cursor: pointer;
+//       display: inline-block;
+//       overflow: hidden;
+//       position: absolute;
+//       top: -200vh;
+//       white-space: nowrap;
+//       width: 100%;
+//       height: 10vh;
+//       vertical-align: top;
+//       pointer-events: auto;
+//       //z-index: 3;
+//       span {
+//         font-size: 0.8em;
+//         margin: 0;
+//         color: whitesmoke;
+//       }
+//     }
+//   }
+// }
 
 .monthly-calendar {
   width: 100%;
