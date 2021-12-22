@@ -1,19 +1,14 @@
 import { useEffect } from 'react';
 import { withCookies } from 'react-cookie'
-import { Link } from 'react-router-dom'
 
 const Select = (props) =>{
     const type = props.type;
-    const host = window.location.host;
-    const protocol = window.location.protocol;
-    const calendarType = props.calendartype;
     const setCalendarType = props.setCalendarType;
 
     // console.log(type);
     // console.log(type != null);
 
     function jump(link) {
-        // window.location.href = protocol + '//' + host + '/' + link + 'calendar';
         setCalendarType(link);
     }
 
@@ -60,9 +55,9 @@ const Select = (props) =>{
                 <option value="monthlycalendar">月</option>
             </select>
             </form> */}
-            <button id="day" onClick={() => jump("daily")}>日</button>
-            <button id="week" onClick={() => jump("weekly")}>週</button>
-            <button id="month" onClick={() => jump("monthly")}>月</button>
+            <button type="button" className="btn" id="day" onClick={() => jump("daily")}>日</button>
+            <button type="button" className="btn" id="week" onClick={() => jump("weekly")}>週</button>
+            <button type="button" className="btn" id="month" onClick={() => jump("monthly")}>月</button>
             {/* <div className="week" onClick="jump(weekly)">週</div>
             <div className="month" onClick="jump(monthly)">月</div> */}
         </div>

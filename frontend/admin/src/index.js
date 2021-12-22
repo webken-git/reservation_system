@@ -11,4 +11,3 @@ ReactDOM.render(
     </RecoilRoot>,
     rootElement
 );
-

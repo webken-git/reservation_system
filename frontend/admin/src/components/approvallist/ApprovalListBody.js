@@ -6,6 +6,7 @@ import ApprovalTable from "./ApprovalTable"
 import "react-datepicker/dist/react-datepicker.css"
 import './approval.scss'
 import dayjs from 'dayjs'
+import DocumentLayout from "../document/DocumentLayout";
 // import Modal from 'react-modal'
 
 const ApprovalListBody = () => {
@@ -14,14 +15,14 @@ const ApprovalListBody = () => {
   }
 
   // const filtering = (e) => {
-  //   setDateFilterType(e.target.value);
+  //   sethateFilterType(e.target.value);
   //   // console.log(e.target.value);
   // }
 
   const [filterType, setFilterType] = useState();
-  // const [DateFilterType, setDateFilterType] = useState();
+  // const [DateFilterType, sethateFilterType] = useState();
 
-  const [ApprovalListData, setApprovalListData] = useState([]);
+  const [ApprovalListhata, setApprovalListhata] = useState([]);
   // 承認リストのデータをAPIから受け取るaxios
   // const GetApporovalList = () => {
   //   axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
@@ -30,7 +31,7 @@ const ApprovalListBody = () => {
   // console.log(data[0]["reservation"]["place"]["name"]);
   // console.log(data);
   // 承認リストのデータをuseStateに入れている
-  //       setApprovalListData(data);
+  //       setApprovalListhata(data);
   //     })
   //     .catch((error) => {
   //       console.log(error);
@@ -55,7 +56,7 @@ const ApprovalListBody = () => {
         const data = response.data;
         // console.log(data[0]["reservation"]["place"]["name"]);
         // 承認リストのデータをuseStateに入れている
-        setApprovalListData(data);
+        setApprovalListhata(data);
       })
       .catch((error) => {
       })
@@ -63,7 +64,7 @@ const ApprovalListBody = () => {
 
   const Table = (
       // データをmapで回している
-      ApprovalListData.map((val, val_index) =>{
+      ApprovalListhata.map((val, val_index) =>{
         return(
           // 承認リストの中のコンポーネント
           <ApprovalTable
@@ -92,27 +93,43 @@ const ApprovalListBody = () => {
     })
   )
   return (
-    <div>
-      <select className="filter" onChange={(e) => filtering(e)} defaultValue="">
-        <option value="">全部</option>
-        <option value="1">カーリング場</option>
-        <option value="2">大会議室</option>
-        <option value="3">中会議室</option>
-        <option value="4">小会議室</option>
-        <option value="5">アーチェリー場</option>
-        <option value="6">武道場</option>
-      </select>
-      <table className="list-body">
-        <thead>
-          <tr>
-            <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
-          </tr>
-        </thead>
-        <tbody>
-          {Table}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="printbutton-wrapper">
+        <select className="filter" onChange={(e) => filtering(e)} defaultValue="">
+          <option value="">全部</option>
+          <option value="1">カーリング場</option>
+          <option value="2">大会議室</option>
+          <option value="3">中会議室</option>
+          <option value="4">小会議室</option>
+          <option value="5">アーチェリー場</option>
+          <option value="6">武道場</option>
+        </select>
+        <DocumentLayout/>
+      </div>
+      <div className="scroll_box-wrapper">
+        <div className="scroll_box">
+          {/* 承認リスト全体コンポーネント */}
+          <table className="list-body">
+            <thead>
+              <tr>
+                <th></th>
+                <th>日付</th>
+                <th>団体者名</th>
+                <th>連絡者名</th>
+                <th>個人/団体</th>
+                <th>時間</th>
+                <th>人数</th>
+                <th>場所</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Table}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
   )
 }
 

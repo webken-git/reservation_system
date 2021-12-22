@@ -8,7 +8,7 @@ import ScheduleBlock from './ScheduleBlock';
 const Content = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
     const [ contentDate, setContentDate ] = useState(new Date());
-    const [ stringContentDate, setStringContentDate ] = useState("");
+    // const [ stringContentDate, setStringContentDate ] = useState("");
     const date = props.date;
     const cookies = props.cookies;
     const individualOrGroup = props.individualOrGroup;
@@ -17,6 +17,7 @@ const Content = (props) =>{
     const count = props.count;
     const filterType = props.filterType;
     const setLoading = props.setLoading;
+    const approvalFilter = props.approvalFilter;
 
     useEffect(() => {
         let unmounted = false;
@@ -25,23 +26,23 @@ const Content = (props) =>{
         let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
         if(!unmounted){
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
-            setStringContentDate(year+'-'+month+'-'+day);    
+            // setStringContentDate(year+'-'+month+'-'+day);    
         }
         axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
             params: {
+                'approval': approvalFilter,
                 'reservation__start': year+'-'+month+'-'+day,
                 'reservation__place__name': filterType
             }
         })
         .then(res => {
-            let scheduleList = res.data;
+            const scheduleList = res.data;
             setLoading(false);
             // console.log(unmounted);
             if(!unmounted){
-                const scheduleList = res.data;
                 setScheduleList(scheduleList);
-                console.log('data:', res.data);
-                console.log('filterType:', filterType);
+                // console.log('data:', res.data);
+                // console.log('filterType:', filterType);
                 setUpdateFlag(false);
                 setHomeUpdateFlag(false);
             }
@@ -51,7 +52,7 @@ const Content = (props) =>{
         });
         
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count]);
+    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading, approvalFilter]);
 
     return (
         <div className="content">

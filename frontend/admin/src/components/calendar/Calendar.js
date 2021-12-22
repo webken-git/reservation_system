@@ -1,54 +1,75 @@
-import React, { useEffect, useState } from "react"
-import axios from "axios"
+import React, {useEffect, useState} from "react"
+// import axios from "axios"
 import './calendar.scss'
 import Head from './Head';
 import Content from './Content';
-// import DailyContent from './DailyContent';
 import Select from './Select';
 import MonthlyCalendar from "./MonthlyCalendar";
 import Loading from "./../loading/Loading.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+    Box,
+    HStack,
+    Stack,
+} from "@chakra-ui/react";
+import DrawerMenu from '../sidebar/DrawerMenu';
+import '../header/header.scss';
+import UserIcon from '../header/usericon/UserIcon';
 
-const Calendar = (props) => {
+const Calendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
-    const [scheduleDict, setScheduleDict] = useState({});
-    const [dateList, setDateList] = useState([]); //表示用のリスト
+    // const [ scheduleDict, setScheduleDict ] = useState({});
+    const [ dateList, setDateList ] = useState([]); //表示用のリスト
     const date = props.date;
-    const setDate = props.setDate;
+    // const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    // const day = date.getDate();
+    // const setDate = props.setDate;
     const [ updateFlag, setUpdateFlag ] = useState(false);
     const [ st, setSt ] = useState(0);
     const [ filterType, setFilterType ] = useState('カーリング場');
     const [ calendarType, setCalendarType ] = useState('weekly');
+    const [approvalFilter, setApprovalFilter] = useState(2);
     const [ loading, setLoading] = useState(true);
     
     // 検索する施設名を変数に代入
     const filtering = (e) => {
         setFilterType(e.target.value);
-        setLoading(true);
-        console.log(e.target.value);
     }
 
-    useEffect(() => {
+    const approvalFiltering = (e) => {
+        setApprovalFilter(e.target.value);
+    }
+
+    // const onClick = (n) => () => {
+    //     const nextDay = day + n
+    //     if()
+    // }
+
+    useEffect(()=>{
+        setLoading(true);
         let unmounted = false;
         let dateDict = {};
-        for (let i = 0; i < 7; i++) {
-            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + i);
-            dateDict['date' + i] = newDate;
+        for(let i=0; i<7; i++){
+            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()+i);
+            dateDict['date'+i] = newDate;
         }
-        for (let i = 1; i < 7; i++) {
-            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i);
-            dateDict['mdate' + i] = newDate;
+        for(let i=1; i<7; i++){
+            let newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()-i);
+            dateDict['mdate'+i] = newDate;
         }
-        const sortDateList = () => {
+        const sortDateList = () =>{
             let dateList = [];
-            for (let day = dateDict['date0'].getDay(); day > 0; day--) {
-                dateList.push(dateDict['mdate' + day]);
+            for(let day = dateDict['date0'].getDay(); day > 0; day--){
+                dateList.push(dateDict['mdate'+day]);
             }
-            for (let day = 0; day < (7 - dateDict['date0'].getDay()); day++) {
-                dateList.push(dateDict['date' + day]);
+            for(let day = 0; day < (7 - dateDict['date0'].getDay()); day++){
+                dateList.push(dateDict['date'+day]);
             }
-            if (!unmounted) {
+            if(!unmounted){
                 setDateList(dateList);
-                console.log('dateList:', dateList);
+                // console.log('dateList:', dateList);
             }
         }
         sortDateList();
@@ -59,7 +80,7 @@ const Calendar = (props) => {
         let now = new Date();
         let hours = now.getHours() - 4;
         let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-        if (!unmounted) {
+        if(!unmounted){
             setSt(margin + blockHeight * now.getHours());
         }
         document.getElementsByClassName('content-row')[0].scrollTo({
@@ -73,8 +94,20 @@ const Calendar = (props) => {
 
 
     return (
-        <div className="weekly-calendar">
+        <div className="calendar-base">
             <div className="header">
+
+                <Stack >
+                    <HStack p={5} className='drawer-menu'>
+                        <Box display={{ base: "block", md: "none" }}>
+                            <DrawerMenu />
+                        </Box>
+                    </HStack>
+                </Stack>
+
+                {/* <div className="header_title">{props.pagename}</div> */}
+                <div className="header_title">カレンダー</div>
+                {/* 各ページにあった名前に変更できるようにpropsにする */}
 
                 {/* 表示するカレンダーの種類 */}
                 <Select
@@ -82,16 +115,21 @@ const Calendar = (props) => {
                     setCalendarType={setCalendarType}
                 />
 
-                {/* 日付を変更するボタン */}
+                {/* 日付表示・変更するボタン */}
                 <div className="date-selector">
-                    <h1>{date.getMonth() + 1}月</h1>
+                    <div className="last-button">
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </div>
+                    <p>{month}月</p>
+                    <div className="next-button">
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </div>
                 </div>
 
-                {/* 表示する予約のフィルター選択 */}
-                <div className="filter-base">
-                    <p>施設名</p>
-                    <select className="filter" onChange={(e) => filtering(e)}>
-                        <option value="カーリング場" selected>カーリング場</option>
+                {/* 表示する予約の施設選択 */}
+                {/* <div className="filter-base">
+                    <select className="filter" defaultValue="カーリング場" onChange={(e) => filtering(e)}>
+                        <option value="カーリング場">カーリング場</option>
                         <option value="小会議室">小会議室</option>
                         <option value="中会議室">中会議室</option>
                         <option value="武道場">武道場</option>
@@ -99,26 +137,64 @@ const Calendar = (props) => {
                     </select>
                 </div>
 
+                <div className="filter-base">
+                    <select className="filter" defaultValue="2" onChange={(e) => filtering(e)}>
+                        <option value="2">承認済み</option>
+                        <option value="1">未承認</option>
+                        <option value="3">不承認</option>
+                        <option value="4">キャンセル</option>
+                    </select>
+                </div> */}
+
+                <div className="stop">
+                    <button type="button" className="btn">予約停止</button>
+                </div>
+
+                <UserIcon />
+
             </div>
 
-            {calendarType == 'monthly' ? (
+            {calendarType === 'monthly' ? (
                 <MonthlyCalendar
                     dayList={dayList}
                     date={date}
                     setCalendarType={setCalendarType}
                     calendarType={calendarType}
+                    setLoading={setLoading}
                 />
             ) : (
                 <div className="main">
+
+                    <div className="main-header">
+                        <div className="filter-base">
+                            <select className="filter" defaultValue="カーリング場" onChange={(e) => filtering(e)}>
+                                <option value="カーリング場">カーリング場</option>
+                                <option value="小会議室">小会議室</option>
+                                <option value="中会議室">中会議室</option>
+                                <option value="武道場">武道場</option>
+                                <option value="多目的体育館">多目的体育館</option>
+                            </select>
+                        </div>
+
+                        <div className="filter-base">
+                            <select className="filter" defaultValue="2" onChange={(e) => approvalFiltering(e)}>
+                                <option value="2">承認済み</option>
+                                <option value="1">未承認</option>
+                                <option value="3">不承認</option>
+                                <option value="4">キャンセル</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div className="head-row">
                         <div className="timeline"></div>
-                        {calendarType == 'weekly' ? (
-                            dateList.map((date, index) => {
+                        {calendarType === 'weekly' ? (
+                            dateList.map((date, index)=>{
                                 return <Head
                                             key={index}
                                             day={dayList[index]}
                                             date={date}
-                                            setScheduleDict={setScheduleDict}
+                                            // setScheduleDict={setScheduleDict}
                                             // openModal={openModal}
                                             updateFlag={updateFlag}
                                             setUpdateFlag={setUpdateFlag}
@@ -130,43 +206,29 @@ const Calendar = (props) => {
                                         />
                                 })
                             ) : (
-                                <Head
-                                    // key={index}
-                                    // day={dayList[index]}
-                                    date={date}
-                                    setScheduleDict={setScheduleDict}
-                                    // openModal={openModal}
-                                    updateFlag={updateFlag}
-                                    setUpdateFlag={setUpdateFlag}
-                                    isMain={props.isMain}
-                                    // individualOrGroup={props.individualOrGroup}
-                                    homeUpdateFlag={props.homeUpdateFlag}
-                                    setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                    filterType={filterType}
-                                />
-                            })
-                        ) : (
-                            <Head
-                                // key={index}
-                                // day={dayList[index]}
-                                date={date}
-                                setScheduleDict={setScheduleDict}
-                                // openModal={openModal}
-                                updateFlag={updateFlag}
-                                setUpdateFlag={setUpdateFlag}
-                                isMain={props.isMain}
-                                // individualOrGroup={props.individualOrGroup}
-                                homeUpdateFlag={props.homeUpdateFlag}
-                                setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                count={count}
-                            />
-                        )}
-
+                                <div className="daily-head">
+                                    <Head
+                                        // key={index}
+                                        // day={dayList[index]}
+                                        date={date}
+                                        // setScheduleDict={setScheduleDict}
+                                        // openModal={openModal}
+                                        updateFlag={updateFlag}
+                                        setUpdateFlag={setUpdateFlag}
+                                        isMain={props.isMain}
+                                        // individualOrGroup={props.individualOrGroup}
+                                        homeUpdateFlag={props.homeUpdateFlag}
+                                        setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                        filterType={filterType}
+                                    />
+                                </div>
+                            )}
+                            
                     </div>
 
                     <div className="content-row">
                         {/* 現在時刻を表示する */}
-                        <div className="now-time" style={{ top: st }}>
+                        <div className="now-time" style={{top: st}}>
                             <div className="circle"></div>
                             <div className="border"></div>
                         </div>
@@ -198,12 +260,12 @@ const Calendar = (props) => {
                             <div><p>23</p></div>
                         </div>
 
-                        {calendarType == 'weekly' ? (
-                            dateList.map((date, index) => {
+                        {calendarType === 'weekly' ? (
+                            dateList.map((date,index)=>{
                                 return <Content
                                             key={index}
                                             date={date}
-                                            setScheduleDict={setScheduleDict}
+                                            // setScheduleDict={setScheduleDict}
                                             // openModal={openModal}
                                             updateFlag={updateFlag}
                                             setUpdateFlag={setUpdateFlag}
@@ -213,30 +275,33 @@ const Calendar = (props) => {
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
                                             filterType={filterType}
                                             setLoading={setLoading}
+                                            approvalFilter={approvalFilter}
                                         />
                             })
                         ) : (
-                            <Content
-                                // key={index}
-                                date={date}
-                                setScheduleDict={setScheduleDict}
-                                // openModal={openModal}
-                                updateFlag={updateFlag}
-                                setUpdateFlag={setUpdateFlag}
-                                isMain={props.isMain}
-                                // individualOrGroup={props.individualOrGroup}
-                                homeUpdateFlag={props.homeUpdateFlag}
-                                setHomeUpdateFlag={props.setHomeUpdateFlag}
-                                filterType={filterType}
-                                setLoading={setLoading}
-                            />
+                            <div className="daily-content">
+                                <Content
+                                    // key={index}
+                                    date={date}
+                                    // setScheduleDict={setScheduleDict}
+                                    // openModal={openModal}
+                                    updateFlag={updateFlag}
+                                    setUpdateFlag={setUpdateFlag}
+                                    isMain={props.isMain}
+                                    // individualOrGroup={props.individualOrGroup}
+                                    homeUpdateFlag={props.homeUpdateFlag}
+                                    setHomeUpdateFlag={props.setHomeUpdateFlag}
+                                    filterType={filterType}
+                                    setLoading={setLoading}
+                                />
+                            </div>
                         )}
                     </div>
                 </div>
             )}
             {loading && <Loading />}
         </div>
-    );
-}
+        );
+    }
 
-export default Calendar;
+    export default Calendar;

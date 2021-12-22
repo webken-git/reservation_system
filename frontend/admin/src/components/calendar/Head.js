@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
-import axios from 'axios'
+import React from 'react'
+// import axios from 'axios'
 import {withCookies} from 'react-cookie'
 const Head = (props) =>{
 
-    const date = props.date;
+    // const date = props.date;
 
     return (
         <div className="head">

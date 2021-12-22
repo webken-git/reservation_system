@@ -21,10 +21,8 @@ const SideBarRoute = (props) => {
                             <SideBar/>
                         </div>
                         <div className="mainbox">
-                            <div className="contents">
                                 {children}
                                 {/* ここに承認リストページやカレンダーを表示する */}
-                            </div>
                         </div>
                     </div>
                 </>

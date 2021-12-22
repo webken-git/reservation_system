@@ -18,11 +18,9 @@ const HeaderRoute = (props) => {
                 <>
                     <div className="allbox">
                         <Header/>
-                        <div className="mainbox">
-                            <div className="contents">
-                                {children}
-                                {/* ここにページを表示する */}
-                            </div>
+                        <div className="contents">
+                            {children}
+                            {/* ここにページを表示する */}
                         </div>
                         <Footer/>
                     </div>

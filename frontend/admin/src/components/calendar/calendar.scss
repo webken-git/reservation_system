@@ -1,106 +1,79 @@
 $bordercolor: gainsboro;
 // $bordercolor: #eee;
 
-.contents {
-  margin: 0;
-}
+// $breakpoints: (
+//   // スマホ
+//   "sp": "screen and (max-width: 767px)",
+//   // タブレット
+//   "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+//   // PC
+//   "pc": "screen and (min-width: #{$layout-width-inner})"
+// );
 
 //追加css
 .container {
   display: inline-block;
   // width: 80%;
   width: 100%;
-  height: 95vh;
+  height: 97vh;
   vertical-align: top;
 }
 
-.weekly-calendar ::-webkit-scrollbar,
-.daily-calendar ::-webkit-scrollbar {
+.calendar-base ::-webkit-scrollbar {
   display: none;
 }
 
-.weekly-calendar,
-.daily-calendar {
+.calendar-base {
   height: 100%;
 
   .header {
-    height: 12%;
+    width: 100%;
+    margin: 0;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #707070;
+
+    .header_title {
+      font-size: 30px;
+      margin-left: 50px;
+      color: #707070;
+    }
+
+    .date-selector {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .filter-base {
+      display: flex;
+      justify-content: space-between;
+    }
+    // .fabars {
+    //   width: 100%;
+    //   margin-left: 10px;
+    //   @include mq(sp) {
+    //     margin-left: 5px;
+    //   }
+    // }
+    // .fabars:hover {
+    //   cursor: pointer;
+    //   color: #707070;
+    // }
   }
 
-  // #preloader{
-  //     background-color: white;
-  //     box-sizing: border-box;
-  //     width: 100%;
-  //     height: 100%;
-  //     position: absolute;
-  //     z-index: 100;
+  .main,
+  .monthly-calendar {
+    height: 88%;
+  }
 
-  //     .central{
-  //         //background-color: blue;
-  //         box-sizing: border-box;
-  //         width: 30%;
-  //         height: 20%;
-  //         position: absolute;
-  //         top: -15%;
-  //         left: -22px;
-  //         right: 0;
-  //         bottom: 0;
-  //         margin: auto;
-  //         color: silver;
-  //         text-align: center;
-
-  //         @keyframes updown {
-  //             from{
-  //                 transform: translateY(0);
-  //             }
-
-  //             to{
-  //                 transform: translateY(-150%);
-  //             }
-  //         }
-  //         .circle{
-  //             display: inline-block;
-  //             width: 1vh;
-  //             height: 1vh;
-  //             border-radius: 50%;
-  //             background-color: silver;
-  //             margin-right: 1.3vw;
-  //             margin-top: 4vh;
-  //             animation: updown 1s ease-in-out 0s infinite;
-  //         }
-
-  //         .c1{
-  //             animation-delay: 0s;
-  //         }
-  //         .c2{
-  //             animation-delay: 0.1s;
-  //         }
-  //         .c3{
-  //             animation-delay: 0.2s;
-  //         }
-  //         .c4{
-  //             animation-delay: 0.3s;
-  //         }
-  //         .c5{
-  //             animation-delay: 0.4s;
-  //         }
-  //         .c6{
-  //             animation-delay: 0.5s;
-  //         }
-  //         .c7{
-  //             animation-delay: 0.6s;
-  //         }
-  //         .c8{
-  //             animation-delay: 0.7s;
-  //         }
-
-  //         .loading{
-  //             font-size: 1.5rem;
-  //             letter-spacing: 0.7vw;
-  //             //font-weight: bold;
-  //         }
-  //     }
-  // }
+  .main {
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 
   .opacityanime {
     animation: show 0.2s linear 0s forwards;
@@ -111,23 +84,28 @@ $bordercolor: gainsboro;
   }
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
+// .header {
+//   display: flex;
+//   justify-content: space-between;
 
-  .select {
-    .add {
-      background-color: white;
-    }
-  }
+//   .select {
+//     .add {
+//       background-color: white;
+//     }
+//   }
 
-  .filter-base {
-    display: flex;
-  }
-}
+//   .date-selector {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+
+//   .filter-base {
+//     display: flex;
+//   }
+// }
 
 .head-row {
-  // height: 12%;
+  height: 10%;
 
   ::-webkit-scrollbar {
     display: inline;
@@ -150,6 +128,7 @@ $bordercolor: gainsboro;
     width: 13.5%;
     height: 100%;
     position: relative;
+    text-align: center;
 
     .day {
       margin-top: 1vh;
@@ -334,156 +313,156 @@ $bordercolor: gainsboro;
   }
 }
 
-.daily-calendar {
-  .head-row {
-    height: 12%;
+// .daily-calendar {
+//   .head-row {
+//     height: 12%;
 
-    ::-webkit-scrollbar {
-      display: inline;
-      width: 5px;
-    }
+//     ::-webkit-scrollbar {
+//       display: inline;
+//       width: 5px;
+//     }
 
-    .timeline {
-      border-bottom: $bordercolor 1px dashed;
-      box-sizing: border-box;
-      display: inline-block;
-      width: 5.5%;
-      height: 100%;
-      vertical-align: top;
-    }
+//     .timeline {
+//       border-bottom: $bordercolor 1px dashed;
+//       box-sizing: border-box;
+//       display: inline-block;
+//       width: 5.5%;
+//       height: 100%;
+//       vertical-align: top;
+//     }
 
-    .head {
-      border-bottom: $bordercolor 1px dashed;
-      box-sizing: border-box;
-      display: inline-block;
-      width: 94.5%;
-      height: 100%;
-      position: relative;
+//     .head {
+//       border-bottom: $bordercolor 1px dashed;
+//       box-sizing: border-box;
+//       display: inline-block;
+//       width: 94.5%;
+//       height: 100%;
+//       position: relative;
 
-      .day {
-        margin-top: 1vh;
-      }
+//       .day {
+//         margin-top: 1vh;
+//       }
 
-      .date {
-        font-size: 2.5vh;
-        text-align: left;
-        position: absolute;
-        top: 3vh;
-        left: 0;
-        width: 100%;
+//       .date {
+//         font-size: 2.5vh;
+//         text-align: left;
+//         position: absolute;
+//         top: 3vh;
+//         left: 0;
+//         width: 100%;
 
-        span {
-          text-align: left;
-        }
-      }
+//         span {
+//           text-align: left;
+//         }
+//       }
 
-      .today {
-        background-color: lightskyblue;
-        color: white;
-        display: inline-block;
-        width: 3.7vh;
-        height: 3.7vh;
-        border-radius: 50%;
-        line-height: 3.7vh;
-        box-sizing: border-box;
-        padding-right: 1px;
-      }
+//       .today {
+//         background-color: lightskyblue;
+//         color: white;
+//         display: inline-block;
+//         width: 3.7vh;
+//         height: 3.7vh;
+//         border-radius: 50%;
+//         line-height: 3.7vh;
+//         box-sizing: border-box;
+//         padding-right: 1px;
+//       }
 
-      p {
-        margin: 0;
-      }
+//       p {
+//         margin: 0;
+//       }
 
-      .allday-schedule {
-        box-sizing: border-box;
-        display: inline-block;
-        width: 100%;
-        height: 2.4vh;
-        overflow: auto;
-        top: 6.8vh;
-        position: absolute;
-        .allday-schedule-content {
-          box-sizing: border-box;
-          border-radius: 0.3em;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-          position: relative;
-          overflow: hidden;
-          cursor: pointer;
-          p {
-            color: white;
-            font-size: 2vh;
-            height: 100%;
-            line-height: 100%;
-            left: 0;
-            width: 100%;
-            position: absolute;
-            margin: 0;
-          }
-        }
-      }
-    }
-  }
+//       .allday-schedule {
+//         box-sizing: border-box;
+//         display: inline-block;
+//         width: 100%;
+//         height: 2.4vh;
+//         overflow: auto;
+//         top: 6.8vh;
+//         position: absolute;
+//         .allday-schedule-content {
+//           box-sizing: border-box;
+//           border-radius: 0.3em;
+//           width: 100%;
+//           height: 100%;
+//           text-align: center;
+//           position: relative;
+//           overflow: hidden;
+//           cursor: pointer;
+//           p {
+//             color: white;
+//             font-size: 2vh;
+//             height: 100%;
+//             line-height: 100%;
+//             left: 0;
+//             width: 100%;
+//             position: absolute;
+//             margin: 0;
+//           }
+//         }
+//       }
+//     }
+//   }
 
-  .content {
-    border-left: $bordercolor 1px solid;
-    box-sizing: border-box;
-    display: inline-block;
-    width: 94.5%;
-    overflow: hidden;
-    position: relative;
-    vertical-align: top;
+//   .content {
+//     border-left: $bordercolor 1px solid;
+//     box-sizing: border-box;
+//     display: inline-block;
+//     width: 94.5%;
+//     overflow: hidden;
+//     position: relative;
+//     vertical-align: top;
 
-    .content-div:first-of-type {
-      margin-top: 2vh;
-    }
+//     .content-div:first-of-type {
+//       margin-top: 2vh;
+//     }
 
-    .content-div {
-      border-top: $bordercolor 1px dashed;
-      box-sizing: border-box;
-      height: 6vh;
-    }
+//     .content-div {
+//       border-top: $bordercolor 1px dashed;
+//       box-sizing: border-box;
+//       height: 6vh;
+//     }
 
-    .create-modal-column {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+//     .create-modal-column {
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 100%;
+//       height: 100%;
+//     }
 
-    .schedule-block-column {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 15%;
-      height: 100%;
-      pointer-events: none;
-    }
+//     .schedule-block-column {
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 15%;
+//       height: 100%;
+//       pointer-events: none;
+//     }
 
-    .schedule-block {
-      background-color: tomato;
-      box-sizing: border-box;
-      border-radius: 0.3em;
-      cursor: pointer;
-      display: inline-block;
-      overflow: hidden;
-      position: absolute;
-      top: -200vh;
-      white-space: nowrap;
-      width: 100%;
-      height: 10vh;
-      vertical-align: top;
-      pointer-events: auto;
-      //z-index: 3;
-      span {
-        font-size: 0.8em;
-        margin: 0;
-        color: whitesmoke;
-      }
-    }
-  }
-}
+//     .schedule-block {
+//       background-color: tomato;
+//       box-sizing: border-box;
+//       border-radius: 0.3em;
+//       cursor: pointer;
+//       display: inline-block;
+//       overflow: hidden;
+//       position: absolute;
+//       top: -200vh;
+//       white-space: nowrap;
+//       width: 100%;
+//       height: 10vh;
+//       vertical-align: top;
+//       pointer-events: auto;
+//       //z-index: 3;
+//       span {
+//         font-size: 0.8em;
+//         margin: 0;
+//         color: whitesmoke;
+//       }
+//     }
+//   }
+// }
 
 .monthly-calendar {
   width: 100%;
