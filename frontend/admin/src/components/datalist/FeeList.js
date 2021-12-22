@@ -1,25 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { noWait } from "recoil";
 import './feelist.scss'
 
 const FeeList = (props) => {
   const agedata = props.age
   const feelistdata = props.feelist
   const placename = props.placename
-  // const timedata = props.time
-  // const [timeData, setTimeData] = useState([])
-
-  // useEffect(() => {
-  //   if (!timedata) {
-  //     // const timeName = timedata.filter(timetable => {
-  //     //   return timetable['name']
-  //     // }
-  //   } else {
-  //     timedata.map((timetables, id) => {
-  //       setTimeData(timetables)
-  //     })
-  //   }
-  // }, [timedata])
-  // console.log(timeData)
 
   // 小学生から一般まで
   const divide_age = agedata.slice(1, 6)
@@ -518,13 +504,12 @@ const FeeList = (props) => {
 
   return (
     <div className="feelist">
-      <details>
-        <summary>料金一覧</summary>
+      <div>
         <div>
           <IndividualFeeList />
           <GroupFeeList />
         </div>
-      </details>
+      </div>
     </div>
   )
 }

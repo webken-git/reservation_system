@@ -21,7 +21,24 @@ const Select = (props) =>{
             elements.classList.add("add")
             // calendarType.classList.add("add");
         }
-    });    
+    });
+
+    // if (type == 'day') {
+    //     document.getElementByClassName("day").style.backgroundColor = "white";
+    // } else if (type == 'week') {
+    //     document.getElementByClassName("week").style.backgroundColor = "white";
+    // } else if (type == 'month') {
+    //     document.getElementByClassName("month").style.backgroundColor = "white";
+    // }
+    // if (type != null) {
+    //     const elements = document.getElementById(type);
+    //     console.log(elements)
+    //     // const element = elements[0];
+    //     // const classList = element.classList;
+    //     // classList.add("add")
+    //     // calendarType.classList.add("add");
+    // }
+    
 
     return (
         <div className="select">
@@ -40,7 +57,7 @@ const Select = (props) =>{
             </form> */}
             <button type="button" className="btn" id="day" onClick={() => jump("daily")}>日</button>
             <button type="button" className="btn" id="week" onClick={() => jump("weekly")}>週</button>
-            <button type="button" className="btn" id="month" onClick={() => jump("monthly")}>月</button>
+            {/* <button type="button" className="btn" id="month" onClick={() => jump("monthly")}>月</button> */}
             {/* <div className="week" onClick="jump(weekly)">週</div>
             <div className="month" onClick="jump(monthly)">月</div> */}
         </div>

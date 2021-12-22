@@ -1,0 +1,15 @@
+.tdnotclick {
+    display: none ;
+}
+
+.tdclick {
+    display: none ;
+}
+
+details[open] .open {
+    display: none ;
+}
+
+details:not([open]) .detailsclose {
+    display: none ;
+}

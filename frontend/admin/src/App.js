@@ -18,8 +18,10 @@ import { UnapprovalList } from "./pages/home/UnapprovalList";
 import { DisapprovalList } from "./pages/home/DisapprovalList";
 import { CancelList } from "./pages/home/CancelList";
 import { UserList } from "./pages/home/UserList";
+import { DataList } from "./pages/home/DataList"
 import { CalendarPage } from "./pages/home/CalendarPage";
 import { DocumentListPage } from "./pages/home/DocumentListPage";
+import { ApprovalInfoPage } from "./pages/home/ApprovalInfoPage";
 import "./index.css"
 import GetDate from "./components/toppage/GetDate"
 
@@ -64,8 +66,10 @@ function App() {
             <SideBarAndHeaderRoute pagename="未承認リスト" path="/unapprovalList" exact children={<Route path="/unapprovalList" exact children={<UnapprovalList/>} />} />
             <SideBarAndHeaderRoute pagename="キャンセルリスト" path="/cancellist" exact children={<Route path="/cancelList" exact children={<CancelList />} />} />
             <SideBarAndHeaderRoute pagename="ドキュメントリスト" path="/documentlist" exact children={<Route path="/documentList" exact children={<DocumentListPage />} />} />
-            <SideBarAndHeaderRoute pagename="ユーザーリスト" path="/userlist" exact children={<Route path="/userlist" exact children={<UserList/>} />} />
-            <SideBarRoute path="/calendar" exact children={<Route path="/calendar" exact children={<CalendarPage/>} />} />
+            <SideBarAndHeaderRoute pagename="ユーザーリスト" path="/userlist" exact children={<Route path="/userlist" exact children={<UserList />} />} />
+            <SideBarAndHeaderRoute pagename="データリスト" path="/datalist" exact children={<Route path="/datalist" exact children={<DataList />} />} />
+            <SideBarAndHeaderRoute pagename="予約詳細" path="/approvalInfo" exact children={<Route path="/approvalInfo" exact children={<ApprovalInfoPage />} />} />
+            <SideBarRoute path="/calendar" exact children={<Route path="/calendar" exact children={<CalendarPage />} />} />
           </LoginRoute>
         </Switch>
       </CookiesProvider>
