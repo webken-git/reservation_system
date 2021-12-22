@@ -14,10 +14,12 @@ const LoginRoute = (props) => {
         axios.get(GET_USER)
             .then((res) => {
                 setUser(res.data);
+                // console.log(res.status);
             })
             .catch((err) => {
                 // トークンが無効な場合、authStateをfalseにする
-                if (err.response.status === 401) {
+                if (err.response.status === 401
+                ) {
                     setAuth({
                         isAuthenticated: false,
                     });
@@ -31,7 +33,7 @@ const LoginRoute = (props) => {
     }, []);
 
     // props.childrenにuserをpropsとして渡す
-    if(auth.isAuthenticated === true) {
+    if (auth.isAuthenticated === true) {
         return props.children;
     } else {
         // alert("再度ログインしてください");

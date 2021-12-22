@@ -6,10 +6,34 @@ import CancelTable from "./CancelTable"
 import dayjs from 'dayjs'
 
 const CancelListBody = () => {
+  const placeFiltering = (e) => {
+    setPlaceFilter(e.target.value);
+    // console.log(e.target.value);
+  }
+
+  const groupFiltering = (e) => {
+    setGroupFilter(e.target.value);
+    // setGroupFilter(true);
+  }
+
+  const dateFiltering = (e) => {
+    setDateFilter(e.target.value);
+  }
+
+  const [placeFilter, setPlaceFilter] = useState();
+  const [groupFilter, setGroupFilter] = useState();
+  const [dateFilter, setDateFilter] = useState();
+
   const [CancelListData, setCancelListData] = useState([]);
   // キャンセルリストのデータをAPIから受け取るaxios
   const GetCancelList = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=4`)
+    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=4`, {
+      params: {
+        'reservation__place': placeFilter,
+        'reservation__is_group': groupFilter,
+        'reservation__start': dateFilter
+      }
+    })
       .then(response => {
         const data = response.data;
         // console.log(data);
@@ -24,7 +48,7 @@ const CancelListBody = () => {
   // ページのレンダリング時にキャンセルリストのデータを受け取っている
   useEffect(() => {
     GetCancelList();
-  }, [])
+  }, [placeFilter, groupFilter, dateFilter])
 
   const Table = (
     CancelListData.map((val, val_index) => {
@@ -38,6 +62,7 @@ const CancelListBody = () => {
           group_name={val.reservation.group_name}
           reader_name={val.reservation.reader_name}
           contact_name={val.reservation.contact_name}
+          is_group={val.reservation.is_group}
           tel={val.reservation.tel}
           address={val.reservation.address}
           purpose={val.reservation.purpose}
@@ -59,7 +84,35 @@ const CancelListBody = () => {
     <div>
       <table className="list-body">
         <tr>
-          <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td></td><td>詳細</td>
+          <td>
+            <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
+          </td>
+          <td></td>
+          <td></td>
+          <td>
+            <select className="groupfilter" onChange={(e) => groupFiltering(e)}>
+              <option value="">全部</option>
+              <option value="false">個人</option>
+              <option value="true">団体</option>
+            </select>
+          </td>
+          <td></td>
+          <td></td>
+          <td>
+            <select className="placefilter" onChange={(e) => placeFiltering(e)}>
+              <option value="" selected>全部</option>
+              <option value="1">カーリング場</option>
+              <option value="2">大会議室</option>
+              <option value="3">中会議室</option>
+              <option value="4">小会議室</option>
+              <option value="5">アーチェリー場</option>
+              <option value="6">武道場</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
         </tr>
         {Table}
       </table>

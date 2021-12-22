@@ -9,49 +9,36 @@ import dayjs from 'dayjs'
 // import Modal from 'react-modal'
 
 const ApprovalListBody = () => {
-  const filtering = (e) => {
-    setFilterType(e.target.value);
+  const placeFiltering = (e) => {
+    setPlaceFilter(e.target.value);
     // console.log(e.target.value);
   }
 
-  // const filtering = (e) => {
-  //   setDateFilterType(e.target.value);
-  //   // console.log(e.target.value);
-  // }
+  const groupFiltering = (e) => {
+    setGroupFilter(e.target.value);
+    // setGroupFilter(true);
+  }
 
-  const [filterType, setFilterType] = useState(1);
-  // const [DateFilterType, setDateFilterType] = useState();
+  const dateFiltering = (e) => {
+    setDateFilter(e.target.value);
+  }
+
+  const [placeFilter, setPlaceFilter] = useState();
+  const [groupFilter, setGroupFilter] = useState();
+  const [dateFilter, setDateFilter] = useState();
+
+
 
   const [ApprovalListData, setApprovalListData] = useState([]);
   // 承認リストのデータをAPIから受け取るaxios
-  // const GetApporovalList = () => {
-  //   axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
-  //     .then(response => {
-  //       const data = response.data;
-  // console.log(data[0]["reservation"]["place"]["name"]);
-  // console.log(data);
-  // 承認リストのデータをuseStateに入れている
-  //       setApprovalListData(data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     })
-  // }
-
-  // ページレンダリング時に承認リストのデータを受け取っている
-  // useEffect(() => {
-  //   GetApporovalList();
-  // }, [])
-
-  useEffect(() => {
-    // axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
+  const GetApporovalList = () => {
+    console.log(dateFilter);
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`, {
       params: {
-        'reservation__place': filterType
+        'reservation__place': placeFilter,
+        'reservation__is_group': groupFilter,
+        'reservation__start': dateFilter
       }
-      // params: {
-      //   'reservation__start': DateFilterType
-      // }
     })
       .then(response => {
         const data = response.data;
@@ -63,7 +50,12 @@ const ApprovalListBody = () => {
       .catch((error) => {
         console.log(error);
       })
-  }, [filterType])
+  }
+
+
+  useEffect(() => {
+    GetApporovalList();
+  }, [placeFilter, groupFilter, dateFilter])
 
   const Table = (
     // データをmapで回している
@@ -78,6 +70,7 @@ const ApprovalListBody = () => {
           group_name={val.reservation.group_name}
           reader_name={val.reservation.reader_name}
           contact_name={val.reservation.contact_name}
+          is_group={val.reservation.is_group}
           tel={val.reservation.tel}
           address={val.reservation.address}
           purpose={val.reservation.purpose}
@@ -101,17 +94,23 @@ const ApprovalListBody = () => {
         <tr>
           <td></td>
           <td>
-            {/* <input type="date" className="filter" onChange={(e) => filtering(e)} /> */}
+            <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
           </td>
           <td></td>
           <td></td>
-          <td></td>
+          <td>
+            <select className="groupfilter" onChange={(e) => groupFiltering(e)}>
+              <option value="">全部</option>
+              <option value="false">個人</option>
+              <option value="true">団体</option>
+            </select>
+          </td>
           <td></td>
           <td></td>
           <td>
-            <select className="filter" onChange={(e) => filtering(e)}>
+            <select className="placefilter" onChange={(e) => placeFiltering(e)}>
               <option value="" selected>全部</option>
-              <option value="1" selected>カーリング場</option>
+              <option value="1">カーリング場</option>
               <option value="2">大会議室</option>
               <option value="3">中会議室</option>
               <option value="4">小会議室</option>
@@ -122,7 +121,7 @@ const ApprovalListBody = () => {
           <td></td>
         </tr>
         <tr>
-          <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
+          <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td></td><td>詳細</td>
         </tr>
         {Table}
       </table>
