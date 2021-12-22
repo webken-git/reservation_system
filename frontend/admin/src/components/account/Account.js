@@ -28,16 +28,16 @@ export const Account = (props) => {
 
     return (
         <>
-            <div className="mypage-wrapper">
+            <div className="account-wrapper">
                 <table className="mail-pass">
                     <tbody>
                         <tr className="mail-address">
                             <td className="mail-pass-title">メールアドレス：</td>
                             <td className="mail-pass-body">{user.email}</td>
                             <td>
-                                {/* <Link url='/account/email' className='link'>
+                                <Link to='/account/email' className='link'>
                                     <span>変更</span>
-                                </Link> */}
+                                </Link>
                             </td>
                         </tr>
                         <tr className="pass-word">

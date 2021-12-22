@@ -106,45 +106,47 @@ $accent-color: #91c21f;
     .auth-page__form-input:focus {
       outline: none;
     }
-    .auth-page__password {
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      padding: 10px 10px;
-      margin: 5px 0;
-    }
-    .auth-page__password:focus {
-      outline: #000 solid 1px;
-    }
-    .password {
-      width: 275px;
-      border: none;
-      font-size: large;
-    }
-    .password:focus {
-      outline: none;
-    }
   }
 
   .auth-btn-wrapper {
     text-align: center;
-    .back-btn {
-      @extend .btn;
-      background-color: $sub-color;
-      border: $sub-color solid 1px;
-    }
-    .verify-btn {
-      @extend .btn;
-      border: 1px solid $accent-color;
-      background-color: $accent-color;
-    }
-    .auth-btn {
-      @extend .btn;
-      width: 10rem;
-      border: 1px solid $accent-color;
-      background-color: $accent-color;
-      // margin: 0 auto;
-    }
   }
+}
+
+.back-btn {
+  @extend .btn;
+  background-color: $sub-color;
+  border: $sub-color solid 1px;
+}
+.verify-btn {
+  @extend .btn;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+}
+.auth-btn {
+  @extend .btn;
+  width: 10rem;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+  // margin: 0 auto;
+}
+
+.password-container {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px 10px;
+  margin: 5px 0;
+}
+.password-container:focus {
+  outline: #000 solid 1px;
+}
+.password {
+  width: 275px;
+  border: none;
+  font-size: large;
+}
+.password:focus {
+  outline: none;
 }
 
 .logout-container {
@@ -163,4 +165,15 @@ $accent-color: #91c21f;
 }
 .login-link {
   @extend .btn;
+}
+
+.link {
+  display: flex;
+  justify-content: center;
+  margin: 3% 0;
+  h1 {
+    width: auto;
+    margin: 0;
+    font-weight: normal;
+  }
 }

@@ -1,34 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { Redirect } from "react-router-dom";
 import { AuthUrls } from "../../utils/authUrls";
 import authState from "../../recoil/auth/atom";
+import reseravationState from "../../recoil/reservation/atom";
 
 const LoginRoute = (props) => {
     const [auth, setAuth] = useRecoilState(authState);
-    const [user, setUser] = useState([]);
+    const setReservationState = useSetRecoilState(reseravationState);
+    // const [user, setUser] = useState([]);
     // トークンが有効か確認
-    const GET_USER = AuthUrls.GET_USER_DATA;
+    const getUser = AuthUrls.GET_USER_LIST;
+    const logout = AuthUrls.LOGOUT;
     const loginCheck = () => {
-        axios.get(GET_USER)
+        axios.get(getUser+"1")
             .then((res) => {
-                setUser(res.data);
+                // setUser(res.data);
             })
             .catch((err) => {
-                // トークンが無効な場合、authStateをfalseにする
-                if (err.response.status === 401) {
-                    setAuth({
-                        isAuthenticated: false,
-                    });
-                }
-
+                // トークンが無効な場合ログアウト
+                axios.post(logout)
+                    .then(res => {
+                        setReservationState([]);
+                        // ログアウト成功時、authStateをfalseにする
+                        setAuth({
+                            isAuthenticated: false,
+                        });
+                    })
+                    .catch(err => {
+                        // console.log(err);
+                    })
             });
     };
-    useEffect(() => {
-        loginCheck();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    loginCheck();
 
     // props.childrenにuserをpropsとして渡す
     if(auth.isAuthenticated === true) {

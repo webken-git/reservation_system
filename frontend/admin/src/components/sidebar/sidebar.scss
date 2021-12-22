@@ -1,12 +1,12 @@
 .sideBox {
   width: 100%;
-  height: 100vh;
   background-color: #233b62;
+  min-height: 100vh;
 }
 
 .TitleBox {
-  width: 100%;
-  height: 14%;
+  height: 100px;
+  font-size: 25px;
   background-color: #1a8d89;
   display: flex;
   justify-content: center;
@@ -14,13 +14,11 @@
 }
 
 .TitleString {
-  color: #ffffff;
-  font-size: 30px;
+  color: #fff;
+  // font-size: 30px;
 }
 
 .transBox {
-  width: 100%;
-  height: 8%;
   display: flex;
   border-bottom: 1px solid #707070;
   color: #ffffff;
@@ -44,4 +42,9 @@
   width: 20px;
   height: 18px;
   margin-right: 5px;
+}
+
+.close-btn {
+  width: 100%;
+  height: 50px;
 }

@@ -93,6 +93,7 @@ urlpatterns = [
 
 if getattr(settings, 'REST_USE_JWT', False):
   from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
+#   import config.views as jwt_views
 
   from dj_rest_auth.jwt_auth import get_refresh_view
 
@@ -100,4 +101,8 @@ if getattr(settings, 'REST_USE_JWT', False):
       path('token/', TokenObtainPairView.as_view()),
       path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
       path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
+      #   path('token/create/', jwt_views.TokenObtainView.as_view()),
+      #   path('token/refresh/', jwt_views.refresh_get),
+      #   path('token/user/', jwt_views.LoginUserView.as_view()),
+      #   path('token/logout/', jwt_views.LogoutView.as_view()),
   ]

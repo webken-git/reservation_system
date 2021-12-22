@@ -1,66 +1,101 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import FeeList from "../../components/datalist/FeeList";
-import './datalist.scss'
+import 'react-tabs/style/react-tabs.scss';
+import { useSetRecoilState } from "recoil";
+import tabState from "../../recoil/tab/atom";
+import { ReservationUrl } from "../../utils/reservationUrls";
+import useSafeState from "../../hooks/useSafeState";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import FeeList from '../../components/datalist/FeeList';
+import GroupFeeList from "../../components/datalist/GroupFeeList";
+import CurlingFeeList from "../../components/datalist/CurlingFeeList";
+import Loading from "../../components/loading/Loading";
 import Modal from 'react-modal'
-import FeeEdit from "../../components/editdatas/FeeEdit";
+import EditFeeList from '../../components/editdatas/EditFeeList'
+// import { Link as Scroll } from 'react-scroll';
+import './datalist.scss'
 
 Modal.setAppElement('#root');
 
 export const DataList = () => {
-    const [placeListData, setPlaceListData] = useState([]);
-    const [feeListData, setFeeListData] = useState([]);
-    const [placeName, setPlaceName] = useState([]);
-    const [divideFeeList, setDivideFeeList] = useState([]);
-    const [age, setAge] = useState([]);
+    const unmountRef = useUnmountRef();
+    const [placeListData, setPlaceListData] = useSafeState(unmountRef, []);
+    const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
+    // const [placeName, setPlaceName] = useState([]);
+    const [divideFeeList, setDivideFeeList] = useSafeState(unmountRef, []);
+    const [age, setAge] = useSafeState(unmountRef, []);
+    const [, setTime] = useSafeState(unmountRef, []);
+    const [, setUsage] = useSafeState(unmountRef, []);
+    const [loading, setLoading] = useSafeState(unmountRef, true);
+    const setTabState = useSetRecoilState(tabState);
     const [modalIsOpen, setIsOpen] = useState(false);
 
     //場所データ取得
     const GetPlaceList = () => {
-        axios.get(`${process.env.REACT_APP_API}/api/places/`)
+        axios.get(ReservationUrl.PLACE)
             .then(response => {
-                const placelists = response.data;
-                setPlaceListData(placelists)
-                setPlaceName(placelists[0].name)  //最初の場所名をセット
+                setPlaceListData(response.data);
             })
             .catch((error) => {
-                console.log(error);
             })
     }
 
     //料金表データ取得
     const GetFeeList = () => {
-        axios.get(`${process.env.REACT_APP_API}/api/facility-fees/`)
+        axios.get(ReservationUrl.FACILITY_FEE)
             .then(response => {
                 const feelists = response.data;
                 setFeeListData(feelists);
-                setDivideFeeList(feelists[1].data);
             })
             .catch((error) => {
-                console.log(error);
             })
     }
 
     //年齢データの取得
     const GetAge = () => {
-        axios.get(`${process.env.REACT_APP_API}/api/ages/`)
+        axios.get(ReservationUrl.AGE)
             .then(response => {
                 const ages = response.data;
                 setAge(ages)
             })
             .catch((error) => {
-                console.log(error);
+            })
+    }
+
+    //時間区分の取得
+    const GetTime = () => {
+        axios.get(ReservationUrl.TIME)
+            .then(response => {
+                const times = response.data;
+                setTime(times)
+            })
+            .catch((error) => {
+            })
+    }
+
+    const GetUsage = () => {
+        axios.get(ReservationUrl.USAGE)
+            .then(response => {
+                const usages = response.data;
+                setUsage(usages)
+            })
+            .catch((error) => {
+                console.log(error)
             })
     }
 
     useEffect(() => {
-        GetFeeList();
         GetPlaceList();
+        GetFeeList();
         GetAge();
+        GetTime();
+        GetUsage();
+        setLoading(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const divide = (pn) => {
-        setPlaceName(pn)
+        setTabState(pn);
         const divide_feelist = feeListData.filter(fld => {
             return fld.place === pn
         })
@@ -70,23 +105,45 @@ export const DataList = () => {
     }
 
     const fees = placeListData.map((place, p_id) => {
+        const isGroup = divideFeeList.filter(fld => {
+            return fld.place.name === place.name && fld.is_group === true;
+        });
+        const timeId4 = divideFeeList.filter(fld => {
+            return fld.place.name === place.name && fld.is_group === true && fld.time.name.indexOf('１時間につき') !== -1;
+        });
+
+        const FacilityFee = () => {
+            if (isGroup.length === 0) {
+                return (
+                    <FeeList key={p_id} feelist={divideFeeList} age={age} />
+                )
+            } else if (timeId4.length === 0) {
+                return (
+                    <GroupFeeList key={p_id} feelist={divideFeeList} age={age} />
+                )
+            } else {
+                return (
+                    <CurlingFeeList key={p_id} feelist={divideFeeList} age={age} />
+                )
+            }
+        }
+
         return (
             <details>
                 <summary onClick={() => divide(place.name)}>
-                    <span className="open">{place['name']}</span>
-                    <span className="detailsclose">{place['name']}</span>
+                    <span>{place['name']}</span>
                 </summary>
-                <button className="button" onClick={() => setIsOpen(true)}>編集</button>
-                <FeeList key={p_id} feelist={divideFeeList} age={age} placename={placeName} />
+                <button className="btn" onClick={() => divide(place.name), () => setIsOpen(true)} >編集</button>
+                <FacilityFee />
                 <Modal
-                    overlayClassName='overlay'
+                    overlayClassName='mdoverlay'
                     isOpen={modalIsOpen}
                     onRequestClose={() => setIsOpen(false)}
                 >
-                    <button onClick={() => setIsOpen(false)}>Close</button>
-                    <FeeEdit key={p_id} feelist={divideFeeList} age={age} placename={placeName} />
+                    <button onClick={() => setIsOpen(false)}>閉じる</button>
+                    <EditFeeList key={p_id} feelist={divideFeeList} age={age} />
                 </Modal>
-            </details>
+            </details >
         )
     })
 
@@ -94,8 +151,8 @@ export const DataList = () => {
         <div className="list-wrapper">
             <div className="scroll_box-wrapper">
                 <div className="scroll_box">
-                    <h2>料金表</h2>
                     {fees}
+                    {loading && <Loading />}
                 </div>
             </div>
         </div>

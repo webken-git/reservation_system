@@ -1,15 +1,31 @@
-.tdnotclick {
-    display: none ;
-}
-
-.tdclick {
-    display: none ;
-}
-
-details[open] .open {
-    display: none ;
-}
-
-details:not([open]) .detailsclose {
-    display: none ;
-}
+.modal {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 2%;
+    bottom: 65%;
+    background-color: #707070;
+    border-radius: 1%;
+    border: #ccc solid 1px;
+    // border-left: #ccc solid 1px;
+    // border-right: #ccc solid 1px;
+    // border-bottom: #ccc solid 1px;
+    padding: 1.5rem;
+    h4 {
+        margin: 0;
+    }
+  }
+  .modal:focus {
+    outline: none;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    //   background-color: rgba(255, 255, 255, 0.5);
+  }

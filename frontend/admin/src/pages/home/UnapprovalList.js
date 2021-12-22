@@ -5,13 +5,8 @@ import UnApprovalListBody from "../../components/unapprovallist/UnApprovalListBo
 export const UnapprovalList =()=> {
   return (
     <div className="list-wrapper">
-      <div className="scroll_box-wrapper">
-        {/* スクロールバーボックス */}
-        <div className="scroll_box">
-          {/* 未承認リスト全体コンポーネント */}
-          <UnApprovalListBody/>
-        </div> 
-      </div>
+      {/* 未承認リスト全体コンポーネント */}
+      <UnApprovalListBody/>
     </div>
   )
 }

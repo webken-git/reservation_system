@@ -1,0 +1,32 @@
+.editfeelist {
+    h3, h4, h5 {
+        margin-top: 0.4em;
+        margin-bottom: 0;
+    }
+
+    table {
+        border-collapse: collapse;
+        padding: 0;
+        width: 70vw;
+        table-layout: fixed;
+    }
+    table tr {
+        background-color: #fff;
+        border: 1px solid #fff;
+        padding: .35em;
+    }
+    table th {
+        padding: 1em 1em 1em 1em;
+        border-right: 1px solid #fff;
+        background-color: #DFDFDF;
+        font-size: 0.8em;
+    }
+    table td {
+        text-align: center;
+        border-right: 1px solid #DFDFDF;
+        border-bottom: 1px solid #DFDFDF;
+    }
+    table td:hover {
+        background-color: #f5f5f5;
+    }
+}

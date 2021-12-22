@@ -1,9 +1,11 @@
 // 不承認リスト全体のコンポーネント
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-import DisApprovalTable from "./DisapprovalTable"
+import ApprovalTable from "../approvallist/ApprovalTable";
 // import './approval.scss'
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
+import DocumentLayout from "../document/DocumentLayout";
+import CsvExportButton from "../csvexport/CsvExportButton";
 
 
 const DisapprovalListBody = () => {
@@ -32,7 +34,7 @@ const DisapprovalListBody = () => {
       DisApprovalListData.map((val, val_index) =>{
         return(
           // 不承認リストの中のコンポーネント
-          <DisApprovalTable
+          <ApprovalTable
           // propsでDisapprovalTable.jsに不承認リストのデータを送っている
           key={val_index}
           // dayjsのformatで〇/〇と日付を表示できるようにしている
@@ -51,21 +53,45 @@ const DisapprovalListBody = () => {
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
           id={val.reservation.id}
-          purpose={val.reservation.purpose}
           admission_fee={val.reservation.admission_fee}
           />
         )
     })
   )
     return (
-      <div>
-      <table className="list-body">
-        <tr>
-          <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
-        </tr>
-        {Table}
-      </table>
-    </div>
+      <>
+        <div className="functions">
+          <span className="space">
+            <DocumentLayout />
+          </span>
+          <span className="space">
+            <CsvExportButton approval={3} />
+          </span>
+        </div>
+        <div className="scroll_box-wrapper">
+          {/* スクロールバーボックス */}
+          <div className="scroll_box">
+          <table className="list-body">
+            <thead>
+              <tr>
+                <td></td>
+                <td>日付</td>
+                <td>団体者名</td>
+                <td>連絡者名</td>
+                <td>個人/団体</td>
+                <td>時間</td>
+                <td>人数</td>
+                <td>場所</td>
+                <td>詳細</td>
+              </tr>
+            </thead>
+            <tbody>
+              {Table}
+            </tbody>
+            </table>
+          </div>
+        </div>
+    </>
     )
 }
 

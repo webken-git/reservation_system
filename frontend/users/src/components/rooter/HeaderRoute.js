@@ -6,8 +6,8 @@ import Footer from '../footer/Footer';
 
 // サイドバーとヘッダーを表示するページに使用するルーティング
 
-{/* <HeaderRoute/>の使い方
-<HeaderRoute pagename="ページの名前(必要なければかかなくてよい)" path="/遷移したいページのファイル名" exact children={<PrivateRoute path="/遷移したいページのファイル名" exact children={<ページ名/>} />} /> */}
+/* <HeaderRoute/>の使い方
+<HeaderRoute pagename="ページの名前(必要なければかかなくてよい)" path="/遷移したいページのファイル名" exact children={<PrivateRoute path="/遷移したいページのファイル名" exact children={<ページ名/>} />} /> */
 
 const HeaderRoute = (props) => {
     const children = props.children;
@@ -18,11 +18,9 @@ const HeaderRoute = (props) => {
                 <>
                     <div className="allbox">
                         <Header/>
-                        <div className="mainbox">
-                            <div className="contents">
-                                {children}
-                                {/* ここにページを表示する */}
-                            </div>
+                        <div className="contents">
+                            {children}
+                            {/* ここにページを表示する */}
                         </div>
                         <Footer/>
                     </div>

@@ -8,7 +8,9 @@ import { LoginPage } from "./pages/home/LoginPage";
 import Registration from "./components/auth/Registration";
 import { TopPage } from "./pages/home/TopPage";
 import { AccountPage } from "./pages/home/AccountPage";
+import { EmailChangePage } from "./pages/home/EmailChangePage";
 import { AccountDeletePage } from "./pages/home/AccountDeletePage";
+import { PassWordChangePage } from "./pages/home/PasswordChangePage";
 import { VerifyEmailPage } from "./pages/home/VerifyEmailPage";
 import { PasswordResetPage } from "./pages/home/PasswordResetPage";
 import { ApprovalList } from "./pages/home/ApprovalList";
@@ -47,8 +49,9 @@ function App() {
                 <>
                   <Switch>
                     <SideBarAndHeaderRoute path={`${url}/`} pagename={"アカウント"} exact children={<AccountPage />} />
-                    {/* <HeaderRoute path={`${url}/email`} exact children={<MailAddressChange />} /> */}
-                    <SideBarAndHeaderRoute path={`${url}/password`} pagename={"アカウント"} exact children={<VerifyEmailPage />} />
+                    <SideBarAndHeaderRoute path={`${url}/email`} exact children={<EmailChangePage />} />
+                    <SideBarAndHeaderRoute path={`${url}/password`} pagename={"アカウント"} exact children={<PassWordChangePage />} />
+                    <SideBarAndHeaderRoute path={`${url}/password/verify`} pagename={"アカウント"} exact children={<VerifyEmailPage />} />
                     <Route path={`${url}/password/reset/:uid/:token`}>
                       <SideBarAndHeaderRoute pagename={"アカウント"} exact children={<PasswordResetPage />} />
                     </Route>

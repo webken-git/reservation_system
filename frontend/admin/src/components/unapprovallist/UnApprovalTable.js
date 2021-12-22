@@ -1,5 +1,5 @@
 // 未承認リストテーブルのコンポーネント
-import React,{ useState } from "react";
+import React from "react";
 // import './approval.scss'
 import ApprovalButton from "./ApprovalButton"
 import DisApprovalButton from "./DisApprovalButton"

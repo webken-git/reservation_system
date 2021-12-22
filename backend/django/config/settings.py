@@ -24,6 +24,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+DEBUG = os.getenv('DEBUG')
+
 
 # ALLOWED_HOSTS = ['*']
 
@@ -192,8 +196,8 @@ SIMPLE_JWT = {
     # トークンをJWTに設定
     'AUTH_HEADER_TYPES': ('JWT',),
     # アクセストークンの持続時間の設定
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
-    # 'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),
     # リフレッシュトークンの持続時間の設定
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     # 'BLACKLIST_AFTER_ROTATION': False,
@@ -220,7 +224,7 @@ CSRF_COOKIE_NAME = 'csrftoken'
 
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'jwt-auth'
-OLD_PASSWORD_FIELD_ENABLED = False
+OLD_PASSWORD_FIELD_ENABLED = True
 # httpsでのリクエストでないとCookieを送信しない(デフォルトはfalse。本番でTrueにする)
 JWT_AUTH_SECURE = False
 # JWT_AUTH_SAMESITE = 'None'
@@ -272,6 +276,12 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1',
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [

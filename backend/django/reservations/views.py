@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 from rest_framework import viewsets, response, status, mixins
 from rest_framework.decorators import action
 from django_filters import rest_framework as filters
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 import datetime
 import pytz
 import os
@@ -16,7 +18,7 @@ from reservations.models import *
 from reservations.serializers import *
 from reservations.funcs.filters import (
     ReservationFilter, ReservationSuspensionScheduleFilter,
-    ApprovalApplicationFilter
+    ApprovalApplicationFilter, ApprovalFilter
 )
 from reservations.funcs.csv import csv_export
 
@@ -261,8 +263,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       email.send()
       return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
-  def update(self, request, *args, **kwargs):
-    super().update(request, *args, **kwargs)
+  def patch(self, request, pk, *args, **kwargs):
+    super().update(request, pk, *args, **kwargs)
 
     data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
 
@@ -338,11 +340,37 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
 
 class ApprovalCountMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
-  # yearとmonthでグループ化して、各年月ごとの予約数を集計する
-  # 必須パラメータ：year, month, approval_id
+  """
+  予約件数を取得（月間）
+  """
   queryset = ApprovalApplication.objects.all()
   serializer_class = ApprovalCountMonthlySerializer
 
+  @extend_schema(
+      parameters=[
+          OpenApiParameter(
+              name='approval',
+              location=OpenApiParameter.QUERY,
+              type=OpenApiTypes.STR,
+              description='Approval ID',
+              required=True,
+          ),
+          OpenApiParameter(
+              name='year',
+              type=OpenApiTypes.INT,
+              location=OpenApiParameter.QUERY,
+              description='年',
+              required=True,
+          ),
+          OpenApiParameter(
+              name='month',
+              type=OpenApiTypes.INT,
+              location=OpenApiParameter.QUERY,
+              description='月',
+              required=True,
+          ),
+      ],
+  )
   def list(self, request, *args, **kwargs):
     queryset = self.filter_queryset(self.get_queryset())
     serializer = self.get_serializer(queryset, many=True)
@@ -350,7 +378,9 @@ class ApprovalCountMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
 
   def get_queryset(self):
     approval_id = self.request.query_params.get('approval', None)
-    queryset = ApprovalApplication.objects.filter(approval=approval_id).values('reservation__start__year', 'reservation__start__month').annotate(count=Count('reservation__start__year')).order_by('reservation__start__year', 'reservation__start__month')
+    year = self.request.query_params.get('year', None)
+    month = self.request.query_params.get('month', None)
+    queryset = ApprovalApplication.objects.filter(approval=approval_id, reservation__start__year=year, reservation__start__month=month).values('reservation__start__year', 'reservation__start__month', 'reservation__start__day').annotate(count=Count('reservation__start__year')).order_by('reservation__start__year', 'reservation__start__month', 'reservation__start__day')
     return queryset
 
   def get_serializer_class(self):
@@ -738,8 +768,8 @@ class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   serializer_class = ApprovalApplicationSerializer
-  filter_fields = [f.name for f in ApprovalApplication._meta.fields]
-  filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_class = ApprovalFilter
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],

@@ -1,78 +1,83 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import 'react-tabs/style/react-tabs.scss';
+import { useSetRecoilState } from "recoil";
+import tabState from "../recoil/tab/atom";
+import { ReservationUrls } from "../utils/reservationUrls";
+import useSafeState from "../hooks/useSafeState";
+import useUnmountRef from "../hooks/useUnmountRef";
 import FeeList from '../components/feelist/FeeList';
+import GroupFeeList from "../components/feelist/GroupFeeList";
+import CurlingFeeList from "../components/feelist/CurlingFeeList";
 import Loading from "../components/loading/Loading";
-import { Link as Scroll } from 'react-scroll';
+// import { Link as Scroll } from 'react-scroll';
 import './mainpage.scss'
 
 const MainPage = () => {
-  const [placeListData, setPlaceListData] = useState([]);
-  const [feeListData, setFeeListData] = useState([]);
-  const [placeName, setPlaceName] = useState([]);
-  const [divideFeeList, setDivideFeeList] = useState([]);
-  const [age, setAge] = useState([]);
-  const [time, setTime] = useState([]);
-  const [usage, setUsage] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const unmountRef = useUnmountRef();
+  const [placeListData, setPlaceListData] = useSafeState(unmountRef, []);
+  const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
+  // const [placeName, setPlaceName] = useState([]);
+  const [divideFeeList, setDivideFeeList] = useSafeState(unmountRef, []);
+  const [age, setAge] = useSafeState(unmountRef, []);
+  const [, setTime] = useSafeState(unmountRef, []);
+  const [, setUsage] = useSafeState(unmountRef, []);
+  const [loading, setLoading] = useSafeState(unmountRef, true);
+  const setTabState = useSetRecoilState(tabState);
 
   //場所データ取得
   const GetPlaceList = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/places/`)
+    axios.get(ReservationUrls.PLACE)
       .then(response => {
-        const placelists = response.data;
-        setPlaceListData(placelists)
-        setPlaceName(placelists[0].name)  //最初の場所名をセット
+        // const placelists = response.data;
+        setPlaceListData(response.data);
+        // setPlaceName(placelists[0].name);  //最初の場所名をセット
       })
       .catch((error) => {
-        console.log(error);
       })
   }
 
   //料金表データ取得
   const GetFeeList = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/facility-fees/`)
+    axios.get(ReservationUrls.FACILITY_FEE)
       .then(response => {
         const feelists = response.data;
         setFeeListData(feelists);
         setDivideFeeList(feelists[1].data);
       })
       .catch((error) => {
-        console.log(error);
       })
   }
 
   //年齢データの取得
   const GetAge = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/ages/`)
+    axios.get(ReservationUrls.AGE)
       .then(response => {
         const ages = response.data;
         setAge(ages)
       })
       .catch((error) => {
-        console.log(error);
       })
   }
 
   //時間区分の取得
   const GetTime = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/times/`)
+    axios.get(ReservationUrls.TIME)
       .then(response => {
         const times = response.data;
         setTime(times)
       })
       .catch((error) => {
-        console.log(error);
       })
   }
 
   const GetUsage = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/usages`)
+    axios.get(ReservationUrls.USAGE)
       .then(response => {
         const usages = response.data;
         setUsage(usages)
-        console.log(usages)
+        // console.log(usages)
       })
       .catch((error) => {
         console.log(error)
@@ -80,16 +85,17 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    GetFeeList();
     GetPlaceList();
+    GetFeeList();
     GetAge();
     GetTime();
     GetUsage();
     setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const divide = (pn) => {
-    setPlaceName(pn)
+    setTabState(pn);
     const divide_feelist = feeListData.filter(fld => {
       return fld.place === pn
     })
@@ -105,11 +111,35 @@ const MainPage = () => {
   })
 
   const tabitems = placeListData.map((place, p_id) => {
-    return (
-      <TabPanel>
-        <FeeList key={p_id} feelist={divideFeeList} age={age} placename={placeName} time={time} />
-      </TabPanel>
-    )
+    const isGroup = divideFeeList.filter(fld => {
+      return fld.place.name === place.name && fld.is_group === true;
+    });
+    const timeId4 = divideFeeList.filter(fld => {
+      return fld.place.name === place.name && fld.is_group === true && fld.time.name.indexOf('１時間につき') !== -1;
+    });
+
+    console.log('isGroup', isGroup)
+    console.log('timeId4', timeId4)
+    console.log('divideFeeList', divideFeeList)
+    if (isGroup.length === 0) {
+      return (
+        <TabPanel key={p_id}>
+          <FeeList key={p_id} feelist={divideFeeList} age={age} />
+        </TabPanel>
+      )
+    } else if (timeId4.length === 0) {
+      return (
+        <TabPanel key={p_id}>
+          <GroupFeeList key={p_id} feelist={divideFeeList} age={age} />
+        </TabPanel>
+      )
+    } else {
+      return (
+        <TabPanel key={p_id}>
+          <CurlingFeeList key={p_id} feelist={divideFeeList} age={age} />
+        </TabPanel>
+      )
+    }
   })
 
   return (

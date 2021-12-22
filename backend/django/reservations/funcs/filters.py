@@ -40,3 +40,17 @@ class ApprovalApplicationFilter(filters.FilterSet):
     fields += ['approval__' + f.name for f in Approval._meta.fields]
     fields += ['reservation__' + f.name for f in Reservation._meta.fields]
     fields += ['reservation__place__' + f.name for f in Place._meta.fields]
+
+
+class ApprovalFilter(filters.FilterSet):
+  # フィルタの定義
+  reservation__start__year = filters.NumberFilter(field_name='reservation__start', lookup_expr='year')
+  reservation__start__month = filters.NumberFilter(field_name='reservation__start', lookup_expr='month')
+  reservation__start__day = filters.NumberFilter(field_name='reservation__start', lookup_expr='day')
+
+  class Meta:
+    model = ApprovalApplication
+    # フィルタを列挙
+    fields = [f.name for f in ApprovalApplication._meta.fields]
+    fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+    fields += ['reservation__place__' + f.name for f in Place._meta.fields]
