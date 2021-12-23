@@ -187,7 +187,7 @@ const ScheduleBlock = (props) =>{
     //     }
     // }
 
-    const id = props.schedule.reservation.id
+    const id = props.schedule.reservation.id;
 
     if((props.schedule.approval.name !== "不承認") && (props.schedule.approval.name !== "不承認")){
         return (
@@ -195,7 +195,7 @@ const ScheduleBlock = (props) =>{
             className="schedule-block"
             // onClick={modalHandle}
             style={styleGeneratorHandler()}
-            to={`/calendar/approval-info/${props.schedule.reservation.id}`}
+            to={`/calendar/approval-info/${id}`}
         >
 
             {props.schedule.repeat_interval === 1 ? (

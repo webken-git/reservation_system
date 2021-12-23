@@ -102,6 +102,16 @@ $breakpoints: (
   }
 }
 
+.document-preparation-table {
+  border-bottom: #ccc 1px solid;
+  border-collapse: collapse;
+  th,
+  td {
+    border-bottom: #ccc 1px solid;
+    padding: 0.5rem;
+  }
+}
+
 .modal-open-btn {
   width: 7rem;
   color: #fff;

@@ -2,6 +2,7 @@ from django_filters import rest_framework as filters
 from reservations.models import (
     Approval, Reservation, Place, ReservationSuspensionSchedule, ApprovalApplication,
 )
+from rest_framework.filters import BaseFilterBackend
 
 
 class ReservationFilter(filters.FilterSet):

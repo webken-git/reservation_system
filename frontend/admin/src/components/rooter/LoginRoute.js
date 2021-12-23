@@ -36,7 +36,7 @@ const LoginRoute = (props) => {
     loginCheck();
 
     // props.childrenにuserをpropsとして渡す
-    if(auth.isAuthenticated === true) {
+    if (auth.isAuthenticated === true) {
         return props.children;
     } else {
         // alert("再度ログインしてください");

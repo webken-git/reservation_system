@@ -52,7 +52,6 @@ const Login = () => {
                 // ローディング画面を非表示
                 setLoading(false);
                 // エラーメッセージを表示
-                // console.log(err.response.data.non_field_errors);
                 setError("このアカウントは管理者権限がありません。");
             });
     };

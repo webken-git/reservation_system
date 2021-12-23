@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 // Custom routing
-import PrivateRoute from "./Route/PrivateRoute";
-import LoginRoute from "./Route/LoginRoute";
-import LogoutRoute from "./Route/LogoutRoute";
+import PrivateRoute from "./route/PrivateRoute";
+import LoginRoute from "./route/LoginRoute";
+import LogoutRoute from "./route/LogoutRoute";
 // randing
 import Home from "./components/user/Home";
 // Involved with user routing

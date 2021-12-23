@@ -264,7 +264,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
   def patch(self, request, pk, *args, **kwargs):
-    super().update(request, pk, *args, **kwargs)
+    super().patch(request, pk, *args, **kwargs)
 
     data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
 
@@ -486,6 +486,28 @@ class TimeViewSet(viewsets.ModelViewSet):
     return super().list(request, *args, **kwargs)
 
   # @method_decorator(vary_on_cookie)@method_decorator(cache_page(TIME_OUTS_1MONTH))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+
+class TimeViewSet(viewsets.ModelViewSet):
+  queryset = Time.objects.all()
+  serializer_class = TimeSerializer
+  filter_fields = [f.name for f in Time._meta.fields]
+  # permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
@@ -767,6 +789,13 @@ class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+    「現在～指定した日付」の範囲の予約データを検索する。
+    現在の日付はdatetime.nowで取得する。
+    そのため、物凄い先の未来の日付を指定して検索すると期日が過ぎていないデータを取得可能。
+    ~/api/reservatios/9999-01-01T00:00（指定した日付）/approval-applications/
+    の様に利用すると良いかと。
+  """
   serializer_class = ApprovalApplicationSerializer
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ApprovalFilter
@@ -966,6 +995,11 @@ class ApprovalApplicationCsvExportViewSet(
 class ReservationDeleteViewSet(
         mixins.DestroyModelMixin,
         viewsets.GenericViewSet):
+  """
+  日時を指定し、指定された期間のデータを全て削除する。
+  start1および、start2という名前のパラメータを送り、
+  start1 ～ start2の期間のデータを削除。
+  """
   queryset = Reservation.objects
   serializer_class = ReservationSerializer
   permission_classes = [permissions.ActionBasedPermission]

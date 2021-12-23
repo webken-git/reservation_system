@@ -10,61 +10,56 @@ import DocumentLayout from "../document/DocumentLayout";
 import CsvExportButton from "../csvexport/CsvExportButton";
 
 const ApprovalListBody = () => {
-  const filtering = (e) => {
-    setFilterType(e.target.value);
+  const placeFiltering = (e) => {
+    setPlaceFilter(e.target.value);
+    // console.log(e.target.value);
   }
 
-  // const filtering = (e) => {
-  //   sethateFilterType(e.target.value);
-  //   // console.log(e.target.value);
-  // }
+  const groupFiltering = (e) => {
+    setGroupFilter(e.target.value);
+    // setGroupFilter(true);
+  }
 
-  const [filterType, setFilterType] = useState();
-  // const [DateFilterType, sethateFilterType] = useState();
+  const dateFiltering = (e) => {
+    setDateFilter(e.target.value);
+  }
 
-  const [ApprovalListhata, setApprovalListhata] = useState([]);
+  const [placeFilter, setPlaceFilter] = useState();
+  const [groupFilter, setGroupFilter] = useState();
+  const [dateFilter, setDateFilter] = useState();
+
+
+
+  const [ApprovalListData, setApprovalListData] = useState([]);
   // 承認リストのデータをAPIから受け取るaxios
-  // const GetApporovalList = () => {
-  //   axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
-  //     .then(response => {
-  //       const data = response.data;
-  // console.log(data[0]["reservation"]["place"]["name"]);
-  // console.log(data);
-  // 承認リストのデータをuseStateに入れている
-  //       setApprovalListhata(data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     })
-  // }
-
-  // ページレンダリング時に承認リストのデータを受け取っている
-  // useEffect(() => {
-  //   GetApporovalList();
-  // }, [])
-
-  useEffect(() => {
+  const GetApporovalList = () => {
+    // console.log(dateFilter);
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`, {
       params: {
-        'reservation__place': filterType
+        'reservation__place': placeFilter,
+        'reservation__is_group': groupFilter,
+        'reservation__start': dateFilter
       }
-      // params: {
-      //   'reservation__start': DateFilterType
-      // }
     })
       .then(response => {
         const data = response.data;
         // console.log(data[0]["reservation"]["place"]["name"]);
         // 承認リストのデータをuseStateに入れている
-        setApprovalListhata(data);
+        setApprovalListData(data);
       })
       .catch((error) => {
       })
-  }, [filterType])
+  }
+
+
+  useEffect(() => {
+    GetApporovalList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placeFilter, groupFilter, dateFilter])
 
   const Table = (
       // データをmapで回している
-      ApprovalListhata.map((val, val_index) =>{
+      ApprovalListData.map((val, val_index) =>{
         return(
           // 承認リストの中のコンポーネント
           <ApprovalTable
@@ -95,7 +90,7 @@ const ApprovalListBody = () => {
   return (
     <>
       <div className="functions">
-        <select className="filter" onChange={(e) => filtering(e)} defaultValue="">
+        <select className="placefilter" onChange={(e) => placeFiltering(e)} defaultValue="">
           <option value="">施設選択</option>
           <option value="">全て</option>
           <option value="1">カーリング場</option>
@@ -118,6 +113,38 @@ const ApprovalListBody = () => {
           <table className="list-body">
             <thead>
               <tr>
+                <td></td>
+                <td>
+                  <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                  <select className="groupfilter" defaultValue="" onChange={(e) => groupFiltering(e)}>
+                    <option value="">全部</option>
+                    <option value="false">個人</option>
+                    <option value="true">団体</option>
+                  </select>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                  <select className="placefilter" defaultValue="" onChange={(e) => placeFiltering(e)}>
+                    <option value="">全部</option>
+                    <option value="1">カーリング場</option>
+                    <option value="2">大会議室</option>
+                    <option value="3">中会議室</option>
+                    <option value="4">小会議室</option>
+                    <option value="5">アーチェリー場</option>
+                    <option value="6">武道場</option>
+                  </select>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </thead>
+            <thead>
+              <tr>
                 <th></th>
                 <th>日付</th>
                 <th>団体者名</th>
@@ -126,6 +153,7 @@ const ApprovalListBody = () => {
                 <th>時間</th>
                 <th>人数</th>
                 <th>場所</th>
+                <th>操作</th>
                 <th>詳細</th>
               </tr>
             </thead>

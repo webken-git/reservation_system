@@ -120,7 +120,6 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.participant_number = validated_data.get('participant_number', instance.participant_number)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.admission_fee = validated_data.get('admission_fee', instance.admission_fee)
-    instance.place_number = validated_data.get('place_number', instance.place_number)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['user_id']
@@ -138,6 +137,19 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.special_equipment.set(special_equipment_data)
 
     return instance
+
+
+class ReservationParameterSerializer(serializers.Serializer):
+  # reservation = ReservationSerializer(read_only=True)
+  # approval = ApprovalSerializer(read_only=True)
+  # approval_id = serializers.PrimaryKeyRelatedField(queryset=Approval.objects.all(), write_only=True)
+  # reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  start1 = serializers.DateTimeField(help_text='開始(yyyy-mm-ddTH:M:S.fz)', required=True)
+  start2 = serializers.DateTimeField(help_text='終了(yyyy-mm-ddTH:M:S.fz)', required=True)
+
+  class Meta:
+    model = Reservation
+    fields = '__all__'
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -186,8 +198,7 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
         'usage_fee': {'required': False},
         'heating_fee': {'required': False},
         'electric_fee': {'required': False},
-        'conditions': {'required': False},
-        'cancellation_reason': {'required': False}
+        'conditions': {'required': False}
     }
 
   def create(self, validated_data):
@@ -208,7 +219,6 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.heating_fee = validated_data.get('heating_fee', instance.heating_fee)
     instance.electric_fee = validated_data.get('electric_fee', instance.electric_fee)
     instance.conditions = validated_data.get('conditions', instance.conditions)
-    instance.cancellation_reason = validated_data.get('cancellation_reason', instance.cancellation_reason)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['reservation_id']

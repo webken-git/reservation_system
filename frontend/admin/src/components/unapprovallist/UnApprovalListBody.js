@@ -1,5 +1,5 @@
 // 未承認リスト全体のコンポーネント
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UnApprovalTable from "./UnApprovalTable"
 // import './approval.scss'
@@ -7,22 +7,50 @@ import dayjs from 'dayjs';
 import CsvExportButton from "../csvexport/CsvExportButton";
 
 const UnapprovalListBody = () => {
+  const placeFiltering = (e) => {
+    setPlaceFilter(e.target.value);
+    // console.log(e.target.value);
+  }
+
+  const groupFiltering = (e) => {
+    setGroupFilter(e.target.value);
+    // setGroupFilter(true);
+  }
+
+  const dateFiltering = (e) => {
+    setDateFilter(e.target.value);
+  }
+
+  const [placeFilter, setPlaceFilter] = useState();
+  const [groupFilter, setGroupFilter] = useState();
+  const [dateFilter, setDateFilter] = useState();
+
   const [UnApprovalListData, setUnApprovalListData] = useState([]);
   // 未承認リストのデータをAPIから受け取るaxios
   const GetUnApprovalList = () => {
-    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=1`)
-    .then(response => {
-      const data = response.data;
-      // 未承認リストのデータをuseStateに入れている
-      setUnApprovalListData(data);
+    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=1`, {
+      params: {
+        'reservation__place': placeFilter,
+        'reservation__is_group': groupFilter,
+        'reservation__start': dateFilter
+      }
     })
-    .catch((error) => {
-    })
+      .then(response => {
+        const data = response.data;
+        // console.log(data);
+        // 未承認リストのデータをuseStateに入れている
+        setUnApprovalListData(data);
+        console.log(data)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
   // ページレンダリング時に未承認リストのデータを受け取っている
   useEffect(() => {
     GetUnApprovalList();
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placeFilter, groupFilter, dateFilter])
 
   const Table = (
       // データをmapで回している
@@ -64,14 +92,40 @@ const UnapprovalListBody = () => {
           {/* スクロールバーボックス */}
           <div className="scroll_box">
             <table className="list-body">
-              <thead>
-                <tr>
-                  <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td></td><td></td><td></td><td>詳細</td>
-                </tr>
-              </thead>
-              <tbody>
-                {Table}
-              </tbody>
+              <tr>
+                <td>
+                  <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                  <select className="groupfilter" defaultValue="" onChange={(e) => groupFiltering(e)}>
+                    <option value="">全部</option>
+                    <option value="false">個人</option>
+                    <option value="true">団体</option>
+                  </select>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                  <select className="placefilter" defaultValue="" onChange={(e) => placeFiltering(e)}>
+                    <option value="">全部</option>
+                    <option value="1">カーリング場</option>
+                    <option value="2">大会議室</option>
+                    <option value="3">中会議室</option>
+                    <option value="4">小会議室</option>
+                    <option value="5">アーチェリー場</option>
+                    <option value="6">武道場</option>
+                  </select>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td></td><td></td><td>詳細</td>
+              </tr>
+              {Table}
             </table>
           </div>
         </div>

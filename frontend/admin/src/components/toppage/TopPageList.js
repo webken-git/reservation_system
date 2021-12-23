@@ -57,19 +57,21 @@ const TopPageList = () => {
   )
   
     return (
-      <div>
-        <table className="approvallistall">
-          <thead>
-            <tr>
-              <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
-            </tr>
-          </thead>
-          <tbody>
-            {TodayTable}
-          </tbody>
-        </table>
+      <div className="scroll_box-wrapper">
+        <div className="scroll_box">
+          <table className="approvallistall">
+            <thead>
+              <tr>
+                <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
+              </tr>
+            </thead>
+            <tbody>
+              {TodayTable}
+            </tbody>
+          </table>
+        </div>
       </div>
     )
 }
 
-export default TopPageList
+export default TopPageList;

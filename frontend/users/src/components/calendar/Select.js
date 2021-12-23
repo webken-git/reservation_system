@@ -38,7 +38,7 @@ const Select = (props) =>{
     //     // classList.add("add")
     //     // calendarType.classList.add("add");
     // }
-    
+
 
     return (
         <div className="select">
@@ -55,8 +55,8 @@ const Select = (props) =>{
                 <option value="monthlycalendar">月</option>
             </select>
             </form> */}
-            <button type="button" className="btn" id="day" onClick={() => jump("daily")}>日</button>
-            <button type="button" className="btn" id="week" onClick={() => jump("weekly")}>週</button>
+            <button type="button" className="btn calendar-btn" id="day" onClick={() => jump("daily")}>日</button>
+            <button type="button" className="btn calendar-btn" id="week" onClick={() => jump("weekly")}>週</button>
             {/* <button type="button" className="btn" id="month" onClick={() => jump("monthly")}>月</button> */}
             {/* <div className="week" onClick="jump(weekly)">週</div>
             <div className="month" onClick="jump(monthly)">月</div> */}
