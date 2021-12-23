@@ -13,6 +13,7 @@ import CurlingFeeList from "../components/feelist/CurlingFeeList";
 import Loading from "../components/loading/Loading";
 // import { Link as Scroll } from 'react-scroll';
 import './mainpage.scss'
+import Calendar from "../components/calendar/Calendar.js";
 
 const MainPage = () => {
   const unmountRef = useUnmountRef();
@@ -146,7 +147,14 @@ const MainPage = () => {
       <div className="list-wrapper">
         <div className="scroll_box-wrapper">
           <div className="scroll_box">
-            {tabitems}
+            <details open={true}>
+              <summary>カレンダー</summary>
+              <Calendar />
+            </details>
+            <details>
+              <summary>料金一覧</summary>
+              {tabitems}
+            </details>
           </div>
         </div>
       </div>

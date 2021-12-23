@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FeeList from "../../components/datalist/FeeList";
 import './datalist.scss'
+import Modal from 'react-modal'
+import FeeEdit from "../../components/editdatas/FeeEdit";
+
+Modal.setAppElement('#root');
 
 export const DataList = () => {
     const [placeListData, setPlaceListData] = useState([]);
@@ -9,6 +13,7 @@ export const DataList = () => {
     const [placeName, setPlaceName] = useState([]);
     const [divideFeeList, setDivideFeeList] = useState([]);
     const [age, setAge] = useState([]);
+    const [modalIsOpen, setIsOpen] = useState(false);
 
     //場所データ取得
     const GetPlaceList = () => {
@@ -71,7 +76,16 @@ export const DataList = () => {
                     <span className="open">{place['name']}</span>
                     <span className="detailsclose">{place['name']}</span>
                 </summary>
+                <button className="button" onClick={() => setIsOpen(true)}>編集</button>
                 <FeeList key={p_id} feelist={divideFeeList} age={age} placename={placeName} />
+                <Modal
+                    overlayClassName='overlay'
+                    isOpen={modalIsOpen}
+                    onRequestClose={() => setIsOpen(false)}
+                >
+                    <button onClick={() => setIsOpen(false)}>Close</button>
+                    <FeeEdit key={p_id} feelist={divideFeeList} age={age} placename={placeName} />
+                </Modal>
             </details>
         )
     })
@@ -80,7 +94,7 @@ export const DataList = () => {
         <div className="list-wrapper">
             <div className="scroll_box-wrapper">
                 <div className="scroll_box">
-                    {/* <h2></h2> */}
+                    <h2>料金表</h2>
                     {fees}
                 </div>
             </div>

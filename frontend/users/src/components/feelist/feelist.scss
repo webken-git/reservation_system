@@ -19,22 +19,9 @@ $breakpoints: (
 }
 
 .feelist {
-  display: flex;
+  // display: flex;
   justify-content: center;
   align-items: center;
-  details {
-    width: 100%;
-    margin: 0 5%;
-  }
-  summary {
-    font-size: 25px;
-    @include mq(sp) {
-      font-size: 18px;
-    }
-  }
-  summary:hover {
-    cursor: pointer;
-  }
 
   //   h3,
   //   h4,

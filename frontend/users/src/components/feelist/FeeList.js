@@ -37,13 +37,11 @@ const FeeList = (props) => {
 
 
   // 各定数に値が入っているか確認
-  if (time1.length === 0 || fee1.length === 0) {
+  if (age1.length === 0 || time1.length === 0 || fee1.length === 0) {
       return <Loading />;
     } else {
       return (
         <div className="feelist">
-          <details>
-            <summary>料金一覧</summary>
             <div>
               <table>
                 <thead>
@@ -88,7 +86,6 @@ const FeeList = (props) => {
                 </tbody>
               </table>
             </div>
-          </details>
         </div>
       );
     }

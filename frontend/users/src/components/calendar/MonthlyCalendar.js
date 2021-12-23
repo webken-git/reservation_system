@@ -11,7 +11,7 @@ const MonthlyCalendar = (props) =>{
     const [approvalList, setApprovalList] = useState([]);
     const [year, setYear] = useState(date.getFullYear())
     const [month, setMonth] = useState(date.getMonth() + 1)
-    const [approvalFilter, ] = useState(2);
+    const [approvalFilter, setApprovalFilter] = useState(2);
     const calendar = createCalendar(year, month)
     const setLoading = props.setLoading;
     // const calendarType = props.calendarType;
@@ -56,11 +56,11 @@ const MonthlyCalendar = (props) =>{
         });
 
         return () => { unmounted = true }
-    }, [year, month, approvalFilter, setLoading]
-    );
+    }, [year, month, approvalFilter]);
 
     return (
         <div className="monthly-calendar">
+            
             <div className="header">
                 {/* <Select
                     type={type}
@@ -79,7 +79,7 @@ const MonthlyCalendar = (props) =>{
                     <tr className="day-row">
                         {
                             dayList.map((day) => {
-                            return <th key={day}>{day}</th>
+                            return <th>{day}</th>
                             })
                         }
                     </tr>

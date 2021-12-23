@@ -1,9 +1,9 @@
 import React from 'react'
 // import axios from 'axios'
 import {withCookies} from 'react-cookie'
-
 const Head = (props) =>{
 
+    // const date = props.date;
     const calendarType = props.calendarType;
 
     const dayOfWeek = props.date.getDay() ;
@@ -24,8 +24,6 @@ const Head = (props) =>{
             </div>
         )
     }
-
-    
 }
 
 export default withCookies(Head);

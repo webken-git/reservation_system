@@ -2,6 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import { withCookies } from 'react-cookie';
 
 const ScheduleBlock = (props) =>{
+    // console.log('chedule')
+
     const [ startHours, setStartHours ] = useState("");
     const [ endHours, setEndHours ] = useState("");
     const [ startMinutes, setStartMinutes ] = useState("");
@@ -11,21 +13,8 @@ const ScheduleBlock = (props) =>{
     const [ scheduleStartDate, setScheduleStartDate ] = useState(new Date());
     const [ scheduleEndDate, setScheduleEndDate ] = useState(new Date());
 
-    // console.log(props.schedule)
-    // console.log(typeof(props.schedule))
-
-    // console.log(props.schedule);
-
-
-
-    const onClick = (e) => {
-
-        const protocol = window.location.protocol;
-        console.log(protocol)
-        const host = window.location.host;
-
-        window.location.href = protocol+"//"+host+"/approvalInfo?id="+e;
-    }
+    // console.log(props.schedule.reservation.start);
+    // console.log(props.contentDate);
     
     useEffect(()=>{
         let unmounted = false;
@@ -187,13 +176,11 @@ const ScheduleBlock = (props) =>{
     //     }
     // }
 
-    if((props.schedule.approval.name !== "不承認") && (props.schedule.approval.name !== "不承認")){
-        return (
+    return (
         <div
             className="schedule-block"
             // onClick={modalHandle}
             style={styleGeneratorHandler()}
-            onClick={() => onClick(props.schedule.reservation.id)}
         >
             {props.schedule.repeat_interval === 1 ? (
                 <p>{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.start.substr(5, 2))+"月"+Number(props.schedule.start.substr(8, 2))+"日")}{props.schedule.start_time.substr(11, 5)}{((startDate < props.contentDate)||(props.contentDate < endDate)) && (<br/>)}~{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.reservation.end.substr(5, 2))+"月"+Number(props.schedule.reservation.end.substr(8, 2))+"日")}{props.schedule.reservation.end.substr(11, 5)}</p>
@@ -203,12 +190,12 @@ const ScheduleBlock = (props) =>{
             {props.schedule.reservation.is_group === false ? (
                 <span>
                     <p>{props.schedule.reservation.place.name}</p>
-                    <p>{props.schedule.reservation.reader_name}</p>
+                    {/* <p>{props.schedule.reservation.reader_name}</p> */}
                 </span>
             ) : (
                 <span>
                     <p>{props.schedule.reservation.place.name}</p>
-                    <p>{props.schedule.reservation.group_name}</p>
+                    {/* <p>{props.schedule.reservation.group_name}</p> */}
                 </span>
             )}
             {/* <span>
@@ -227,9 +214,7 @@ const ScheduleBlock = (props) =>{
                 </div>
             )} */}
         </div>
-    )} else {
-        return null
-    }
+    )
 }
 
 export default withCookies(ScheduleBlock);

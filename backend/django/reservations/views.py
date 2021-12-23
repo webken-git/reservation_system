@@ -571,7 +571,7 @@ class FacilityFeeViewSet(viewsets.ModelViewSet):
   }
 
   @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  @method_decorator(cache_page(TIME_OUTS_1DAY))
   def list(self, request, *args, **kwargs):
     self.queryset = FacilityFee.objects.all().values('place__name').order_by('place__name').distinct()
     self.serializer_class = GetFacilityFeeSerializer

@@ -87,164 +87,161 @@ const GroupFeeList = (props) => {
 
 
   // 各定数に値が入っているか確認
-  if (time1.length === 0 || fee1.length === 0) {
+  if (age1.length === 0 || time1.length === 0 || fee1.length === 0) {
       return <Loading />;
     } else {
       return (
           <div className="feelist group">
-              <details>
-                  <summary>料金一覧</summary>
-                  <div>
-                      <h2>個人使用</h2>
-                      <table>
-                          <thead>
-                              <tr>
-                                  <th></th>
-                                  <th>{age1[0].name}</th>
-                                  <th>{age2[0].name}</th>
-                                  <th>{age3[0].name}</th>
-                                  <th>{age4[0].name}</th>
-                                  <th>{age5[0].name}</th>
-                                  <th>{age6[0].name}</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>{time1[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee1[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee2[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee3[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee4[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee5[0].fee}</td>
-                                  <td data-label={age6[0].name}>{fee6[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time2[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee7[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee8[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee9[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee10[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee11[0].fee}</td>
-                                  <td data-label={age6[0].name}>{fee12[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time3[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee13[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee14[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee15[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee16[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee17[0].fee}</td>
-                                  <td data-label={age6[0].name}>{fee18[0].fee}</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                      <h2>団体使用</h2>
-                      <table>
-                          <thead>
-                              <tr>
-                                  <th></th>
-                                  <th>{age1[0].name}</th>
-                                  <th>{age2[0].name}</th>
-                                  <th>{age3[0].name}</th>
-                                  <th>{age4[0].name}</th>
-                                  <th>{age5[0].name}</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>{time4[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee19[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee20[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee21[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee22[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee23[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time5[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee24[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee25[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee26[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee27[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee28[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time6[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee29[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee30[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee31[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee32[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee33[0].fee}</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                      <h2>競技会使用</h2>
-                      <table>
-                          <thead>
-                              <tr>
-                                  <th></th>
-                                  <th>{age1[0].name}</th>
-                                  <th>{age2[0].name}</th>
-                                  <th>{age3[0].name}</th>
-                                  <th>{age4[0].name}</th>
-                                  <th>{age5[0].name}</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>{time7[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee34[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee35[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee36[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee37[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee38[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time8[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee39[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee40[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee41[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee42[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee43[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time9[0].time.name}</td>
-                                  <td data-label={age1[0].name}>{fee44[0].fee}</td>
-                                  <td data-label={age2[0].name}>{fee45[0].fee}</td>
-                                  <td data-label={age3[0].name}>{fee46[0].fee}</td>
-                                  <td data-label={age4[0].name}>{fee47[0].fee}</td>
-                                  <td data-label={age5[0].name}>{fee48[0].fee}</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                      <h2>営利目的使用</h2>
-                      <table>
-                          <thead>
-                              <tr>
-                                  <th></th>
-                                  <th>{time10[0].purpose}</th>
-                                  <th>{time11[0].purpose}</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>{time10[0].time.name}</td>
-                                  <td data-label={time10[0].purpose}>{fee49[0].fee}</td>
-                                  <td data-label={time11[0].purpose}>{fee52[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time11[0].time.name}</td>
-                                  <td data-label={time10[0].purpose}>{fee50[0].fee}</td>
-                                  <td data-label={time11[0].purpose}>{fee53[0].fee}</td>
-                              </tr>
-                              <tr>
-                                  <td>{time12[0].time.name}</td>
-                                  <td data-label={time10[0].purpose}>{fee51[0].fee}</td>
-                                  <td data-label={time11[0].purpose}>{fee54[0].fee}</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </details>
+                <div>
+                    <h2>個人使用</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{age1[0].name}</th>
+                                <th>{age2[0].name}</th>
+                                <th>{age3[0].name}</th>
+                                <th>{age4[0].name}</th>
+                                <th>{age5[0].name}</th>
+                                <th>{age6[0].name}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{time1[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee1[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee2[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee3[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee4[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee5[0].fee}</td>
+                                <td data-label={age6[0].name}>{fee6[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time2[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee7[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee8[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee9[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee10[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee11[0].fee}</td>
+                                <td data-label={age6[0].name}>{fee12[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time3[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee13[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee14[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee15[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee16[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee17[0].fee}</td>
+                                <td data-label={age6[0].name}>{fee18[0].fee}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h2>団体使用</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{age1[0].name}</th>
+                                <th>{age2[0].name}</th>
+                                <th>{age3[0].name}</th>
+                                <th>{age4[0].name}</th>
+                                <th>{age5[0].name}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{time4[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee19[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee20[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee21[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee22[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee23[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time5[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee24[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee25[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee26[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee27[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee28[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time6[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee29[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee30[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee31[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee32[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee33[0].fee}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h2>競技会使用</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{age1[0].name}</th>
+                                <th>{age2[0].name}</th>
+                                <th>{age3[0].name}</th>
+                                <th>{age4[0].name}</th>
+                                <th>{age5[0].name}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{time7[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee34[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee35[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee36[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee37[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee38[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time8[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee39[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee40[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee41[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee42[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee43[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time9[0].time.name}</td>
+                                <td data-label={age1[0].name}>{fee44[0].fee}</td>
+                                <td data-label={age2[0].name}>{fee45[0].fee}</td>
+                                <td data-label={age3[0].name}>{fee46[0].fee}</td>
+                                <td data-label={age4[0].name}>{fee47[0].fee}</td>
+                                <td data-label={age5[0].name}>{fee48[0].fee}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h2>営利目的使用</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{time10[0].purpose}</th>
+                                <th>{time11[0].purpose}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{time10[0].time.name}</td>
+                                <td data-label={time10[0].purpose}>{fee49[0].fee}</td>
+                                <td data-label={time11[0].purpose}>{fee52[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time11[0].time.name}</td>
+                                <td data-label={time10[0].purpose}>{fee50[0].fee}</td>
+                                <td data-label={time11[0].purpose}>{fee53[0].fee}</td>
+                            </tr>
+                            <tr>
+                                <td>{time12[0].time.name}</td>
+                                <td data-label={time10[0].purpose}>{fee51[0].fee}</td>
+                                <td data-label={time11[0].purpose}>{fee54[0].fee}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
           </div>
       );
     }
