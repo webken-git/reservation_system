@@ -12,12 +12,12 @@ const ApprovalInfo = (props) =>{
     // const [date, setDate] = useState("");
     const id = props.id;
 
-
     const pullReservation = () => {
         setLoading(true);
         axios.get(`${process.env.REACT_APP_API}/api/reservations/${id}`,{
         })
         .then(res => {
+            console.log(res.data)
             setReservation(res.data);
             setLoading(false);
         })
@@ -29,15 +29,15 @@ const ApprovalInfo = (props) =>{
 
     useEffect(() => {
         pullReservation();
+        // setYear(reservation.start.substr(0, 2))
     }, [])
-
     
     return (
     <>
         <div className="info-wrapper">
             <table className="info-table">
                 <tbody>
-                    <tr className="name">
+                    <tr className="name-base">
                         <td className="name-title">氏名：</td>
                         {reservation.is_group === false ? (
                             <td className="name-body">{reservation.reader_name}</td>

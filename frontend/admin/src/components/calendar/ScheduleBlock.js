@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import { withCookies } from 'react-cookie';
+import { Link } from 'react-router-dom'
 
 const ScheduleBlock = (props) =>{
     const [ startHours, setStartHours ] = useState("");
@@ -10,6 +11,7 @@ const ScheduleBlock = (props) =>{
     const [ endDate, setEndDate ] = useState("");
     const [ scheduleStartDate, setScheduleStartDate ] = useState(new Date());
     const [ scheduleEndDate, setScheduleEndDate ] = useState(new Date());
+    
 
     // console.log(props.schedule)
     // console.log(typeof(props.schedule))
@@ -18,14 +20,14 @@ const ScheduleBlock = (props) =>{
 
 
 
-    const onClick = (e) => {
+    // const onClick = (e) => {
 
-        const protocol = window.location.protocol;
-        console.log(protocol)
-        const host = window.location.host;
+    //     const protocol = window.location.protocol;
+    //     console.log(protocol)
+    //     const host = window.location.host;
 
-        window.location.href = protocol+"//"+host+"/approvalInfo?id="+e;
-    }
+    //     window.location.href = protocol+"//"+host+"/approvalInfo?id="+e;
+    // }
     
     useEffect(()=>{
         let unmounted = false;
@@ -187,14 +189,17 @@ const ScheduleBlock = (props) =>{
     //     }
     // }
 
+    const id = props.schedule.reservation.id
+
     if((props.schedule.approval.name !== "不承認") && (props.schedule.approval.name !== "不承認")){
         return (
-        <div
+        <Link
             className="schedule-block"
             // onClick={modalHandle}
             style={styleGeneratorHandler()}
-            onClick={() => onClick(props.schedule.reservation.id)}
+            to={`/calendar/approvalInfo/${props.schedule.reservation.id}`}
         >
+            
             {props.schedule.repeat_interval === 1 ? (
                 <p>{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.start.substr(5, 2))+"月"+Number(props.schedule.start.substr(8, 2))+"日")}{props.schedule.start_time.substr(11, 5)}{((startDate < props.contentDate)||(props.contentDate < endDate)) && (<br/>)}~{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.reservation.end.substr(5, 2))+"月"+Number(props.schedule.reservation.end.substr(8, 2))+"日")}{props.schedule.reservation.end.substr(11, 5)}</p>
             ) : (
@@ -226,7 +231,7 @@ const ScheduleBlock = (props) =>{
                     <span>グループのスケジュールを表示中なので編集できません</span>
                 </div>
             )} */}
-        </div>
+        </Link>
     )} else {
         return null
     }

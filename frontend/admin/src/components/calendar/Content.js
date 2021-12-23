@@ -29,7 +29,6 @@ const Content = (props) =>{
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
             // setStringContentDate(year+'-'+month+'-'+day);    
         }
-        console.log(approvalFilter)
         axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
             params: {
                 'approval': approvalFilter,

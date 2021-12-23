@@ -68,8 +68,23 @@ function App() {
             <SideBarAndHeaderRoute pagename="ドキュメントリスト" path="/documentlist" exact children={<Route path="/documentList" exact children={<DocumentListPage />} />} />
             <SideBarAndHeaderRoute pagename="ユーザーリスト" path="/userlist" exact children={<Route path="/userlist" exact children={<UserList />} />} />
             <SideBarAndHeaderRoute pagename="データリスト" path="/datalist" exact children={<Route path="/datalist" exact children={<DataList />} />} />
-            <SideBarAndHeaderRoute pagename="予約詳細" path="/approvalInfo" exact children={<Route path="/approvalInfo" exact children={<ApprovalInfoPage />} />} />
-            <SideBarRoute path="/calendar" exact children={<Route path="/calendar" exact children={<CalendarPage />} />} />
+            {/* <SideBarAndHeaderRoute pagename="予約詳細" path="/calendar/approvalInfo:id" exact children={<Route path="/approvalInfo" exact children={<ApprovalInfoPage />} />} />
+            <SideBarRoute path="/calendar" exact children={<Route path="/calendar" exact children={<CalendarPage />} />} /> */}
+            <Route path="/calendar"
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <SideBarRoute path={`${url}/`} pagename={"カレンダー"} exact children={<CalendarPage />} />
+                    {/* <SideBarAndHeaderRoute path={`${url}/approvalInfo/:id`} pagename={"予約詳細"} exact children={<ApprovalInfoPage />} /> */}
+                    {/* <Route path={`${url}/approvalInfo/:id`}> */}
+                    <Route path={`${url}/approvalInfo/:id`}>
+                      <SideBarAndHeaderRoute pagename={"予約詳細"} exact children={<ApprovalInfoPage />} />
+                    </Route>
+                  </Switch>
+                </>
+              )}
+           />
+
           </LoginRoute>
         </Switch>
       </CookiesProvider>
