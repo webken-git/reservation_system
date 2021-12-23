@@ -1,6 +1,6 @@
-import React from 'react';
-import axios from 'axios';
-import { CookiesProvider } from 'react-cookie';
+import React from "react";
+import axios from "axios";
+import { CookiesProvider } from "react-cookie";
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainPage from './pages/MainPage';
@@ -14,13 +14,15 @@ import { PassWordChangePage } from './pages/PasswordChangePage';
 import { LoginPage } from './pages/LoginPage';
 import Registration from './components/auth/Registration';
 import { AccountDeletePage } from './pages/AccountDeletePage';
+import Content from "./components/reservationform/Content";
+import "./index.scss";
 
 // var csrftoken = Cookies.get('csrftoken');
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 axios.defaults.headers = {
-  'Content-Type': 'application/json',
+  "Content-Type": "application/json",
 };
 
 function App() {
@@ -45,8 +47,10 @@ function App() {
           />
           {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
           <HeaderRoute path="/" exact children={<MainPage />} />
+          <HeaderRoute path="/cart" exact children={<Content />} />
           <LoginRoute>
-            <Route path="/account"
+            <Route
+              path="/account"
               render={({ match: { url } }) => (
                 <>
                   <Switch>
@@ -72,4 +76,4 @@ function App() {
 // const root = document.querySelector("#root");
 // ReactDOM.render(<App />, root);
 
-export default App
+export default App;

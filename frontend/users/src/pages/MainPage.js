@@ -1,19 +1,23 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.scss';
-import { useSetRecoilState } from "recoil";
-import tabState from "../recoil/tab/atom";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import tabState from "../recoil/tab";
+import authState from "../recoil/auth";
+import { formData } from "../recoil/form/atom";
 import { ReservationUrls } from "../utils/reservationUrls";
 import useSafeState from "../hooks/useSafeState";
 import useUnmountRef from "../hooks/useUnmountRef";
+import Calendar from "../components/calendar/Calendar.js";
 import FeeList from '../components/feelist/FeeList';
 import GroupFeeList from "../components/feelist/GroupFeeList";
 import CurlingFeeList from "../components/feelist/CurlingFeeList";
+import { ReservationForm } from "../components/reservationform/ReservationForm";
 import Loading from "../components/loading/Loading";
 // import { Link as Scroll } from 'react-scroll';
 import './mainpage.scss'
-import Calendar from "../components/calendar/Calendar.js";
+
 
 const MainPage = () => {
   const unmountRef = useUnmountRef();
@@ -26,6 +30,8 @@ const MainPage = () => {
   const [, setUsage] = useSafeState(unmountRef, []);
   const [loading, setLoading] = useSafeState(unmountRef, true);
   const setTabState = useSetRecoilState(tabState);
+  const tabStates = useRecoilValue(tabState);
+  const CheckAuth = useRecoilValue(authState);
 
   //場所データ取得
   const GetPlaceList = () => {
@@ -56,9 +62,7 @@ const MainPage = () => {
     axios.get(ReservationUrls.AGE)
       .then(response => {
         const ages = response.data;
-        setAge(ages)
-      })
-      .catch((error) => {
+        setAge(ages);
       })
   }
 
@@ -67,7 +71,7 @@ const MainPage = () => {
     axios.get(ReservationUrls.TIME)
       .then(response => {
         const times = response.data;
-        setTime(times)
+        setTime(times);
       })
       .catch((error) => {
       })
@@ -155,6 +159,9 @@ const MainPage = () => {
               <summary>料金一覧</summary>
               {tabitems}
             </details>
+            {CheckAuth.isAuthenticated === true && (
+              <ReservationForm placeName={tabStates.place} placeList={placeListData} />
+            )}
           </div>
         </div>
       </div>

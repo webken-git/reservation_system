@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { Redirect } from "react-router-dom";
 import { AuthUrls } from "../../utils/authUrls";
-import authState from "../../recoil/auth/atom";
+import authState from "../../recoil/auth";
 
 const LoginRoute = (props) => {
     const [auth, setAuth] = useRecoilState(authState);

@@ -1,6 +1,7 @@
+import React from 'react'
 import axios from 'axios';
 import { useSetRecoilState } from "recoil";
-import authState from "../../recoil/auth/atom";
+import authState from "../../recoil/auth";
 import { AuthUrls } from "../../utils/authUrls";
 import './auth.scss';
 

@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from "react";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
@@ -8,7 +9,7 @@ import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
-import authState from "../../recoil/auth/atom";
+import authState from "../../recoil/auth";
 import { RegistrationButton } from './RegistrationButton';
 import logo from '../../assets/image/logo.png';
 import './auth.scss';

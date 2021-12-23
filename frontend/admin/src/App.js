@@ -1,8 +1,10 @@
 import React from "react";
-import axios from 'axios';
-import { CookiesProvider } from 'react-cookie';
+import axios from "axios";
+import { CookiesProvider } from "react-cookie";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LoginRoute from "./components/rooter/LoginRoute";
+import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
+import SideBarRoute from "./components/rooter/SideBarRoute";
 
 import { LoginPage } from "./pages/home/LoginPage";
 import Registration from "./components/auth/Registration";
@@ -22,18 +24,15 @@ import { DataList } from "./pages/home/DataList"
 import { CalendarPage } from "./pages/home/CalendarPage";
 import { DocumentListPage } from "./pages/home/DocumentListPage";
 import { ApprovalInfoPage } from "./pages/home/ApprovalInfoPage";
-import "./index.css"
+import "./index.scss"
 import GetDate from "./components/toppage/GetDate"
 
-import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
-import SideBarRoute from "./components/rooter/SideBarRoute";
-
 // var csrftoken = Cookies.get('csrftoken');
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 axios.defaults.headers = {
-  'Content-Type': 'application/json',
+  "Content-Type": "application/json",
 };
 
 function App() {
@@ -67,7 +66,12 @@ function App() {
                     <Route path={`${url}/password/reset/:uid/:token`}>
                       <SideBarAndHeaderRoute pagename={"アカウント"} exact children={<PasswordResetPage />} />
                     </Route>
-                    <SideBarAndHeaderRoute path={`${url}/delete`} pagename={"アカウント"} exact children={<AccountDeletePage />} />
+                    <SideBarAndHeaderRoute
+                      path={`${url}/delete`}
+                      pagename={"アカウント"}
+                      exact
+                      children={<AccountDeletePage />}
+                    />
                   </Switch>
                 </>
               )}
@@ -84,8 +88,6 @@ function App() {
                 <>
                   <Switch>
                     <SideBarRoute path={`${url}/`} pagename={"カレンダー"} exact children={<CalendarPage />} />
-                    {/* <SideBarAndHeaderRoute path={`${url}/approvalInfo/:id`} pagename={"予約詳細"} exact children={<ApprovalInfoPage />} /> */}
-                    {/* <Route path={`${url}/approvalInfo/:id`}> */}
                     <Route path={`${url}/approval-info/:id`}>
                       <SideBarAndHeaderRoute pagename={"予約詳細"} exact children={<ApprovalInfoPage />} />
                     </Route>

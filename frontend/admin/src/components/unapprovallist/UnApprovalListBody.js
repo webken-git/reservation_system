@@ -100,7 +100,7 @@ const UnapprovalListBody = () => {
                 <td></td>
                 <td>
                   <select className="groupfilter" defaultValue="" onChange={(e) => groupFiltering(e)}>
-                    <option value="">全部</option>
+                    <option value="">全体</option>
                     <option value="false">個人</option>
                     <option value="true">団体</option>
                   </select>
@@ -109,7 +109,7 @@ const UnapprovalListBody = () => {
                 <td></td>
                 <td>
                   <select className="placefilter" defaultValue="" onChange={(e) => placeFiltering(e)}>
-                    <option value="">全部</option>
+                    <option value="">全体</option>
                     <option value="1">カーリング場</option>
                     <option value="2">大会議室</option>
                     <option value="3">中会議室</option>
