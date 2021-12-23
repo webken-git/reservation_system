@@ -26,8 +26,8 @@ class UserViewSet(mixins.RetrieveModelMixin,
   authentication_classes = [JWTCookieAuthentication]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
-      permissions.IsAdminUser: ['update', 'partial_update', 'destroy'],
-      permissions.IsAuthenticated: ['list', 'retrieve'],
+      permissions.IsAdminUser: ['update', ],
+      permissions.IsAuthenticated: ['list', 'retrieve', 'partial_update', 'destroy'],
       permissions.AllowAny: []
   }
 

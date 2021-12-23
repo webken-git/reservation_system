@@ -18,21 +18,10 @@ $breakpoints: (
   }
 }
 
-.logobox {
-  width: 10%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.logo {
+  width: 90px;
+  cursor: pointer;
   @include mq(sp) {
-    width: auto;
-    margin-left: 2%;
-  }
-  img {
-    width: 90px;
-    cursor: pointer;
-    @include mq(sp) {
-      width: 70px;
-    }
+    width: 70px;
   }
 }

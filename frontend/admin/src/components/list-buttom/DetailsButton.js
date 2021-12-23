@@ -30,11 +30,11 @@ const DetailsButton = (props) => {
 
   return (
     <td className="list-button-wrapper">
-      <p calssName="details-button" onClick={() => setIsOpen(true)}>
+      <p className="details-button" onClick={() => setIsOpen(true)}>
         <FontAwesomeIcon icon={faSearchPlus} />
       </p>
       <Modal isOpen={modalIsOpen} style={modalStyle}>
-        <div className="list-wrapper">
+        <div className="modal-wrapper">
           <div className="scroll_box-wrapper">
             <p className="close" onClick={() => setIsOpen(false)}>×</p>
             <div className="scroll_box">

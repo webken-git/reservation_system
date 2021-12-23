@@ -4,13 +4,13 @@ import UserDetailsButton from "./UserDetailsButton"
 // import './approval.scss'
 
 const UserTable = (props) => {
-  return(
+  return (
     <tr>
       {/* id */}
       <td>{props.id}</td>
       {/* メールアドレス */}
       <td>{props.email}</td>
-      <td><UserDetailsButton/></td>
+      <td><UserDetailsButton /></td>
     </tr>
   )
 }

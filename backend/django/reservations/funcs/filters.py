@@ -44,14 +44,15 @@ class ApprovalApplicationFilter(filters.FilterSet):
     fields += ['reservation__place__' + f.name for f in Place._meta.fields]
 
 
-class SwaggerQueryStringFilter(BaseFilterBackend):
-  """
-  create query string parameter for swagger
-  """
+class ApprovalFilter(filters.FilterSet):
+  # フィルタの定義
+  reservation__start__year = filters.NumberFilter(field_name='reservation__start', lookup_expr='year')
+  reservation__start__month = filters.NumberFilter(field_name='reservation__start', lookup_expr='month')
+  reservation__start__day = filters.NumberFilter(field_name='reservation__start', lookup_expr='day')
 
-  def get_schema_fields(self, view):
-    fields = []
-    for key, value in view.serializer_class._declared_fields.items():
-      field = coreapi.Field(name=key, description=value.help_text, required=value.required, location="query",)
-      fields.append(field)
-    return fields
+  class Meta:
+    model = ApprovalApplication
+    # フィルタを列挙
+    fields = [f.name for f in ApprovalApplication._meta.fields]
+    fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+    fields += ['reservation__place__' + f.name for f in Place._meta.fields]

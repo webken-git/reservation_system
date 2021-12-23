@@ -22,7 +22,7 @@ $main-color: #1a8d89;
 $sub-color: #707070;
 $accent-color: #233b62;
 
-.mypage-wrapper {
+.account-wrapper {
   width: 100%;
   .title {
     font-size: 30px;
@@ -62,13 +62,10 @@ $accent-color: #233b62;
   }
   @include mq(sp) {
     .mail-pass {
-      width: 100%;
       tr {
-        width: 100%;
         margin-bottom: 10%;
         display: block;
         td {
-          width: 100%;
           display: block;
         }
       }

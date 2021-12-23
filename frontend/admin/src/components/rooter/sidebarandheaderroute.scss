@@ -1,19 +1,68 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
+
 .allbox {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
+  // width: 100vw;
+  // height: 100vh;
+  display: flex;
+  overflow-x: hidden;
 
-    .sidebar {
-        width:15%;
-        height: 100vh;
+  .drawer-menu {
+    display: none;
+    @include mq("sp") {
+      display: block;
     }
-      
-    .mainbox {
-        width: 85%;
-        height: 100vh;
+    @include mq("tab") {
+      display: block;
+    }
+  }
+  .menu {
+    display: block;
+    @include mq("sp") {
+      display: none;
+    }
+    @include mq("tab") {
+      display: none;
+    }
+  }
 
-        .contents {
-            margin: 2% 2% 0 2%;
-        }
+  .sidebar {
+    min-width: fit-content;
+    @include mq(sp) {
+      min-width: 70%;
     }
+    @include mq(tab) {
+      min-width: 70%;
+    }
+  }
+
+  .mainbox {
+    width: 100%;
+    // align-items: center;
+    // height: 100vh;
+    .contents {
+      margin: 2% 2% 0 2%;
+    }
+  }
 }

@@ -20,6 +20,7 @@ $breakpoints: (
 
 $main-color: #1a8d89;
 $sub-color: #707070;
+$accent-color: #233b62;
 
 .btn {
   width: 7rem;
@@ -94,41 +95,32 @@ $sub-color: #707070;
     .auth-page__form-input:focus {
       outline: none;
     }
-    .auth-page__password {
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      padding: 10px 10px;
-      margin: 5px 0;
+    .link {
+      text-decoration: none;
+      color: $accent-color;
     }
-    .auth-page__password:focus {
-      outline: #000 solid 1px;
-    }
-    .password {
-      width: 275px;
-      border: none;
-      font-size: large;
-    }
-    .password:focus {
-      outline: none;
+    .link:hover {
+      text-decoration: underline;
     }
   }
 
   .auth-btn-wrapper {
     text-align: center;
-    .back-btn {
-      @extend .btn;
-      background-color: $sub-color;
-      border: $sub-color solid 1px;
-    }
-    .verify-btn {
-      @extend .btn;
-    }
-    .auth-btn {
-      @extend .btn;
-      width: 10rem;
-      // margin: 0 auto;
-    }
   }
+}
+
+.back-btn {
+  @extend .btn;
+  background-color: $sub-color;
+  border: $sub-color solid 1px;
+}
+.verify-btn {
+  @extend .btn;
+}
+.auth-btn {
+  @extend .btn;
+  width: 10rem;
+  // margin: 0 auto;
 }
 
 .logout-btn {
@@ -162,4 +154,22 @@ $sub-color: #707070;
 }
 .login-link {
   @extend .btn;
+}
+
+.password-container {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px 10px;
+  margin: 5px 0;
+}
+.password-container:focus {
+  outline: #000 solid 1px;
+}
+.password {
+  width: 275px;
+  border: none;
+  font-size: large;
+}
+.password:focus {
+  outline: none;
 }

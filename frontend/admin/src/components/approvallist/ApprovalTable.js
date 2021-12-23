@@ -1,13 +1,29 @@
 // 承認リストの中身
 import React from "react";
+import { useSetRecoilState } from "recoil";
 // import './approval.scss'
 import DetailsButton from "./../list-buttom/DetailsButton"
 import ApprovalCancelButton from "./../list-buttom/ApprovalCancelButtom"
+import reservationState from "../../recoil/reservation/atom";
 
 const ApprovalTable = (props) => {
+  const setReservationState = useSetRecoilState(reservationState);
+
+  // ラジオボタンのチェック状態をstateに保存
+  const handleChange = (e) => {
+    setReservationState({ id: e.target.id });
+  };
   return (
     <tr>
-      <td><input type="checkbox" /></td>
+      <td>
+        <input
+          type="radio"
+          id={props.id}
+          name="approval"
+          value={props.contact_name}
+          onChange={handleChange}
+        />
+      </td>
       {/* 予約日 */}
       <td>{props.date}</td>
       {/* 団体者名 */}

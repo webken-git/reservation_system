@@ -4,6 +4,7 @@ import axios from "axios";
 import CancelTable from "./CancelTable"
 // import './../approvallist/approval.scss'
 import dayjs from 'dayjs'
+import CsvExportButton from "../csvexport/CsvExportButton";
 
 const CancelListBody = () => {
   const placeFiltering = (e) => {
@@ -36,12 +37,10 @@ const CancelListBody = () => {
     })
       .then(response => {
         const data = response.data;
-        // console.log(data);
         // キャンセルリストのデータをuseStateに入れている
         setCancelListData(data);
       })
       .catch((error) => {
-        console.log(error);
       })
   }
 
@@ -74,7 +73,6 @@ const CancelListBody = () => {
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
           id={val.reservation.id}
-          purpose={val.reservation.purpose}
           admission_fee={val.reservation.admission_fee}
         />
       )
@@ -82,41 +80,63 @@ const CancelListBody = () => {
   )
   return (
     <div>
-      <table className="list-body">
-        <tr>
-          <td>
-            <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
-          </td>
-          <td></td>
-          <td></td>
-          <td>
-            <select className="groupfilter" onChange={(e) => groupFiltering(e)}>
-              <option value="">全部</option>
-              <option value="false">個人</option>
-              <option value="true">団体</option>
-            </select>
-          </td>
-          <td></td>
-          <td></td>
-          <td>
-            <select className="placefilter" onChange={(e) => placeFiltering(e)}>
-              <option value="" selected>全部</option>
-              <option value="1">カーリング場</option>
-              <option value="2">大会議室</option>
-              <option value="3">中会議室</option>
-              <option value="4">小会議室</option>
-              <option value="5">アーチェリー場</option>
-              <option value="6">武道場</option>
-            </select>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
-        </tr>
-        {Table}
-      </table>
-    </div>
+      <div className="functions">
+        <span className="space">
+          <CsvExportButton approval={4} />
+        </span>
+      </div>
+      <div className="scroll_box-wrapper">
+        {/* スクロールバーボックス */}
+        <div className="scroll_box">
+          <table className="list-body">
+            <tr>
+              <td>
+                <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <select className="groupfilter" onChange={(e) => groupFiltering(e)}>
+                  <option value="">全部</option>
+                  <option value="false">個人</option>
+                  <option value="true">団体</option>
+                </select>
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <select className="placefilter" onChange={(e) => placeFiltering(e)}>
+                  <option value="" selected>全部</option>
+                  <option value="1">カーリング場</option>
+                  <option value="2">大会議室</option>
+                  <option value="3">中会議室</option>
+                  <option value="4">小会議室</option>
+                  <option value="5">アーチェリー場</option>
+                  <option value="6">武道場</option>
+                </select>
+              </td>
+              <td></td>
+            </tr>
+            <thead>
+              <tr>
+                <td>日付</td>
+                <td>団体者名</td>
+                <td>代表者名</td>
+                <td>個人/団体</td>
+                <td>時間</td>
+                <td>人数</td>
+                <td>場所</td>
+                <td></td>
+                <td>詳細</td>
+              </tr>
+            </thead>
+            <tbody>
+              {Table}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div >
   )
 }
 

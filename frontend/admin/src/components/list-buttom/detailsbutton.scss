@@ -1,44 +1,41 @@
-詳細ボタンのcss
-.details-button {
-  font-size: 40px;
-  font-weight: 900;
-  margin-left: 13px;
-  background-color: skyblue;
-}
-// .detailsbutton {
-//   font-size: 20px;
-//   font-weight: 900;
-//   margin-left: 13px;
+// 詳細ボタンのcss
+// .details-button {
+// font-size: 40px;
+// font-weight: 900;
+// background-color: skyblue;
 // }
+.details-button:hover {
+  opacity: 0.5;
+}
 
-.list-wrapper {
+.modal-wrapper {
   .scroll_box-wrapper {
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     .scroll_box {
-      width: 1550px;
-      height: 480px;
+      // width: 1550px;
+      // height: 500px;
       overflow-y: scroll;
       // white-space: nowrap;
     }
-    
+
     /* スクロールの幅の設定 */
     .scroll_box::-webkit-scrollbar {
       width: 10px;
       height: 10px;
     }
-    
+
     /* スクロールの背景の設定 */
     .scroll_box::-webkit-scrollbar-track {
       // border-radius: 5px;
       box-shadow: 0 0 4px #aaa inset;
     }
-    
+
     /* スクロールのつまみ部分の設定 */
     .scroll_box::-webkit-scrollbar-thumb {
       border-radius: 5px;
       // background: deepskyblue;
-      background: gray;  
+      background: gray;
     }
   }
   .printingbutton-wrapper-wrapper {
@@ -52,9 +49,4 @@
   // .contents {
   //   font-size: 20px;
   // }
-}
-
-.close {
-  color: blue;
-  font-size: 30px;
 }

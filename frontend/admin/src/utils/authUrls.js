@@ -14,4 +14,5 @@ export const AuthUrls = {
     GET_USER_DATA: `${ROOT_URL}/account/user/`,
     // GET_USER_DATA: `${ROOT_URL}/account/login-user/`,
     GET_USER_LIST: `${ROOT_URL}/api/users/`,
+    APP_SETTINGS: `${ROOT_URL}/api/app-settings/`,
 };

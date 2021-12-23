@@ -7,10 +7,9 @@ import dayjs from 'dayjs'
 const TopPageList = () => {
   const [TodayList, setTodayList] = useState([])
   const GetTodayList = () => {
-    axios.get('https://webhok.net/reservation_system/api/reservations/9999-01-01T00:00/approval-applications/?approval=2')
+    axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`)
     .then(response => {
       const data = response.data;
-      console.log(data)
       var today = dayjs().format('YYYY-MM-DD')
       // var today = dayjs().add(1, 'y').add(19, 'd').format('YYYY-MM-DD')
       // var today = dayjs().add(1, 'd').format('YYYY-MM-DD')
@@ -24,17 +23,13 @@ const TopPageList = () => {
       for(let i = 0; data.length > i; i++){
         var r_start = data[i]["reservation"]["start"]
         var r_start_format = dayjs(r_start).format('YYYY-MM-DD')
-        console.log(r_start_format)
         if(r_start_format === today){
           todaydata.push(data[i])
           setTodayList(todaydata)
         }
-
       }
-      
     })
     .catch((error) => {
-      console.log(error);
     })
   }
 

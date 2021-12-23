@@ -193,6 +193,7 @@ intermediate_table('equipment_place.csv', 'reservations_equipment_place', 'equip
 connect.commit()
 
 insert_facility_fee_data('facility_fee_v2.csv')
+insert_facility_fee_data('facility_fee.csv')
 insert_equipment_fee_data('equipment_fee.csv')
 insert_reservation_data('reservation.csv')
 connect.commit()

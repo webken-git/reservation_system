@@ -11,10 +11,9 @@ const UserIcon = (props) => {
     const [modalIsOpen, setIsOpen] = useState(false);
 
     return (
-        <div>
-            <div className='usericonbox' onClick={() => setIsOpen(true)}>
-                <div className='circle'></div>
-                <p><FontAwesomeIcon icon={props.icon} /></p>
+        <>
+            <div className="user-icon-container">
+                <FontAwesomeIcon icon={props.icon} size='3x' className='user-icon' onClick={() => setIsOpen(true)} />
             </div>
             <Modal
                 className='modal'
@@ -22,11 +21,17 @@ const UserIcon = (props) => {
                 isOpen={modalIsOpen}
                 onRequestClose={() => setIsOpen(false)}
             >
-                <PageLink url='/account' pagename={'マイページ'}/>
-                <PageLink url='/account' pagename={'予約一覧'} />
-                <Logout/>
+                <span onClick={() => setIsOpen(false)}>
+                    <PageLink url='/account' pagename={'マイページ'} />
+                </span>
+                <span onClick={() => setIsOpen(false)}>
+                    <PageLink url='/account' pagename={'予約一覧'} />
+                </span>
+                <span onClick={() => setIsOpen(false)}>
+                    <Logout />
+                </span>
             </Modal>
-        </div>
+        </>
     )
 }
 

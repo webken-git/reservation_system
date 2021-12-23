@@ -8,9 +8,9 @@ const Logo = (props) => {
     }
 
     return (
-        <div className='logobox' onClick={handleClick}>
-            <img src={props.logo}/>
-        </div>
+        <span onClick={handleClick}>
+            <img src={props.logo} alt='logo' className='logo'/>
+        </span>
     )
 }
 
