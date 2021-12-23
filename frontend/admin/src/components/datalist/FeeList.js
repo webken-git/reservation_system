@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { noWait } from "recoil";
+import React from "react";
 import './feelist.scss'
 
 const FeeList = (props) => {

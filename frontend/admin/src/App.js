@@ -41,6 +41,16 @@ function App() {
       <CookiesProvider>
         <Switch>
           <Route path="/login" exact children={<LoginPage />} />
+          <Route path="/password"
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <Route path={`${url}/`} exact children={<VerifyEmailPage />} />
+                    <Route path={`${url}/reset/:uid/:token`} exact children={<PasswordResetPage />} />
+                  </Switch>
+                </>
+            )}
+          />
           <LoginRoute>
             <Route path="/registration" exact children={<Registration />} />
             <SideBarAndHeaderRoute pagename={<GetDate />} path="/" exact children={<Route path="/" exact children={<TopPage />} />} />

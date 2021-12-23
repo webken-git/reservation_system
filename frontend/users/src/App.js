@@ -33,6 +33,16 @@ function App() {
         <Switch>
           <Route path="/login" exact children={<LoginPage />} />
           <Route path="/registration" exact children={<Registration />} />
+          <Route path="/password"
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <Route path={`${url}/`} exact children={<VerifyEmailPage />} />
+                    <Route path={`${url}/reset/:uid/:token`} exact children={<PasswordResetPage />} />
+                  </Switch>
+                </>
+            )}
+          />
           {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
           <HeaderRoute path="/" exact children={<MainPage />} />
           <LoginRoute>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import SideBar from '../sidebar/SideBar'
-import './sideandheader.scss'
+// import './sideandheader.scss'
 
 // サイドバーとヘッダーを表示するページに使用するルーティング
 

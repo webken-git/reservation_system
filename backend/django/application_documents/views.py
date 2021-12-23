@@ -64,6 +64,7 @@ def create_new_word(request):
   if query:
     file = BASE_DIR + query[0].url
     doc = docx.Document(file)
+    doc.styles['Normal'].font.name = 'ＭＳ 明朝'
     tbl = doc.tables[0]
 
     if query[0].name == '稚内市体育施設使用等承認（不承認）通知書' or query[0].name == '稚内市体育施設使用等承認取消し等決定通知書' or query[0].name == '稚内市体育施設使用料等後納承認（不承認）通知書':
@@ -73,51 +74,51 @@ def create_new_word(request):
       tbl.rows[1].cells[1].paragraphs[0].text = insert_string(tbl.rows[1].cells[1].paragraphs[0].text, 5, place)
       # 使用（利用）区分
       if 'アマチュアスポーツ' in usages:
-        tbl.rows[2].cells[1].paragraphs[0].text = tbl.rows[2].cells[1].paragraphs[0].text.replace('□アマチュア', '☒アマチュア')
+        tbl.rows[2].cells[1].paragraphs[0].text = tbl.rows[2].cells[1].paragraphs[0].text.replace('□アマチュア', '☑アマチュア')
       if '一般使用' in usages:
-        tbl.rows[2].cells[1].paragraphs[0].text = tbl.rows[2].cells[1].paragraphs[0].text.replace('□一般使用', '☒一般使用')
+        tbl.rows[2].cells[1].paragraphs[0].text = tbl.rows[2].cells[1].paragraphs[0].text.replace('□一般使用', '☑一般使用')
       if '競技会使用' in usages:
-        tbl.rows[2].cells[1].paragraphs[0].text = tbl.rows[2].cells[1].paragraphs[0].text.replace('□競技会使用', '☒競技会使用')
+        tbl.rows[2].cells[1].paragraphs[0].text = tbl.rows[2].cells[1].paragraphs[0].text.replace('□競技会使用', '☑競技会使用')
       if '非営利' in usages:
-        tbl.rows[2].cells[1].paragraphs[1].text = tbl.rows[2].cells[1].paragraphs[1].text.replace('□非営利', '☒非営利')
+        tbl.rows[2].cells[1].paragraphs[1].text = tbl.rows[2].cells[1].paragraphs[1].text.replace('□非営利', '☑非営利')
         if '入場料を徴収する' in usages:
-          tbl.rows[2].cells[1].paragraphs[1].text = tbl.rows[2].cells[1].paragraphs[1].text.replace('□入場料を徴収する', '☒入場料を徴収する')
+          tbl.rows[2].cells[1].paragraphs[1].text = tbl.rows[2].cells[1].paragraphs[1].text.replace('□入場料を徴収する', '☑入場料を徴収する')
         elif '入場料を徴収しない' in usages:
-          tbl.rows[2].cells[1].paragraphs[1].text = tbl.rows[2].cells[1].paragraphs[1].text.replace('□入場料を徴収しない', '☒入場料を徴収しない')
+          tbl.rows[2].cells[1].paragraphs[1].text = tbl.rows[2].cells[1].paragraphs[1].text.replace('□入場料を徴収しない', '☑入場料を徴収しない')
       elif '営利' in usages:
-        tbl.rows[2].cells[1].paragraphs[2].text = tbl.rows[2].cells[1].paragraphs[2].text.replace('□営　利', '☒営　利')
+        tbl.rows[2].cells[1].paragraphs[2].text = tbl.rows[2].cells[1].paragraphs[2].text.replace('□営　利', '☑営　利')
         if '入場料を徴収する' in usages:
-          tbl.rows[2].cells[1].paragraphs[2].text = tbl.rows[2].cells[1].paragraphs[2].text.replace('□入場料を徴収する', '☒入場料を徴収する')
+          tbl.rows[2].cells[1].paragraphs[2].text = tbl.rows[2].cells[1].paragraphs[2].text.replace('□入場料を徴収する', '☑入場料を徴収する')
         elif '入場料を徴収しない' in usages:
-          tbl.rows[2].cells[1].paragraphs[2].text = tbl.rows[2].cells[1].paragraphs[2].text.replace('□入場料を徴収しない', '☒入場料を徴収しない')
+          tbl.rows[2].cells[1].paragraphs[2].text = tbl.rows[2].cells[1].paragraphs[2].text.replace('□入場料を徴収しない', '☑入場料を徴収しない')
       # 年齢区分
       if '幼児' in ages:
-        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□幼児', '☒幼児')
+        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□幼児', '☑幼児')
       if '小学生' in ages:
-        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□小学生', '☒小学生')
+        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□小学生', '☑小学生')
       if '中学生' in ages:
-        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□中学生', '☒中学生')
+        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□中学生', '☑中学生')
       if '高校生' in ages:
-        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□高校生', '☒高校生')
+        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□高校生', '☑高校生')
       if '大学生' in ages:
-        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□大学生', '☒大学生')
+        tbl.rows[3].cells[1].paragraphs[0].text = tbl.rows[3].cells[1].paragraphs[0].text.replace('□大学生', '☑大学生')
       if '一般' in ages:
-        tbl.rows[3].cells[1].paragraphs[1].text = tbl.rows[3].cells[1].paragraphs[1].text.replace('□一般', '☒一般')
+        tbl.rows[3].cells[1].paragraphs[1].text = tbl.rows[3].cells[1].paragraphs[1].text.replace('□一般', '☑一般')
       if '高齢者' in ages:
-        tbl.rows[3].cells[1].paragraphs[1].text = tbl.rows[3].cells[1].paragraphs[1].text.replace('□高齢者', '☒高齢者')
+        tbl.rows[3].cells[1].paragraphs[1].text = tbl.rows[3].cells[1].paragraphs[1].text.replace('□高齢者', '☑高齢者')
       if '障害者' in ages:
-        tbl.rows[3].cells[1].paragraphs[1].text = tbl.rows[3].cells[1].paragraphs[1].text.replace('□障害者', '☒障害者')
+        tbl.rows[3].cells[1].paragraphs[1].text = tbl.rows[3].cells[1].paragraphs[1].text.replace('□障害者', '☑障害者')
       # 利用日時
       tbl.rows[4].cells[1].paragraphs[0].text = tbl.rows[4].cells[1].paragraphs[0].text.replace('年', str(start.year) + ' 年').replace('　月', str(start.month) + ' 月').replace('　日', str(start.day) + ' 日').replace('　時', str(start.strftime('%I')) + ' 時').replace('　分', str(start.minute) + ' 分')
       tbl.rows[4].cells[1].paragraphs[1].text = tbl.rows[4].cells[1].paragraphs[1].text.replace('年', str(end.year) + ' 年').replace('　月', str(end.month) + ' 月').replace('　日', str(end.day) + ' 日').replace('　時', str(end.strftime('%I')) + ' 時').replace('　分', str(end.minute) + ' 分')
       if start_hour - 12 < 0:
-        tbl.rows[4].cells[1].paragraphs[0].text = tbl.rows[4].cells[1].paragraphs[0].text.replace('前', '☒前')
+        tbl.rows[4].cells[1].paragraphs[0].text = tbl.rows[4].cells[1].paragraphs[0].text.replace('前', '☑前')
       elif start_hour - 12 > 0:
-        tbl.rows[4].cells[1].paragraphs[0].text = tbl.rows[4].cells[1].paragraphs[0].text.replace('後', '☒後')
+        tbl.rows[4].cells[1].paragraphs[0].text = tbl.rows[4].cells[1].paragraphs[0].text.replace('後', '☑後')
       if end_hour - 12 < 0:
-        tbl.rows[4].cells[1].paragraphs[1].text = tbl.rows[4].cells[1].paragraphs[1].text.replace('前', '☒前')
+        tbl.rows[4].cells[1].paragraphs[1].text = tbl.rows[4].cells[1].paragraphs[1].text.replace('前', '☑前')
       elif end_hour - 12 > 0:
-        tbl.rows[4].cells[1].paragraphs[1].text = tbl.rows[4].cells[1].paragraphs[1].text.replace('後', '☒後')
+        tbl.rows[4].cells[1].paragraphs[1].text = tbl.rows[4].cells[1].paragraphs[1].text.replace('後', '☑後')
     else:
       tbl.rows[0].cells[3].paragraphs[0].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
       if approval_applications[0].reservation.is_group == 1:
@@ -131,51 +132,51 @@ def create_new_word(request):
       tbl.rows[1].cells[3].paragraphs[0].text = insert_string(tbl.rows[1].cells[3].paragraphs[0].text, 5, place)
       # 使用（利用）区分
       if 'アマチュアスポーツ' in usages:
-        tbl.rows[2].cells[3].paragraphs[0].text = tbl.rows[2].cells[3].paragraphs[0].text.replace('□アマチュア', '☒アマチュア')
+        tbl.rows[2].cells[3].paragraphs[0].text = tbl.rows[2].cells[3].paragraphs[0].text.replace('□アマチュア', '☑アマチュア')
       if '一般使用' in usages:
-        tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□一般使用', '☒一般使用')
+        tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□一般使用', '☑一般使用')
       if '競技会使用' in usages:
-        tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□競技会使用', '☒競技会使用')
+        tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□競技会使用', '☑競技会使用')
       if '非営利' in usages:
-        tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□非営利', '☒非営利')
+        tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□非営利', '☑非営利')
         if '入場料を徴収する' in usages:
-          tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□入場料を徴収する', '☒入場料を徴収する')
+          tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□入場料を徴収する', '☑入場料を徴収する')
         elif '入場料を徴収しない' in usages:
-          tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□入場料を徴収しない', '☒入場料を徴収しない')
+          tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□入場料を徴収しない', '☑入場料を徴収しない')
       elif '営利' in usages:
-        tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□営　利', '☒営　利')
+        tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□営　利', '☑営　利')
         if '入場料を徴収する' in usages:
-          tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□入場料を徴収する', '☒入場料を徴収する')
+          tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□入場料を徴収する', '☑入場料を徴収する')
         elif '入場料を徴収しない' in usages:
-          tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□入場料を徴収しない', '☒入場料を徴収しない')
+          tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□入場料を徴収しない', '☑入場料を徴収しない')
       # 年齢区分
       if '幼児' in ages:
-        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□幼児', '☒幼児')
+        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□幼児', '☑幼児')
       if '小学生' in ages:
-        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□小学生', '☒小学生')
+        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□小学生', '☑小学生')
       if '中学生' in ages:
-        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□中学生', '☒中学生')
+        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□中学生', '☑中学生')
       if '高校生' in ages:
-        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□高校生', '☒高校生')
+        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□高校生', '☑高校生')
       if '大学生' in ages:
-        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□大学生', '☒大学生')
+        tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□大学生', '☑大学生')
       if '一般' in ages:
-        tbl.rows[3].cells[3].paragraphs[1].text = tbl.rows[3].cells[3].paragraphs[1].text.replace('□一般', '☒一般')
+        tbl.rows[3].cells[3].paragraphs[1].text = tbl.rows[3].cells[3].paragraphs[1].text.replace('□一般', '☑一般')
       if '高齢者' in ages:
-        tbl.rows[3].cells[3].paragraphs[1].text = tbl.rows[3].cells[3].paragraphs[1].text.replace('□高齢者', '☒高齢者')
+        tbl.rows[3].cells[3].paragraphs[1].text = tbl.rows[3].cells[3].paragraphs[1].text.replace('□高齢者', '☑高齢者')
       if '障害者' in ages:
-        tbl.rows[3].cells[3].paragraphs[1].text = tbl.rows[3].cells[3].paragraphs[1].text.replace('□障害者', '☒障害者')
+        tbl.rows[3].cells[3].paragraphs[1].text = tbl.rows[3].cells[3].paragraphs[1].text.replace('□障害者', '☑障害者')
       # 利用日時
       tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('年', str(start.year) + ' 年').replace('　月', str(start.month) + ' 月').replace('　日', str(start.day) + ' 日').replace('　時', str(start.strftime('%I')) + ' 時').replace('　分', str(start.minute) + ' 分')
       tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('年', str(end.year) + ' 年').replace('　月', str(end.month) + ' 月').replace('　日', str(end.day) + ' 日').replace('　時', str(end.strftime('%I')) + ' 時').replace('　分', str(end.minute) + ' 分')
       if start_hour < 0:
-        tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('前', '☒前')
+        tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('前', '☑前')
       elif start_hour > 0:
-        tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('後', '☒後')
+        tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('後', '☑後')
       if end_hour < 0:
-        tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('前', '☒前')
+        tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('前', '☑前')
       elif end_hour > 0:
-        tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('後', '☒後')
+        tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('後', '☑後')
 
     # 稚内市体育施設使用等承認（不承認）通知書
     if query[0].name == '稚内市体育施設使用等承認（不承認）通知書':
@@ -183,9 +184,9 @@ def create_new_word(request):
       tbl.rows[0].cells[0].paragraphs[3].text = insert_string(tbl.rows[0].cells[0].paragraphs[3].text, 6, contact_name)
       tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('　　年', str(now.year) + ' 年').replace('　月', str(now.month) + ' 月').replace('　日', str(now.day) + ' 日')
       if approval == '承認':
-        tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('□承認', '☒承認')
+        tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('□承認', '☑承認')
       elif approval == '不承認':
-        tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('□不承認', '☒不承認')
+        tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('□不承認', '☑不承認')
       else:
         return {'error': '承認または不承認されたデータを指定してください。'}
       tbl.rows[5].cells[1].paragraphs[0].text = insert_string(tbl.rows[5].cells[1].paragraphs[0].text, 0, purpose)

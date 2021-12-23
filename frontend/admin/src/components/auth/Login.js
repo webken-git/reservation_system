@@ -4,6 +4,7 @@ import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { Link } from "react-router-dom";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
@@ -114,6 +115,11 @@ const Login = () => {
                                 <FontAwesomeIcon icon={faEyeSlash} id="btn-eye" onClick={hidePassword} />
                         }
                     </div>
+                </div>
+                <div>
+                    <Link to='/password' className='link'>
+                        <span>パスワードを忘れた方はこちら</span>
+                    </Link>
                 </div>
                 <div className="auth-btn-wrapper">
                     <button className="btn auth-btn" type="submit">ログイン</button>

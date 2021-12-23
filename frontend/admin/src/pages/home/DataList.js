@@ -80,7 +80,7 @@ export const DataList = () => {
         <div className="list-wrapper">
             <div className="scroll_box-wrapper">
                 <div className="scroll_box">
-                    <h2></h2>
+                    {/* <h2></h2> */}
                     {fees}
                 </div>
             </div>

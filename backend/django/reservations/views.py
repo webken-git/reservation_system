@@ -135,8 +135,8 @@ class SpecialEquipmentViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -219,8 +219,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -287,7 +287,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
     if request.data['approval_id'] == '2':
       # メール送信
       email = EmailMessage(
-          subject="【重要】本予約完了のご連絡/稚内市みどりスポーツパーク",
+          subject="【重要】本予約完了のご連絡",
           body=render_to_string("reservations/email/reservation_approval_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -300,7 +300,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       """
       # メール送信
       email = EmailMessage(
-          subject="【重要】予約不承認のお詫び/稚内市みどりスポーツパーク",
+          subject="【重要】予約不承認のお詫び",
           body=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -313,7 +313,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       """
       # メール送信
       email = EmailMessage(
-          subject="予約キャンセル手続き完了のご連絡/稚内市みどりスポーツパーク",
+          subject="予約キャンセル手続き完了のご連絡",
           body=render_to_string("reservations/email/user_side_cancel_message.txt", context, request),
           from_email=from_email,
           to=[to_email],
@@ -327,7 +327,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       """
       # メール送信
       email = EmailMessage(
-          subject="予約キャンセルのお詫び/稚内市みどりスポーツパーク",
+          subject="予約キャンセルのお詫び",
           body=render_to_string("reservations/email/facility_side_cancel_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -502,8 +502,8 @@ class UsageCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -525,8 +525,8 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -548,8 +548,8 @@ class DefferdPaymentViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 

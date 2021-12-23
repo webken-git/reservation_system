@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
 
@@ -121,6 +122,11 @@ const Login = () => {
                                 <FontAwesomeIcon icon={faEyeSlash} id="btn-eye" onClick={hidePassword} />
                         }
                     </div>
+                </div>
+                <div>
+                    <Link to='/password' className='link'>
+                        <span>パスワードを忘れた方はこちら</span>
+                    </Link>
                 </div>
                 <div className="auth-btn-wrapper">
                     <button className="btn auth-btn" type="submit">ログイン</button>
