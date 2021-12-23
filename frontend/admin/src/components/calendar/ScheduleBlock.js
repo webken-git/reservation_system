@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import { withCookies } from 'react-cookie';
+import { Link } from 'react-router-dom'
 
 const ScheduleBlock = (props) =>{
     const [ startHours, setStartHours ] = useState("");
@@ -11,6 +12,7 @@ const ScheduleBlock = (props) =>{
     const [ scheduleStartDate, setScheduleStartDate ] = useState(new Date());
     const [ scheduleEndDate, setScheduleEndDate ] = useState(new Date());
 
+
     // console.log(props.schedule)
     // console.log(typeof(props.schedule))
 
@@ -18,15 +20,15 @@ const ScheduleBlock = (props) =>{
 
 
 
-    const onClick = (e) => {
+    // const onClick = (e) => {
 
-        const protocol = window.location.protocol;
-        console.log(protocol)
-        const host = window.location.host;
+    //     const protocol = window.location.protocol;
+    //     console.log(protocol)
+    //     const host = window.location.host;
 
-        window.location.href = protocol+"//"+host+"/approvalInfo?id="+e;
-    }
-    
+    //     window.location.href = protocol+"//"+host+"/approvalInfo?id="+e;
+    // }
+
     useEffect(()=>{
         let unmounted = false;
         if(!unmounted){
@@ -56,7 +58,7 @@ const ScheduleBlock = (props) =>{
                 //     let startTimeWeekday = props.contentDate.getDay();
                 //     let scheduleStartTimeWeekday = startDate.getDay();
                 //     let scheduleEndTimeWeekday = endDate.getDay();
-        
+
                 //     scheduleStartDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate() - (startTimeWeekday >= scheduleStartTimeWeekday ? (startTimeWeekday - scheduleStartTimeWeekday) : 7 - (scheduleStartTimeWeekday - startTimeWeekday)));
                 //     scheduleEndDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate() + (scheduleEndTimeWeekday >= startTimeWeekday ? (scheduleEndTimeWeekday - startTimeWeekday) : 7 - (startTimeWeekday - scheduleEndTimeWeekday)));
                 // }
@@ -83,11 +85,9 @@ const ScheduleBlock = (props) =>{
                 //         }
                 //     }
                 // }
-                
                 setScheduleStartDate(scheduleStartDate);
                 setScheduleEndDate(scheduleEndDate);
-                
-            }                        
+            }
         }
 
         return () => { unmounted = true }
@@ -104,7 +104,7 @@ const ScheduleBlock = (props) =>{
     } else if(props.schedule.approval.name === "キャンセル"){
         backgroundColor = "red";
     }
-    
+
     const styleGenerator = useCallback((top, height) => ({
         backgroundColor: backgroundColor,
         top: top ? top+'vh' : '0vh',
@@ -135,12 +135,12 @@ const ScheduleBlock = (props) =>{
             }
             else if(scheduleStartDate < scheduleEndDate && props.contentDate.getTime() === scheduleStartDate.getTime()){
                 top = (startHours*6)+2+startMinutes*0.1;
-                height = (25-(startHours+1))*6+((6-startMinutes*0.1)+0*0.1);    
-            }    
+                height = (25-(startHours+1))*6+((6-startMinutes*0.1)+0*0.1);
+            }
             else if(scheduleStartDate < props.contentDate && props.contentDate < scheduleEndDate){
                 top = 0;
                 height = 152;
-            }    
+            }
         }
 
         return styleGenerator(top, height);
@@ -176,7 +176,7 @@ const ScheduleBlock = (props) =>{
     //         }else{
     //             props.setScheduleDict({...props.schedule, "scheduleStartDate": scheduleStartDate, "scheduleEndDate": scheduleEndDate});
     //         }
-    //         props.openModal();    
+    //         props.openModal();
     //     }else{
     //         setPageX(event.pageX > window.innerWidth * 0.9 ? window.innerWidth * 0.9 : event.pageX);
     //         setPageY(event.pageY > window.innerHeight * 0.95 ? window.innerHeight * 0.95 : event.pageY);
@@ -187,14 +187,17 @@ const ScheduleBlock = (props) =>{
     //     }
     // }
 
+    const id = props.schedule.reservation.id
+
     if((props.schedule.approval.name !== "不承認") && (props.schedule.approval.name !== "不承認")){
         return (
-        <div
+        <Link
             className="schedule-block"
             // onClick={modalHandle}
             style={styleGeneratorHandler()}
-            onClick={() => onClick(props.schedule.reservation.id)}
+            to={`/calendar/approval-info/${props.schedule.reservation.id}`}
         >
+
             {props.schedule.repeat_interval === 1 ? (
                 <p>{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.start.substr(5, 2))+"月"+Number(props.schedule.start.substr(8, 2))+"日")}{props.schedule.start_time.substr(11, 5)}{((startDate < props.contentDate)||(props.contentDate < endDate)) && (<br/>)}~{((startDate < props.contentDate)||(props.contentDate < endDate)) && (Number(props.schedule.reservation.end.substr(5, 2))+"月"+Number(props.schedule.reservation.end.substr(8, 2))+"日")}{props.schedule.reservation.end.substr(11, 5)}</p>
             ) : (
@@ -226,7 +229,7 @@ const ScheduleBlock = (props) =>{
                     <span>グループのスケジュールを表示中なので編集できません</span>
                 </div>
             )} */}
-        </div>
+        </Link>
     )} else {
         return null
     }

@@ -79,8 +79,20 @@ function App() {
             <SideBarAndHeaderRoute pagename="ドキュメントリスト" exact children={<Route path="/document-list" exact children={<DocumentListPage />} />} />
             <SideBarAndHeaderRoute pagename="ユーザーリスト" exact children={<Route path="/user-list" exact children={<UserList />} />} />
             <SideBarAndHeaderRoute pagename="データリスト" exact children={<Route path="/data-list" exact children={<DataList />} />} />
-            <SideBarAndHeaderRoute pagename="予約詳細" exact children={<Route path="/approval-info" exact children={<ApprovalInfoPage />} />} />
-            <SideBarRoute exact children={<Route path="/calendar" exact children={<CalendarPage />} />} />
+            <Route path="/calendar"
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <SideBarRoute path={`${url}/`} pagename={"カレンダー"} exact children={<CalendarPage />} />
+                    {/* <SideBarAndHeaderRoute path={`${url}/approvalInfo/:id`} pagename={"予約詳細"} exact children={<ApprovalInfoPage />} /> */}
+                    {/* <Route path={`${url}/approvalInfo/:id`}> */}
+                    <Route path={`${url}/approval-info/:id`}>
+                      <SideBarAndHeaderRoute pagename={"予約詳細"} exact children={<ApprovalInfoPage />} />
+                    </Route>
+                  </Switch>
+                </>
+              )}
+           />
           </LoginRoute>
         </Switch>
       </CookiesProvider>

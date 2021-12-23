@@ -34,11 +34,21 @@ $bordercolor: gainsboro;
     .date-selector {
       display: flex;
       justify-content: space-between;
+      width: fit-content;
+      .last-button:hover,
+      .next-button:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
     }
 
     .filter-base {
       display: flex;
       justify-content: space-between;
+    }
+
+    .calendar-btn {
+      width: 3rem;
     }
   }
 

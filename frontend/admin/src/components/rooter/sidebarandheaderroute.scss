@@ -37,6 +37,9 @@ $accent-color: #233b62;
       display: block;
     }
   }
+  .drawer-menu:hover {
+    cursor: pointer;
+  }
   .menu {
     display: block;
     @include mq("sp") {

@@ -12,12 +12,12 @@ const ApprovalInfo = (props) =>{
     // const [date, setDate] = useState("");
     const id = props.id;
 
-
     const pullReservation = () => {
         setLoading(true);
         axios.get(`${process.env.REACT_APP_API}/api/reservations/${id}`,{
         })
         .then(res => {
+            console.log(res.data)
             setReservation(res.data);
             setLoading(false);
         })
@@ -29,40 +29,43 @@ const ApprovalInfo = (props) =>{
 
     useEffect(() => {
         pullReservation();
+        // setYear(reservation.start.substr(0, 2))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    if (reservation.length === 0) {
+        return <Loading />;
+    } else {
+        return (
+        <>
+            <div className="info-wrapper">
+                <table className="info-table">
+                    <tbody>
+                        <tr className="name-base">
+                            <td className="name-title">氏名：</td>
+                            {reservation.is_group === false ? (
+                                <td className="name-body">{reservation.reader_name}</td>
+                            ) : (
+                                <td className="name-body">{reservation.group_name}</td>
+                            )
+                            }
+                        </tr>
+                        <tr className="place">
+                            <td className="place-title">場所：</td>
+                            <td className="place-body">{reservation.place.name}</td>
+                        </tr>
+                        <tr className="time">
+                            <td className="time-title">時間：</td>
+                            <td className="time-body">{reservation.start}</td>
+                        </tr>
 
-    return (
-    <>
-        <div className="info-wrapper">
-            <table className="info-table">
-                <tbody>
-                    <tr className="name">
-                        <td className="name-title">氏名：</td>
-                        {reservation.is_group === false ? (
-                            <td className="name-body">{reservation.reader_name}</td>
-                        ) : (
-                            <td className="name-body">{reservation.group_name}</td>
-                        )
-                        }
-                    </tr>
-                    <tr className="place">
-                        <td className="place-title">場所：</td>
-                        <td className="place-body">{reservation.place.name}</td>
-                    </tr>
-                    <tr className="time">
-                        <td className="time-title">時間：</td>
-                        <td className="time-body">{reservation.start}</td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-        {loading && <Loading />}
-    </>
-        
-    )
+                    </tbody>
+                </table>
+            </div>
+            {loading && <Loading />}
+        </>
+        )
+    }
 
     // const calendarType = props.calendarType;
 
@@ -84,8 +87,6 @@ const ApprovalInfo = (props) =>{
     //         </div>
     //     )
     // }
-
-    
 }
 
 export default ApprovalInfo;

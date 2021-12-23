@@ -1,17 +1,9 @@
 import React from 'react'
+import { useParams } from "react-router-dom";
 import ApprovalInfo from '../../components/approvalInfo/ApprovalInfo'
 
 export const ApprovalInfoPage =()=> {
-
-    // const id = window.location.search;
-    // const url = new URL(window.location.href);
-    // console.log(url)
-    // const id = url.get('id')
-    // console.log(id)
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id')
-    // console.log(param)
+    const {id} = useParams();
 
     return (
             <ApprovalInfo
