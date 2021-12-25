@@ -3,3 +3,5 @@
 pyvenv.cfg
 
 /config/local.py
+
+.env
