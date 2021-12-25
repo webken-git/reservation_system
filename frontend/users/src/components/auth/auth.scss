@@ -1,0 +1,179 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+$main-color: #23ad39;
+$sub-color: #707070;
+$accent-color: #91c21f;
+
+.btn {
+  width: 7rem;
+  color: #fff;
+  border: 1px solid $main-color;
+  border-radius: 3px;
+  padding: 9px 17px;
+  background-color: $main-color;
+  margin: 3% 0;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.btn:hover {
+  color: #707070;
+  background-color: #fff;
+  transition: color 80ms 190ms, background-color 150ms;
+}
+
+.auth-page {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  margin: 0 auto;
+  @include mq(sp) {
+    width: 100%;
+  }
+
+  .auth-page__logo {
+    margin-top: 5%;
+    img {
+      width: 500px;
+      @include mq(sp) {
+        width: 200px;
+      }
+    }
+  }
+  .auth-page__title-registration {
+    margin: 3% 0;
+    font-weight: normal;
+  }
+  .link {
+    display: flex;
+    justify-content: center;
+    margin: 3% 0;
+    h1 {
+      width: auto;
+      margin: 0;
+      font-weight: normal;
+    }
+    .registration-link {
+      @extend .btn;
+      display: inline-block;
+      padding: 0 5px;
+      margin: 0 0 0 10px;
+      border: 1px solid $accent-color;
+      background-color: $accent-color;
+    }
+  }
+
+  .auth-page__form {
+    display: inline-block;
+    text-align: left;
+    .auth-page__form-label {
+      font-size: 24px;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .auth-page__form-error {
+      color: #f00;
+      font-weight: bold;
+      display: block;
+    }
+
+    .auth-page__form-input {
+      width: 300px;
+      height: 3rem;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 0 10px;
+      margin: 5px 0;
+      font-size: large;
+    }
+    .auth-page__form-input:focus {
+      outline: none;
+    }
+  }
+
+  .auth-btn-wrapper {
+    text-align: center;
+  }
+}
+
+.back-btn {
+  @extend .btn;
+  background-color: $sub-color;
+  border: $sub-color solid 1px;
+}
+.verify-btn {
+  @extend .btn;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+}
+.auth-btn {
+  @extend .btn;
+  width: 10rem;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+  // margin: 0 auto;
+}
+
+.password-container {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px 10px;
+  margin: 5px 0;
+}
+.password-container:focus {
+  outline: #000 solid 1px;
+}
+.password {
+  width: 275px;
+  border: none;
+  font-size: large;
+}
+.password:focus {
+  outline: none;
+}
+
+.logout-container {
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+}
+.logout-container:hover {
+  text-decoration: underline;
+}
+
+.registration-link {
+  @extend .btn;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+}
+.login-link {
+  @extend .btn;
+}
+
+.link {
+  display: flex;
+  justify-content: center;
+  margin: 3% 0;
+  h1 {
+    width: auto;
+    margin: 0;
+    font-weight: normal;
+  }
+}

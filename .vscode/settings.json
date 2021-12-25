@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "backend\\Scripts\\python.exe",
+    "python.pythonPath": "backend\\env\\Scripts\\python",
     "python.linting.enabled": true, // 文法チェックを行う
     "python.linting.pylintEnabled": false, // pylint は使わない
     "python.linting.pycodestyleEnabled": false, // pep8 は使わない
@@ -18,5 +18,6 @@
         "editor.formatOnPaste": false, // ペースト時に自動整形を行わない
         "editor.formatOnType": false, // 入力後に自動整形を行わない
     },
-    "markdown-pdf.headerTemplate": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>", // 保存時に自動整形を行う
+    "markdown-pdf.headerTemplate": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+    "editor.formatOnSave": true, // 保存時に自動整形を行う
 }

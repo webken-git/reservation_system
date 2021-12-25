@@ -1,0 +1,499 @@
+$bordercolor: gainsboro;
+// $bordercolor: #eee;
+
+// $breakpoints: (
+//   // スマホ
+//   "sp": "screen and (max-width: 767px)",
+//   // タブレット
+//   "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+//   // PC
+//   "pc": "screen and (min-width: #{$layout-width-inner})"
+// );
+
+//追加css
+.container {
+  display: inline-block;
+  // width: 80%;
+  width: 100%;
+  height: 97vh;
+  vertical-align: top;
+}
+
+// .calendar-base ::-webkit-scrollbar {
+//   display: none;
+// }
+
+.calendar-base {
+  height: 60vh;
+  // display: flex;
+  // justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 50px;
+
+  .header {
+    width: 80%;
+    margin: 0;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #707070;
+
+    .header_title {
+      font-size: 30px;
+      margin-left: 50px;
+      color: #707070;
+    }
+
+    .calendar-btn {
+      width: 3rem;
+    }
+
+    .date-selector {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 300px;
+      height: 50px;
+
+      // アイコンをホバーした時
+      .last-button:hover {
+        cursor: pointer;
+      }
+      .next-button:hover {
+        cursor: pointer;
+      }
+
+      p {
+        font-size: 2.5vh;
+        margin: 0;
+      }
+    }
+
+    .filter-base {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .main,
+  .monthly-calendar {
+    width: 80%;
+    height: 88%;
+  }
+
+  .main {
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .opacityanime {
+    animation: show 0.2s linear 0s forwards;
+  }
+
+  .dn {
+    display: none;
+  }
+}
+
+.head-row {
+  height: 15%;
+
+  ::-webkit-scrollbar {
+    display: inline;
+    width: 5px;
+  }
+
+  .timeline {
+    border-bottom: $bordercolor 1px dashed;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 5.5%;
+    height: 100%;
+    vertical-align: top;
+  }
+
+  .head {
+    border-bottom: $bordercolor 1px dashed;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 13.5%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+
+    .day {
+      margin-top: 1vh;
+    }
+
+    .date {
+      font-size: 2.5vh;
+      text-align: center;
+      position: absolute;
+      top: 3vh;
+      left: 0;
+      width: 100%;
+
+      span {
+        text-align: center;
+      }
+    }
+
+    .today {
+      background-color: #91c21f;
+      color: white;
+      display: inline-block;
+      width: 3.7vh;
+      height: 3.7vh;
+      border-radius: 50%;
+      line-height: 3.7vh;
+      box-sizing: border-box;
+      padding-right: 1px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .allday-schedule {
+      box-sizing: border-box;
+      display: inline-block;
+      width: 100%;
+      height: 2.4vh;
+      overflow: auto;
+      top: 6.8vh;
+      position: absolute;
+      .allday-schedule-content {
+        box-sizing: border-box;
+        border-radius: 0.3em;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        p {
+          color: white;
+          font-size: 2vh;
+          height: 100%;
+          line-height: 100%;
+          left: 0;
+          width: 100%;
+          position: absolute;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .daily-head {
+    border-bottom: $bordercolor 1px dashed;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 94.5%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+
+    .day {
+      margin-top: 1vh;
+    }
+
+    .date {
+      font-size: 2.5vh;
+      text-align: center;
+      position: absolute;
+      top: 3vh;
+      left: 0;
+      width: 100%;
+
+      span {
+        text-align: center;
+      }
+    }
+
+    .today {
+      background-color: #91c21f;
+      color: white;
+      display: inline-block;
+      width: 3.7vh;
+      height: 3.7vh;
+      border-radius: 50%;
+      line-height: 3.7vh;
+      box-sizing: border-box;
+      padding-right: 1px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .allday-schedule {
+      box-sizing: border-box;
+      display: inline-block;
+      width: 100%;
+      height: 2.4vh;
+      overflow: auto;
+      top: 6.8vh;
+      position: absolute;
+      .allday-schedule-content {
+        box-sizing: border-box;
+        border-radius: 0.3em;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        p {
+          color: white;
+          font-size: 2vh;
+          height: 100%;
+          line-height: 100%;
+          left: 0;
+          width: 100%;
+          position: absolute;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.content-row {
+  height: 90%;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE, Edge 対応 */
+  scrollbar-width: none; /* Firefox 対応 */
+  position: relative;
+
+  .now-time {
+    width: 95.8%;
+    left: 4.2%;
+    position: absolute;
+    box-sizing: border-box;
+    z-index: 2;
+    pointer-events: none;
+
+    .circle {
+      display: inline-block;
+      background-color: red;
+      width: 1.5vh;
+      height: 1.5vh;
+      border-radius: 50%;
+    }
+
+    .border {
+      display: inline-block;
+      box-sizing: border-box;
+      border: 0.7px solid red;
+      background-color: red;
+      width: 100%;
+      height: 1px;
+      transform: translateY(-3.5vh);
+    }
+  }
+
+  .timeline {
+    display: inline-block;
+    width: 5.5%;
+
+    div:first-of-type {
+      margin-top: 2vh;
+    }
+
+    div {
+      border-top: $bordercolor 1px dashed;
+      box-sizing: border-box;
+      height: 6vh;
+    }
+
+    p {
+      background-color: white;
+      display: inline;
+      font-size: 1em;
+      position: relative;
+      top: -1.6vh;
+      margin: 0;
+    }
+  }
+
+  .content {
+    border-left: $bordercolor 1px solid;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 13.5%;
+    overflow: hidden;
+    position: relative;
+    vertical-align: top;
+
+    .content-div:first-of-type {
+      margin-top: 2vh;
+    }
+
+    .content-div {
+      border-top: $bordercolor 1px dashed;
+      box-sizing: border-box;
+      height: 6vh;
+    }
+
+    .create-modal-column {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .schedule-block-column {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .schedule-block {
+      background-color: tomato;
+      box-sizing: border-box;
+      border-radius: 0.3em;
+      cursor: pointer;
+      display: inline-block;
+      overflow: hidden;
+      position: absolute;
+      top: -200vh;
+      white-space: nowrap;
+      width: 100%;
+      height: 10vh;
+      vertical-align: top;
+      pointer-events: auto;
+      p {
+        font-size: 0.8em;
+        margin: 0;
+        color: whitesmoke;
+      }
+    }
+  }
+
+  .daily-content {
+    border-left: $bordercolor 1px solid;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 94.5%;
+    overflow: hidden;
+    position: relative;
+    vertical-align: top;
+
+    .content-div:first-of-type {
+      margin-top: 2vh;
+    }
+
+    .content-div {
+      border-top: $bordercolor 1px dashed;
+      box-sizing: border-box;
+      height: 6vh;
+    }
+
+    .create-modal-column {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .schedule-block-column {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 30%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .schedule-block {
+      background-color: tomato;
+      box-sizing: border-box;
+      border-radius: 0.3em;
+      cursor: pointer;
+      display: inline-block;
+      overflow: hidden;
+      position: absolute;
+      top: -200vh;
+      white-space: nowrap;
+      width: 100%;
+      height: 10vh;
+      vertical-align: top;
+      pointer-events: auto;
+      p {
+        font-size: 0.8em;
+        margin: 0;
+        color: whitesmoke;
+      }
+    }
+  }
+}
+
+.monthly-calendar {
+  width: 100%;
+  height: 100%;
+
+  .header {
+    height: 12%;
+    display: flex;
+    // justify-content: center; //左右中央揃え
+    align-items: center; //上下中央揃え
+
+    .today {
+      border: 1px solid $bordercolor;
+    }
+
+    .button {
+      width: 15%;
+    }
+
+    p {
+      margin: 0;
+      font-size: 22px;
+    }
+  }
+
+  table {
+    width: 100%;
+    height: 86%;
+    border: 2px $bordercolor solid;
+    border-collapse: collapse;
+
+    tbody {
+      width: 100%;
+      height: 100%;
+      margin: 1px;
+
+      tr {
+        width: 13%;
+        height: 10%;
+        border-bottom: 1.5px $bordercolor solid;
+
+        th {
+          display: table-cell;
+          vertical-align: top;
+          padding-top: 3px;
+          font-size: 12px;
+          border-right: 1.5px $bordercolor solid;
+        }
+      }
+
+      .day-row {
+        height: 1%;
+        // border: 3px solid;
+        // border-top: $bordercolor 1px dashed;
+        border: none;
+      }
+    }
+  }
+}

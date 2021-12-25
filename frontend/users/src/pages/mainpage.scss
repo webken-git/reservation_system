@@ -1,0 +1,79 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+.list-wrapper {
+  .scroll_box-wrapper {
+    display: flex;
+    justify-content: center;
+    .scroll_box {
+      width: 100vw;
+      height: 70vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      // white-space: nowrap;
+    }
+
+    /* スクロールの幅の設定 */
+    .scroll_box::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* スクロールの背景の設定 */
+    .scroll_box::-webkit-scrollbar-track {
+      box-shadow: 0 0 4px #aaa inset;
+    }
+
+    /* スクロールのつまみ部分の設定 */
+    .scroll_box::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      background: gray;
+    }
+  }
+}
+
+// react-tabsのスタイルを変更
+.react-tabs__tab {
+  border: 2px solid transparent;
+  border-bottom: none;
+  bottom: -2px;
+}
+.react-tabs__tab--selected {
+  border-color: #707070;
+}
+.react-tabs__tab-list {
+  border-bottom: 2px solid #707070;
+}
+
+details {
+  width: 100%;
+  margin: 0 2%;
+}
+summary {
+  width: fit-content;
+  font-size: 25px;
+  @include mq(sp) {
+    font-size: 18px;
+  }
+}
+summary:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
