@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import PasswordReset from "../components/account/PasswordReset";
 
-export const PasswordResetPage = (match) => {
+export const PasswordResetPage = () => {
     // パラメーターを取得
     let { uid, token } = useParams();
     // console.log(uid);

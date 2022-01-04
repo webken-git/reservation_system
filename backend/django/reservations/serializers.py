@@ -1,10 +1,15 @@
 from django.db.models import query
 from rest_framework import serializers
 from rest_framework.relations import ManyRelatedField
-from reservations.models import *
+from reservations.models import (
+    Reservation, ReservationSuspensionSchedule, Approval, Place, Equipment, SpecialEquipment,
+    Age, AgeCategory, Usage, UsageCategory, DefferdPayment, FacilityFee, EquipmentFee,
+    ApprovalApplication, UserInfo, Time
+)
 from users.serializers import UserSerializer
 import datetime
 from django.db.models.aggregates import Count
+from users.models import User
 
 
 class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):

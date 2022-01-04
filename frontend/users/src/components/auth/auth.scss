@@ -131,6 +131,26 @@ $accent-color: #91c21f;
   // margin: 0 auto;
 }
 
+.detail-btn {
+  @extend .btn;
+  @extend .btn;
+  width: 8rem;
+  @include mq(sp) {
+    width: 6rem;
+    font-size: 0.8rem;
+  }
+}
+.cancel-btn {
+  @extend .btn;
+  width: 8rem;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+  @include mq(sp) {
+    width: 6rem;
+    font-size: 0.8rem;
+  }
+}
+
 .password-container {
   border: 1px solid #ccc;
   border-radius: 3px;

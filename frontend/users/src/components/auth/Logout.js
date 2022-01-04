@@ -16,6 +16,7 @@ const Logout = (props) => {
                 // ログアウト成功時、authStateをfalseにする
                 setAuthState({
                     isAuthenticated: false,
+                    userId: "",
                 });
                 window.location.href = "/";
             })

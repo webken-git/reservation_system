@@ -149,8 +149,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-
+# 本番環境では、STATIC_URLを変更
 STATIC_URL = '/static/'
+# STATIC_URL = '/reservation_system/backend/django/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -175,7 +176,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         # 'config.funcs.authentication.CookieHandlerJWTAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
@@ -190,9 +191,9 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     # アクセストークンの持続時間の設定
     # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=180),
     # リフレッシュトークンの持続時間の設定
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
     # 'BLACKLIST_AFTER_ROTATION': False,
     'ROTATE_REFRESH_TOKENS': True,
 }
@@ -265,6 +266,10 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:5000',
     'http://127.0.0.1:5000',
+    'http://reserve.wmsp.info',
+    'https://reserve.wmsp.info',
+    'http://admin-reserve.wmsp.info',
+    'https://admin-reserve.wmsp.info',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -272,6 +277,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:5000',
     'http://127.0.0.1:5000',
+    'http://reserve.wmsp.info',
+    'https://reserve.wmsp.info',
+    'http://admin-reserve.wmsp.info',
+    'https://admin-reserve.wmsp.info',
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [

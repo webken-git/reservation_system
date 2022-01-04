@@ -5,7 +5,7 @@ import { AuthUrls } from "../../utils/authUrls";
 import Loading from "../loading/Loading";
 import './account.scss';
 
-export const Account = (props) => {
+export const Account = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(false);
     const GET_USER = AuthUrls.GET_USER_DATA;

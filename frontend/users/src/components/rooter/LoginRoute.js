@@ -12,7 +12,7 @@ const LoginRoute = (props) => {
     const getUser = AuthUrls.GET_USER_LIST;
     const logout = AuthUrls.LOGOUT;
     const loginCheck = () => {
-        axios.get(getUser+"1")
+        axios.get(`${getUser}${auth.userId}/`)
             .then((res) => {
                 // setUser(res.data);
             })
@@ -23,6 +23,7 @@ const LoginRoute = (props) => {
                         // ログアウト成功時、authStateをfalseにする
                         setAuth({
                             isAuthenticated: false,
+                            userId: "",
                         });
                     })
                     .catch(err => {

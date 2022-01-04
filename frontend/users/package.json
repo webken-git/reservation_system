@@ -45,6 +45,7 @@
     "start:test": "cp ./config/.env.test .env && react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+    "winbuild": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -45,6 +45,7 @@ const Login = () => {
                 setLoading(false);
                 setAuthState({
                     isAuthenticated: true,
+                    userId: res.data.user.pk,
                 });
                 // ログイン成功後、とりあえずトップページに遷移
                 window.location.href = '/';
@@ -54,7 +55,7 @@ const Login = () => {
                 // ローディング画面を非表示
                 setLoading(false);
                 // エラーメッセージを表示
-                console.log(err);
+                // console.log(err);
                 setError(err.response.data.non_field_errors);
             });
     };

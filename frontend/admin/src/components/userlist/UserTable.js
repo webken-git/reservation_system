@@ -10,6 +10,8 @@ const UserTable = (props) => {
       <td>{props.id}</td>
       {/* メールアドレス */}
       <td>{props.email}</td>
+      <td>{props.is_staff ? <>〇</> : <>×</>}</td>
+      <td>{props.is_superuser ? <>〇</> : <>×</>}</td>
       <td><UserDetailsButton/></td>
     </tr>
   )

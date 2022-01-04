@@ -28,6 +28,13 @@ $breakpoints: (
       overflow-y: scroll;
       overflow-x: hidden;
       // white-space: nowrap;
+      details {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        .detail-content {
+          margin-bottom: 80px;
+        }
+      }
     }
 
     /* スクロールの幅の設定 */

@@ -161,6 +161,9 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
   def create(self, request, *args, **kwargs):
     schedules = ReservationSuspensionSchedule.objects.all()
+    # schedulesが空ならば、予約可能
+    if not schedules:
+      return super().create(request, *args, **kwargs)
     for schedule in schedules:
       if str(schedule.start) <= request.data['start'] <= str(schedule.end):
         return response.Response({'error': {'入力された日時は予約できません。'}})
@@ -169,8 +172,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
       else:
         return super().create(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -263,8 +266,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       email.send()
       return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
-  def patch(self, request, pk, *args, **kwargs):
-    super().patch(request, pk, *args, **kwargs)
+  def partial_update(self, request, *args, **kwargs):
+    super().partial_update(request, *args, **kwargs)
 
     data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
 

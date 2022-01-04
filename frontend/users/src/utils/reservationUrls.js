@@ -13,4 +13,5 @@ export const ReservationUrls = {
     USAGE: `${ROOT_URL}/api/usages/`,
     FACILITY_FEE: `${ROOT_URL}/api/facility-fees/`,
     EQUIPMENT_FEE: `${ROOT_URL}/api/equipment-fees/`,
+    APP_SETTING: `${ROOT_URL}/api/app-settings/`,
 };

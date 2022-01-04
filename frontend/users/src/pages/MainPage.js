@@ -153,7 +153,9 @@ const MainPage = () => {
           <div className="scroll_box">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <div className="detail-content">
+                <Calendar />
+              </div>
             </details>
             <details>
               <summary>料金一覧</summary>

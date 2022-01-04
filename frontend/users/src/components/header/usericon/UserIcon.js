@@ -22,10 +22,10 @@ const UserIcon = (props) => {
                 onRequestClose={() => setIsOpen(false)}
             >
                 <span onClick={() => setIsOpen(false)}>
-                    <PageLink url='/account' pagename={'マイページ'} />
+                    <PageLink url='/account' pagename={'アカウント'} />
                 </span>
                 <span onClick={() => setIsOpen(false)}>
-                    <PageLink url='/account' pagename={'予約一覧'} />
+                    <PageLink url='/history' pagename={'予約履歴'} />
                 </span>
                 <span onClick={() => setIsOpen(false)}>
                     <Logout />

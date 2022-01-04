@@ -16,7 +16,7 @@ django-cors-headers==3.10.0
 django-filter==21.1
 django-phonenumber-field==6.0.0
 django-redis==5.0.0
-djangorestframework==3.12.4
+djangorestframework==3.13.1
 djangorestframework-simplejwt==5.0.0
 drf-nested-routers==0.93.4
 drf-spectacular==0.21.0
@@ -32,7 +32,6 @@ lxml==4.6.4
 Markdown==3.3.6
 mccabe==0.6.1
 mysql-connector-python==8.0.27
-mysqlclient==2.1.0
 oauthlib==3.1.1
 phonenumbers==8.12.38
 Pillow==8.4.0
@@ -42,6 +41,7 @@ pycparser==2.21
 pyflakes==2.4.0
 Pygments==2.10.0
 PyJWT==2.0.1
+PyMySQL==1.0.2
 pyrsistent==0.18.0
 python-docx==0.8.11
 python-dotenv==0.19.2

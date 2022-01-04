@@ -7,6 +7,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
+import { ReservationUrls } from "../../utils/reservationUrls";
 import logo from '../../assets/image/logo.png';
 import './auth.scss';
 
@@ -22,6 +23,32 @@ const Registration = () => {
 
     // アカウント作成処理
     const url = AuthUrls.REGISTRATION;
+    const appSetting = ReservationUrls.APP_SETTING;
+
+    const createAppSetting = (pk) => {
+        axios.post(appSetting, {
+            'user_id': pk,
+            'is_receive_announcement_email': true,
+            'is_receive_reminder_email': true,
+        })
+            .then(res => {
+                // アカウント作成処理が成功した場合、ローディング画面を非表示
+                setLoading(false);
+                // アカウント作成成功のメッセージを表示
+                setSuccess("アカウント作成が完了しました。");
+                // アカウント作成が完了したら0.5秒後にログイン画面に遷移
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 500);
+            })
+            .catch(err => {
+                // アカウント作成処理が失敗した場合、ローディング画面を非表示
+                setLoading(false);
+                // アカウント作成失敗のメッセージを表示
+                setSuccess("アカウント作成に失敗しました。");
+            });
+    };
+
     const onSubmit = data => {
         let formData = new FormData();
 
@@ -31,19 +58,10 @@ const Registration = () => {
         formData.append('password2', password);
         // アカウント作成処理中はローディング画面を表示
         setLoading(true);
-        // setError(null);
         setSuccess(null);
         axios.post(url, formData)
             .then(res => {
-                // アカウント作成処理が成功した場合
-                // ローディング画面を非表示
-                setLoading(false);
-                // アカウント作成成功のメッセージを表示
-                setSuccess("アカウント作成が完了しました。");
-                // アカウント作成が完了したら0.5秒後にログイン画面に遷移
-                setTimeout(() => {
-                    window.location.href = "/login";
-                }, 500);
+                createAppSetting(res.data.user.pk);
             })
             .catch(err => {
                 // アカウント作成処理が失敗した場合
@@ -75,7 +93,6 @@ const Registration = () => {
             <h1 className="auth-page__title-registration">アカウント登録</h1>
             {success && <p className="success">{success}</p>}
             <form className="auth-page__form" onSubmit={handleSubmit(onSubmit)}>
-                {success && <p>{success}</p>}
                 <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="email">メールアドレス</label>
                     {errors.email && <span className="auth-page__form-error">※この項目は必須です</span>}

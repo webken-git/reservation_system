@@ -3,6 +3,7 @@ from django.core import validators
 from django.db.models.fields.related import ForeignKey
 from phonenumber_field.modelfields import PhoneNumberField
 from users.models import User
+import uuid
 
 # Create your models here.
 
@@ -69,11 +70,12 @@ class SpecialEquipment(models.Model):
 
 
 class Reservation(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(
       User, verbose_name='user',
       blank=True, null=True,
       related_name='reservation_user',
-      on_delete=models.SET_NULL
+      on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
@@ -121,11 +123,12 @@ class Reservation(models.Model):
 
 
 class UserInfo(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(
       User, verbose_name='user',
       blank=True, null=True,
       related_name='user_info_user',
-      on_delete=models.SET_NULL
+      on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
@@ -140,6 +143,7 @@ class UserInfo(models.Model):
 
 
 class ApprovalApplication(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',
       related_name='approval_app_reservation',
@@ -204,6 +208,7 @@ class Time(models.Model):
 
 
 class UsageCategory(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   usage = models.ManyToManyField(
       Usage,
       verbose_name='usage',
@@ -222,6 +227,7 @@ class UsageCategory(models.Model):
 
 
 class AgeCategory(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   age = models.ManyToManyField(
       Age,
       verbose_name='age',
@@ -239,6 +245,7 @@ class AgeCategory(models.Model):
 
 
 class DefferdPayment(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   reason = models.CharField('後納の理由', max_length=50)
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',
