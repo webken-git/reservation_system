@@ -180,6 +180,22 @@ def insert_app_settings(file, table):
   f.close()
 
 
+def insert_auto_mail_data(file, table):
+  """
+  自動送信メール
+  """
+  f = open('./static/app_settings/csv/' + file, 'r', encoding='utf8')
+
+  now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+
+  reader = csv.reader(f)
+  header = next(reader)
+  for row in reader:
+    sql = "INSERT INTO " + table + "(name, subject, body, created_at, updated_at) VALUES(%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], row[2], now, now))
+  f.close()
+
+
 insert_master_data('age.csv', "reservations_age")
 insert_master_data('approval.csv', 'reservations_approval')
 insert_place_data('place.csv', 'reservations_place')
@@ -204,6 +220,7 @@ connect.commit()
 # intermediate_table('usage-category_usage.csv', 'reservations_usagecategory_usage', 'usagecategory_id', 'usage_id')
 # intermediate_table('age-category_age.csv', 'reservations_agecategory_age', 'agecategory_id', 'age_id')
 insert_document_data('document_template.csv', 'application_documents_documenttemplate')
+insert_auto_mail_data('auto-mail.csv', 'app_settings_automail')
 # insert_app_settings('app_settings.csv', 'app_settings_appsettings')
 connect.commit()
 cursor.close()

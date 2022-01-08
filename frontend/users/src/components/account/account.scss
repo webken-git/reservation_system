@@ -33,14 +33,7 @@ $accent-color: #91c21f;
   .mail-pass {
     display: inline-block;
     text-align: left;
-
     font-size: 20px;
-    // .mail-pass-body {
-    // color: $sub-color;
-    // }
-    .change-link {
-      color: #2699fb;
-    }
     tr {
       display: block;
       margin-bottom: 5%;
@@ -57,7 +50,7 @@ $accent-color: #91c21f;
   }
   .account-link {
     text-decoration: none;
-    color: #000;
+    color: inherit;
   }
   .account-link:hover {
     text-decoration: underline;

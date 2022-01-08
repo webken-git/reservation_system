@@ -29,14 +29,13 @@ $breakpoints: (
     table-layout: fixed;
   }
   table tr {
-    background-color: #fff;
     border: 1px solid #fff;
     padding: 0.35rem;
   }
   table th {
     padding: 1%;
     border-right: 1px solid #fff;
-    background-color: #dfdfdf;
+    background-color: #999;
     font-size: 1.2rem;
   }
   table thead {
@@ -59,7 +58,7 @@ $breakpoints: (
   table td:first-child {
     @include mq(sp) {
       text-align: center;
-      background-color: #dfdfdf;
+      background-color: #999;
       font-weight: bold;
     }
   }

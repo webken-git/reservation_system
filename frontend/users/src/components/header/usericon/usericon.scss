@@ -41,6 +41,7 @@ $accent-color: #91c21f;
   right: 2%;
   bottom: 65%;
   background-color: #fff;
+  z-index: 9999;
   border-radius: 1%;
   border: #ccc solid 1px;
   // border-left: #ccc solid 1px;
@@ -70,6 +71,7 @@ $accent-color: #91c21f;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 9998;
   //   background-color: rgba(255, 255, 255, 0.5);
   @include mq(sp) {
     // background-color: rgba(0, 0, 0, 0.5);

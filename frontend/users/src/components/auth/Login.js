@@ -80,7 +80,7 @@ const Login = () => {
                 <img src={logo} alt="logo" />
             </div>
             <div className="link">
-            <h1 className="auth-page__title">ログイン</h1>
+                <h1 className="auth-page__title">ログイン</h1>
                 <RegistrationButton />
             </div>
             {error && <p className="auth-page__error">{error}</p>}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ReservationUrls } from '../../utils/reservationUrls';
 import useUnmountRef from '../../hooks/useUnmountRef';
 import useSafeState from '../../hooks/useSafeState';
+import { formatDate, formatTime } from './formatData';
 import Loading from '../loading/Loading';
 import './history.scss';
 
@@ -14,33 +15,13 @@ const ReservationCancel = (props) => {
 
     const approvalApplication = ReservationUrls.APPROVAL_APPLICATION;
 
-    // date型をyyyy-mm-ddに変換
-    const formatDate = (date) => {
-        // 0埋め
-        const zeroPadding = (num) => {
-            return ('0' + num).slice(-2);
-        };
-        const year = date.getFullYear();
-        const month = zeroPadding(date.getMonth() + 1);
-        const day = zeroPadding(date.getDate());
-        return `${year}-${month}-${day}`;
-    };
-    // date型をhh:mmに変換
-    const formatTime = (date) => {
-        // minutesは2桁表示する
-        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-        return `${date.getHours()}:${minutes}`;
-    };
-
     const getReservation = () => {
         axios.get(`${approvalApplication}${props.id}/`)
             .then((res) => {
                 setReservation(res.data);
-                // console.log(res.data.approval.name);
                 setIsLoading(false);
             })
             .catch((err) => {
-                // console.log(err);
                 setIsLoading(false);
                 // 前のページに戻る
                 window.history.back();
@@ -105,14 +86,14 @@ const ReservationCancel = (props) => {
                         </li>
                         <li>
                             <label>予約日：</label>
-                            <span>{formatDate(new Date(reservation.reservation.start))}</span>
+                            <span>{formatDate(new Date(reservation.reservation.start.replace(/-/g,"/")))}</span>
                         </li>
                         <li>
                             <label>予約時間：</label>
                             <span>
-                                {formatTime(new Date(reservation.reservation.start))}
+                                {formatTime(new Date(reservation.reservation.start.replace(/-/g,"/")))}
                                 ～
-                                {formatTime(new Date(reservation.reservation.end))}
+                                {formatTime(new Date(reservation.reservation.end.replace(/-/g,"/")))}
                             </span>
                         </li>
                         <li>

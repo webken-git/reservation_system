@@ -4,13 +4,14 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.conf import settings
 from rest_framework import viewsets, response, status, mixins
-from rest_framework.decorators import action
+# from rest_framework.decorators import action
 from django_filters import rest_framework as filters
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
-import datetime
 import pytz
+import datetime
 import os
 from dotenv import load_dotenv
 from users import permissions
@@ -21,6 +22,7 @@ from reservations.funcs.filters import (
     ApprovalApplicationFilter, ApprovalFilter
 )
 from reservations.funcs.csv import csv_export
+from app_settings.models import AutoMail
 
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分
@@ -234,10 +236,16 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
   def create(self, request, *args, **kwargs):
     if ApprovalApplication.objects.filter(reservation=request.data['reservation_id']).exists():
-      return response.Response({'error': 'リクエストされたreservation_idが追加されているデータが既に存在しています。'})
+      return response.Response({'error': 'リクエストされたreservation_idが追加されているデータが既に存在しています。'}, status=status.HTTP_400_BAD_REQUEST)
     else:
       super().create(request, *args, **kwargs)
       data = ApprovalApplication.objects.filter(reservation__id=request.data['reservation_id'], approval__id=request.data['approval_id'])
+      # 予約手続き完了メール送信
+      automail = AutoMail.objects.get(name='予約手続き完了メール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_complete_message.txt'
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
 
       """送信元メールアドレス"""
       load_dotenv()
@@ -257,7 +265,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
       # メール送信
       email = EmailMessage(
-          subject="予約手続き完了のご連絡/稚内市みどりスポーツパーク",
+          subject=automail.subject,
           body=render_to_string("reservations/email/reservation_complete_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -288,9 +296,15 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
     }
 
     if request.data['approval_id'] == '2':
+      # 予約承認メール送信
+      automail = AutoMail.objects.get(name='予約承認メール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_approval_message.txt'
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="【重要】本予約完了のご連絡",
+          subject=automail.subject,
           body=render_to_string("reservations/email/reservation_approval_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -298,12 +312,16 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       )
       email.send()
     elif request.data['approval_id'] == '3':
-      """
-      予約が不承認された場合
-      """
+      # 予約が不承認された場合
+      # 予約承認メール送信
+      automail = AutoMail.objects.get(name='予約不承認メール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_unapproval_message.txt'
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="【重要】予約不承認のお詫び",
+          subject=automail.subject,
           body=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -311,12 +329,16 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       )
       email.send()
     elif ApprovalApplication.objects.filter(reservation__user=request.user.id, reservation=request.data['reservation_id'], approval=4).exists():
-      """
-      利用者側からキャンセルされた場合
-      """
+      # 利用者側からキャンセルされた場合
+      # 利用者側からのキャンセルメール送信
+      automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/user_side_cancel_message.txt'
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="予約キャンセル手続き完了のご連絡",
+          subject=automail.subject,
           body=render_to_string("reservations/email/user_side_cancel_message.txt", context, request),
           from_email=from_email,
           to=[to_email],
@@ -325,12 +347,16 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       email.send()
     elif request.user.id != ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=4)[0].reservation.user.id\
             and User.objects.filter(id=request.user.id, is_staff=True).exists():
-      """
-      施設側からキャンセルされた場合
-      """
+      # 施設側からキャンセルされた場合
+      # 施設側からのキャンセルメール送信
+      automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/facility_side_cancel_message.txt'
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="予約キャンセルのお詫び",
+          subject=automail.subject,
           body=render_to_string("reservations/email/facility_side_cancel_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -348,6 +374,12 @@ class ApprovalCountMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
   """
   queryset = ApprovalApplication.objects.all()
   serializer_class = ApprovalCountMonthlySerializer
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @extend_schema(
       parameters=[

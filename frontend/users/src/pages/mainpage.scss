@@ -61,12 +61,31 @@ $breakpoints: (
   border: 2px solid transparent;
   border-bottom: none;
   bottom: -2px;
+  display: inline-block;
+  position: relative;
+  list-style: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  &:active {
+    outline: none;
+  }
 }
-.react-tabs__tab--selected {
-  border-color: #707070;
-}
+
 .react-tabs__tab-list {
   border-bottom: 2px solid #707070;
+  .react-tabs__tab--selected {
+    border-color: #707070;
+    // background: none;
+    // background-color: inherit;
+    color: inherit;
+  }
+}
+
+.dark-theme {
+  background: #333;
 }
 
 details {
@@ -79,8 +98,7 @@ summary {
   @include mq(sp) {
     font-size: 18px;
   }
-}
-summary:hover {
-  cursor: pointer;
-  opacity: 0.5;
+  &:hover {
+    cursor: pointer;
+  }
 }

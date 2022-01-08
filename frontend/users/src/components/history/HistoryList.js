@@ -6,6 +6,7 @@ import { ReservationUrls } from '../../utils/reservationUrls';
 import authState from "../../recoil/auth/atom";
 import useUnmountRef from '../../hooks/useUnmountRef';
 import useSafeState from '../../hooks/useSafeState';
+import { formatDate, formatTime } from './formatData';
 import Loading from '../loading/Loading';
 import './history.scss';
 
@@ -15,24 +16,6 @@ const HistoryList = () => {
     const [isLoading, setIsLoading] = useSafeState(unmountRef, true);
     const auth = useRecoilValue(authState);
 
-    // date型をyyyy-mm-ddに変換
-    const formatDate = (date) => {
-        // 0埋め
-        const zeroPadding = (num) => {
-            return ('0' + num).slice(-2);
-        };
-        const year = date.getFullYear();
-        const month = zeroPadding(date.getMonth() + 1);
-        const day = zeroPadding(date.getDate());
-        return `${year}-${month}-${day}`;
-    };
-    // date型をhh:mmに変換
-    const formatTime = (date) => {
-        // minutesは2桁表示する
-        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-        return `${date.getHours()}:${minutes}`;
-    };
-
     const getReservations = () => {
         axios.get(`${ReservationUrls.APPROVAL_APPLICATION}?reservation__user=${auth.userId}`)
             .then((res) => {
@@ -40,7 +23,6 @@ const HistoryList = () => {
                 setReservations(res.data);
             })
             .catch((err) => {
-                // console.log(err);
             });
     };
 
@@ -71,11 +53,11 @@ const HistoryList = () => {
                                 <tr key={reservation.id}>
                                     <td>{reservation.reservation.reader_name}</td>
                                     <td data-label="場所">{reservation.reservation.place.name}</td>
-                                    <td data-label="予約日">{formatDate(new Date(reservation.reservation.start))}</td>
+                                    <td data-label="予約日">{formatDate(new Date(reservation.reservation.start.replace(/-/g,"/")))}</td>
                                     <td data-label="予約時間">
-                                        {formatTime(new Date(reservation.reservation.start))}
+                                        {formatTime(new Date(reservation.reservation.start.replace(/-/g,"/")))}
                                         ～
-                                        {formatTime(new Date(reservation.reservation.end))}
+                                        {formatTime(new Date(reservation.reservation.end.replace(/-/g,"/")))}
                                     </td>
                                     <td data-label="ステータス">{reservation.approval.name}</td>
                                     <td data-label="詳細">
