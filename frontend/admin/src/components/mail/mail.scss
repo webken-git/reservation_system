@@ -1,0 +1,122 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
+
+.mail-list {
+  width: 100%;
+  .mail-list__title {
+    display: flex;
+    align-items: center;
+    h2 {
+      margin-right: auto;
+      @include mq("sp") {
+        // margin-right: 0;
+        font-size: 1.3rem;
+      }
+    }
+  }
+  .mail-list__content {
+    height: 750px;
+    overflow-y: scroll;
+    @include mq("sp") {
+      height: auto;
+      overflow-y: none;
+    }
+    details {
+      font-size: 1.3rem;
+      margin-bottom: 2%;
+      summary {
+        &:hover {
+          cursor: pointer;
+          opacity: 0.7;
+        }
+      }
+    }
+
+    .mail-list__content__detail {
+      .mail-list__content__detail__subject {
+        font-size: 1.1rem;
+      }
+
+      .mail-list__content__detail__body {
+        width: 80%;
+        font-size: 1.1rem;
+        @include mq(sp) {
+          width: 100%;
+        }
+        p {
+          border: 1px solid $sub-color;
+          white-space: pre-line;
+        }
+      }
+    }
+  }
+}
+
+.send-mail {
+  form {
+    margin: 0 auto;
+    .form-group {
+      .form-control__input {
+        padding: 10px;
+        width: 500px;
+        font-size: 1.2rem;
+        @include mq("tab") {
+          margin: 1% 0;
+        }
+        @include mq("sp") {
+          width: 95%;
+        }
+      }
+      .form-control__textarea {
+        padding: 10px;
+        width: 500px;
+        height: 550px;
+        font-size: 1.2rem;
+        @include mq("tab") {
+          margin: 1% 0;
+        }
+        @include mq("sp") {
+          width: 95%;
+        }
+      }
+    }
+  }
+  .mail__btn {
+    margin: 2% 0;
+  }
+}
+
+.mail-list__button {
+  width: 10rem;
+}
+
+.mail__overlay {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.red,
+.send-mail__form-error {
+  color: #f00;
+  font-weight: bold;
+}

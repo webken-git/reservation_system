@@ -58,7 +58,7 @@ $accent-color: #91c21f;
     th {
       position: sticky;
       top: 0;
-      background-color: #999;
+      background-color: #ddd;
       font-weight: bold;
       text-align: center;
       &::before {
@@ -94,6 +94,8 @@ $accent-color: #91c21f;
         content: attr(data-label);
         float: left;
         font-weight: bold;
+        // 上下中央揃え
+        margin-top: 0.5em;
       }
     }
     .history-table-thead {

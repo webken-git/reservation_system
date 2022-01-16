@@ -14,6 +14,40 @@ import { RegistrationButton } from './RegistrationButton';
 import logo from '../../assets/image/logo.png';
 import './auth.scss';
 
+export function login(email, password, setLoading, setError, setAuthState, url) {
+    let formData = new FormData();
+
+    // フォームデータを追加
+    formData.append('email', email);
+    formData.append('password', password);
+    // ログイン処理中はローディング画面を表示
+    setLoading(true);
+    setError(null);
+    axios.post(url, formData, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then(res => {
+            // ログイン処理が成功した場合
+            // ローディング画面を非表示
+            setLoading(false);
+            setAuthState({
+                isAuthenticated: true,
+                userId: res.data.user.pk,
+            });
+            // ログイン成功後、とりあえずトップページに遷移
+            window.location.href = '/';
+        })
+        .catch(err => {
+            // ログイン処理が失敗した場合
+            // ローディング画面を非表示
+            setLoading(false);
+            // エラーメッセージを表示
+            setError(err.response.data.non_field_errors);
+        });
+};
+
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
@@ -25,40 +59,6 @@ const Login = () => {
 
     // ログイン処理
     const url = AuthUrls.LOGIN;
-    const onSubmit = () => {
-        let formData = new FormData();
-
-        // フォームデータを追加
-        formData.append('email', email);
-        formData.append('password', password);
-        // ログイン処理中はローディング画面を表示
-        setLoading(true);
-        setError(null);
-        axios.post(url, formData, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then(res => {
-                // ログイン処理が成功した場合
-                // ローディング画面を非表示
-                setLoading(false);
-                setAuthState({
-                    isAuthenticated: true,
-                    userId: res.data.user.pk,
-                });
-                // ログイン成功後、とりあえずトップページに遷移
-                window.location.href = '/';
-            })
-            .catch(err => {
-                // ログイン処理が失敗した場合
-                // ローディング画面を非表示
-                setLoading(false);
-                // エラーメッセージを表示
-                // console.log(err);
-                setError(err.response.data.non_field_errors);
-            });
-    };
 
     // パスワード表示切り替え
     const hidePassword = () => {
@@ -84,7 +84,7 @@ const Login = () => {
                 <RegistrationButton />
             </div>
             {error && <p className="auth-page__error">{error}</p>}
-            <form className="auth-page__form" onSubmit={handleSubmit(onSubmit)}>
+            <form className="auth-page__form" onSubmit={handleSubmit(() => login(email, password, setLoading, setError, setAuthState, url))}>
                 <div className="auth-page__form-group">
                     <label className="auth-page__form-label" htmlFor="email">メールアドレス</label>
                     {errors.email && <span className="auth-page__form-error">※この項目は必須です</span>}

@@ -37,6 +37,7 @@ const UserListBody = () => {
   // ページレンダリング時にユーザーリストのデータを受け取っている
   useEffect(() => {
     GetUserList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const Table = (

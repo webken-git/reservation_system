@@ -145,6 +145,7 @@ $accent-color: #91c21f;
   @include mq(sp) {
     width: 6rem;
     font-size: 0.8rem;
+    margin: 0.3rem;
   }
 }
 .cancel-btn {
@@ -155,6 +156,7 @@ $accent-color: #91c21f;
   @include mq(sp) {
     width: 6rem;
     font-size: 0.8rem;
+    margin: 0.3rem;
   }
 }
 
