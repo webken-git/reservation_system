@@ -13,7 +13,7 @@ const LoginRoute = (props) => {
     const getUser = AuthUrls.GET_USER_LIST;
     const logout = AuthUrls.LOGOUT;
     const loginCheck = () => {
-        axios.get(getUser+auth.userId)
+        axios.get(`${getUser}${auth.userId}/`)
             .then((res) => {
                 // setUser(res.data);
             })

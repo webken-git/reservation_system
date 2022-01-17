@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from 'react-router-dom'
 import { AuthUrls } from "../../utils/authUrls";
 import Loading from "../loading/Loading";
+import AppSettings from "./AppSettings";
 import './account.scss';
 
 export const Account = () => {
@@ -50,6 +51,7 @@ export const Account = () => {
                                 </Link>
                             </td>
                         </tr>
+                        <AppSettings />
                         <tr className="mail-address">
                             <td className="mail-pass-title">
                                 <Link to='/account/delete' className='account-link'>

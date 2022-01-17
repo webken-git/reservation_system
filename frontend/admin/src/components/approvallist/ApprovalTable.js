@@ -1,16 +1,19 @@
 // 承認リストの中身
 import React from "react";
-import { useSetRecoilState } from "recoil";
 // import './approval.scss'
 import DetailsButton from "../list-buttom/DetailsButton";
 import ApprovalCancelButtom from "../list-buttom/ApprovalCancelButtom";
+// recoil
+import { useSetRecoilState } from "recoil";
 import reservationState from "../../recoil/reservation/atom";
 
 const ApprovalTable = (props) => {
+  // reservationStateにデータをsetする
   const setReservationState = useSetRecoilState(reservationState);
 
   // ラジオボタンのチェック状態をstateに保存
   const handleChange = (e) => {
+    // reservation idをreservationStateにsetする
     setReservationState({ id: e.target.id });
   };
   return (

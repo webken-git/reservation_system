@@ -21,8 +21,8 @@ class AppSettingsViewSet(viewsets.ModelViewSet):
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: [],
-      permissions.IsAuthenticated: ['update', 'partial_update', 'create', 'destroy', 'list', 'retrieve'],
-      permissions.AllowAny: []
+      permissions.IsAuthenticated: ['update', 'partial_update', 'destroy', 'list', 'retrieve'],
+      permissions.AllowAny: ['create']
   }
 
   # @method_decorator(vary_on_cookie)

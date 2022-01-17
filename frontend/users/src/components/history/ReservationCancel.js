@@ -10,6 +10,8 @@ import './history.scss';
 const ReservationCancel = (props) => {
     const unmountRef = useUnmountRef();
     const [reservation, setReservation] = useSafeState(unmountRef, []);
+    const [usage, setUsage] = useSafeState(unmountRef, []);
+    const [age, setAge] = useSafeState(unmountRef, []);
     const [isLoading, setIsLoading] = useSafeState(unmountRef, true);
     const [message, setMessage] = useSafeState(unmountRef, '');
 
@@ -19,12 +21,33 @@ const ReservationCancel = (props) => {
         axios.get(`${approvalApplication}${props.id}/`)
             .then((res) => {
                 setReservation(res.data);
+                getUsage(res.data.reservation.id);
+                getAge(res.data.reservation.id);
                 setIsLoading(false);
             })
             .catch((err) => {
                 setIsLoading(false);
                 // 前のページに戻る
                 window.history.back();
+            });
+    };
+
+    const getUsage = (reservationId) => {
+        axios.get(`${ReservationUrls.USAGE_CATEGORY}?reservation=${reservationId}`)
+            .then((res) => {
+                setUsage(res.data);
+                // console.log(res.data);
+            })
+            .catch((err) => {
+            });
+    };
+
+    const getAge = (reservationId) => {
+        axios.get(`${ReservationUrls.AGE_CATEGORY}?reservation=${reservationId}`)
+            .then((res) => {
+                setAge(res.data);
+            })
+            .catch((err) => {
             });
     };
 
@@ -97,12 +120,25 @@ const ReservationCancel = (props) => {
                             </span>
                         </li>
                         <li>
+                            <label>利用区分：</label>
+                            {usage[0] && usage[0].usage.map((item, index) => (
+                                <span key={index}>{item.name}　</span>
+                            ))}
+                        </li>
+                        <li>
+                            <label>年齢区分：</label>
+                            {age[0] && age[0].age.map((item, index) => (
+                                <span key={index}>{item.name}　</span>
+                            ))}
+                        </li>
+                        <li>
                             <label>ステータス：</label>
                             <span>{reservation.approval.name}</span>
                         </li>
                     </ul>
                     <div className="auth-btn-wrapper">
                         <button className="back-btn" type="button" onClick={() => window.history.back()}>戻る</button>
+                        <span>　</span>
                         <button type="button" className="btn auth-btn" onClick={() => onClick()}>キャンセル</button>
                     </div>
                 </div>

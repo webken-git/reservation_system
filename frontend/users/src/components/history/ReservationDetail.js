@@ -10,18 +10,41 @@ import './history.scss';
 const ReservationDetail = (props) => {
     const unmountRef = useUnmountRef();
     const [reservation, setReservation] = useSafeState(unmountRef, []);
-    const [, setIsLoading] = useSafeState(unmountRef, true);
+    const [usage, setUsage] = useSafeState(unmountRef, []);
+    const [age, setAge] = useSafeState(unmountRef, []);
+    // const [, setIsLoading] = useSafeState(unmountRef, true);
 
     const getReservation = () => {
         axios.get(`${ReservationUrls.APPROVAL_APPLICATION}${props.id}/`)
             .then((res) => {
                 setReservation(res.data);
-                setIsLoading(false);
+                // setIsLoading(false);
+                getUsage(res.data.reservation.id);
+                getAge(res.data.reservation.id);
             })
             .catch((err) => {
-                setIsLoading(false);
+                // setIsLoading(false);
                 // 前のページに戻る
                 window.history.back();
+            });
+    };
+
+    const getUsage = (reservationId) => {
+        axios.get(`${ReservationUrls.USAGE_CATEGORY}?reservation=${reservationId}`)
+            .then((res) => {
+                setUsage(res.data);
+                // console.log(res.data);
+            })
+            .catch((err) => {
+            });
+    };
+
+    const getAge = (reservationId) => {
+        axios.get(`${ReservationUrls.AGE_CATEGORY}?reservation=${reservationId}`)
+            .then((res) => {
+                setAge(res.data);
+            })
+            .catch((err) => {
             });
     };
 
@@ -69,6 +92,18 @@ const ReservationDetail = (props) => {
                                 ～
                                 {formatTime(new Date(reservation.reservation.end.replace(/-/g,"/")))}
                             </span>
+                        </li>
+                        <li>
+                            <label>利用区分：</label>
+                            {usage[0] && usage[0].usage.map((item, index) => (
+                                <span key={index}>{item.name}　</span>
+                            ))}
+                        </li>
+                        <li>
+                            <label>年齢区分：</label>
+                            {age[0] && age[0].age.map((item, index) => (
+                                <span key={index}>{item.name}　</span>
+                            ))}
                         </li>
                         <li>
                             <label>ステータス：</label>
