@@ -34,6 +34,7 @@ $bordercolor: gainsboro;
     .date-selector {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       width: fit-content;
       .last-button:hover,
       .next-button:hover {
