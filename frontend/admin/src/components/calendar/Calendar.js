@@ -19,7 +19,7 @@ import UserIcon from '../header/usericon/UserIcon';
 
 const Calendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
-    const [ date, setDate ] = useState(new Date());
+    const [ date, setDate ] = useState(new Date(2021, 3, 1));
     const [ dateList, setDateList ] = useState([]); //表示用のリスト
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -30,6 +30,7 @@ const Calendar = (props) =>{
     const [ calendarType, setCalendarType ] = useState('weekly');
     const [approvalFilter, setApprovalFilter] = useState(2);
     const [ loading, setLoading] = useState(true);
+    const isMain = true;
 
     // 検索する施設名を変数に代入
     const filtering = (e) => {
@@ -145,9 +146,9 @@ const Calendar = (props) =>{
                     </div>
                 </div>
 
-                <div className="stop">
+                {/* <div className="stop">
                     <button type="button" className="btn">予約停止</button>
-                </div>
+                </div> */}
 
                 <UserIcon />
 
@@ -249,7 +250,7 @@ const Calendar = (props) =>{
                                             // openModal={openModal}
                                             updateFlag={updateFlag}
                                             setUpdateFlag={setUpdateFlag}
-                                            isMain={props.isMain}
+                                            isMain={isMain}
                                             // individualOrGroup={props.individualOrGroup}
                                             homeUpdateFlag={props.homeUpdateFlag}
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
@@ -268,7 +269,7 @@ const Calendar = (props) =>{
                                     // openModal={openModal}
                                     updateFlag={updateFlag}
                                     setUpdateFlag={setUpdateFlag}
-                                    isMain={props.isMain}
+                                    isMain={isMain}
                                     // individualOrGroup={props.individualOrGroup}
                                     homeUpdateFlag={props.homeUpdateFlag}
                                     setHomeUpdateFlag={props.setHomeUpdateFlag}
