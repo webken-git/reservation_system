@@ -14,7 +14,7 @@ import { PassWordChangePage } from "./pages/PasswordChangePage";
 import { LoginPage } from "./pages/LoginPage";
 import Registration from "./components/auth/Registration";
 import { AccountDeletePage } from "./pages/AccountDeletePage";
-import Content from "./components/reservationform/Content";
+import { ReservationStep } from "./components/reservationform/ReservationStep";
 import "./index.scss";
 // var csrftoken = Cookies.get('csrftoken');
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -36,7 +36,7 @@ function App() {
           <Route path="/registration" exact children={<Registration />} />
           {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
           <HeaderRoute path="/" exact children={<MainPage />} />
-          <HeaderRoute path="/cart" exact children={<Content />} />
+          <HeaderRoute path="/cart" exact children={<ReservationStep />} />
           <LoginRoute>
             <Route
               path="/account"

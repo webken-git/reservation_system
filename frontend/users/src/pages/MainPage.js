@@ -4,9 +4,8 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import FeeList from "../components/feelist/FeeList";
 import authState from "../recoil/auth/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ReservationForm } from "../components/reservationform/ReservationForm";
-import { formData } from "../recoil/form/atom";
 const MainPage = () => {
   const [PlaceListData, setPlaceListData] = useState([]);
   const [FeeListData, setFeeListData] = useState();
@@ -15,7 +14,6 @@ const MainPage = () => {
   const [Age, setAge] = useState();
   const [Time, setTime] = useState();
   const CheckAuth = useRecoilValue(authState);
-
   //場所データ取得
   const GetPlaceList = () => {
     axios
@@ -104,7 +102,10 @@ const MainPage = () => {
         {tabitems}
       </Tabs>
       {CheckAuth.isAuthenticated === true && (
-        <ReservationForm placeName={PlaceName} placeList={PlaceListData} />
+        <>
+          <ReservationForm placeName={PlaceName} />
+          {/* <Test placeName={PlaceName} /> */}
+        </>
       )}
     </>
   );
