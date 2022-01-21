@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Grid } from "@material-ui/core";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { useRecoilState, useRecoilValue } from "recoil";
 import "./Content.scss";
@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import { PersonalForm } from "./PersonalForm";
 import { Stepper } from "react-form-stepper";
 import { PersonalData } from "./PersonalData";
+import { ReservationPost } from "./ReservationPost";
+import { Thanks } from "./Thanks";
 
 import {
   FormControl,
@@ -27,6 +29,7 @@ import {
   MenuItem,
   SelectField,
   formHelperTextClasses,
+  Button,
 } from "@mui/material";
 
 export const ReservationStep = () => {
@@ -48,44 +51,69 @@ export const ReservationStep = () => {
     setActiveStep(step);
   }, [step]);
   return (
-    <>
-      <div>
-        <Stepper
-          steps={[
-            { label: "予約施設一覧" },
-            { label: "個人情報入力" },
-            { label: "予約する" },
-          ]}
-          styleConfig={{
-            size: "3em",
-            labelFontSize: "1rem",
-            completedBgColor: "#00895e",
-            completedTextColor: "black",
-            inactiveBgColor: "#fffff",
-            inactiveTextColor: "black",
-            activeBgColor: "#00895e",
-          }}
-          activeStep={activeStep}
-        />
-      </div>
+    <div>
+      {data.length === 0 ? (
+        ""
+      ) : (
+        <div>
+          <Stepper
+            steps={[
+              { label: "予約施設一覧" },
+              { label: "個人情報入力" },
+              { label: "予約する" },
+            ]}
+            styleConfig={{
+              size: "3em",
+              labelFontSize: "1rem",
+              completedBgColor: "#00895e",
+              completedTextColor: "black",
+              inactiveBgColor: "#fffff",
+              inactiveTextColor: "black",
+              activeBgColor: "#00895e",
+            }}
+            activeStep={activeStep}
+          />
+        </div>
+      )}
+      {/* <Grid container alignItems="center" justify="center"> */}
       <div style={{ display: activeStep === 0 ? "" : "none" }}>
         <ReservationList />
-        {/* local環境のみ反転 */}
-        {!data.length === 0 ? (
-          <div>
-            <Link to="/">施設予約する</Link>
-          </div>
-        ) : (
-          <div>
+        {data.length === 0 ? (
+          <Grid container alignItems="center" justify={"center"} margin>
             <Button
-              variant={"contained"}
-              onClick={Step1}
               style={{
                 backgroundColor: "#9CCC65",
+                color: "black",
+                // marginLeft: "100px",
+                marginTop: "200px",
               }}
             >
-              次へ
+              <Link
+                to="/"
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+                  fontSize: "25px",
+                }}
+              >
+                施設予約する
+              </Link>
             </Button>
+          </Grid>
+        ) : (
+          <div>
+            <Grid container alignItems="center" justify={"center"}>
+              <Button
+                variant={"contained"}
+                onClick={Step1}
+                style={{
+                  backgroundColor: "#9CCC65",
+                  width: "20%",
+                }}
+              >
+                次へ
+              </Button>
+            </Grid>
           </div>
         )}
       </div>
@@ -95,24 +123,20 @@ export const ReservationStep = () => {
         </div>
       </div>
       <div style={{ display: activeStep === 2 ? "" : "none" }}>
+        <Grid container alignItems="center" justify={"center"}>
+          <div style={{ color: "red", fontSize: "40px" }}>
+            以下の情報で予約します
+          </div>
+          <Thanks />
+        </Grid>
         <PersonalData />
         <ReservationList />
-        <Button
-          variant={"contained"}
-          onClick={Step1}
-          style={{
-            backgroundColor: "#9CCC65",
-          }}
-        >
-          戻る
-        </Button>
-        <Button variant={"contained"} onClick={Step3}>
-          post
-        </Button>
+        <ReservationPost />
       </div>
       <div style={{ display: activeStep === 3 ? "" : "none" }}>
-        <p>hel</p>
+        <Thanks />
       </div>
-    </>
+      {/* </Grid> */}
+    </div>
   );
 };

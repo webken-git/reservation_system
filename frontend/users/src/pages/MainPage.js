@@ -11,17 +11,19 @@ const MainPage = () => {
   const [FeeListData, setFeeListData] = useState();
   const [PlaceName, setPlaceName] = useState([]);
   const [DivideFeeList, setDivideFeeList] = useState();
+  const [id, setID] = useState([]);
   const [Age, setAge] = useState();
   const [Time, setTime] = useState();
   const CheckAuth = useRecoilValue(authState);
   //場所データ取得
   const GetPlaceList = () => {
     axios
-      .get(`${process.env.REACT_APP_API}/api/places/`)
+      .get("http://127.0.0.1:8000/api/places/")
       .then((response) => {
         const placeLists = response.data;
         setPlaceListData(placeLists);
         setPlaceName(placeLists[0].name); //最初の場所名をセット
+        setID(placeLists[0].id);
       })
       .catch((error) => {});
   };
@@ -29,7 +31,7 @@ const MainPage = () => {
   //料金表データ取得
   const GetFeeList = () => {
     axios
-      .get(`${process.env.REACT_APP_API}/api/facility-fees/`)
+      .get("http://127.0.0.1:8000/api/facility-fees/")
       .then((response) => {
         const feelists = response.data;
         setFeeListData(feelists);
@@ -41,7 +43,7 @@ const MainPage = () => {
   //年齢データの取得
   const GetAge = () => {
     axios
-      .get(`${process.env.REACT_APP_API}/api/ages/`)
+      .get("http://127.0.0.1:8000/api/ages/")
       .then((response) => {
         const ages = response.data;
         setAge(ages);
@@ -52,7 +54,7 @@ const MainPage = () => {
   //時間区分の取得
   const GetTime = () => {
     axios
-      .get(`${process.env.REACT_APP_API}/api/times/`)
+      .get("http://127.0.0.1:8000/api/times/")
       .then((response) => {
         const times = response.data;
         setTime(times);
@@ -69,12 +71,13 @@ const MainPage = () => {
 
   const divide = (pn) => {
     setPlaceName(pn);
+
     const divide_feelist = FeeListData.filter((fld) => {
       return fld.place === pn;
     });
+
     return setDivideFeeList(divide_feelist[0]);
   };
-
   const tab = PlaceListData.map((place) => {
     return (
       <Tab onClick={() => divide(place.name)} key={place.id}>
@@ -103,8 +106,7 @@ const MainPage = () => {
       </Tabs>
       {CheckAuth.isAuthenticated === true && (
         <>
-          <ReservationForm placeName={PlaceName} />
-          {/* <Test placeName={PlaceName} /> */}
+          <ReservationForm placeName={PlaceName} placeLists={PlaceListData} />
         </>
       )}
     </>

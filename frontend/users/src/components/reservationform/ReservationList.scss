@@ -1,0 +1,39 @@
+.RL-root{
+     display: flex;
+     flex-direction:column;
+     margin-left: 120px;
+    .notFacility {
+        margin-top: 30%;
+        font-size: 40px;
+    }
+
+    .select {
+        font-size: 40px;
+        color: grey;
+    }
+      .reservation {
+          font-size: 30px;
+          text-decoration:underline; text-decoration-color:gray;
+      }
+      .usage{
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+      .start{
+           padding-top: 10px;
+           padding-bottom: 10px;
+      }
+      .number{
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+.box{ 
+    //    margin: 2em ;
+       padding: 1em;
+       width: 25%;
+       background-color: #fff;
+       /* 背景色 */
+       border: 1px solid #ccc;
+       /* 枠線 */
+}
+}
