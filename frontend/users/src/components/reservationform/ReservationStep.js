@@ -59,29 +59,27 @@ export const ReservationStep = () => {
       <div style={{ display: activeStep === 0 ? "" : "none" }}>
         <ReservationList />
         {data.length === 0 ? (
-          <Grid container alignItems="center" justify={"center"} margin>
+          <Grid container alignItems="center" justifyContent={"center"} margin>
+            <Link to="/"
+              style={{
+                textDecoration: "none",
+                fontSize: "25px",
+              }}
+            >
             <button
               type="button"
               className="btn"
               style={{
-                marginTop: "200px",
+                marginTop: "100px",
               }}
             >
-              <Link
-                to="/"
-                style={{
-                  color: "black",
-                  textDecoration: "none",
-                  fontSize: "25px",
-                }}
-              >
-                施設予約する
+                予約する
+              </button>
               </Link>
-            </button>
           </Grid>
         ) : (
           <div>
-              <Grid container alignItems="center" justify={"center"}>
+              <Grid container alignItems="center" justifyContent={"center"}>
                 <button
                   type="button"
                   className="btn"
@@ -102,7 +100,7 @@ export const ReservationStep = () => {
         </div>
       </div>
       <div style={{ display: activeStep === 2 ? "" : "none" }}>
-        <Grid container alignItems="center" justify={"center"}>
+        <Grid container alignItems="center" justifyContent={"center"}>
           <h2 className="title">
             以下の入力内容で予約いたします。<br/>
             入力内容を確認後、「予約する」ボタンを押してください。
@@ -113,7 +111,7 @@ export const ReservationStep = () => {
         <ReservationPost />
       </div>
       <div style={{ display: activeStep === 3 ? "" : "none" }}>
-        <Grid container alignItems="center" justify={"center"}>
+        <Grid container alignItems="center" justifyContent={"center"}>
           <Thanks />
         </Grid>
       </div>

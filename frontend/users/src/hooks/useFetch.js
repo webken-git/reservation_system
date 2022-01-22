@@ -3,8 +3,8 @@ import axios from "axios";
 
 export const useFetch = ({ url }) => {
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setLoading] = useState(false);
+  const [, setError] = useState(null);
+  const [, setLoading] = useState(false);
   const fetchRequest = useCallback(async () => {
     try {
       setLoading(true);
