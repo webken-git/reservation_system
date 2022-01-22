@@ -191,7 +191,7 @@ def insert_auto_mail_data(file, table):
   reader = csv.reader(f)
   header = next(reader)
   for row in reader:
-    sql = "INSERT INTO " + table + "(name, subject, body, created_at, updated_at) VALUES(%s,%s,%s)"
+    sql = "INSERT INTO " + table + "(name, subject, body, created_at, updated_at) VALUES(%s,%s,%s,%s,%s)"
     cursor.execute(sql, (row[0], row[1], row[2], now, now))
   f.close()
 
