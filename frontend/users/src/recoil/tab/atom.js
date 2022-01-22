@@ -6,7 +6,7 @@ const { persistAtom } = recoilPersist();
 const tabState = atom({
     key: 'tabState',
     default: {
-        place: "カーリング場",
+        place_id: 1,
     },
     effects_UNSTABLE: [persistAtom],
 });

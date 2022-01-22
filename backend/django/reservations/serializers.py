@@ -77,9 +77,9 @@ class ReservationSerializer(serializers.ModelSerializer):
   place = PlaceSerializer(read_only=True)
   place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), write_only=True)
   equipment = EquipmentSerializer(many=True, read_only=True)
-  equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), many=True, write_only=True)
+  equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), many=True, write_only=True, required=False)
   special_equipment = SpecialEquipmentSerializer(many=True, read_only=True)
-  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), many=True, write_only=True)
+  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), many=True, write_only=True, required=False)
 
   class Meta:
     model = Reservation
