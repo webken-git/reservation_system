@@ -18,7 +18,7 @@ import tabState from "../../recoil/tab";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ReservationStep } from "./ReservationStep.js";
 import { useFetch } from "../../hooks/useFetch";
-import { Link } from "react-router-dom";
+import { usePlaceName } from "../../hooks/usePlaceName";
 import { reservationSchema } from "./FormYup";
 import {
   FormControl,
@@ -44,10 +44,9 @@ const Label = styled("p")({
 });
 
 const schema = reservationSchema;
-export const ReservationForm = ({ placeName, placeLists }) => {
+export const ReservationForm = () => {
   const [FormData, setFormData] = useRecoilState(formData);
-  let tab = useRecoilValue(tabState);
-  // console.log(placeLists);
+  const tab = useRecoilValue(tabState);
   const {
     control,
     handleSubmit,
@@ -60,39 +59,14 @@ export const ReservationForm = ({ placeName, placeLists }) => {
   const [checkValue, setCheckValue] = useState(false);
   const [checkPayment, setCheckPayment] = useState(false);
   const [ageValue, setAgeValue] = useState([]);
-  // const [ageName, setAgeName] = useState([]);
   const [reservationId, setReservationId] = useState(0);
   const AgeData = useFetch({
     url: ReservationUrls.AGE,
   });
+  const PlaceNames = usePlaceName(tab);
 
-  const creid = () => {
-    if (placeName === "カーリング場") {
-      return setReservationId(1);
-    }
-    if (placeName === "大会議室") {
-      return setReservationId(2);
-    }
-    if (placeName === "中会議室") {
-      return setReservationId(3);
-    }
-    if (placeName === "小会議室") {
-      return setReservationId(4);
-    }
-    if (placeName === "アーチェリー場") {
-      return setReservationId(5);
-    }
-    if (placeName === "武道場") {
-      return setReservationId(6);
-    }
-    if (placeName === "多目的体育館") {
-      return setReservationId(7);
-    }
-  };
-  useEffect(() => {
-    creid();
-  }, [placeName]);
   const onSubmit = (e) => {
+    console.log(e);
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
     const startDate = format(e.StartDate, "yyyy-LL-dd");
     const endDate = format(e.EndDate, "yyyy-LL-dd");
@@ -100,14 +74,14 @@ export const ReservationForm = ({ placeName, placeLists }) => {
     const endTime = e.End;
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
-    const reservation = placeName;
+    const placeName = PlaceNames;
     const age = ageValue;
     const id = getId();
     // 選択中のタブを取得
     let placeId = tab;
     delete e["ageGroup"];
-    delete e["StartDate"];
-    delete e["EndDate"];
+    // delete e["StartDate"];
+    // delete e["EndDate"];
     const i = e.usage;
     const t = e.profits;
     const w = e.collect;
@@ -116,7 +90,7 @@ export const ReservationForm = ({ placeName, placeLists }) => {
       ...e,
       start,
       end,
-      reservation,
+      placeName,
       id,
       age,
       placeId,
@@ -126,7 +100,7 @@ export const ReservationForm = ({ placeName, placeLists }) => {
       usageList,
     };
     setFormData(data);
-    // console.log(data);
+    console.log(data);
     // let a = [];
     // a.push(data);
     // console.log(a);
@@ -315,7 +289,7 @@ export const ReservationForm = ({ placeName, placeLists }) => {
                     label="予約シート数"
                     {...field}
                   >
-                    {placeName === "カーリング場" ? (
+                    {tab === 1 ? (
                       list.map((lists, id) => (
                         <MenuItem
                           key={id}
@@ -326,7 +300,7 @@ export const ReservationForm = ({ placeName, placeLists }) => {
                         </MenuItem>
                       ))
                     ) : (
-                      <MenuItem label="1" value="1">
+                      <MenuItem label="1" value={1}>
                         1
                       </MenuItem>
                     )}
@@ -374,7 +348,7 @@ export const ReservationForm = ({ placeName, placeLists }) => {
                       {...field}
                     >
                       {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
-                      {placeName === "カーリング場"
+                      {tabState === 1
                         ? curlingTimetable.map((timetables, id) => (
                             <MenuItem
                               key={id}
@@ -447,7 +421,7 @@ export const ReservationForm = ({ placeName, placeLists }) => {
                     >
                       {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
 
-                      {placeName === "カーリング場"
+                      {tab === 1
                         ? curlingTimetable.map((timetables, id) => (
                             <MenuItem
                               key={id}
@@ -643,10 +617,7 @@ export const ReservationForm = ({ placeName, placeLists }) => {
             )}
           </div>
           <div className="submitBtn">
-            <button
-              type="submit"
-              className="btn"
-            >
+            <button type="submit" className="btn">
               追加する
             </button>
           </div>

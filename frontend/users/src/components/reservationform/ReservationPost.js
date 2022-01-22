@@ -4,7 +4,7 @@ import axios from "axios";
 import { formData, personalData, stepValue } from "../../recoil/form/atom";
 import authState from "../../recoil/auth";
 import { useRecoilState, useRecoilValue } from "recoil";
-// import { useFetch } from "../../hooks/useFetch";
+import { useFetch } from "../../hooks/useFetch";
 // import { PostAgeCategories } from "../Post/postlogic";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
@@ -12,11 +12,13 @@ import Loading from "../loading/Loading";
 export const ReservationPost = () => {
   const [, setStep] = useRecoilState(stepValue);
   const auth = useRecoilValue(authState);
-  // const AgeData = useFetch({
-  //   url: ReservationUrls.AGE_CATEGORY,
-  // });
+  const AgeData = useFetch({
+    url: ReservationUrls.RESERVATION,
+  });
+  console.log(AgeData);
   const [loading, setLoading] = useState(false);
   const FormData = useRecoilValue(formData);
+  console.debug(FormData);
   const PersonalData = useRecoilValue(personalData);
   const next = () => {
     setStep(3);
@@ -30,12 +32,10 @@ export const ReservationPost = () => {
       age_id: FormData.age,
       reservation: reservation,
     };
-    // console.log(age);
     axios
       .post(ReservationUrls.AGE_CATEGORY, age)
       .then((response) => {
-        // console.log("response body:", response.data);
-        // console.log("成功");
+        console.log("ageCategories成功");
       })
       .catch((error) => {});
   };
@@ -48,7 +48,7 @@ export const ReservationPost = () => {
       .post(ReservationUrls.USAGE_CATEGORY, data)
       .then((response) => {
         //  console.log("response body:", response.data);
-        //  console.log("成功");
+        console.log("postUsageID成功");
       })
       .catch((error) => {});
   };
@@ -61,7 +61,7 @@ export const ReservationPost = () => {
       .post(ReservationUrls.APPROVAL_APPLICATION, data)
       .then((response) => {
         // console.log("response body:", response.data);
-        // console.log("成功");
+        console.log("postApprovalID成功");
       })
       .catch((error) => {});
   };
@@ -70,6 +70,9 @@ export const ReservationPost = () => {
     setLoading(true);
     const data = {
       user_id: auth.userId,
+      place_id: FormData.placeId,
+      equipment_id: [0],
+      special_equipment_id: [0],
       group_name: PersonalData.group_name,
       reader_name: PersonalData.reader_name,
       contact_name: PersonalData.contact_name,
@@ -85,15 +88,12 @@ export const ReservationPost = () => {
       purpose: FormData.reason,
       admission_fee: 0,
       place_number: FormData.placeNumber,
-      place_id: FormData.placeId,
-      equipment_id: [],
-      special_equipment_id: [],
     };
     axios
       .post(ReservationUrls.RESERVATION, data)
       .then((response) => {
         // console.log("response body:", response.data);
-        // console.log("成功");
+        console.log("postReservations成功");
         postApprovalID(response.data.id);
         postAgeCategories(response.data.id);
         postUsageID(response.data.id);
@@ -101,15 +101,16 @@ export const ReservationPost = () => {
       })
       .catch((error) => {
         setLoading(false);
+        console.log(data);
       });
   };
 
   const postData = () => {
     postReservations();
-    setTimeout(() => {
-      window.location.href = "/";
-      back();
-    }, 2000);
+    // setTimeout(() => {
+    //   window.location.href = "/";
+    //   back();
+    // }, 2000);
   };
   return (
     <>
