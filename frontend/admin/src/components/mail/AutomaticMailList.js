@@ -13,12 +13,12 @@ const AutomaticMailList = () => {
     const unmountRef = useUnmountRef();
     const [automaticMailListData, setAutomaticMailListData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [subject, setSubject] = useState('');
-    const [body, setBody] = useState('');
+    // const [subject, setSubject] = useState('');
+    // const [body, setBody] = useState('');
     const [id, setId] = useSafeState('');
     const [message, setMessage] = useState('');
     const [modalIsOpen, setModalIsOpen] = useSafeState(unmountRef, false);
-    const { register, handleSubmit, setValue, formState: { errors }, } = useForm();
+    const { register, handleSubmit, getValues, setValue, formState: { errors }, } = useForm();
 
     const mailList = AuthUrls.AUTO_MAIL;
     const GetAutomaticMailList = () => {
@@ -45,6 +45,8 @@ const AutomaticMailList = () => {
     const onSubmit = (id) => {
         setLoading(true);
         let formData = new FormData();
+        const subject = getValues("subject");
+        const body = getValues("body");
         formData.append("subject", subject);
         formData.append("body", body);
         axios.patch(`${mailList}${id}/`, formData, {
@@ -55,9 +57,7 @@ const AutomaticMailList = () => {
             .then((res) => {
                 setMessage(res.data.message);
                 setLoading(false);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                window.location.reload();
             })
             .catch((err) => {
                 setMessage("変更に失敗しました");
@@ -127,8 +127,8 @@ const AutomaticMailList = () => {
                                                 {...register("subject", {
                                                     required: true,
                                                 })}
-                                                value={subject}
-                                                onChange={(e) => setSubject(e.target.value)}
+                                                // value={val.subject}
+                                                // onChange={(e) => setSubject(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
@@ -141,10 +141,10 @@ const AutomaticMailList = () => {
                                                 {...register("body", {
                                                     required: true,
                                                 })}
-                                                value={body}
-                                                onChange={(e) => setBody(e.target.value)}
+                                                // value={body}
+                                                // onChange={(e) => setBody(e.target.value)}
                                             >
-                                                {body}
+                                                {/* {body} */}
                                             </textarea>
                                         </div>
                                         <button className="back-btn" type="button" onClick={modalToggle}>戻る</button>
