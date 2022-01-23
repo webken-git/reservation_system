@@ -1,21 +1,21 @@
-import React from 'react'
+import React from "react";
 import { useRecoilValue } from "recoil";
-import './header.scss';
+import "./header.scss";
 
-import Logo from './logo/Logo';
-import logo from '../../assets/image/logo.png';
+import Logo from "./logo/Logo";
+import logo from "../../assets/image/logo.png";
 
 import UserIcon from './usericon/UserIcon';
 import Cart from './cart/Cart';
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
 import authState from "../../recoil/auth/atom";
-import { LoginButton } from '../auth/LoginButton';
-import { RegistrationButton } from '../auth/RegistrationButton';
-
+import { LoginButton } from "../auth/LoginButton";
+import { RegistrationButton } from "../auth/RegistrationButton";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-    const auth = useRecoilValue(authState);
+  const auth = useRecoilValue(authState);
 
     return (
         <div className='header-box'>
@@ -39,7 +39,7 @@ const Header = () => {
                 </div>
             }
         </div>
-    )
-}
+      );
+};
 
-export default Header
+export default Header;

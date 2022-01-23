@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { CookiesProvider } from "react-cookie";
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainPage from './pages/MainPage';
@@ -11,44 +10,61 @@ import { EmailChangePage } from './pages/EmailChangePage';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
 import { PasswordResetPage } from './pages/PasswordResetPage';
 import { PassWordChangePage } from './pages/PasswordChangePage';
+import { HistoryPage } from "./pages/HistoryPage";
+import { ReservationDetailPage } from "./pages/ReservationDetailPage";
+import { ReservationCancelPage } from "./pages/ReservationCancelPage";
 import { LoginPage } from './pages/LoginPage';
-import Registration from './components/auth/Registration';
+import { RegistrationPage } from "./pages/RegistrationPage";
 import { AccountDeletePage } from './pages/AccountDeletePage';
-import Content from "./components/reservationform/Content";
+import { ReservationStepPage } from "./pages/ReservationStepPage";
 import "./index.scss";
 
-// var csrftoken = Cookies.get('csrftoken');
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
-axios.defaults.headers = {
-  "Content-Type": "application/json",
+axios.defaults.headers.common = {
+  "X-Requested-With": "XMLHttpRequest",
+  "X-CSRFToken": csrftoken,
 };
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
+        <Route path="/login" exact children={<LoginPage />} />
+        <Route path="/registration" exact children={<RegistrationPage />} />
+        <Route path="/password"
+            render={({ match: { url } }) => (
+              <>
+                <Switch>
+                  <Route path={`${url}/`} exact children={<VerifyEmailPage />} />
+                  <Route path={`${url}/reset/:uid/:token`} exact children={<PasswordResetPage />} />
+                </Switch>
+              </>
+          )}
+        />
         {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
-      </Switch>
-      <CookiesProvider>
-        <Switch>
-          <Route path="/login" exact children={<LoginPage />} />
-          <Route path="/registration" exact children={<Registration />} />
-          <Route path="/password"
-              render={({ match: { url } }) => (
-                <>
-                  <Switch>
-                    <Route path={`${url}/`} exact children={<VerifyEmailPage />} />
-                    <Route path={`${url}/reset/:uid/:token`} exact children={<PasswordResetPage />} />
-                  </Switch>
-                </>
-            )}
-          />
-          {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
-          <HeaderRoute path="/" exact children={<MainPage />} />
-          <HeaderRoute path="/cart" exact children={<Content />} />
-          <LoginRoute>
+        <HeaderRoute path="/" exact children={<MainPage />} />
+        <LoginRoute>
+          <Switch>
+            <HeaderRoute path="/additional-data" exact children={<ReservationStepPage />} />
             <Route
               path="/account"
               render={({ match: { url } }) => (
@@ -66,9 +82,24 @@ function App() {
                 </>
               )}
             />
-          </LoginRoute>
-        </Switch>
-      </CookiesProvider>
+            <Route path="/history"
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <HeaderRoute path={`${url}/`} exact children={<HistoryPage />} />
+                    <Route path={`${url}/cancel/:id/:reservationId`}>
+                      <HeaderRoute exact children={<ReservationCancelPage />} />
+                    </Route>
+                    <Route path={`${url}/:id`}>
+                      <HeaderRoute exact children={<ReservationDetailPage />} />
+                    </Route>
+                  </Switch>
+                </>
+              )}
+            />
+          </Switch>
+        </LoginRoute>
+      </Switch>
     </BrowserRouter>
   );
 }

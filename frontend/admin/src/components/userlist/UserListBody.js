@@ -37,6 +37,7 @@ const UserListBody = () => {
   // ページレンダリング時にユーザーリストのデータを受け取っている
   useEffect(() => {
     GetUserList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const Table = (
@@ -49,6 +50,8 @@ const UserListBody = () => {
           key={val_index}
           id={val.id}
           email={val.email}
+          is_staff={val.is_staff}
+          is_superuser={val.is_superuser}
         />
       )
     })
@@ -65,7 +68,11 @@ const UserListBody = () => {
             <table className="list-body">
               <thead>
                 <tr>
-                  <td>id</td><td>メールアドレス</td><td>詳細</td>
+                  <td>id</td>
+                  <td>メールアドレス</td>
+                  <td>管理者権限</td>
+                  <td>スーパーユーザー権限</td>
+                  <td>詳細</td>
                 </tr>
               </thead>
               <tbody>

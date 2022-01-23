@@ -5,7 +5,6 @@ import 'react-tabs/style/react-tabs.scss';
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import tabState from "../recoil/tab";
 import authState from "../recoil/auth";
-import { formData } from "../recoil/form/atom";
 import { ReservationUrls } from "../utils/reservationUrls";
 import useSafeState from "../hooks/useSafeState";
 import useUnmountRef from "../hooks/useUnmountRef";
@@ -15,16 +14,17 @@ import GroupFeeList from "../components/feelist/GroupFeeList";
 import CurlingFeeList from "../components/feelist/CurlingFeeList";
 import { ReservationForm } from "../components/reservationform/ReservationForm";
 import Loading from "../components/loading/Loading";
-// import { Link as Scroll } from 'react-scroll';
 import './mainpage.scss'
 
 
 const MainPage = () => {
+  document.title = "施設予約"; // ページタイトルを変更
   const unmountRef = useUnmountRef();
   const [placeListData, setPlaceListData] = useSafeState(unmountRef, []);
   const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
   // const [placeName, setPlaceName] = useState([]);
   const [divideFeeList, setDivideFeeList] = useSafeState(unmountRef, []);
+  // const [id, setID] = useSafeState(unmountRef, []);
   const [age, setAge] = useSafeState(unmountRef, []);
   const [, setTime] = useSafeState(unmountRef, []);
   const [, setUsage] = useSafeState(unmountRef, []);
@@ -32,14 +32,14 @@ const MainPage = () => {
   const setTabState = useSetRecoilState(tabState);
   const tabStates = useRecoilValue(tabState);
   const CheckAuth = useRecoilValue(authState);
-
   //場所データ取得
   const GetPlaceList = () => {
     axios.get(ReservationUrls.PLACE)
       .then(response => {
-        // const placelists = response.data;
-        setPlaceListData(response.data);
+        const placeLists = response.data;
+        setPlaceListData(placeLists);
         // setPlaceName(placelists[0].name);  //最初の場所名をセット
+        // setID(placeLists[0].id);
       })
       .catch((error) => {
       })
@@ -99,8 +99,11 @@ const MainPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const divide = (pn) => {
-    setTabState(pn);
+  const divide = (pn, place_id) => {
+    setTabState({
+      placeId: place_id,
+      placeName: pn,
+    });
     const divide_feelist = feeListData.filter(fld => {
       return fld.place === pn
     })
@@ -111,7 +114,7 @@ const MainPage = () => {
 
   const tab = placeListData.map((place, p_id) => {
     return (
-      <Tab key={p_id} onClick={() => divide(place.name)}>{place.name}</Tab>
+      <Tab key={p_id} onClick={() => divide(place.name, place.id)}>{place.name}</Tab>
     )
   })
 
@@ -153,14 +156,16 @@ const MainPage = () => {
           <div className="scroll_box">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <div className="detail-content">
+                <Calendar />
+              </div>
             </details>
             <details>
               <summary>料金一覧</summary>
               {tabitems}
             </details>
             {CheckAuth.isAuthenticated === true && (
-              <ReservationForm placeName={tabStates.place} placeList={placeListData} />
+              <ReservationForm placeName={tabStates.place} placeLists={placeListData} />
             )}
           </div>
         </div>

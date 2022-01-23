@@ -9,12 +9,11 @@ import reseravationState from "../../recoil/reservation/atom";
 const LoginRoute = (props) => {
     const [auth, setAuth] = useRecoilState(authState);
     const setReservationState = useSetRecoilState(reseravationState);
-    // const [user, setUser] = useState([]);
     // トークンが有効か確認
     const getUser = AuthUrls.GET_USER_LIST;
     const logout = AuthUrls.LOGOUT;
     const loginCheck = () => {
-        axios.get(getUser+"1")
+        axios.get(`${getUser}${auth.userId}/`)
             .then((res) => {
                 // setUser(res.data);
             })
@@ -26,6 +25,7 @@ const LoginRoute = (props) => {
                         // ログアウト成功時、authStateをfalseにする
                         setAuth({
                             isAuthenticated: false,
+                            userId: '',
                         });
                     })
                     .catch(err => {

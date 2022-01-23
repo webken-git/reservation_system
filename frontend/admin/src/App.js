@@ -6,33 +6,52 @@ import LoginRoute from "./components/rooter/LoginRoute";
 import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
 import SideBarRoute from "./components/rooter/SideBarRoute";
 
-import { LoginPage } from "./pages/home/LoginPage";
+import { LoginPage } from "./pages/LoginPage";
 import Registration from "./components/auth/Registration";
-import { TopPage } from "./pages/home/TopPage";
-import { AccountPage } from "./pages/home/AccountPage";
-import { EmailChangePage } from "./pages/home/EmailChangePage";
-import { AccountDeletePage } from "./pages/home/AccountDeletePage";
-import { PassWordChangePage } from "./pages/home/PasswordChangePage";
-import { VerifyEmailPage } from "./pages/home/VerifyEmailPage";
-import { PasswordResetPage } from "./pages/home/PasswordResetPage";
-import { ApprovalList } from "./pages/home/ApprovalList";
-import { UnapprovalList } from "./pages/home/UnapprovalList";
-import { DisapprovalList } from "./pages/home/DisapprovalList";
-import { CancelList } from "./pages/home/CancelList";
-import { UserList } from "./pages/home/UserList";
-import { DataList } from "./pages/home/DataList"
-import { CalendarPage } from "./pages/home/CalendarPage";
-import { DocumentListPage } from "./pages/home/DocumentListPage";
-import { ApprovalInfoPage } from "./pages/home/ApprovalInfoPage";
+import { TopPage } from "./pages/TopPage";
+import { AccountPage } from "./pages/AccountPage";
+import { EmailChangePage } from "./pages/EmailChangePage";
+import { AccountDeletePage } from "./pages/AccountDeletePage";
+import { PassWordChangePage } from "./pages/PasswordChangePage";
+import { VerifyEmailPage } from "./pages/VerifyEmailPage";
+import { PasswordResetPage } from "./pages/PasswordResetPage";
+import { ApprovalList } from "./pages/ApprovalList";
+import { UnapprovalList } from "./pages/UnapprovalList";
+import { DisapprovalList } from "./pages/DisapprovalList";
+import { CancelList } from "./pages/CancelList";
+import { UserList } from "./pages/UserList";
+import { DataList } from "./pages/DataList"
+import { CalendarPage } from "./pages/CalendarPage";
+import { DocumentListPage } from "./pages/DocumentListPage";
+import { ApprovalInfoPage } from "./pages/ApprovalInfoPage";
+import { MailPage } from "./pages/MailPage";
+import { SendEmailPage } from "./pages/SendEmailPage";
 import "./index.scss"
 import GetDate from "./components/toppage/GetDate"
 
-// var csrftoken = Cookies.get('csrftoken');
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
-axios.defaults.headers = {
-  "Content-Type": "application/json",
+axios.defaults.headers.common = {
+  "X-Requested-With": "XMLHttpRequest",
+  "X-CSRFToken": csrftoken,
 };
 
 function App() {
@@ -94,7 +113,19 @@ function App() {
                   </Switch>
                 </>
               )}
-           />
+            />
+            <Route path="/mail"
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <SideBarAndHeaderRoute path={`${url}/`} pagename={"メール"} exact children={<MailPage />} />
+                    <Route path={`${url}/send`}>
+                      <SideBarAndHeaderRoute pagename={"メール一斉送信"} exact children={<SendEmailPage />} />
+                    </Route>
+                  </Switch>
+                </>
+              )}
+            />
           </LoginRoute>
         </Switch>
       </CookiesProvider>
