@@ -3,7 +3,9 @@ import axios from "axios"
 import './calendar.scss'
 // import Head from './Head';
 // import Content from './Content';
-// import Select from './Select';
+import Select from './Select';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const MonthlyCalendar = (props) =>{
     const dayList = props.dayList;
@@ -14,8 +16,8 @@ const MonthlyCalendar = (props) =>{
     const [approvalFilter, setApprovalFilter] = useState(2);
     const calendar = createCalendar(year, month)
     const setLoading = props.setLoading;
-    // const calendarType = props.calendarType;
-    // const setCalendarType = props.setCalendarType;
+    const calendarType = props.calendarType;
+    const setCalendarType = props.setCalendarType;
 
     const onClick = (n) => () => {
         const nextMonth = month + n
@@ -62,16 +64,27 @@ const MonthlyCalendar = (props) =>{
         <div className="monthly-calendar">
             
             <div className="header">
-                {/* <Select
-                    type={type}
-                /> */}
 
-                <div className="today"><p>今日</p></div>
-                <div className="button">
-                    <button onClick={onClick(-1)}><p>{'prev'}</p></button>
-                    <button onClick={onClick(1)}><p>{'next'}</p></button>
+                {/* 表示するカレンダーの種類 */}
+                <Select
+                    calendarType={calendarType}
+                    setCalendarType={setCalendarType}
+                />
+                
+
+                <div className="date-title">
+
+                    <div className="last-button" onClick={onClick(-1)}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </div>
+                    <div className="date-title">
+                        <p>{year}年{month}月</p>
+                    </div>
+                    <div className="next-button" onClick={onClick(1)}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </div>
                 </div>
-                {/* <p>{year+'年'+month+'月'}</p> */}
+                
             </div>
 
             <table>
@@ -91,7 +104,7 @@ const MonthlyCalendar = (props) =>{
                                     {day}
                                     {approvalList.map((approval) => (
                                         day === approval.day
-                                        ? <p>{approval.count}</p>
+                                        ? <p>{approval.count}件</p>
                                         : null
                                     ))}
                                 </th>

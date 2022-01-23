@@ -33,12 +33,11 @@ $bordercolor: gainsboro;
   margin-bottom: 50px;
 
   .header {
-    width: 80%;
-    margin: 0;
-    height: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 80%;
+    margin: 0;
     border-bottom: 1px solid #707070;
 
     .header_title {
@@ -51,12 +50,10 @@ $bordercolor: gainsboro;
       width: 3rem;
     }
 
-    .date-selector {
+    .date-title {
+      width: 50%;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 300px;
-      height: 50px;
+      justify-content: center;
 
       // アイコンをホバーした時
       .last-button:hover {
@@ -70,18 +67,22 @@ $bordercolor: gainsboro;
         font-size: 2.5vh;
         margin: 0;
       }
-    }
 
-    .filter-base {
-      display: flex;
-      justify-content: space-between;
+      .filter-base {
+        display: flex;
+        justify-content: space-between;
+      }
     }
   }
 
-  .main,
-  .monthly-calendar {
+  .main {
     width: 80%;
     height: 88%;
+  }
+
+  .monthly-calendar {
+    width: 80%;
+    height: 100%;
   }
 
   .main {
@@ -444,22 +445,30 @@ $bordercolor: gainsboro;
   height: 100%;
 
   .header {
-    height: 12%;
+    // height: 12%;
     display: flex;
-    // justify-content: center; //左右中央揃え
+    justify-content: space-between;
     align-items: center; //上下中央揃え
+    width: 100%;
+    margin: 0;
+    // height: 50px;
 
-    .today {
-      border: 1px solid $bordercolor;
-    }
+    .date-title {
+      width: 50%;
+      display: flex;
+      justify-content: center;
 
-    .button {
-      width: 15%;
-    }
+      .last-button:hover {
+        cursor: pointer;
+      }
+      .next-button:hover {
+        cursor: pointer;
+      }
 
-    p {
-      margin: 0;
-      font-size: 22px;
+      p {
+        margin: 0;
+        font-size: 2.5vh;
+      }
     }
   }
 

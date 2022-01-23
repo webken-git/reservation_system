@@ -3,7 +3,17 @@ import axios from "axios"
 import './calendar.scss'
 // import Head from './Head';
 // import Content from './Content';
-// import Select from './Select';
+import Select from './Select';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+    Box,
+    HStack,
+    Stack,
+} from "@chakra-ui/react";
+import DrawerMenu from '../sidebar/DrawerMenu';
+import '../header/header.scss';
+import UserIcon from '../header/usericon/UserIcon';
 
 const MonthlyCalendar = (props) =>{
     const dayList = props.dayList;
@@ -44,8 +54,6 @@ const MonthlyCalendar = (props) =>{
         .then(res => {
             const approvalList = res.data;
             setLoading(false);
-            console.log('approvalList: ', approvalList);
-            setLoading(false);
 
             if(!unmounted){
                 setApprovalList(approvalList);
@@ -62,24 +70,46 @@ const MonthlyCalendar = (props) =>{
     return (
         <div className="monthly-calendar">
             <div className="header">
-                {/* <Select
-                    type={type}
-                /> */}
+            
+                <Stack >
+                    <HStack p={5} className='drawer-menu'>
+                        <Box display={{ base: "block", md: "none" }}>
+                            <DrawerMenu />
+                       </Box>
+                    </HStack>
+                </Stack>
 
-                <div className="today"><p>今日</p></div>
-                <div className="button">
-                    <button onClick={onClick(-1)}><p>{'prev'}</p></button>
-                    <button onClick={onClick(1)}><p>{'next'}</p></button>
-                </div>
-                {/* <p>{year+'年'+month+'月'}</p> */}
+                    {/* <div className="header_title">{props.pagename}</div> */}
+                    <div className="header_title">カレンダー</div>
+                    {/* 各ページにあった名前に変更できるようにpropsにする */}
+
+                    {/* 表示するカレンダーの種類 */}
+                    <Select
+                        calendarType={props.calendarType}
+                        setCalendarType={props.setCalendarType}
+                    />
+
+                    <div className="date-selector">
+
+                        <div className="last-button" onClick={onClick(-1)}>
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </div>
+                        <p>{year}年{month}月</p>
+                        <div className="next-button" onClick={onClick(1)}>
+                            <FontAwesomeIcon icon={faChevronRight} />
+                        </div>
+                    </div>
+
+                    <UserIcon />
+
             </div>
 
             <table>
                 <tbody>
                     <tr className="day-row">
                         {
-                            dayList.map((day) => {
-                            return <th key={day}>{day}</th>
+                            dayList.map((day, index) => {
+                            return <th day={day} key={index}>{day}</th>
                             })
                         }
                     </tr>
@@ -87,11 +117,11 @@ const MonthlyCalendar = (props) =>{
                         <tr key={week.join('')}>
                             {week.map((day, j) => (
                                 // <th key={i + j}>{day}</th>
-                                <th>
+                                <th key={j}>
                                     {day}
-                                    {approvalList.map((approval) => (
+                                    {approvalList.map((approval, k) => (
                                         day === approval.day
-                                        ? <p>{approval.count}</p>
+                                        ? <p key={k}>{approval.count}</p>
                                         : null
                                     ))}
                                 </th>

@@ -4,6 +4,7 @@ import { withCookies } from 'react-cookie'
 import {v4 as uuidv4} from 'uuid'
 
 import ScheduleBlock from './ScheduleBlock';
+import { fil } from 'date-fns/locale';
 
 const Content = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
@@ -25,6 +26,7 @@ const Content = (props) =>{
         let year = date.getFullYear();
         let month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
         let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
+
         if(!unmounted){
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
             // setStringContentDate(year+'-'+month+'-'+day);    
