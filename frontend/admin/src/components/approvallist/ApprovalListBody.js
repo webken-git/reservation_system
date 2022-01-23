@@ -15,17 +15,11 @@ const ApprovalListBody = () => {
     // console.log(e.target.value);
   }
 
-  const groupFiltering = (e) => {
-    setGroupFilter(e.target.value);
-    // setGroupFilter(true);
-  }
-
   const dateFiltering = (e) => {
     setDateFilter(e.target.value);
   }
 
   const [placeFilter, setPlaceFilter] = useState();
-  const [groupFilter, setGroupFilter] = useState();
   const [dateFilter, setDateFilter] = useState();
 
 
@@ -37,7 +31,6 @@ const ApprovalListBody = () => {
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`, {
       params: {
         'reservation__place': placeFilter,
-        'reservation__is_group': groupFilter,
         'reservation__start': dateFilter
       }
     })
@@ -55,7 +48,7 @@ const ApprovalListBody = () => {
   useEffect(() => {
     GetApporovalList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placeFilter, groupFilter, dateFilter])
+  }, [placeFilter, dateFilter])
 
   const Table = (
       // データをmapで回している
@@ -66,6 +59,7 @@ const ApprovalListBody = () => {
             // propsでApprovalTable.jsに承認リストのデータを送っている
             key={val_index}
             id={val.id}
+            reservation_id={val.reservation.id}
             // dayjsのformatで〇/〇と日付を表示できるようにしている
             date={dayjs(val.reservation.start).format('YYYY-MM-DD')}
             group_name={val.reservation.group_name}
@@ -83,6 +77,11 @@ const ApprovalListBody = () => {
             place={val.reservation.place.name}
             reservation_id={val.reservation.id}
             admission_fee={val.reservation.admission_fee}
+            email={val.reservation.user.email}
+            approval={val.approval.name}
+            usage_fee={val.usage_fee}
+            electric_fee={val.electric_fee}
+            heating_fee={val.heating_fee}
           />
         )
     })
@@ -109,14 +108,6 @@ const ApprovalListBody = () => {
                 </td>
                 <td></td>
                 <td></td>
-                <td>
-                  <select className="groupfilter" defaultValue="" onChange={(e) => groupFiltering(e)}>
-                    <option value="">全体</option>
-                    <option value="false">個人</option>
-                    <option value="true">団体</option>
-                  </select>
-                </td>
-                <td></td>
                 <td></td>
                 <td>
                   <select className="placefilter" defaultValue="" onChange={(e) => placeFiltering(e)}>
@@ -130,7 +121,6 @@ const ApprovalListBody = () => {
                   </select>
                 </td>
                 <td></td>
-                <td></td>
               </tr>
             </thead>
             <thead>
@@ -139,9 +129,7 @@ const ApprovalListBody = () => {
                 <th>日付</th>
                 <th>団体者名</th>
                 <th>連絡者名</th>
-                <th>個人/団体</th>
                 <th>時間</th>
-                <th>人数</th>
                 <th>場所</th>
                 <th>操作</th>
                 <th>詳細</th>

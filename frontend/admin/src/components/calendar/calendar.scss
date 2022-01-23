@@ -1,3 +1,26 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
 $bordercolor: gainsboro;
 
 //追加css
@@ -36,10 +59,14 @@ $bordercolor: gainsboro;
       justify-content: space-between;
       align-items: center;
       width: fit-content;
-      .last-button:hover,
-      .next-button:hover {
-        cursor: pointer;
-        opacity: 0.5;
+
+      .last-button,
+      .next-button {
+        margin: 0 20px;
+        &:hover {
+          cursor: pointer;
+          opacity: 0.5;
+        }
       }
     }
 

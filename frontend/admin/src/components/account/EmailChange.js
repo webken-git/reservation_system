@@ -90,22 +90,6 @@ const EmailChange = () => {
                 </div>
             </form>
             {loading && <Loading />}
-            {/* <ReactModal
-                isOpen={modalIsOpen}
-                // onRequestClose={() => setIsOpen(false)}
-                className="modal-content"
-                overlayClassName="modal-overlay"
-                ariaHideApp={false}
-            >
-                <div className="buttom-modal-wrapper">
-                    <p className="modal-question">本当に変更しますか？</p>
-                    <div className="auth-btn-wrapper">
-                        <button type="button" className="back-btn" onClick={() => setIsOpen(false)}>キャンセル</button>
-                        <span>　</span>
-                        <button type="button" className="auth-btn">変更する</button>
-                    </div>
-                </div>
-                </ReactModal> */}
         </div>
   )
 }

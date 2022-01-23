@@ -4,7 +4,7 @@ import { withCookies } from 'react-cookie'
 import {v4 as uuidv4} from 'uuid'
 
 import ScheduleBlock from './ScheduleBlock';
-import { fil } from 'date-fns/locale';
+// import { fil } from 'date-fns/locale';
 
 const Content = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
@@ -53,27 +53,16 @@ const Content = (props) =>{
         .catch( error => {
             console.log(error);
         });
-        
+
         return () => { unmounted = true }
     }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading, approvalFilter]);
 
     if (calendarType === 'weekly'){
     return (
         <div className="content">
-            <div 
-                className="content-span" 
+            <div
+                className="content-span"
             >
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
@@ -115,20 +104,9 @@ const Content = (props) =>{
     )} else if (calendarType === 'daily') {
         return (
             <div className="daily-content">
-            <div 
-                className="content-span" 
+            <div
+                className="content-span"
             >
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>

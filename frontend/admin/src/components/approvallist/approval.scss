@@ -67,7 +67,7 @@ $accent-color: #233b62;
         font-size: 16px;
       }
     }
-    th {
+    thead th {
       position: sticky;
       top: 0;
       background-color: #f5f5f5;
@@ -89,6 +89,9 @@ $accent-color: #233b62;
       // @include mq("sp") {
       //   padding: 1% 2%;
       // }
+    }
+    .approval-label {
+      padding: 15px 0;
     }
   }
 }

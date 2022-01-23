@@ -1,81 +1,77 @@
 // 承認取り消しボタンのコンポーネント
 import React, { useState } from "react";
 import axios from "axios";
-import Modal from 'react-modal'
+import Modal from 'react-modal';
+import { useForm } from 'react-hook-form';
+import { ReservationUrls } from "../../utils/reservationUrls";
+import Loading from "../loading/Loading";
 import './list_send_button.scss'
 
 const ApprovalCancelButtom = (props) => {
-  const reservationId = props.id
-  const approval = 4
-  const [approvalCancelReason, setApprovalCancelReason] = useState("")
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  const handleChange = (e) => {
-    setApprovalCancelReason(e.target.value)
-  }
-
-
-  // データを承認リストに送るaxios
-  const CancelSend = () => {
-    if (approvalCancelReason === "") {
-      return;
-    }
-
-    axios.patch(`${process.env.REACT_APP_API}/api/approval-applications/` + reservationId + '/', {
-      approval_id: approval,
-      reservation_id: reservationId,
-      // usage_fee: 0,
-      // heating_fee: 0,
-      // electric_fee: 0,
-      cancellation_reason: approvalCancelReason
+  // データを不承認リストに送るaxios
+  const ApporovalSend = () => {
+    setLoading(true);
+    setMessage('キャンセルメールを送信しています...');
+    axios.patch(`${ReservationUrls.APPROVAL_APPLICATION}${props.id}/`, {
+      approval_id: 4,
+      reservation_id: props.reservation_id,
+      cancellation_reason: getValues("cancellation_reason"),
     })
       .then(response => {
-        console.log('Success')
-        console.log(response.date);
+        // console.log('Success')
+        // console.log(response.date);
+        setMessage('承認の取り消しに成功しました');
+        setLoading(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       })
       .catch((error) => {
-        console.log(error)
+        // console.log(error)
+        setMessage('承認の取り消しに失敗しました');
+        setLoading(false);
+        setTimeout(() => {
+          // window.location.reload();
+        }, 500);
       })
-    setIsOpen(false)
   }
-  // 承認ボタンのモーダルウィンドウ
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  const modalStyle = {
-    overlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      backgroundColor: "rgba(0,0,0,0.60)"
-    },
-    content: {
-      position: "absolute",
-      top: "13rem",
-      left: "32rem",
-      right: "32rem",
-      bottom: "13rem",
-      backgroundColor: "white",
-      // borderRadius: "1rem",
-      padding: "1.5rem"
-    }
-  };
+
+  const modalToggle = () => {
+    setModalIsOpen(!modalIsOpen);
+  }
+
   return (
-    <div className="list-send-button-wrapper">
-      <p className="approval-cancel-button" onClick={() => setIsOpen(true)}>承認取り消し</p>
-      <Modal isOpen={modalIsOpen} style={modalStyle}>
-        <div className="buttom-modal-wrapper">
-          <div className="modal-question-wrapper">
-            <p className="modal-question">承認取り消しの理由</p>
-            <input type="text" value={approvalCancelReason} onChange={handleChange} />
-          </div>
-          <div className="modal-question-wrapper">
-            <p className="modal-question">本当に承認を取り消しますか？</p>
-          </div>
-          <div className="modal-yesno-wrapper">
-            <p className="modal-yes" onClick={() => CancelSend(reservationId)}>はい</p>
-            <p className="modal-no" onClick={() => setIsOpen(false)}>いいえ</p>
-          </div>
+    <>
+      <button type="button" className="approval-cancel-btn" onClick={() => setModalIsOpen(true)}>承認取り消し</button>
+      <Modal isOpen={modalIsOpen} onRequestClose={modalToggle} className="modal-content" overlayClassName="modal-overlay">
+      <div className="buttom-modal-wrapper">
+          <form onSubmit={handleSubmit(ApporovalSend)}>
+            <div className="modal-title">
+              <h2>以下の項目を入力後、キャンセルボタンを押してください</h2>
+              {message && <p className="message">{message}</p>}
+            </div>
+            <div className="modal-form-group">
+              {errors.cancellation_reason && <p className="modal-error">※この項目は必須です</p>}
+              <label className="modal-label">承認取り消しの理由：</label>
+              <input type="text" name="cancellation_reason" className="modal-input"
+                {...register("cancellation_reason", { required: true })}
+              />
+            </div>
+            <div className="modal-form-group">
+              <button type="submit" className="auth-btn">キャンセル</button>
+              <span>　</span>
+              <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>閉じる</button>
+            </div>
+          </form>
         </div>
+        {loading && <Loading />}
       </Modal>
-    </div>
+    </>
   )
 }
 

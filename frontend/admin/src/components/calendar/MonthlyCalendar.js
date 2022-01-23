@@ -70,7 +70,6 @@ const MonthlyCalendar = (props) =>{
     return (
         <div className="monthly-calendar">
             <div className="header">
-            
                 <Stack >
                     <HStack p={5} className='drawer-menu'>
                         <Box display={{ base: "block", md: "none" }}>
@@ -79,29 +78,24 @@ const MonthlyCalendar = (props) =>{
                     </HStack>
                 </Stack>
 
-                    {/* <div className="header_title">{props.pagename}</div> */}
-                    <div className="header_title">カレンダー</div>
-                    {/* 各ページにあった名前に変更できるようにpropsにする */}
-
-                    {/* 表示するカレンダーの種類 */}
-                    <Select
-                        calendarType={props.calendarType}
-                        setCalendarType={props.setCalendarType}
-                    />
-
-                    <div className="date-selector">
-
-                        <div className="last-button" onClick={onClick(-1)}>
-                            <FontAwesomeIcon icon={faChevronLeft} />
-                        </div>
-                        <p>{year}年{month}月</p>
-                        <div className="next-button" onClick={onClick(1)}>
-                            <FontAwesomeIcon icon={faChevronRight} />
-                        </div>
+                {/* <div className="header_title">{props.pagename}</div> */}
+                <div className="header_title">カレンダー</div>
+                {/* 各ページにあった名前に変更できるようにpropsにする */}
+                {/* 表示するカレンダーの種類 */}
+                <Select
+                    calendarType={props.calendarType}
+                    setCalendarType={props.setCalendarType}
+                />
+                <div className="date-selector">
+                    <div className="last-button" onClick={onClick(-1)}>
+                        <FontAwesomeIcon icon={faChevronLeft} size="2x"/>
                     </div>
-
-                    <UserIcon />
-
+                    <p>{year}年{month}月</p>
+                    <div className="next-button" onClick={onClick(1)}>
+                        <FontAwesomeIcon icon={faChevronRight} size="2x"/>
+                    </div>
+                </div>
+                <UserIcon />
             </div>
 
             <table>

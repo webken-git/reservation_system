@@ -82,9 +82,10 @@ const DocumentSelection = (props) => {
                 <button type="button" onClick={props.modalToggle} className="modal-close-btn">閉じる</button>
             </div> :
             <>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form className="modal-wrapper" onSubmit={handleSubmit(onSubmit)}>
                     <h3>発行する申請書を選択</h3>
                     {error && <p className="error">{error}</p>}
+                    {errors.checkbox && <p className="text-danger">※この項目は必須です</p>}
                     {documentTemplateList.map((documentTemplate, index) => {
                         index = documentTemplate.id;
                         return (
@@ -104,8 +105,8 @@ const DocumentSelection = (props) => {
                             </div>
                         );
                     })}
-                    {errors.checkbox && <p className="text-danger">※この項目は必須です</p>}
                     <div>
+                        {errors.number && <p className="text-danger">※半角数字で入力してください</p>}
                         <label>発行番号を入力：
                             <input
                                 type="text"
@@ -117,7 +118,6 @@ const DocumentSelection = (props) => {
                                 value={text}
                                 onChange={handleTextChange}
                             />
-                            {errors.number && <p className="text-danger">※半角数字で入力してください</p>}
                         </label>
                     </div>
                     <button type="submit" className="modal-open-btn">発行</button>
