@@ -72,7 +72,7 @@ const DocumentListItem = (props) => {
                     </div>
                 </td>
                 <td>
-                    <button type="button" className="download-btn" onClick={() => downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}/` + props.document.file, props.document.file_name)}>ダウンロード</button>
+                    <button type="button" className="download-btn" onClick={() => downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}/application_documents/docx/` + props.document.file, props.document.file_name)}>ダウンロード</button>
                 </td>
                 <td>
                     <button type="button" className="delete-btn" onClick={() => deleteDocument(props.document.id)}>削除</button>

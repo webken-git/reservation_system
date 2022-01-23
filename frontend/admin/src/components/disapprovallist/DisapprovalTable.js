@@ -29,12 +29,8 @@ const DisApprovalTable = (props) => {
       <td>{props.group_name}</td>
       {/* 代表者名 */}
       <td>{props.reader_name}</td>
-      {/* 個人or団体 */}
-      {props.is_group ? <td>団体</td> : <td>個人</td>}
       {/* 予約時間 */}
       <td>{props.start_time}~{props.end_time}</td>
-      {/* 人数 */}
-      <td>{(props.organizer_number) + (props.participant_number)}</td>
       {/* 場所 */}
       <td>{props.place}</td>
       <DetailsButton

@@ -1,10 +1,15 @@
 from django.db.models import query
 from rest_framework import serializers
 from rest_framework.relations import ManyRelatedField
-from reservations.models import *
+from reservations.models import (
+    Reservation, ReservationSuspensionSchedule, Approval, Place, Equipment, SpecialEquipment,
+    Age, AgeCategory, Usage, UsageCategory, DefferdPayment, FacilityFee, EquipmentFee,
+    ApprovalApplication, UserInfo, Time
+)
 from users.serializers import UserSerializer
 import datetime
 from django.db.models.aggregates import Count
+from users.models import User
 
 
 class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
@@ -72,9 +77,9 @@ class ReservationSerializer(serializers.ModelSerializer):
   place = PlaceSerializer(read_only=True)
   place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), write_only=True)
   equipment = EquipmentSerializer(many=True, read_only=True)
-  equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), many=True, write_only=True)
+  equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), many=True, write_only=True, required=False)
   special_equipment = SpecialEquipmentSerializer(many=True, read_only=True)
-  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), many=True, write_only=True)
+  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), many=True, write_only=True, required=False)
 
   class Meta:
     model = Reservation

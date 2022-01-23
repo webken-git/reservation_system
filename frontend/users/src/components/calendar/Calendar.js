@@ -4,6 +4,7 @@ import './calendar.scss'
 import Head from './Head';
 import Content from './Content';
 import Select from './Select';
+import MonthlyCalendar from "./MonthlyCalendar";
 import Loading from "./../loading/Loading.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -22,7 +23,10 @@ const Calendar = (props) =>{
     const [ st, setSt ] = useState(0);
     const [ calendarType, setCalendarType ] = useState('weekly');
     const [ loading, setLoading] = useState(true);
-    const placeName = props.placeName;
+    const placeName = 'カーリング場';
+    const isMain = true;
+
+    // console.log(placeName)
 
     const dateChange = (e) => {
 
@@ -93,32 +97,53 @@ const Calendar = (props) =>{
 
     return (
         <div className="calendar-base">
-            <div className="header">
+            
 
-                {/* 表示するカレンダーの種類 */}
-                <Select
-                    calendarType={calendarType}
+                        {calendarType !== 'monthly' ? (
+                            <div className="header">
+
+                                {/* 表示するカレンダーの種類 */}
+                                <Select
+                                    calendarType={calendarType}
+                                    setCalendarType={setCalendarType}
+                                />
+
+                                <div className="date-title">
+
+                                    <div className="last-button" onClick={() => dateChange('last')}>
+                                        <FontAwesomeIcon icon={faChevronLeft} />
+                                    </div>
+
+                                    <div className="date-title">
+
+                                        {calendarType === 'daily' ? (
+                                            <p>{year}年{month}月{day}日</p>
+                                        ) : (
+                                                <p>{year}年{month}月</p>
+                                        )}
+
+                                    </div>
+
+                                    <div className="next-button" onClick={() => dateChange('next')}>
+                                        <FontAwesomeIcon icon={faChevronRight} />
+                                    </div>
+
+                                </div>
+                            </div>
+                        ) : null}
+
+            
+
+            {calendarType === 'monthly' ? (
+                <MonthlyCalendar
+                    dayList={dayList}
+                    date={date}
                     setCalendarType={setCalendarType}
+                    calendarType={calendarType}
+                    setLoading={setLoading}
                 />
+            ) : (
 
-                {/* 日付表示・変更するボタン */}
-                <div className="date-selector">
-                    <div className="last-button" onClick={() => dateChange('last')}>
-                        <FontAwesomeIcon icon={faChevronLeft} />
-                    </div>
-
-                    {calendarType === 'daily' ? (
-                        <p>{year}年{month}月{day}日</p>
-                    ) : (
-                            <p>{year}年{month}月</p>
-                    )}
-
-                    <div className="next-button" onClick={() => dateChange('next')}>
-                        <FontAwesomeIcon icon={faChevronRight} />
-                    </div>
-                </div>
-
-            </div>
                 <div className="main">
 
                     <div className="head-row">
@@ -133,7 +158,7 @@ const Calendar = (props) =>{
                                             // openModal={openModal}
                                             updateFlag={updateFlag}
                                             setUpdateFlag={setUpdateFlag}
-                                            isMain={props.isMain}
+                                            isMain={isMain}
                                             // individualOrGroup={props.individualOrGroup}
                                             homeUpdateFlag={props.homeUpdateFlag}
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
@@ -149,7 +174,7 @@ const Calendar = (props) =>{
                                         // openModal={openModal}
                                         updateFlag={updateFlag}
                                         setUpdateFlag={setUpdateFlag}
-                                        isMain={props.isMain}
+                                        isMain={isMain}
                                         // individualOrGroup={props.individualOrGroup}
                                         homeUpdateFlag={props.homeUpdateFlag}
                                         setHomeUpdateFlag={props.setHomeUpdateFlag}
@@ -201,7 +226,7 @@ const Calendar = (props) =>{
                                             // openModal={openModal}
                                             updateFlag={updateFlag}
                                             setUpdateFlag={setUpdateFlag}
-                                            isMain={props.isMain}
+                                            isMain={isMain}
                                             // individualOrGroup={props.individualOrGroup}
                                             homeUpdateFlag={props.homeUpdateFlag}
                                             setHomeUpdateFlag={props.setHomeUpdateFlag}
@@ -218,7 +243,7 @@ const Calendar = (props) =>{
                                     // openModal={openModal}
                                     updateFlag={updateFlag}
                                     setUpdateFlag={setUpdateFlag}
-                                    isMain={props.isMain}
+                                    isMain={isMain}
                                     // individualOrGroup={props.individualOrGroup}
                                     homeUpdateFlag={props.homeUpdateFlag}
                                     setHomeUpdateFlag={props.setHomeUpdateFlag}
@@ -228,6 +253,7 @@ const Calendar = (props) =>{
                         )}
                     </div>
                 </div>
+            )}
             {loading && <Loading />}
         </div>
         );

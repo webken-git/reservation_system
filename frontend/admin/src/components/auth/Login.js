@@ -17,11 +17,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors }, } = useForm();
   const setAuthState = useSetRecoilState(authState);
 
   // ログイン処理
@@ -35,8 +31,7 @@ const Login = () => {
     // ログイン処理中はローディング画面を表示
     setLoading(true);
     setError(null);
-    axios
-      .post(url, formData, {
+    axios.post(url, formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -47,6 +42,7 @@ const Login = () => {
         setLoading(false);
         setAuthState({
           isAuthenticated: true,
+          userId: res.data.user.pk,
         });
         // ログイン成功後、とりあえずトップページに遷移
         window.location.href = "/";

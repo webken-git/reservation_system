@@ -116,7 +116,7 @@ const DocumentPreparation = (props) => {
                                     {popup.length === 0 ? <></> : <span className="popup">{popup}</span>}
                                 </th>
                                 <th>
-                                    <button type="button" className="download-btn" onClick={() => downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}/` + item.file, item.file_name)}>ダウンロード</button>
+                                    <button type="button" className="download-btn" onClick={() => downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}/application_documents/docx/` + item.file, item.file_name)}>ダウンロード</button>
                                 </th>
                             </tr>
                         );

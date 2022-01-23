@@ -1,3 +1,23 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
 // 詳細ボタンのcss
 // .details-button {
 // font-size: 40px;
@@ -6,36 +26,37 @@
 // }
 .details-button:hover {
   opacity: 0.5;
+  cursor: pointer;
 }
 
 .modal-wrapper {
-  .scroll_box-wrapper {
-    display: flex;
-    justify-content: center;
-    .scroll_box {
-      // width: 1550px;
-      // height: 500px;
-      overflow-y: scroll;
-      // white-space: nowrap;
+  ul li {
+    font-size: 1.2rem;
+    position: relative;
+    list-style: none;
+    label {
+      width: 200px;
+      display: table-cell;
+      font-weight: bold;
     }
-
-    /* スクロールの幅の設定 */
-    .scroll_box::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
+    span {
+      display: table-cell;
+      text-align: right;
+      @include mq(sp) {
+        // width: 100%;
+        display: block;
+        text-align: left;
+      }
     }
-
-    /* スクロールの背景の設定 */
-    .scroll_box::-webkit-scrollbar-track {
-      // border-radius: 5px;
-      box-shadow: 0 0 4px #aaa inset;
-    }
-
-    /* スクロールのつまみ部分の設定 */
-    .scroll_box::-webkit-scrollbar-thumb {
-      border-radius: 5px;
-      // background: deepskyblue;
-      background: gray;
-    }
+  }
+  ul li::after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0.65em;
+    left: -1em;
+    width: 8px;
+    height: 2px;
+    background-color: #666;
   }
 }

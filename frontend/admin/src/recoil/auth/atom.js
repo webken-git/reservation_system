@@ -7,6 +7,7 @@ const authState = atom({
     key: 'authState',
     default: {
         isAuthenticated: false,
+        userId: '',
     },
     effects_UNSTABLE: [persistAtom],
 });

@@ -8,53 +8,35 @@ import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
 Modal.setAppElement("#root");
 
 const DetailsButton = (props) => {
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  const modalStyle = {
-    overlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      backgroundColor: "rgba(0,0,0,0.60)"
-    },
-    content: {
-      position: "absolute",
-      top: "5rem",
-      left: "30rem",
-      right: "30rem",
-      bottom: "5rem",
-      backgroundColor: "white",
-      // borderRadius: "1rem",
-      padding: "1.5rem"
-    }
-  };
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
+
+  const modalToggle = () => {
+    setModalIsOpen(!modalIsOpen);
+  }
 
   return (
-    <div className="list-button-wrapper">
-      <p className="details-button" onClick={() => setIsOpen(true)}>
+    <>
+      <p className="details-button" onClick={() => setModalIsOpen(true)}>
         <FontAwesomeIcon icon={faSearchPlus} />
       </p>
-      <Modal isOpen={modalIsOpen} style={modalStyle}>
-        <div className="list-wrapper">
-          <div className="scroll_box-wrapper">
-          <p className="close" onClick={() => setIsOpen(false)}>×</p>
-            <div className="scroll_box">
-              <p>名前の予約</p>
-              <p>日付</p>
-              <p>場所</p>
-              <p>承認状況</p>
-              <p>aaaaaaaaaaaaaaa</p>
-              <p>aaaaaaaaaaaaaaa</p>
-              <p>aaaaaaaaaaaaaaa</p>
-              <p>aaaaaaaaaaaaaaa</p>
-              <p>aaaaaaaaaaaaaaa</p>
-              <p>aaaaaaaaaaaaaaa</p>
-              <p>aaaaaaaaaaaaaaa</p>
-              {/* start_day={dayjs(val.reservation.start).format('YYYY/MM/DD')} */}
-            </div>
-          </div>
+      <Modal isOpen={modalIsOpen} onRequestClose={modalToggle} className="modal-content" overlayClassName="modal-overlay">
+        <div className="modal-wrapper">
+          <p>名前の予約</p>
+          <p>日付</p>
+          <p>場所</p>
+          <p>承認状況</p>
+          <p>aaaaaaaaaaaaaaa</p>
+          <p>aaaaaaaaaaaaaaa</p>
+          <p>aaaaaaaaaaaaaaa</p>
+          <p>aaaaaaaaaaaaaaa</p>
+          <p>aaaaaaaaaaaaaaa</p>
+          <p>aaaaaaaaaaaaaaa</p>
+          <p>aaaaaaaaaaaaaaa</p>
+          {/* start_day={dayjs(val.reservation.start).format('YYYY/MM/DD')} */}
+          <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>閉じる</button>
         </div>
       </Modal>
-    </div>
+    </>
   );
 }
 

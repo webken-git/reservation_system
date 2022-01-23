@@ -3,9 +3,10 @@ import axios from "axios";
 import { Link } from 'react-router-dom'
 import { AuthUrls } from "../../utils/authUrls";
 import Loading from "../loading/Loading";
+import AppSettings from "./AppSettings";
 import './account.scss';
 
-export const Account = (props) => {
+export const Account = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(false);
     const GET_USER = AuthUrls.GET_USER_DATA;
@@ -50,6 +51,7 @@ export const Account = (props) => {
                                 </Link>
                             </td>
                         </tr>
+                        <AppSettings />
                         <tr className="mail-address">
                             <td className="mail-pass-title">
                                 <Link to='/account/delete' className='account-link'>

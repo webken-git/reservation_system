@@ -131,6 +131,26 @@ $accent-color: #233b62;
   background-color: $sub-color;
 }
 
+.approval-btn {
+  @extend .btn;
+  width: 4.5rem;
+  border: #f00 solid 1px;
+  background-color: #f00;
+}
+
+.disapproval-btn {
+  @extend .btn;
+  width: 5.5rem;
+  border: #1f00aa solid 1px;
+  background-color: #003caa;
+}
+.approval-cancel-btn {
+  @extend .btn;
+  width: 8rem;
+  border: #1f00aa solid 1px;
+  background-color: #003caa;
+}
+
 .logout-container {
   color: #000;
   cursor: pointer;

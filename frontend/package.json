@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@hookform/resolvers": "^2.8.8",
+    "react-hook-form": "^7.24.1",
+    "yup": "^0.32.11"
+  }
+}

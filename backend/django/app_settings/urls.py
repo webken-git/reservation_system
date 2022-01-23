@@ -9,6 +9,8 @@ app_name = 'app_settings'
 router = routers.SimpleRouter()
 
 router.register('app-settings', views.AppSettingsViewSet)
+router.register('auto-mail', views.AutoMailViewSet)
+router.register('send-mail', views.SendMailViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
