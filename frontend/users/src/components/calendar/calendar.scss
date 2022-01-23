@@ -75,10 +75,14 @@ $bordercolor: gainsboro;
     }
   }
 
-  .main,
-  .monthly-calendar {
+  .main {
     width: 80%;
     height: 88%;
+  }
+
+  .monthly-calendar {
+    width: 80%;
+    height: 100%;
   }
 
   .main {

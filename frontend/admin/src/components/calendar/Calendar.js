@@ -19,7 +19,7 @@ import UserIcon from '../header/usericon/UserIcon';
 
 const Calendar = (props) =>{
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
-    const [ date, setDate ] = useState(new Date(2021, 3, 1));
+    const [ date, setDate ] = useState(new Date());
     const [ dateList, setDateList ] = useState([]); //表示用のリスト
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -119,7 +119,7 @@ const Calendar = (props) =>{
                     setLoading={setLoading}
                 />
             ) : (
-                <div>
+                <div className="maii">
                     <div className="header">
 
                         <Stack >
@@ -163,8 +163,9 @@ const Calendar = (props) =>{
 
                         <UserIcon />
 
-                        </div>
-                        <div className="main">
+                    </div>
+
+                    <div className="main">
 
                             <div className="main-header">
                                 <div className="filter-base">

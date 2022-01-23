@@ -53,9 +53,14 @@ $bordercolor: gainsboro;
     }
   }
 
-  .main,
+  .main {
+    height: 93%;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
   .monthly-calendar {
-    height: 88%;
+    height: 100vh;
     margin-right: 10px;
     margin-left: 10px;
   }

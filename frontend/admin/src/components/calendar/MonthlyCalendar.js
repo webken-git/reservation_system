@@ -54,8 +54,6 @@ const MonthlyCalendar = (props) =>{
         .then(res => {
             const approvalList = res.data;
             setLoading(false);
-            console.log('approvalList: ', approvalList);
-            setLoading(false);
 
             if(!unmounted){
                 setApprovalList(approvalList);
@@ -110,8 +108,8 @@ const MonthlyCalendar = (props) =>{
                 <tbody>
                     <tr className="day-row">
                         {
-                            dayList.map((day) => {
-                            return <th key={day}>{day}</th>
+                            dayList.map((day, index) => {
+                            return <th day={day} key={index}>{day}</th>
                             })
                         }
                     </tr>
@@ -119,11 +117,11 @@ const MonthlyCalendar = (props) =>{
                         <tr key={week.join('')}>
                             {week.map((day, j) => (
                                 // <th key={i + j}>{day}</th>
-                                <th>
+                                <th key={j}>
                                     {day}
-                                    {approvalList.map((approval) => (
+                                    {approvalList.map((approval, k) => (
                                         day === approval.day
-                                        ? <p>{approval.count}</p>
+                                        ? <p key={k}>{approval.count}</p>
                                         : null
                                     ))}
                                 </th>
