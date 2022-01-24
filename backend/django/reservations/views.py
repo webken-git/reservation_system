@@ -244,7 +244,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       automail = AutoMail.objects.get(name='予約手続き完了メール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_complete_message.txt'
       # automail.bodyの\r\nを改行に変換
-      automail.body = automail.body.replace('\r\n', '\n')
+      automail.body = automail.body.replace('\\r\\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:
         f.write(automail.body)
@@ -302,7 +302,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       automail = AutoMail.objects.get(name='予約承認メール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_approval_message.txt'
       # automail.bodyの\r\nを改行に変換
-      automail.body = automail.body.replace('\r\n', '\n')
+      automail.body = automail.body.replace('\\r\\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:
         f.write(automail.body)
@@ -321,7 +321,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       automail = AutoMail.objects.get(name='予約不承認メール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_unapproval_message.txt'
       # automail.bodyの\r\nを改行に変換
-      automail.body = automail.body.replace('\r\n', '\n')
+      automail.body = automail.body.replace('\\r\\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:
         f.write(automail.body)
@@ -340,7 +340,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/user_side_cancel_message.txt'
       # automail.bodyの\r\nを改行に変換
-      automail.body = automail.body.replace('\r\n', '\n')
+      automail.body = automail.body.replace('\\r\\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:
         f.write(automail.body)
@@ -360,7 +360,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/facility_side_cancel_message.txt'
       # automail.bodyの\r\nを改行に変換
-      automail.body = automail.body.replace('\r\n', '\n')
+      automail.body = automail.body.replace('\\r\\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:
         f.write(automail.body)

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useForm, Controller, get } from "react-hook-form";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { ja } from "date-fns/locale";
 import DateAdapter from "@mui/lab/AdapterDateFns";
@@ -12,14 +12,13 @@ import {
   curlingTimetable,
 } from "./FormDataList";
 import { format } from "date-fns";
+import { usePlaceName } from "../../hooks/usePlaceName";
 import form from "./ReservationForm.module.scss";
 import { formData } from "../../recoil/form/atom";
 import tabState from "../../recoil/tab";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { ReservationStep } from "./ReservationStep.js";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { useFetch } from "../../hooks/useFetch";
-import { usePlaceName } from "../../hooks/usePlaceName";
-import { reservationSchema } from "./FormYup";
+import { Thanks } from "./Thanks";
 import {
   FormControl,
   FormControlLabel,
@@ -28,94 +27,124 @@ import {
   FormGroup,
   RadioGroup,
   Radio,
-  // Select,
   MenuItem,
-  // SelectField,
   Button,
   styled,
   FormHelperText,
 } from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 import { ReservationUrls } from "../../utils/reservationUrls";
 const Label = styled("p")({
   marginRight: 15,
   fontSize: 17,
 });
 
-const schema = reservationSchema;
 export const ReservationForm = () => {
+  const resetFormData = useResetRecoilState(formData);
   const [FormData, setFormData] = useRecoilState(formData);
   const tab = useRecoilValue(tabState);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-  const [Data, setData] = useState([]);
   const [list, setList] = useState([]);
   const [checkValue, setCheckValue] = useState(false);
   const [checkPayment, setCheckPayment] = useState(false);
   const [ageValue, setAgeValue] = useState([]);
-  const [reservationId, setReservationId] = useState(0);
+  const [ageList, setAgeList] = useState([]);
   const AgeData = useFetch({
     url: ReservationUrls.AGE,
   });
-  const PlaceNames = usePlaceName(tab);
+  const UsageData = useFetch({
+    url: ReservationUrls.USAGE,
+  });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    criteriaMode: "all",
+    defaultValues: {
+      ageGroup: "",
+      usage: "",
+      profits: "",
+      collect: "",
+      placeNumber: "",
+      StartDate: new Date(),
+      Start: "",
+      EndDate: new Date(),
+      End: "",
+      reason: "",
+      staffNum: "",
+      useNum: "",
+      device: "",
+      useDevice: "",
+      deferredPayment: "",
+      payLater: "",
+    },
+  });
 
+  useEffect(() => {
+    //tabを変更する度にformをリセット
+    reset();
+  }, [tab]);
+  // console.log(getId());
   const onSubmit = (e) => {
-    console.log(e);
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
     const startDate = format(e.StartDate, "yyyy-LL-dd");
     const endDate = format(e.EndDate, "yyyy-LL-dd");
     const startTime = e.Start;
     const endTime = e.End;
-    const start = startDate.concat(" ", startTime);
-    const end = endDate.concat(" ", endTime);
-    const placeName = PlaceNames;
-    const age = ageValue;
-    const id = getId();
-    // 選択中のタブを取得
-    let placeId = tab;
-    delete e["ageGroup"];
-    // delete e["StartDate"];
-    // delete e["EndDate"];
-    const i = e.usage;
-    const t = e.profits;
-    const w = e.collect;
-    const usageList = [i, t, w];
-    const data = {
-      ...e,
-      start,
-      end,
-      placeName,
-      id,
-      age,
-      placeId,
-      startDate,
-      endDate,
-      reservationId,
-      usageList,
-    };
-    setFormData(data);
-    console.log(data);
-    // let a = [];
-    // a.push(data);
-    // console.log(a);
-  };
-
-  // カーリングの時だけplace_numberにレーンのシート分投げる
-  useEffect(() => {
-    //利用人数99人までのListを生成
-    const useNum = [];
-    for (let i = 1; i < 100; i++) {
-      let obj = { id: i, value: i };
-      useNum.push(obj);
-      setData(useNum);
+    console.log(startDate <= endDate);
+    if (startDate <= endDate === true) {
+      const start = startDate.concat(" ", startTime);
+      const end = endDate.concat(" ", endTime);
+      const age = ageValue;
+      // const id = getId();
+      // 選択中の施設を取得
+      const placeId = tab.placeId;
+      const placeName = tab.placeName;
+      delete e["ageGroup"];
+      delete e["StartDate"];
+      delete e["EndDate"];
+      // 利用区分を取得
+      const i = e.usage;
+      const t = e.profits;
+      const w = e.collect;
+      const usageList = [i, t, w];
+      // const data = {
+      //   ...e,
+      //   start,
+      //   end,
+      //   placeName,
+      //   age,
+      //   placeId,
+      //   placeName,
+      //   startDate,
+      //   endDate,
+      //   usageList,
+      //   id: getId(),
+      // };
+      // const list = [...FormData, data, ];
+      setFormData((oldFormData) => [
+        ...oldFormData,
+        {
+          ...e,
+          start,
+          end,
+          placeName,
+          age,
+          placeId,
+          placeName,
+          startDate,
+          endDate,
+          usageList,
+          id: getId(),
+        },
+      ]);
+      reset();
     }
-  }, []);
+    if (startDate <= endDate === false) {
+    }
+  };
+  console.log(FormData);
+  // カーリングの時だけplace_numberにレーンのシート分投げる
   useEffect(() => {
     const placeNum = [];
     for (let i = 1; i < 4; i++) {
@@ -135,7 +164,10 @@ export const ReservationForm = () => {
   const checkAgeValue = (e) => {
     //apiに配列で渡す為にcheckした年齢のvalueを配列入れる
     if ({ [e.target.value]: e.target.checked === true }) {
-      setAgeValue([...ageValue, e.target.value]);
+      setAgeList([...ageList, e.target.value]);
+      //配列の重複要素を削除
+      const list = ageList.filter((x, i, self) => self.indexOf(x) === i);
+      setAgeValue(list);
     }
   };
 
@@ -143,21 +175,24 @@ export const ReservationForm = () => {
     <Grid container alignItems="center" justifyContent={"center"}>
       <div className={form.parent_elements}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* <button onClick={resetFormData()}>aaa</button> */}
           <h1>予約情報入力</h1>
           <div>
-            <>年齢</>
-            <FormGroup>
-              <Controller
-                //Checkboxを制御するController
-                control={control}
-                name="ageGroup"
-                defaultValue={""}
-                rules={{ required: "選択してください。" }}
-                render={({ field }) => (
-                  <div className={form.ageGroup}>
-                    {AgeData &&
-                      AgeData.map((ageGroup, id) => (
-                        <FormControl error>
+            <Label>年齢：</Label>
+            <FormControl error>
+              <FormHelperText>
+                {errors.ageGroup && errors.ageGroup.message}
+              </FormHelperText>
+              <FormGroup>
+                <Controller
+                  //Checkboxを制御するController
+                  control={control}
+                  name="ageGroup"
+                  rules={{ required: "選択してください。" }}
+                  render={({ field }) => (
+                    <div className={form.ageGroup}>
+                      {AgeData &&
+                        AgeData.map((ageGroup, id) => (
                           <FormControlLabel
                             {...field}
                             key={id}
@@ -166,119 +201,129 @@ export const ReservationForm = () => {
                             control={<Checkbox onClick={checkAgeValue} />}
                             labelPlacement="end"
                           />
-                          {/* <FormHelperText>
-                          {errors.ageGroup?.message}
-                        </FormHelperText> */}
-                        </FormControl>
-                      ))}
-                  </div>
+                        ))}
+                    </div>
+                  )}
+                />
+              </FormGroup>
+            </FormControl>
+          </div>
+          <Label>利用区分：</Label>
+          <div>
+            <FormControl error>
+              <FormHelperText>
+                {errors.usage && errors.usage.message}
+              </FormHelperText>
+              <Controller
+                //radio buttonを制御するController
+                name="usage"
+                rules={{ required: "選択してください。" }}
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <RadioGroup
+                      {...field}
+                      row
+                      value={field.value === undefined ? "" : field.value}
+                      className={form.usage}
+                    >
+                      <FormControlLabel
+                        value={1}
+                        control={<Radio />}
+                        label="アマチュアスポーツ"
+                      />
+                      <FormControlLabel
+                        value={2}
+                        control={<Radio />}
+                        label="一般利用"
+                        // error={"usage" in errors}
+                      />
+                      <FormControlLabel
+                        value={3}
+                        control={<Radio />}
+                        label="競技会使用"
+                        // error={"usage" in errors}
+                      />
+                    </RadioGroup>
+                  </>
                 )}
               />
-            </FormGroup>
-          </div>
-          <Label>利用区分:</Label>
-          <div>
-            <Controller
-              //radio buttonを制御するController
-              name="usage"
-              control={control}
-              rules={{ required: "選択してください。" }}
-              render={({ field }) => (
-                <>
-                  <RadioGroup
-                    {...field}
-                    row
-                    value={field.value === undefined ? "" : field.value}
-                    className={form.usage}
-                  >
-                    <FormControlLabel
-                      value={1}
-                      control={<Radio />}
-                      label="アマチュアスポーツ"
-                      error={"usage" in errors}
-                    />
-                    <FormControlLabel
-                      value={2}
-                      control={<Radio />}
-                      label="一般利用"
-                      error={"usage" in errors}
-                    />
-                    <FormControlLabel
-                      value={3}
-                      control={<Radio />}
-                      label="競技会使用"
-                      error={"usage" in errors}
-                    />
-                  </RadioGroup>
-                </>
-              )}
-            />
+            </FormControl>
           </div>
           <div>
-            <Controller
-              //radio buttonを制御するController
-              name="profits"
-              control={control}
-              rules={{ required: "選択してください。" }}
-              render={({ field }) => (
-                <>
-                  <RadioGroup
-                    {...field}
-                    row
-                    value={field.value === undefined ? "" : field.value}
-                    className={form.profits}
-                  >
-                    <FormControlLabel
-                      value={5}
-                      control={<Radio />}
-                      label="営利"
-                    />
-                    <FormControlLabel
-                      value={4}
-                      control={<Radio />}
-                      label="非営利"
-                    />
-                  </RadioGroup>
-                </>
-              )}
-            />
+            <FormControl error>
+              <FormHelperText>
+                {errors.profits && errors.profits.message}
+              </FormHelperText>
+              <Controller
+                //radio buttonを制御するController
+                name="profits"
+                control={control}
+                rules={{ required: "選択してください。" }}
+                render={({ field }) => (
+                  <>
+                    <RadioGroup
+                      {...field}
+                      row
+                      value={field.value === undefined ? "" : field.value}
+                      className={form.profits}
+                    >
+                      <FormControlLabel
+                        value={5}
+                        control={<Radio />}
+                        label="営利"
+                      />
+                      <FormControlLabel
+                        value={4}
+                        control={<Radio />}
+                        label="非営利"
+                      />
+                    </RadioGroup>
+                  </>
+                )}
+              />
+            </FormControl>
           </div>
           <div></div>
           <div>
-            <Controller
-              //radio buttonを制御するController
-              name="collect"
-              control={control}
-              rules={{ required: "選択してください。" }}
-              render={({ field }) => (
-                <>
-                  <RadioGroup
-                    {...field}
-                    row
-                    value={field.value === undefined ? "" : field.value}
-                    className={form.profits}
-                  >
-                    <FormControlLabel
-                      value={6}
-                      control={<Radio />}
-                      label="入場料を徴収する"
-                    />
-                    <FormControlLabel
-                      value={7}
-                      control={<Radio />}
-                      label="入場料を徴収しない"
-                    />
-                  </RadioGroup>
-                </>
-              )}
-            />
+            <FormControl error>
+              <FormHelperText>
+                {errors.collect && errors.collect.message}
+              </FormHelperText>
+              <Controller
+                //radio buttonを制御するController
+                name="collect"
+                control={control}
+                rules={{ required: "選択してください。" }}
+                render={({ field }) => (
+                  <>
+                    <RadioGroup
+                      {...field}
+                      row
+                      value={field.value === undefined ? "" : field.value}
+                      className={form.profits}
+                    >
+                      <FormControlLabel
+                        value={6}
+                        control={<Radio />}
+                        label="入場料を徴収する"
+                      />
+                      <FormControlLabel
+                        value={7}
+                        control={<Radio />}
+                        label="入場料を徴収しない"
+                      />
+                    </RadioGroup>
+                  </>
+                )}
+              />
+            </FormControl>
           </div>
           <div>
             <Controller
               name="placeNumber"
               control={control}
-              defaultValue=""
-              rules={{ required: "入力" }}
+              rules={{ required: "選択してください。" }}
               render={({ field }) => (
                 <div>
                   <TextField
@@ -287,9 +332,11 @@ export const ReservationForm = () => {
                     size="Normal"
                     defaultValue=""
                     label="予約シート数"
+                    error={"placeNumber" in errors}
+                    helperText={errors.placeNumber ? "入力してください" : ""}
                     {...field}
                   >
-                    {tab === 1 ? (
+                    {tab.placeId === 1 ? (
                       list.map((lists, id) => (
                         <MenuItem
                           key={id}
@@ -314,11 +361,10 @@ export const ReservationForm = () => {
               <Controller
                 name="StartDate"
                 control={control}
-                defaultValue={new Date()}
-                rules={{ required: "入力" }}
+                rules={{ required: "選択してください。" }}
                 render={({ field }) => (
                   <div className={form.StartDate}>
-                    <Label>利用日時</Label>
+                    <Label>利用日時：</Label>
                     <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
                       <DesktopDatePicker
                         {...field}
@@ -334,9 +380,8 @@ export const ReservationForm = () => {
             <div>
               <Controller
                 name="Start"
-                defaultValue=""
                 control={control}
-                rules={{ required: "選択してください" }}
+                rules={{ required: "選択してください。" }}
                 render={({ field }) => (
                   <div className={form.start}>
                     <TextField
@@ -345,10 +390,12 @@ export const ReservationForm = () => {
                       select
                       defaultValue=""
                       label="何時から"
+                      error={"Start" in errors}
+                      helperText={errors.Start ? "入力してください" : ""}
                       {...field}
                     >
                       {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
-                      {tabState === 1
+                      {tab.placeId === 1
                         ? curlingTimetable.map((timetables, id) => (
                             <MenuItem
                               key={id}
@@ -384,8 +431,7 @@ export const ReservationForm = () => {
               <Controller
                 name="EndDate"
                 control={control}
-                defaultValue={new Date()}
-                rules={{ required: "入力" }}
+                rules={{ required: "選択してください。" }}
                 render={({ field }) => (
                   <div className={form.EndDate}>
                     <Label>
@@ -406,9 +452,8 @@ export const ReservationForm = () => {
             <div>
               <Controller
                 name="End"
-                defaultValue=""
                 control={control}
-                rules={{ required: "選択してください" }}
+                rules={{ required: "選択してください。" }}
                 render={({ field }) => (
                   <div className={form.end}>
                     <TextField
@@ -417,11 +462,13 @@ export const ReservationForm = () => {
                       size="Normal"
                       defaultValue=""
                       label="何時まで"
+                      error={"End" in errors}
+                      helperText={errors.End ? "入力してください" : ""}
                       {...field}
                     >
                       {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
 
-                      {tab === 1
+                      {tab.placeId === 1
                         ? curlingTimetable.map((timetables, id) => (
                             <MenuItem
                               key={id}
@@ -459,18 +506,16 @@ export const ReservationForm = () => {
               //   TextFiledを制御するController
               name="reason"
               control={control}
-              // rules={{ required: "入力してください" }}
-              defaultValue=""
+              rules={{ required: "選択してください。" }}
               render={({ field }) => (
                 <div className={form.reason}>
-                  <p>利用目的</p>
+                  <Label>利用目的：</Label>
                   <TextField
                     {...field}
                     label="利用目的を入力してください。"
                     variant="outlined"
                     error={"reason" in errors}
-                    // 公式で説明している書き方だけどerrorでる
-                    // helperText={errors.reason?.message}
+                    helperText={errors.reason ? "入力してください" : ""}
                   />
                 </div>
               )}
@@ -479,29 +524,20 @@ export const ReservationForm = () => {
           <div>
             <Controller
               name="staffNum"
-              defaultValue=""
               control={control}
-              rules={{ required: "選択してください" }}
+              rules={{ required: "選択してください。" }}
               render={({ field }) => (
                 <div className={form.StaffNum}>
                   <Label>主催関係者</Label>
                   <TextField
+                    type="number"
                     style={{ width: "100px" }}
-                    select
                     size="Normal"
-                    defaultValue=""
                     label="人"
+                    error={"staffNum" in errors}
                     {...field}
-                  >
-                    <MenuItem>
-                      <em></em>
-                    </MenuItem>
-                    {Data.map((useNum, id) => (
-                      <MenuItem key={id} label={useNum.id} value={useNum.value}>
-                        {useNum.value}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    helperText={errors.staffNum ? "入力してください" : ""}
+                  ></TextField>
                 </div>
               )}
             />
@@ -510,42 +546,35 @@ export const ReservationForm = () => {
             <Label>参加人数</Label>
             <Controller
               name="useNum"
-              defaultValue=""
               control={control}
-              rules={{ required: "選択してください" }}
+              rules={{ required: "選択してください。" }}
               render={({ field }) => (
                 <>
                   <TextField
+                    type="number"
                     style={{ width: "100px" }}
-                    select
                     size="Normal"
-                    defaultValue=""
                     label="人"
+                    error={"useNum" in errors}
                     {...field}
-                  >
-                    <MenuItem>
-                      <em></em>
-                    </MenuItem>
-                    {Data.map((useNum, id) => (
-                      <MenuItem key={id} label={useNum.id} value={useNum.value}>
-                        {useNum.value}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    helperText={errors.useNum ? "入力してください" : ""}
+                  ></TextField>
                 </>
               )}
             />
           </div>
-          <FormControl>
+          <Label>附属設備もしくは器具の使用：</Label>
+          <FormControl error>
+            <FormHelperText>
+              {errors.device && errors.device.message}
+            </FormHelperText>
             <Controller
               //Checkboxを制御するController
               control={control}
               name="device"
-              defaultValue={""}
               rules={{ required: "選択してください。" }}
               render={({ field }) => (
                 <>
-                  <Label>附属設備もしくは器具の使用</Label>
                   <RadioGroup
                     {...field}
                     row
@@ -570,22 +599,23 @@ export const ReservationForm = () => {
               <Controller
                 control={control}
                 name="useDevice"
-                defaultValue=""
                 rules={{ required: "選択してください。" }}
                 render={({ field }) => <TextField {...field} />}
               />
             )}
           </div>
-          <FormControl>
+          <Label>後納申請：</Label>
+          <FormControl error>
+            <FormHelperText>
+              {errors.deferredPayment && errors.deferredPayment.message}
+            </FormHelperText>
             <Controller
               //Checkboxを制御するController
               control={control}
-              name="deferredPayment"
-              defaultValue={""}
               rules={{ required: "選択してください。" }}
+              name="deferredPayment"
               render={({ field }) => (
                 <>
-                  <Label>後納申請</Label>
                   <RadioGroup
                     {...field}
                     row
@@ -609,9 +639,8 @@ export const ReservationForm = () => {
             {checkPayment === "true" && (
               <Controller
                 control={control}
-                name="payLater"
-                defaultValue=""
                 rules={{ required: "選択してください。" }}
+                name="payLater"
                 render={({ field }) => <TextField {...field} />}
               />
             )}

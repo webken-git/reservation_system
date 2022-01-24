@@ -48,7 +48,7 @@ export const PersonalForm = () => {
     next();
   };
   return (
-    <Grid container alignItems="center" justify="center" row-gap="1em">
+    <Grid container alignItems="center" justifyContent="center" row-gap="1em">
       <div className="PF-root">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
@@ -81,7 +81,6 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="reader_name"
               control={control}
-              rules={{ required: "入力してください" }}
               defaultValue=""
               render={({ field }) => (
                 <div>
@@ -104,7 +103,6 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="contact_name"
               control={control}
-              rules={{ required: "入力してください" }}
               defaultValue=""
               render={({ field }) => (
                 <div>
@@ -127,7 +125,6 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="address"
               control={control}
-              rules={{ required: "入力してください" }}
               defaultValue=""
               render={({ field }) => (
                 <div>
@@ -150,7 +147,6 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="tel"
               control={control}
-              rules={{ required: "入力してください" }}
               defaultValue=""
               render={({ field }) => (
                 <div>

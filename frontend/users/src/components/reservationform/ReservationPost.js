@@ -5,7 +5,8 @@ import { formData, personalData, stepValue } from "../../recoil/form/atom";
 import authState from "../../recoil/auth";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useFetch } from "../../hooks/useFetch";
-// import { PostAgeCategories } from "../Post/postlogic";
+import tabState from "../../recoil/tab";
+import { useSetRecoilState, useResetRecoilState } from "recoil";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
 
@@ -20,6 +21,11 @@ export const ReservationPost = () => {
   const FormData = useRecoilValue(formData);
   console.debug(FormData);
   const PersonalData = useRecoilValue(personalData);
+  // recoilで保存しているStateを初期化
+  const resetTab = useResetRecoilState(tabState);
+  const resetFormData = useResetRecoilState(formData);
+  const resetPersonalData = useSetRecoilState(personalData);
+
   const next = () => {
     setStep(3);
   };
@@ -27,31 +33,31 @@ export const ReservationPost = () => {
     setStep(0);
   };
 
-  const postAgeCategories = (reservation) => {
+  // age-categoriesにPOSTする
+  const postAgeCategories = (reservation, ageList) => {
     const age = {
-      age_id: FormData.age,
+      age_id: ageList,
       reservation: reservation,
     };
     axios
       .post(ReservationUrls.AGE_CATEGORY, age)
-      .then((response) => {
-        console.log("ageCategories成功");
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
-  const postUsageID = (reservation) => {
+  // usage-categoriesにPOSTする
+  const postUsageID = (reservation, usageList) => {
     const data = {
-      usage_id: FormData.usageList,
+      usage_id: usageList,
       reservation: reservation,
     };
     axios
       .post(ReservationUrls.USAGE_CATEGORY, data)
       .then((response) => {
-        //  console.log("response body:", response.data);
-        console.log("postUsageID成功");
+        setLoading(false);
       })
       .catch((error) => {});
   };
+  // approval-applicationsにPOSTする
   const postApprovalID = (reservation_id) => {
     const data = {
       approval_id: 1,
@@ -59,62 +65,63 @@ export const ReservationPost = () => {
     };
     axios
       .post(ReservationUrls.APPROVAL_APPLICATION, data)
-      .then((response) => {
-        // console.log("response body:", response.data);
-        console.log("postApprovalID成功");
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
 
+  // reservationにPOSTする
   const postReservations = () => {
     setLoading(true);
-    const data = {
-      user_id: auth.userId,
-      place_id: FormData.placeId,
-      equipment_id: [0],
-      special_equipment_id: [0],
-      group_name: PersonalData.group_name,
-      reader_name: PersonalData.reader_name,
-      contact_name: PersonalData.contact_name,
-      address: PersonalData.address,
-      // 国際番号で登録する必要があるため、telには+818000000000という形で入力する
-      tel: `+${PersonalData.tel}`,
-      is_group: true,
-      delete_flag: true,
-      start: FormData.start,
-      end: FormData.end,
-      organizer_number: FormData.staffNum,
-      participant_number: FormData.useNum,
-      purpose: FormData.reason,
-      admission_fee: 0,
-      place_number: FormData.placeNumber,
-    };
-    axios
-      .post(ReservationUrls.RESERVATION, data)
-      .then((response) => {
-        // console.log("response body:", response.data);
-        console.log("postReservations成功");
-        postApprovalID(response.data.id);
-        postAgeCategories(response.data.id);
-        postUsageID(response.data.id);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(data);
-      });
+    FormData.map((item) => {
+      let data = {
+        user_id: auth.userId,
+        group_name: PersonalData.group_name,
+        reader_name: PersonalData.reader_name,
+        contact_name: PersonalData.contact_name,
+        address: PersonalData.address,
+        // 国際番号で登録する必要があるため、telには+818000000000という形で入力する
+        tel: `+${PersonalData.tel}`,
+        is_group: true,
+        delete_flag: true,
+        start: item.start,
+        end: item.end,
+        organizer_number: item.staffNum,
+        participant_number: item.useNum,
+        purpose: item.reason,
+        admission_fee: 0,
+        place_number: item.placeNumber,
+        place_id: item.placeId,
+        equipment_id: [],
+        special_equipment_id: [],
+      };
+      axios
+        .post(ReservationUrls.RESERVATION, data)
+        .then((response) => {
+          // api/reservations/へのPOSTリクエストが成功したら、
+          // そのレコードのidを取得し、以下のPOSTリクエストに渡す
+          postApprovalID(response.data.id);
+          postAgeCategories(response.data.id, item.age);
+          postUsageID(response.data.id, item.usageList);
+        })
+        .catch((error) => {
+          setLoading(false);
+        });
+    });
   };
 
   const postData = () => {
     postReservations();
-    // setTimeout(() => {
-    //   window.location.href = "/";
-    //   back();
-    // }, 2000);
+    setTimeout(() => {
+      resetTab();
+      resetFormData();
+      resetPersonalData([]);
+      back();
+      window.location.href = "/";
+    }, 2000);
   };
   return (
     <>
-      <Grid container alignItems="center" justify={"center"}>
+      <Grid container alignItems="center" justifyContent={"center"}>
         <div>
           <button
             type="button"
@@ -142,7 +149,7 @@ export const ReservationPost = () => {
           </button>
         </div>
       </Grid>
-      {loading ? <Loading /> : null}
+      {loading && <Loading />}
     </>
   );
 };

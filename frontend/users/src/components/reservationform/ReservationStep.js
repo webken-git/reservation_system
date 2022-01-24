@@ -59,40 +59,39 @@ export const ReservationStep = () => {
       <div style={{ display: activeStep === 0 ? "" : "none" }}>
         <ReservationList />
         {data.length === 0 ? (
-          <Grid container alignItems="center" justify={"center"} margin>
-            <button
-              type="button"
-              className="btn"
+          <Grid container alignItems="center" justifyContent={"center"} margin>
+            <Link
+              to="/"
               style={{
-                marginTop: "200px",
+                textDecoration: "none",
+                fontSize: "25px",
               }}
             >
-              <Link
-                to="/"
+              <button
+                type="button"
+                className="btn"
                 style={{
-                  color: "black",
-                  textDecoration: "none",
-                  fontSize: "25px",
+                  marginTop: "100px",
                 }}
               >
-                施設予約する
-              </Link>
-            </button>
+                予約する
+              </button>
+            </Link>
           </Grid>
         ) : (
           <div>
-              <Grid container alignItems="center" justify={"center"}>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={Step1}
-                  style={{
-                    width: "20%",
-                  }}
-                >
-                  次へ
-                </button>
-              </Grid>
+            <Grid container alignItems="center" justifyContent={"center"}>
+              <button
+                type="button"
+                className="btn"
+                onClick={Step1}
+                style={{
+                  width: "20%",
+                }}
+              >
+                次へ
+              </button>
+            </Grid>
           </div>
         )}
       </div>
@@ -102,9 +101,10 @@ export const ReservationStep = () => {
         </div>
       </div>
       <div style={{ display: activeStep === 2 ? "" : "none" }}>
-        <Grid container alignItems="center" justify={"center"}>
+        <Grid container alignItems="center" justifyContent={"center"}>
           <h2 className="title">
-            以下の入力内容で予約いたします。<br/>
+            以下の入力内容で予約いたします。
+            <br />
             入力内容を確認後、「予約する」ボタンを押してください。
           </h2>
         </Grid>
@@ -113,7 +113,7 @@ export const ReservationStep = () => {
         <ReservationPost />
       </div>
       <div style={{ display: activeStep === 3 ? "" : "none" }}>
-        <Grid container alignItems="center" justify={"center"}>
+        <Grid container alignItems="center" justifyContent={"center"}>
           <Thanks />
         </Grid>
       </div>

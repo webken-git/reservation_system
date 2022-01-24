@@ -23,6 +23,8 @@ $sub-color: #707070;
 $accent-color: #91c21f;
 
 .cart-icon-container {
+  position: relative;
+  bottom: -10px;
   .cart-icon {
     color: $sub-color;
   }
@@ -30,6 +32,14 @@ $accent-color: #91c21f;
     opacity: 0.5;
   }
   .cart-count {
-    color: #f00;
+    top: -23px;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    color: $main-color;
+    font-weight: bold;
+    font-size: 1.3rem;
   }
 }

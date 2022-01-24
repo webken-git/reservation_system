@@ -17,6 +17,7 @@ import Loading from "../components/loading/Loading";
 import "./mainpage.scss";
 
 const MainPage = () => {
+  document.title = "施設予約"; // ページタイトルを変更
   const unmountRef = useUnmountRef();
   const [placeListData, setPlaceListData] = useSafeState(unmountRef, []);
   const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
@@ -97,12 +98,16 @@ const MainPage = () => {
   }, []);
 
   const divide = (pn, place_id) => {
-    setTabState(place_id);
+    setTabState({
+      placeId: place_id,
+      placeName: pn,
+    });
     const divide_feelist = feeListData.filter((fld) => {
       return fld.place === pn;
     });
     return setDivideFeeList(divide_feelist[0].data);
   };
+
   const tab = placeListData.map((place, p_id) => {
     return (
       <Tab key={p_id} onClick={() => divide(place.name, place.id)}>
