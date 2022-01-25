@@ -12,6 +12,9 @@ import CurlingFeeList from "../../components/datalist/CurlingFeeList";
 import Loading from "../../components/loading/Loading";
 import Modal from 'react-modal'
 import EditFeeList from '../../components/editdatas/EditFeeList'
+import EditGroupFeeList from '../../components/editdatas/EditGroupFeeList'
+import EditCurlingFeeList from '../../components/editdatas/EditCurlingFeeList'
+
 // import { Link as Scroll } from 'react-scroll';
 import './datalist.scss'
 
@@ -21,7 +24,7 @@ export const DataList = () => {
     const unmountRef = useUnmountRef();
     const [placeListData, setPlaceListData] = useSafeState(unmountRef, []);
     const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
-    // const [placeName, setPlaceName] = useState([]);
+    const [placeName, setPlaceName] = useState([]);
     const [divideFeeList, setDivideFeeList] = useSafeState(unmountRef, []);
     const [age, setAge] = useSafeState(unmountRef, []);
     const [, setTime] = useSafeState(unmountRef, []);
@@ -96,6 +99,7 @@ export const DataList = () => {
 
     const divide = (pn) => {
         setTabState(pn);
+        setPlaceName(pn)
         const divide_feelist = feeListData.filter(fld => {
             return fld.place === pn
         })
@@ -128,6 +132,22 @@ export const DataList = () => {
             }
         }
 
+        const EditFacilityFee = () => {
+            if (placeName.indexOf("会議室") !== -1) {
+                return (
+                    <EditFeeList key={p_id} feelist={divideFeeList} age={age} />
+                )
+            } else if (placeName.indexOf("カーリング場") !== -1) {
+                return (
+                    <EditCurlingFeeList key={p_id} feelist={divideFeeList} age={age} />
+                )
+            } else {
+                return (
+                    <EditGroupFeeList key={p_id} feelist={divideFeeList} age={age} />
+                )
+            }
+        }
+
         return (
             <details>
                 <summary onClick={() => divide(place.name)}>
@@ -141,7 +161,7 @@ export const DataList = () => {
                     onRequestClose={() => setIsOpen(false)}
                 >
                     <button onClick={() => setIsOpen(false)}>閉じる</button>
-                    <EditFeeList key={p_id} feelist={divideFeeList} age={age} />
+                    <EditFacilityFee />
                 </Modal>
             </details >
         )

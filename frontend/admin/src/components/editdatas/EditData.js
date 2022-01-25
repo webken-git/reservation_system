@@ -1,4 +1,4 @@
-import React, { useParams, useState } from "react";
+import React, { useEffect, useParams, useState } from "react";
 import './editdata.scss'
 import axios from "axios";
 import Modal from 'react-modal'
@@ -7,22 +7,26 @@ import { ReservationUrl } from "../../utils/reservationUrls";
 Modal.setAppElement('#root');
 
 const EditData = (props) => {
-    const [content, setContent] = useState('')
+    const [content, setContent] = useState(props.tdclick)
     const [modalIsOpen, setIsOpen] = useState(false);
     const feeId = props.feeid
+    const feeAgeId = props.feeageid
+    const feeTimeId = props.feetimeid
+    const feePlaceId = props.feeplaceid
 
     const handleChange = (e) => {
         setContent(e.target.value)
     }
 
-    const editDataSend = (event) => {
-
+    const editDataSend = () => {
         if (content === "") {
             return;
         }
 
         axios.patch(ReservationUrl.FACILITY_FEE + feeId + '/', {
-            id: feeId,
+            place_id: feePlaceId,
+            age_id: feeAgeId,
+            time_id: feeTimeId,
             fee: content
         })
             .then(response => {
@@ -46,9 +50,9 @@ const EditData = (props) => {
                 isOpen={modalIsOpen}
                 onRequestClose={() => setIsOpen(false)}
             >
-                <h4>{props.feename}</h4>
+                <h4>{props.feeage}</h4>
                 <h4>{props.feetime}</h4>
-                <input type="text" value={content} placeholder={props.tdclick} required="required" onChange={handleChange} />
+                <input type="number" value={content} placeholder={props.tdclick} required="required" onChange={handleChange} />
                 <button onClick={() => editDataSend()}>変更</button>
                 <button onClick={() => setIsOpen(false)}>閉じる</button>
             </Modal>

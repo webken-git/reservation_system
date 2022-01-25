@@ -5,6 +5,7 @@ import './feelist.scss'
 const FeeList = (props) => {
   const agedata = props.age;
   const feelistdata = props.feelist;
+  console.log(agedata)
 
   // 表示する料金データを取得
   const age1 = agedata.filter(age => age.name === "小学生");
@@ -13,9 +14,13 @@ const FeeList = (props) => {
   const age4 = agedata.filter(age => age.name === "大学生");
   const age5 = agedata.filter(age => age.name === "一般");
   const age6 = agedata.filter(age => age.name === "高齢者");
+
+  // 時間ごとに取得
   const time1 = feelistdata.filter(feelist => feelist.time.name.indexOf("午前") !== -1);
   const time2 = feelistdata.filter(feelist => feelist.time.name.indexOf("午後") !== -1);
   const time3 = feelistdata.filter(feelist => feelist.time.name.indexOf("夜間") !== -1);
+
+  // 時間と年齢で区別
   const fee1 = time1.filter(feelist => feelist.age.name === "小学生");
   const fee2 = time1.filter(feelist => feelist.age.name === "中学生");
   const fee3 = time1.filter(feelist => feelist.age.name === "高校生");
