@@ -3,16 +3,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ApprovalTable from "./ApprovalTable"
 // import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"
+// import "react-datepicker/dist/react-datepicker.css"
 import './approval.scss'
 import dayjs from 'dayjs'
 import DocumentLayout from "../document/DocumentLayout";
 import CsvExportButton from "../csvexport/CsvExportButton";
 
 const ApprovalListBody = () => {
-  const placeFiltering = (e) => {
-    setPlaceFilter(e.target.value);
-    // console.log(e.target.value);
+  const dateFiltering = (e) => {
+    setDateFilter(e.target.value);
   }
 
   const groupFiltering = (e) => {
@@ -20,19 +19,22 @@ const ApprovalListBody = () => {
     // setGroupFilter(true);
   }
 
-  const dateFiltering = (e) => {
-    setDateFilter(e.target.value);
+  const placeFiltering = (e) => {
+    setPlaceFilter(e.target.value);
+    // console.log(e.target.value);
   }
 
-  const [placeFilter, setPlaceFilter] = useState();
-  const [groupFilter, setGroupFilter] = useState();
   const [dateFilter, setDateFilter] = useState();
+  const [groupFilter, setGroupFilter] = useState();
+  const [placeFilter, setPlaceFilter] = useState();
 
-  // console.log(dateFilter);
+  console.log(dateFilter);
   const FilterYear = dayjs(dateFilter).format('YYYY');
   const FilterMonth = dayjs(dateFilter).format('M');
   const FilterDay = dayjs(dateFilter).format('D');
-  // console.log(FilterDay);
+  console.log(FilterDay);
+  console.log(FilterMonth);
+  console.log(FilterYear);
 
 
 
@@ -41,11 +43,11 @@ const ApprovalListBody = () => {
   const GetApporovalList = () => {
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`, {
       params: {
-        'reservation__place': placeFilter,
-        'reservation__is_group': groupFilter,
         'reservation__start__year': FilterYear,
         'reservation__start__month': FilterMonth,
-        'reservation__start__day': FilterDay
+        'reservation__start__day': FilterDay,
+        'reservation__place': placeFilter,
+        'reservation__is_group': groupFilter
       }
     })
       .then(response => {
@@ -61,7 +63,7 @@ const ApprovalListBody = () => {
 
   useEffect(() => {
     GetApporovalList();
-  }, [placeFilter, groupFilter, dateFilter])
+  }, [dateFilter, placeFilter, groupFilter])
 
   const Table = (
     // データをmapで回している
@@ -121,6 +123,7 @@ const ApprovalListBody = () => {
               <td></td>
               <td>
                 <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
+                {/* <input type="text" className="datefilter" onChange={(e) => dateFiltering(e)} /> */}
               </td>
               <td></td>
               <td></td>

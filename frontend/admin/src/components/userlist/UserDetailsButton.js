@@ -5,6 +5,17 @@ import Modal from 'react-modal'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
 
+// const GetUserDetails = () => {
+//   axios.get(`${process.env.REACT_APP_API}/api/reservations/approval-applications/`)
+//     .then(response => {
+//       const data = response.data;
+//       console.log(data)
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     })
+// }
+
 Modal.setAppElement("#root");
 
 const DetailsButton = (props) => {
@@ -36,9 +47,9 @@ const DetailsButton = (props) => {
       <Modal isOpen={modalIsOpen} style={modalStyle}>
         <div className="list-wrapper">
           <div className="scroll_box-wrapper">
-          <p className="close" onClick={() => setIsOpen(false)}>×</p>
+            <p className="close" onClick={() => setIsOpen(false)}>×</p>
             <div className="scroll_box">
-              <p>名前の予約</p>
+              <p>の予約</p>
               <p>日付</p>
               <p>場所</p>
               <p>承認状況</p>
