@@ -1,18 +1,12 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
 
 import { Grid } from "@material-ui/core";
 import { formData } from "../../recoil/form/atom";
 import { useRecoilValue } from "recoil";
 import "./ReservationList.scss";
-import { useEffect } from "react";
-import Loading from "../loading/Loading";
 
 export const ReservationList = () => {
   const data = useRecoilValue(formData);
-  const [usage, setUsage] = useState([]);
-  const [loading, setLoading] = useState(false);
-
 
   return (
     <>
@@ -23,30 +17,33 @@ export const ReservationList = () => {
           </Grid>
         ) : (
           <div className="reservation-list">
-              <div className="title">追加した予約一覧</div>
-              {/* 追加されたデータを1件ずつ表示 */}
-              <Grid container>
-                {data.map((item, index) => {
-                  return (
-                    <Grid className="reserve-data" key={index} item lg={2} md={3}>
-                      <div className="place">施設名：{item.placeName}</div>
-                      <div className="reservation">{item.reservation}</div>
-                        <div className="usage">利用区分：{
-                          // usage nameを表示する
-                        }</div>
-                      <div className="start">
-                        開始日時:
-                        {item.startDate} {item.Start}から
-                      </div>
-                      <div className="end">
-                        終了日時：{item.endDate} {item.End}まで
-                      </div>
-                      <div className="number">
-                        主催者：{item.staffNum}人 参加者：{item.useNum}人
-                      </div>
-                      利用目的：
-                      <div className="box">{item.reason}</div>
-                      {/* {data.device === "false" ? (
+            <div className="title">追加した予約一覧</div>
+            {/* 追加されたデータを1件ずつ表示 */}
+            <Grid container>
+              {data.map((item, index) => {
+                return (
+                  <Grid className="reserve-data" key={index} item lg={2} md={3}>
+                    <div className="place">施設名：{item.placeName}</div>
+                    <div className="reservation">{item.reservation}</div>
+                    <div className="usage">
+                      利用区分：
+                      {
+                        // usage nameを表示する
+                      }
+                    </div>
+                    <div className="start">
+                      開始日時:
+                      {item.startDate} {item.Start}から
+                    </div>
+                    <div className="end">
+                      終了日時：{item.endDate} {item.End}まで
+                    </div>
+                    <div className="number">
+                      主催者：{item.staffNum}人 参加者：{item.useNum}人
+                    </div>
+                    利用目的：
+                    <div className="box">{item.reason}</div>
+                    {/* {data.device === "false" ? (
                         <div>附属設備もしくは器具を使用しない</div>
                       ) : (
                         <div>
@@ -66,14 +63,13 @@ export const ReservationList = () => {
                         }
                         </Grid>
                       )} */}
-                    </Grid>
-                  );
-                })}
-              </Grid>
+                  </Grid>
+                );
+              })}
+            </Grid>
           </div>
         )}
       </div>
-      {loading && <Loading />}
     </>
   );
 };

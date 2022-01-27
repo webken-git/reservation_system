@@ -1,9 +1,9 @@
 from django.db import models
 from rest_framework import serializers
-from application_documents.models import DocumentTemplate, Document
+from documents.models import DocumentTemplate, Document
 from reservations.models import ApprovalApplication
 from reservations.serializers import ApprovalApplicationSerializer
-from application_documents import views
+from documents import views
 
 
 class DocumentTemplateSerializer(serializers.ModelSerializer):

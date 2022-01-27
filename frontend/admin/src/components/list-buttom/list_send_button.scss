@@ -75,6 +75,13 @@ $breakpoints: (
     @include mq(sp) {
       width: 100%;
     }
+    h2 {
+      // 見出しをおしゃれにする
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+    }
   }
 
   .modal-form-group {

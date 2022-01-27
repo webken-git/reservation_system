@@ -58,20 +58,9 @@ const Content = (props) =>{
     if (calendarType === 'weekly'){
         return (
             <div className="content">
-                <div 
-                    className="content-span" 
+                <div
+                    className="content-span"
                 >
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
                     <div className="content-div"></div>
                     <div className="content-div"></div>
                     <div className="content-div"></div>
@@ -113,20 +102,9 @@ const Content = (props) =>{
         )} else if (calendarType === 'daily') {
             return (
                 <div className="daily-content">
-                <div 
-                    className="content-span" 
+                <div
+                    className="content-span"
                 >
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
-                    <div className="content-div"></div>
                     <div className="content-div"></div>
                     <div className="content-div"></div>
                     <div className="content-div"></div>

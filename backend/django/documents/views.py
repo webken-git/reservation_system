@@ -7,9 +7,10 @@ import datetime
 import pytz
 import os
 import docx
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from users import permissions
-from application_documents.models import DocumentTemplate, Document
-from application_documents.serializers import DocumentTemplateSerializer, DocumentSerializer
+from documents.models import DocumentTemplate, Document
+from documents.serializers import DocumentTemplateSerializer, DocumentSerializer
 from reservations.models import ApprovalApplication, DefferdPayment, UsageCategory, AgeCategory
 
 
@@ -41,6 +42,8 @@ def create_new_word(request):
   usage_categorizes = UsageCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)
   age_categorizes = AgeCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)
   # 記入内容データ
+  group_name = approval_applications[0].reservation.group_name
+  reader_name = approval_applications[0].reservation.reader_name
   contact_name = approval_applications[0].reservation.contact_name
   address = approval_applications[0].reservation.address
   tel = approval_applications[0].reservation.tel
@@ -60,6 +63,11 @@ def create_new_word(request):
   admission_fee = approval_applications[0].reservation.admission_fee
   conditions = approval_applications[0].conditions
   cancellation_reason = approval_applications[0].cancellation_reason
+  created_at = approval_applications[0].reservation.created_at
+  updated_at = approval_applications[0].updated_at
+  usage_fee = approval_applications[0].usage_fee
+  heating_fee = approval_applications[0].heating_fee
+  electric_fee = approval_applications[0].electric_fee
 
   if query:
     file = BASE_DIR + query[0].url
@@ -120,14 +128,19 @@ def create_new_word(request):
       elif end_hour - 12 > 0:
         tbl.rows[4].cells[1].paragraphs[1].text = tbl.rows[4].cells[1].paragraphs[1].text.replace('後', '☑後')
     else:
-      tbl.rows[0].cells[3].paragraphs[0].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
-      if approval_applications[0].reservation.is_group == 1:
-        tbl.rows[0].cells[3].paragraphs[4].text = tbl.rows[0].cells[3].paragraphs[4].text.replace('名　　　　', '名　' + approval_applications[0].reservation.group_name + ' ')
-      elif approval_applications[0].reservation.is_group == 0:
-        tbl.rows[0].cells[3].paragraphs[5].text = tbl.rows[0].cells[3].paragraphs[5].text.replace('名　　　　', '名　' + approval_applications[0].reservation.reader_name + ' ')
-      tbl.rows[0].cells[3].paragraphs[7].text = tbl.rows[0].cells[3].paragraphs[7].text.replace('名　　　　', '名　' + contact_name + ' ')
-      tbl.rows[0].cells[3].paragraphs[8].text = tbl.rows[0].cells[3].paragraphs[8].text.replace('所　　　　　　　　　　', '所　' + address + '')
-      tbl.rows[0].cells[3].paragraphs[9].text = tbl.rows[0].cells[3].paragraphs[9].text.replace('号　　　　　　', '号　' + str(tel))
+      tbl.rows[0].cells[3].paragraphs[0].text = updated_at.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
+      # 右揃えにしてgroup_nameを挿入
+      tbl.rows[0].cells[3].paragraphs[4].text = "　　　　　　　　　　　　　　　　　　　　　　　・団 体 名　{}".format(group_name)
+      tbl.rows[0].cells[3].paragraphs[4].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+      tbl.rows[0].cells[3].paragraphs[5].text = "　　　　　　　　　　　　　　　　　　　　　　　　代表者名　{}".format(reader_name)
+      # reader_nameの位置をgroup_nameの位置に合わせる
+      tbl.rows[0].cells[3].paragraphs[5].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+      tbl.rows[0].cells[3].paragraphs[7].text = "　　　　　　　　　　　　　　　　　　　　　　　・連絡者名　{}".format(contact_name)
+      tbl.rows[0].cells[3].paragraphs[7].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+      tbl.rows[0].cells[3].paragraphs[8].text = "　　　　　　　　　　　　　　　　　　　　　　　　住　　所　{}".format(address)
+      tbl.rows[0].cells[3].paragraphs[8].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+      tbl.rows[0].cells[3].paragraphs[9].text = "　　　　　　　　　　　　　　　　　　　　　　　　電話番号　{}".format(tel)
+      tbl.rows[0].cells[3].paragraphs[9].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
       # 使用（利用）体育施設の名称
       tbl.rows[1].cells[3].paragraphs[0].text = insert_string(tbl.rows[1].cells[3].paragraphs[0].text, 5, place)
       # 使用（利用）区分
@@ -180,9 +193,9 @@ def create_new_word(request):
 
     # 稚内市体育施設使用等承認（不承認）通知書
     if query[0].name == '稚内市体育施設使用等承認（不承認）通知書':
-      tbl.rows[0].cells[0].paragraphs[1].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
-      tbl.rows[0].cells[0].paragraphs[3].text = insert_string(tbl.rows[0].cells[0].paragraphs[3].text, 6, contact_name)
-      tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('　　年', str(now.year) + ' 年').replace('　月', str(now.month) + ' 月').replace('　日', str(now.day) + ' 日')
+      tbl.rows[0].cells[0].paragraphs[1].text = updated_at.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
+      tbl.rows[0].cells[0].paragraphs[3].text = insert_string(tbl.rows[0].cells[0].paragraphs[3].text, 6, "{}　{}".format(group_name, contact_name))
+      tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('　　年', str(created_at.year) + ' 年').replace('　月', str(created_at.month) + ' 月').replace('　日', str(created_at.day) + ' 日')
       if approval == '承認':
         tbl.rows[0].cells[0].paragraphs[10].text = tbl.rows[0].cells[0].paragraphs[10].text.replace('□承認', '☑承認')
       elif approval == '不承認':
@@ -208,9 +221,9 @@ def create_new_word(request):
     # 稚内市体育施設使用等承認取消し等決定通知書
     elif query[0].name == '稚内市体育施設使用等承認取消し等決定通知書':
       if cancellation_reason:
-        tbl.rows[0].cells[0].paragraphs[1].text = now.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
-        tbl.rows[0].cells[0].paragraphs[2].text = insert_string(tbl.rows[0].cells[0].paragraphs[2].text, 6, contact_name)
-        tbl.rows[0].cells[0].paragraphs[9].text = tbl.rows[0].cells[0].paragraphs[9].text.replace('　　年', str(now.year) + ' 年').replace('　月', str(now.month) + ' 月').replace('　日', str(now.day) + ' 日').replace('第　　　　号', '第　' + str(number) + '　号')
+        tbl.rows[0].cells[0].paragraphs[1].text = updated_at.strftime('%Y 年 %m 月 %d 日').replace('年 0', '年 ').replace('月 0', '月 ')
+        tbl.rows[0].cells[0].paragraphs[2].text = insert_string(tbl.rows[0].cells[0].paragraphs[2].text, 6, "{}　{}".format(group_name, contact_name))
+        tbl.rows[0].cells[0].paragraphs[9].text = tbl.rows[0].cells[0].paragraphs[9].text.replace('　　年', str(created_at.year) + ' 年').replace('　月', str(created_at.month) + ' 月').replace('　日', str(created_at.day) + ' 日').replace('第　　　　号', '第　' + str(number) + '　号')
         tbl.rows[5].cells[1].paragraphs[0].text = insert_string(tbl.rows[5].cells[1].paragraphs[0].text, 0, purpose)
         tbl.rows[6].cells[0].paragraphs[2].text = insert_string(tbl.rows[6].cells[0].paragraphs[2].text, 0, str(cancellation_reason))
       else:
@@ -233,27 +246,21 @@ def create_new_word(request):
         tbl.rows[9].cells[3].paragraphs[0].text = tbl.rows[9].cells[3].paragraphs[0].text.replace('無', '✓無')
       if conditions:
         tbl.rows[16].cells[1].paragraphs[0].text = tbl.rows[16].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
-      else:
-        return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
     # 稚内市体育施設使用料等後納承認（不承認）通知書
     elif query[0].name == '稚内市体育施設使用料等後納承認（不承認）通知書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
       tbl.rows[6].cells[1].paragraphs[1].text = insert_string(tbl.rows[6].cells[1].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
       if conditions:
         tbl.rows[7].cells[1].paragraphs[0].text = tbl.rows[7].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
-      else:
-        return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
     # 稚内市体育施設使用料等後納申請書
     elif query[0].name == '稚内市体育施設使用料等後納申請書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
       tbl.rows[6].cells[3].paragraphs[1].text = insert_string(tbl.rows[6].cells[3].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
       if conditions:
         tbl.rows[10].cells[3].paragraphs[0].text = tbl.rows[10].cells[3].paragraphs[0].text.replace('）', '）\n' + str(conditions))
-      else:
-        return {'error': 'approval-applicationテーブルにあるcoditionフィールドの値が未入力です。'}
   else:
     return {'error': 'docxファイルの指定が違います。'}
-  doc.save(BASE_DIR + '/static/application_documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx')
+  doc.save(BASE_DIR + '/static/documents/docx/' + now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx')
   return now.strftime('%Y%m%d-%H%M%S_') + str(query[0].id) + '.docx', now.strftime('%Y%m%d-%H%M%S_') + query[0].name + '.docx'
 
 

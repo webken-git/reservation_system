@@ -2,20 +2,40 @@
 import React from "react";
 // import './approval.scss'
 import DetailsButton from "./../list-buttom/DetailsButton";
+// recoil
+import { useSetRecoilState } from "recoil";
+import reservationState from "../../recoil/reservation/atom";
 
 const CancelTable = (props) => {
+  // reservationStateにデータをsetする
+  const setReservationState = useSetRecoilState(reservationState);
+
+  // ラジオボタンのチェック状態をstateに保存
+  const handleChange = (e) => {
+    // reservation idをreservationStateにsetする
+    setReservationState({ id: e.target.id });
+  };
   return (
     <tr>
+      <td>
+        <input
+          type="radio"
+          id={props.id}
+          name="approval"
+          value={props.contact_name}
+          onChange={handleChange}
+        />
+      </td>
       {/* 予約日 */}
-      <td>{props.date}</td>
+      <td><label for={props.id} className="approval-label">{props.date}</label></td>
       {/* 団体者名 */}
-      <td>{props.group_name}</td>
+      <td><label for={props.id} className="approval-label">{props.group_name}</label></td>
       {/* 団体者名 */}
-      <td>{props.reader_name}</td>
+      <td><label for={props.id} className="approval-label">{props.reader_name}</label></td>
       {/* 予約時間 */}
-      <td>{props.start_time}~{props.end_time}</td>
+      <td><label for={props.id} className="approval-label">{props.start_time}~{props.end_time}</label></td>
       {/* 場所 */}
-      <td>{props.place}</td>
+      <td><label for={props.id} className="approval-label">{props.place}</label></td>
       <td>
         <DetailsButton
           id={props.id}

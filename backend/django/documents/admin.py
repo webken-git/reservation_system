@@ -1,5 +1,5 @@
 from django.contrib import admin
-from application_documents.models import DocumentTemplate, Document
+from documents.models import DocumentTemplate, Document
 
 # Register your models here.
 

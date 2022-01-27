@@ -45,8 +45,8 @@ def insert_place_data(file, table):
 
   reader = csv.reader(f)
   for row in reader:
-    sql = "INSERT INTO " + table + "(name, max, created_at, updated_at) VALUES(%s,%s,%s,%s)"
-    cursor.execute(sql, (row[0], row[1], now, now))
+    sql = "INSERT INTO " + table + "(name, min, max, created_at, updated_at) VALUES(%s,%s,%s,%s,%s)"
+    cursor.execute(sql, (row[0], row[1], row[2], now, now))
   f.close()
 
 
@@ -152,7 +152,7 @@ def insert_document_data(file, table):
   """
   申請書マスタ
   """
-  f = open('./static/application_documents/csv/' + file, 'r', encoding='utf8')
+  f = open('./static/documents/csv/' + file, 'r', encoding='utf8')
 
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
@@ -219,7 +219,7 @@ insert_equipment_fee_data('equipment_fee.csv')
 # intermediate_table('usage-category_usage.csv', 'reservations_usagecategory_usage', 'usagecategory_id', 'usage_id')
 # intermediate_table('age-category_age.csv', 'reservations_agecategory_age', 'agecategory_id', 'age_id')
 
-insert_document_data('document_template.csv', 'application_documents_documenttemplate')
+insert_document_data('document_template.csv', 'documents_documenttemplate')
 insert_auto_mail_data('auto-mail.csv', 'app_settings_automail')
 connect.commit()
 cursor.close()

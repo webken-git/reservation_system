@@ -1,6 +1,6 @@
 import React from "react";
 import { personalData } from "../../recoil/form/atom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import "./PersonalData.scss";
 export const PersonalData = () => {
   const data = useRecoilValue(personalData);
@@ -12,7 +12,7 @@ export const PersonalData = () => {
         <div>代表者名：{data.reader_name}</div>
         <div>連絡者名：{data.contact_name}</div>
         <div>住所：{data.address}</div>
-        <div>電話番号：{`+${data.tel}`}</div>
+        <div>電話番号：{data.tel}</div>
         <span className="line"></span>
       </div>
     </div>

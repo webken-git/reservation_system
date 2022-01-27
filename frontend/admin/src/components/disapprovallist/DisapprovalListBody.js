@@ -1,7 +1,7 @@
 // 不承認リスト全体のコンポーネント
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ApprovalTable from "../approvallist/ApprovalTable";
+import DisapprovalTable from "./DisapprovalTable";
 import '../approvallist/approval.scss';
 import dayjs from 'dayjs';
 import DocumentLayout from "../document/DocumentLayout";
@@ -52,7 +52,7 @@ const DisapprovalListBody = () => {
       DisApprovalListData.map((val, val_index) =>{
         return(
           // 不承認リストの中のコンポーネント
-          <ApprovalTable
+          <DisapprovalTable
           // propsでDisapprovalTable.jsに不承認リストのデータを送っている
           key={val_index}
           id={val.id}
@@ -72,10 +72,12 @@ const DisapprovalListBody = () => {
           organizer_number={val.reservation.organizer_number}
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
-          reservation_id={val.reservation.id}
           admission_fee={val.reservation.admission_fee}
           email={val.reservation.user.email}
           approval={val.approval.name}
+          usage_fee={val.usage_fee}
+          electric_fee={val.electric_fee}
+          heating_fee={val.heating_fee}
         />
       )
     })
@@ -115,7 +117,6 @@ const DisapprovalListBody = () => {
                     </select>
                   </td>
                   <td></td>
-                  <td></td>
                 </tr>
               </thead>
               <thead>
@@ -126,7 +127,6 @@ const DisapprovalListBody = () => {
                   <th>代表者名</th>
                   <th>時間</th>
                   <th>場所</th>
-                  <th>操作</th>
                   <th>詳細</th>
                 </tr>
               </thead>

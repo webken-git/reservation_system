@@ -75,7 +75,6 @@ const ApprovalListBody = () => {
             organizer_number={val.reservation.organizer_number}
             participant_number={val.reservation.participant_number}
             place={val.reservation.place.name}
-            reservation_id={val.reservation.id}
             admission_fee={val.reservation.admission_fee}
             email={val.reservation.user.email}
             approval={val.approval.name}

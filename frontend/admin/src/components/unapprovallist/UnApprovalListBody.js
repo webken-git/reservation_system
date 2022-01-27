@@ -70,7 +70,6 @@ const UnapprovalListBody = () => {
             organizer_number={val.reservation.organizer_number}
             participant_number={val.reservation.participant_number}
             place={val.reservation.place.name}
-            reservation_id={val.reservation.id}
             admission_fee={val.reservation.admission_fee}
             email={val.reservation.user.email}
             approval={val.approval.name}
@@ -119,7 +118,7 @@ const UnapprovalListBody = () => {
                   <th>代表者名</th>
                   <th>時間</th>
                   <th>場所</th>
-                  <th></th>
+                  <th>操作</th>
                   <th>詳細</th>
                 </tr>
               </thead>

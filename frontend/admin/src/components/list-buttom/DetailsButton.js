@@ -91,9 +91,11 @@ const DetailsButton = (props) => {
             </li>
             <li>
               <label>利用区分：</label>
-              {usage[0] && usage[0].usage.map((item, index) => (
+              <p>
+                {usage[0] && usage[0].usage.map((item, index) => (
                   <span key={index}>{item.name}　</span>
-              ))}
+                ))}
+              </p>
             </li>
             <li>
               <label>年齢区分：</label>

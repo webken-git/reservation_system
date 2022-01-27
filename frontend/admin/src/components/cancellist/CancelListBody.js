@@ -5,6 +5,7 @@ import CancelTable from "./CancelTable"
 // import './../approvallist/approval.scss'
 import dayjs from 'dayjs'
 import CsvExportButton from "../csvexport/CsvExportButton";
+import DocumentLayout from "../document/DocumentLayout";
 
 const CancelListBody = () => {
   const placeFiltering = (e) => {
@@ -67,7 +68,6 @@ const CancelListBody = () => {
           organizer_number={val.reservation.organizer_number}
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
-          reservation_id={val.reservation.id}
           admission_fee={val.reservation.admission_fee}
           email={val.reservation.user.email}
           approval={val.approval.name}
@@ -79,6 +79,9 @@ const CancelListBody = () => {
     <div>
       <div className="functions">
         <span className="space">
+          <DocumentLayout />
+        </span>
+        <span className="space">
           <CsvExportButton approval={4} />
         </span>
       </div>
@@ -88,6 +91,7 @@ const CancelListBody = () => {
           <table className="list-body">
             <thead>
               <tr>
+                <td></td>
                 <td>
                   <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
                 </td>
@@ -110,6 +114,7 @@ const CancelListBody = () => {
             </thead>
             <thead>
               <tr>
+                <th></th>
                 <th>日付</th>
                 <th>団体者名</th>
                 <th>代表者名</th>

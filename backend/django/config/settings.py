@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     # Local
     'announcements',
     'app_settings',
-    'application_documents',
+    'documents',
     'business_diary',
     'reservations',
     'questionnaire',

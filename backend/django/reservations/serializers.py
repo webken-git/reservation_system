@@ -224,6 +224,7 @@ class ApprovalApplicationSerializer(serializers.ModelSerializer):
     instance.heating_fee = validated_data.get('heating_fee', instance.heating_fee)
     instance.electric_fee = validated_data.get('electric_fee', instance.electric_fee)
     instance.conditions = validated_data.get('conditions', instance.conditions)
+    instance.cancellation_reason = validated_data.get('cancellation_reason', instance.cancellation_reason)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['reservation_id']

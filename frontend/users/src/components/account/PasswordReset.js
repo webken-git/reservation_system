@@ -69,7 +69,7 @@ const PasswordReset = (props) => {
             {error && <p className="auth-page__error">{error}</p>}
             <form className="auth-page__form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="auth-page__form-group">
-                    <label className="auth-page__form-label" htmlFor="password">パスワード</label>
+                    <label className="auth-page__form-label" htmlFor="password">新規パスワード</label>
                     {errors.password && <span className="auth-page__form-error">※この項目は必須です</span>}
                     <div className="password-container">
                         <input
@@ -79,9 +79,10 @@ const PasswordReset = (props) => {
                             id="password"
                             {...register("password", {
                                 required: true,
-                                minLength: 6,
+                                minLength: 8,
                             })}
                             value={password} onChange={(e) => setPassword(e.target.value)}
+                            placeholder="全角半角英数字8文字以上"
                         />
                         {
                             showPassword ?
