@@ -11,7 +11,7 @@ import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons
 import '../header/header.scss';
 
 const Calendar = (props) =>{
-    const [ date, setDate ] = useState(new Date(2021, 3, 1));
+    const [ date, setDate ] = useState(new Date());
     const dayList = ['日', '月', '火', '水', '木', '金', '土'];
     // const [ scheduleDict, setScheduleDict ] = useState({});
     const [ dateList, setDateList ] = useState([]); //表示用のリスト

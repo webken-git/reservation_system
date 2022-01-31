@@ -84,6 +84,7 @@ const MonthlyCalendar = (props) =>{
                         <FontAwesomeIcon icon={faChevronRight} />
                     </div>
                 </div>
+                
             </div>
 
             <table>

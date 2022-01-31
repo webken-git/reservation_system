@@ -14,9 +14,9 @@ import { HistoryPage } from "./pages/HistoryPage";
 import { ReservationDetailPage } from "./pages/ReservationDetailPage";
 import { ReservationCancelPage } from "./pages/ReservationCancelPage";
 import { LoginPage } from './pages/LoginPage';
-import Registration from './components/auth/Registration';
+import { RegistrationPage } from "./pages/RegistrationPage";
 import { AccountDeletePage } from './pages/AccountDeletePage';
-import Content from "./components/reservationform/Content";
+import { ReservationStepPage } from "./pages/ReservationStepPage";
 import "./index.scss";
 
 function getCookie(name) {
@@ -47,23 +47,24 @@ axios.defaults.headers.common = {
 function App() {
   return (
     <BrowserRouter>
-        <Switch>
-          <Route path="/login" exact children={<LoginPage />} />
-          <Route path="/registration" exact children={<Registration />} />
-          <Route path="/password"
-              render={({ match: { url } }) => (
-                <>
-                  <Switch>
-                    <Route path={`${url}/`} exact children={<VerifyEmailPage />} />
-                    <Route path={`${url}/reset/:uid/:token`} exact children={<PasswordResetPage />} />
-                  </Switch>
-                </>
-            )}
-          />
-          {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
-          <HeaderRoute path="/" exact children={<MainPage />} />
-          <HeaderRoute path="/cart" exact children={<Content />} />
-          <LoginRoute>
+      <Switch>
+        <Route path="/login" exact children={<LoginPage />} />
+        <Route path="/registration" exact children={<RegistrationPage />} />
+        <Route path="/password"
+            render={({ match: { url } }) => (
+              <>
+                <Switch>
+                  <Route path={`${url}/`} exact children={<VerifyEmailPage />} />
+                  <Route path={`${url}/reset/:uid/:token`} exact children={<PasswordResetPage />} />
+                </Switch>
+              </>
+          )}
+        />
+        {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
+        <HeaderRoute path="/" exact children={<MainPage />} />
+        <LoginRoute>
+          <Switch>
+            <HeaderRoute path="/additional-data" exact children={<ReservationStepPage />} />
             <Route
               path="/account"
               render={({ match: { url } }) => (
@@ -82,22 +83,23 @@ function App() {
               )}
             />
             <Route path="/history"
-                render={({ match: { url } }) => (
-                  <>
-                    <Switch>
-                      <HeaderRoute path={`${url}/`} exact children={<HistoryPage />} />
-                      <Route path={`${url}/cancel/:id/:reservationId`}>
-                        <HeaderRoute exact children={<ReservationCancelPage />} />
-                      </Route>
-                      <Route path={`${url}/:id`}>
-                        <HeaderRoute exact children={<ReservationDetailPage />} />
-                      </Route>
-                    </Switch>
-                  </>
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <HeaderRoute path={`${url}/`} exact children={<HistoryPage />} />
+                    <Route path={`${url}/cancel/:id/:reservationId`}>
+                      <HeaderRoute exact children={<ReservationCancelPage />} />
+                    </Route>
+                    <Route path={`${url}/:id`}>
+                      <HeaderRoute exact children={<ReservationDetailPage />} />
+                    </Route>
+                  </Switch>
+                </>
               )}
             />
-          </LoginRoute>
-        </Switch>
+          </Switch>
+        </LoginRoute>
+      </Switch>
     </BrowserRouter>
   );
 }

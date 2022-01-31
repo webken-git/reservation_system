@@ -184,14 +184,14 @@ def insert_auto_mail_data(file, table):
   """
   自動送信メール
   """
-  f = open('./static/app_settings/csv/' + file, 'r', encoding='utf8')
+  f = open('./static/app_settings/csv/' + file, 'r', encoding='utf8', newline='')
 
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
-  reader = csv.reader(f)
+  reader = csv.reader(f, delimiter=',', doublequote=True, lineterminator='\r\n', quotechar='"', skipinitialspace=True)
   header = next(reader)
   for row in reader:
-    sql = "INSERT INTO " + table + "(name, subject, body, created_at, updated_at) VALUES(%s,%s,%s)"
+    sql = "INSERT INTO " + table + "(name, subject, body, created_at, updated_at) VALUES(%s,%s,%s,%s,%s)"
     cursor.execute(sql, (row[0], row[1], row[2], now, now))
   f.close()
 
@@ -202,26 +202,25 @@ insert_place_data('place.csv', 'reservations_place')
 insert_master_data('usage.csv', 'reservations_usage')
 insert_master_data('time.csv', 'reservations_time')
 insert_master_data('equipment.csv', 'reservations_equipment')
-# insert_master_data('special_equipment.csv', 'reservations_specialequipment')
 connect.commit()
-
 intermediate_table('equipment_place.csv', 'reservations_equipment_place', 'equipment_id', 'place_id')
 connect.commit()
-
 insert_facility_fee_data('facility_fee_v2.csv')
 insert_facility_fee_data('facility_fee.csv')
 insert_equipment_fee_data('equipment_fee.csv')
+
 # insert_reservation_data('reservation.csv')
-connect.commit()
+# connect.commit()
+
 # insert_approval_application_data('approval-application.csv')
 # insert_category_data('usage-category.csv', 'reservations_usagecategory')
 # insert_category_data('age-category.csv', 'reservations_agecategory')
 # connect.commit()
 # intermediate_table('usage-category_usage.csv', 'reservations_usagecategory_usage', 'usagecategory_id', 'usage_id')
 # intermediate_table('age-category_age.csv', 'reservations_agecategory_age', 'agecategory_id', 'age_id')
+
 insert_document_data('document_template.csv', 'application_documents_documenttemplate')
 insert_auto_mail_data('auto-mail.csv', 'app_settings_automail')
-# insert_app_settings('app_settings.csv', 'app_settings_appsettings')
 connect.commit()
 cursor.close()
 connect.close()
