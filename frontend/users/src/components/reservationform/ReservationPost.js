@@ -3,8 +3,13 @@ import { Grid } from "@material-ui/core";
 import axios from "axios";
 import { formData, personalData, stepValue } from "../../recoil/form/atom";
 import authState from "../../recoil/auth";
-import tabState from '../../recoil/tab';
-import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
+import tabState from "../../recoil/tab";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+  useResetRecoilState,
+} from "recoil";
 // import { useFetch } from "../../hooks/useFetch";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
@@ -38,8 +43,7 @@ export const ReservationPost = () => {
     };
     axios
       .post(ReservationUrls.AGE_CATEGORY, age)
-      .then((response) => {
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
   // usage-categoriesにPOSTする
@@ -63,8 +67,7 @@ export const ReservationPost = () => {
     };
     axios
       .post(ReservationUrls.APPROVAL_APPLICATION, data)
-      .then((response) => {
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
 
@@ -79,7 +82,7 @@ export const ReservationPost = () => {
         contact_name: PersonalData.contact_name,
         address: PersonalData.address,
         // 国際番号で登録する必要があるため、telには+818000000000という形で入力する
-        tel: `+${PersonalData.tel}`,
+        tel: PersonalData.tel,
         is_group: true,
         delete_flag: true,
         start: item.start,

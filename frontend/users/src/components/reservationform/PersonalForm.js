@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller, set } from "react-hook-form";
-import { useRecoilState, useRecoilValue } from "recoil";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useRecoilState } from "recoil";
 import { personalData, stepValue } from "../../recoil/form/atom";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { stepSchema } from "./stepYup";
 import { Grid } from "@material-ui/core";
 import "./PersonalForm.scss";
-import {
-  FormControl,
-  FormControlLabel,
-  TextField,
-  Checkbox,
-  FormGroup,
-  RadioGroup,
-  Radio,
-  Select,
-  MenuItem,
-  SelectField,
-  Button,
-  styled,
-  formHelperTextClasses,
-} from "@mui/material";
+import { TextField } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 export const PersonalForm = () => {
-  const [data, setData] = useRecoilState(personalData);
-  const [step, setStep] = useRecoilState(stepValue);
+  const [, setData] = useRecoilState(personalData);
+  const [, setStep] = useRecoilState(stepValue);
   const {
     handleSubmit,
     formState: { errors },
-    reset,
     control,
-    getValues,
   } = useForm({
     resolver: yupResolver(stepSchema),
   });
@@ -150,15 +133,24 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="tel"
               control={control}
-              rules={{ required: "入力してください" }}
+              rules={{
+                required: "入力してください",
+                pattern: /^[0-9]+$/,
+                maxLength: 11,
+              }}
               defaultValue=""
               render={({ field }) => (
                 <div>
                   <div>電話番号</div>
-                  <PhoneInput
+                  <TextField
                     {...field}
-                    country={"jp"}
+                    type="tel"
+                    label="電話番号を入力してください。"
+                    variant="outlined"
                     error={"tel" in errors}
+                    helperText={
+                      errors.tel ? "入力してください" : "※必須事項です"
+                    }
                   />
                 </div>
               )}

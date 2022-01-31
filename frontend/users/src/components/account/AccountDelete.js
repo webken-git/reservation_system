@@ -127,9 +127,10 @@ const AccountDelete = () => {
                             id="password"
                             {...register("password", {
                                 required: true,
-                                minLength: 6,
+                                minLength: 8,
                             })}
                             value={password} onChange={(e) => setPassword(e.target.value)}
+                            placeholder="全角半角英数字8文字以上"
                         />
                         {
                             showPassword ?

@@ -18,41 +18,70 @@ $breakpoints: (
   }
 }
 
+$main-color: #23ad39;
+$sub-color: #707070;
+$accent-color: #91c21f;
+
 .list-wrapper {
-  .scroll_box-wrapper {
-    display: flex;
-    justify-content: center;
-    .scroll_box {
-      width: 100vw;
-      height: 70vh;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      // white-space: nowrap;
-      details {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        .detail-content {
-          margin-bottom: 80px;
-        }
+  width: 100%;
+  // .scroll_box-wrapper {
+  //   display: flex;
+  //   justify-content: center;
+  //   .scroll_box {
+  //     width: 100vw;
+  //     // height: 70vh;
+  //     // overflow-y: scroll;
+  //     overflow-x: hidden;
+  //     // white-space: nowrap;
+  details {
+    width: 90%;
+    // margin-top: 10px;
+    // margin-bottom: 30px;
+    margin: 0 auto 30px auto;
+    @include mq(sp) {
+      width: 100%;
+    }
+    summary {
+      width: fit-content;
+      font-size: 25px;
+      @include mq(sp) {
+        font-size: 18px;
+      }
+      &:hover {
+        cursor: pointer;
       }
     }
+  }
+  // }
 
-    /* スクロールの幅の設定 */
-    .scroll_box::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
+  // /* スクロールの幅の設定 */
+  // .scroll_box::-webkit-scrollbar {
+  //   width: 10px;
+  //   height: 10px;
+  // }
 
-    /* スクロールの背景の設定 */
-    .scroll_box::-webkit-scrollbar-track {
-      box-shadow: 0 0 4px #aaa inset;
-    }
+  // /* スクロールの背景の設定 */
+  // .scroll_box::-webkit-scrollbar-track {
+  //   box-shadow: 0 0 4px #aaa inset;
+  // }
 
-    /* スクロールのつまみ部分の設定 */
-    .scroll_box::-webkit-scrollbar-thumb {
-      border-radius: 5px;
-      background: gray;
+  // /* スクロールのつまみ部分の設定 */
+  // .scroll_box::-webkit-scrollbar-thumb {
+  //   border-radius: 5px;
+  //   background: gray;
+  // }
+}
+
+.css-1ujnqem-MuiTabs-root {
+  .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+    font-size: 1.2rem;
+    @include mq(sp) {
+      font-size: 1rem;
     }
+  }
+  .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color: $main-color;
+    font-weight: bold;
   }
 }
 
@@ -81,24 +110,5 @@ $breakpoints: (
     // background: none;
     // background-color: inherit;
     color: inherit;
-  }
-}
-
-.dark-theme {
-  background: #333;
-}
-
-details {
-  width: 100%;
-  margin: 0 2%;
-}
-summary {
-  width: fit-content;
-  font-size: 25px;
-  @include mq(sp) {
-    font-size: 18px;
-  }
-  &:hover {
-    cursor: pointer;
   }
 }

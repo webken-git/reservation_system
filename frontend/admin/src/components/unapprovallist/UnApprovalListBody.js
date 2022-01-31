@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UnApprovalTable from "./UnApprovalTable"
-// import './approval.scss'
+import '../approvallist/approval.scss'
 import dayjs from 'dayjs';
 import CsvExportButton from "../csvexport/CsvExportButton";
 
@@ -12,17 +12,11 @@ const UnapprovalListBody = () => {
     // console.log(e.target.value);
   }
 
-  const groupFiltering = (e) => {
-    setGroupFilter(e.target.value);
-    // setGroupFilter(true);
-  }
-
   const dateFiltering = (e) => {
     setDateFilter(e.target.value);
   }
 
   const [placeFilter, setPlaceFilter] = useState();
-  const [groupFilter, setGroupFilter] = useState();
   const [dateFilter, setDateFilter] = useState();
 
   const [UnApprovalListData, setUnApprovalListData] = useState([]);
@@ -31,7 +25,6 @@ const UnapprovalListBody = () => {
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=1`, {
       params: {
         'reservation__place': placeFilter,
-        'reservation__is_group': groupFilter,
         'reservation__start': dateFilter
       }
     })
@@ -43,14 +36,14 @@ const UnapprovalListBody = () => {
         console.log(data)
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       })
   }
   // ページレンダリング時に未承認リストのデータを受け取っている
   useEffect(() => {
     GetUnApprovalList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placeFilter, groupFilter, dateFilter])
+  }, [placeFilter, dateFilter])
 
   const Table = (
       // データをmapで回している
@@ -60,6 +53,8 @@ const UnapprovalListBody = () => {
           <UnApprovalTable
             // propsでUnApprovalTable.jsに未承認リストのデータを送っている
             key={val_index}
+            id={val.id}
+            reservation_id={val.reservation.id}
             // dayjsのformatで〇/〇と日付を表示できるようにしている
             date={dayjs(val.reservation.start).format('YYYY-MM-DD')}
             group_name={val.reservation.group_name}
@@ -75,8 +70,9 @@ const UnapprovalListBody = () => {
             organizer_number={val.reservation.organizer_number}
             participant_number={val.reservation.participant_number}
             place={val.reservation.place.name}
-            id={val.reservation.id}
             admission_fee={val.reservation.admission_fee}
+            email={val.reservation.user.email}
+            approval={val.approval.name}
           />
         )
     })
@@ -92,40 +88,43 @@ const UnapprovalListBody = () => {
           {/* スクロールバーボックス */}
           <div className="scroll_box">
             <table className="list-body">
-              <tr>
-                <td>
-                  <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
-                </td>
-                <td></td>
-                <td></td>
-                <td>
-                  <select className="groupfilter" defaultValue="" onChange={(e) => groupFiltering(e)}>
-                    <option value="">全体</option>
-                    <option value="false">個人</option>
-                    <option value="true">団体</option>
-                  </select>
-                </td>
-                <td></td>
-                <td></td>
-                <td>
-                  <select className="placefilter" defaultValue="" onChange={(e) => placeFiltering(e)}>
-                    <option value="">全体</option>
-                    <option value="1">カーリング場</option>
-                    <option value="2">大会議室</option>
-                    <option value="3">中会議室</option>
-                    <option value="4">小会議室</option>
-                    <option value="5">アーチェリー場</option>
-                    <option value="6">武道場</option>
-                  </select>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td></td><td></td><td>詳細</td>
-              </tr>
-              {Table}
+              <thead>
+                <tr>
+                  <td>
+                    <input type="date" className="datefilter" onChange={(e) => dateFiltering(e)} />
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <select className="placefilter" defaultValue="" onChange={(e) => placeFiltering(e)}>
+                      <option value="">全体</option>
+                      <option value="1">カーリング場</option>
+                      <option value="2">大会議室</option>
+                      <option value="3">中会議室</option>
+                      <option value="4">小会議室</option>
+                      <option value="5">アーチェリー場</option>
+                      <option value="6">武道場</option>
+                    </select>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th>日付</th>
+                  <th>団体者名</th>
+                  <th>代表者名</th>
+                  <th>時間</th>
+                  <th>場所</th>
+                  <th>操作</th>
+                  <th>詳細</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Table}
+              </tbody>
             </table>
           </div>
         </div>

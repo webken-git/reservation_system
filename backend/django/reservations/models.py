@@ -1,7 +1,6 @@
 from django.db import models
 from django.core import validators
 from django.db.models.fields.related import ForeignKey
-from phonenumber_field.modelfields import PhoneNumberField
 from users.models import User
 import uuid
 
@@ -35,8 +34,8 @@ class Place(models.Model):
   予約場所テーブル
   """
   name = models.CharField('利用体育施設の名称', max_length=25)
-  max = models.IntegerField(
-      '最大シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
+  min = models.FloatField('最小利用時間', default=1.0)
+  max = models.FloatField('最大利用時間', default=1.0, validators=[validators.MinValueValidator(1.0), validators.MaxValueValidator(25.0)])
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -88,7 +87,7 @@ class Reservation(models.Model):
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号')
+  tel = models.CharField('電話番号', max_length=15, blank=True, null=True)
   is_group = models.BooleanField('is_group', default=False)
   delete_flag = models.BooleanField('delete_flag', default=False)
   start = models.DateTimeField('利用開始日時')
@@ -142,7 +141,7 @@ class UserInfo(models.Model):
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号')
+  tel = models.CharField('電話番号', max_length=15, blank=True, null=True)
   is_group = models.BooleanField('is_group', default=False)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -266,6 +265,10 @@ class DefferdPayment(models.Model):
       related_name='defferd_payment_reservation',
       on_delete=models.CASCADE
   )
+  fee = models.IntegerField('後納料', validators=[
+      validators.MinValueValidator(0),
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 

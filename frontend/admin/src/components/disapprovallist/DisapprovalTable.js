@@ -2,7 +2,7 @@
 import React from "react";
 import { useSetRecoilState } from "recoil";
 // import './approval.scss'
-import DetailsButton from "../approvallist/DetailsButton";
+import DetailsButton from "../list-buttom/DetailsButton";
 import reservationState from "../../recoil/reservation/atom";
 
 const DisApprovalTable = (props) => {
@@ -24,37 +24,40 @@ const DisApprovalTable = (props) => {
         />
       </td>
       {/* 予約日 */}
-      <td>{props.date}</td>
+      <td><label for={props.id} className="approval-label">{props.date}</label></td>
       {/* 団体者名 */}
-      <td>{props.group_name}</td>
+      <td><label for={props.id} className="approval-label">{props.group_name}</label></td>
       {/* 代表者名 */}
-      <td>{props.reader_name}</td>
-      {/* 個人or団体 */}
-      {props.is_group ? <td>団体</td> : <td>個人</td>}
+      <td><label for={props.id} className="approval-label">{props.reader_name}</label></td>
       {/* 予約時間 */}
-      <td>{props.start_time}~{props.end_time}</td>
-      {/* 人数 */}
-      <td>{(props.organizer_number) + (props.participant_number)}</td>
+      <td><label for={props.id} className="approval-label">{props.start_time}~{props.end_time}</label></td>
       {/* 場所 */}
-      <td>{props.place}</td>
-      <DetailsButton
-        // group_name={val.reservation.group_name}
-        id={props.id}
-        group={props.group_name}
-        reader_name={props.reader_name}
-        contact_name={props.contact_name}
-        tel={props.tel}
-        address={props.address}
-        place={props.place}
-        start_day={props.start_day}
-        start_time={props.start_time}
-        end_day={props.end_day}
-        end_time={props.end_time}
-        organizer_number={props.organizer_number}
-        participant_number={props.participant_number}
-        purpose={props.purpose}
-        admission_fee={props.admission_fee}
-      />
+      <td><label for={props.id} className="approval-label">{props.place}</label></td>
+      <td>
+        <DetailsButton
+          id={props.id}
+          reservation_id={props.reservation_id}
+          group_name={props.group_name}
+          reader_name={props.reader_name}
+          contact_name={props.contact_name}
+          tel={props.tel}
+          address={props.address}
+          place={props.place}
+          start_day={props.start_day}
+          start_time={props.start_time}
+          end_day={props.end_day}
+          end_time={props.end_time}
+          organizer_number={props.organizer_number}
+          participant_number={props.participant_number}
+          purpose={props.purpose}
+          admission_fee={props.admission_fee}
+          email={props.email}
+          approval={props.approval}
+          usage_fee={props.usage_fee}
+          electric_fee={props.electric_fee}
+          heating_fee={props.heating_fee}
+        />
+      </td>
     </tr>
   )
 }

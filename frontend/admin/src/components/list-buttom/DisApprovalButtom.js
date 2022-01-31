@@ -1,79 +1,77 @@
 // 不承認ボタンのコンポーネント
 import React, { useState } from "react";
 import axios from "axios";
-import Modal from 'react-modal'
+import Modal from 'react-modal';
+import { useForm } from 'react-hook-form';
+import { ReservationUrls } from "../../utils/reservationUrls";
+import Loading from "../loading/Loading";
 import './list_send_button.scss'
 
 const DisApprovalButtom = (props) => {
-  const reservationId = props.id
-  const approval = 3
-  const [DisApprovalReason, setDisApprovalReason] = useState("")
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  const handleChange = (e) => {
-    setDisApprovalReason(e.target.value)
-  }
-
-  const DisApporovalSend = () => {
-    if (DisApprovalReason === "") {
-      return;
-    }
-    // データを不承認リストに送るaxios
-    axios.patch(`${process.env.REACT_APP_API}/api/approval-applications/` + reservationId + '/', {
-      approval_id: approval,
-      reservation_id: reservationId,
-      // usage_fee: 0,
-      // heating_fee: 0,
-      // electric_fee: 0,
-      conditions: DisApprovalReason,
+  // データを不承認リストに送るaxios
+  const ApporovalSend = () => {
+    setLoading(true);
+    setMessage('不承認メールを送信しています...');
+    axios.patch(`${ReservationUrls.APPROVAL_APPLICATION}${props.id}/`, {
+      approval_id: 3,
+      reservation_id: props.reservation_id,
+      conditions: getValues("conditions"),
     })
       .then(response => {
-        console.log('Success')
-        console.log(response.date);
+        // console.log('Success')
+        // console.log(response.date);
+        setMessage('不承認に成功しました');
+        setLoading(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       })
       .catch((error) => {
-        console.log(error)
+        // console.log(error)
+        setMessage('不承認に失敗しました');
+        setLoading(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       })
-    setIsOpen(false)
   }
-  // 承認ボタンのモーダルウィンドウ
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  const modalStyle = {
-    overlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      backgroundColor: "rgba(0,0,0,0.60)"
-    },
-    content: {
-      position: "absolute",
-      top: "13rem",
-      left: "32rem",
-      right: "32rem",
-      bottom: "13rem",
-      backgroundColor: "white",
-      // borderRadius: "1rem",
-      padding: "1.5rem"
-    }
-  };
+
+  const modalToggle = () => {
+    setModalIsOpen(!modalIsOpen);
+  }
+
   return (
-    <div className="list-send-button-wrapper">
-      <p className="disapproval-button" onClick={() => setIsOpen(true)}>不承認</p>
-      <Modal isOpen={modalIsOpen} style={modalStyle}>
-        <div className="buttom-modal-wrapper">
-          <div className="modal-question-wrapper">
-            <p className="modal-question">不承認の理由</p>
-            <input type="text" value={DisApprovalReason} onChange={handleChange} />
-          </div>
-          <div className="modal-question-wrapper">
-            <p className="modal-question">本当に不承認しますか？</p>
-          </div>
-          <div className="modal-yesno-wrapper">
-            <p className="modal-yes" onClick={() => DisApporovalSend(reservationId)}>はい</p>
-            <p className="modal-no" onClick={() => setIsOpen(false)}>いいえ</p>
-          </div>
+    <>
+      <button type="button" className="disapproval-btn" onClick={() => setModalIsOpen(true)}>不承認</button>
+      <Modal isOpen={modalIsOpen} onRequestClose={modalToggle} className="modal-content" overlayClassName="modal-overlay">
+      <div className="buttom-modal-wrapper">
+          <form onSubmit={handleSubmit(ApporovalSend)}>
+            <div className="modal-title">
+              <h2>以下の項目を入力後、不承認ボタンを押してください</h2>
+              {message && <p className="message">{message}</p>}
+            </div>
+            <div className="modal-form-group">
+              {errors.conditions && <p className="modal-error">※この項目は必須です</p>}
+              <label className="modal-label">不承認の理由：</label>
+              <input type="text" name="conditions" className="modal-input"
+                {...register("conditions", { required: true })}
+              />
+            </div>
+            <div className="modal-form-group">
+              <button type="submit" className="btn">不承認</button>
+              <span>　</span>
+              <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>閉じる</button>
+            </div>
+          </form>
         </div>
+        {loading && <Loading />}
       </Modal>
-    </div>
+    </>
   )
 }
 

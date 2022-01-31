@@ -1,7 +1,7 @@
 // 不承認リスト全体のコンポーネント
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ApprovalTable from "../approvallist/ApprovalTable";
+import DisapprovalTable from "./DisapprovalTable";
 import '../approvallist/approval.scss';
 import dayjs from 'dayjs';
 import DocumentLayout from "../document/DocumentLayout";
@@ -14,17 +14,11 @@ const DisapprovalListBody = () => {
     // console.log(e.target.value);
   }
 
-  const groupFiltering = (e) => {
-    setGroupFilter(e.target.value);
-    // setGroupFilter(true);
-  }
-
   const dateFiltering = (e) => {
     setDateFilter(e.target.value);
   }
 
   const [placeFilter, setPlaceFilter] = useState();
-  const [groupFilter, setGroupFilter] = useState();
   const [dateFilter, setDateFilter] = useState();
 
   const [DisApprovalListData, setDisApprovalListData] = useState([]);
@@ -33,7 +27,6 @@ const DisapprovalListBody = () => {
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=3`, {
       params: {
         'reservation__place': placeFilter,
-        'reservation__is_group': groupFilter,
         'reservation__start': dateFilter
       }
     })
@@ -44,7 +37,7 @@ const DisapprovalListBody = () => {
         setDisApprovalListData(data);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       })
   }
 
@@ -52,22 +45,23 @@ const DisapprovalListBody = () => {
   useEffect(() => {
     GetDisApprovalList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placeFilter, groupFilter])
+  }, [placeFilter])
 
   const Table = (
     // データをmapで回している
       DisApprovalListData.map((val, val_index) =>{
         return(
           // 不承認リストの中のコンポーネント
-          <ApprovalTable
+          <DisapprovalTable
           // propsでDisapprovalTable.jsに不承認リストのデータを送っている
           key={val_index}
+          id={val.id}
+          reservation_id={val.reservation.id}
           // dayjsのformatで〇/〇と日付を表示できるようにしている
           date={dayjs(val.reservation.start).format('YYYY-MM-DD')}
           group_name={val.reservation.group_name}
           reader_name={val.reservation.reader_name}
           contact_name={val.reservation.contact_name}
-          is_group={val.reservation.is_group}
           tel={val.reservation.tel}
           address={val.reservation.address}
           purpose={val.reservation.purpose}
@@ -78,8 +72,12 @@ const DisapprovalListBody = () => {
           organizer_number={val.reservation.organizer_number}
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
-          id={val.reservation.id}
           admission_fee={val.reservation.admission_fee}
+          email={val.reservation.user.email}
+          approval={val.approval.name}
+          usage_fee={val.usage_fee}
+          electric_fee={val.electric_fee}
+          heating_fee={val.heating_fee}
         />
       )
     })
@@ -106,14 +104,6 @@ const DisapprovalListBody = () => {
                   </td>
                   <td></td>
                   <td></td>
-                  <td>
-                    <select className="groupfilter" defaultValue="" onChange={(e) => groupFiltering(e)}>
-                      <option value="">全体</option>
-                      <option value="false">個人</option>
-                      <option value="true">団体</option>
-                    </select>
-                  </td>
-                  <td></td>
                   <td></td>
                   <td>
                     <select className="placefilter" defaultValue="" onChange={(e) => placeFiltering(e)}>
@@ -127,12 +117,17 @@ const DisapprovalListBody = () => {
                     </select>
                   </td>
                   <td></td>
-                  <td></td>
                 </tr>
               </thead>
               <thead>
                 <tr>
-                  <td></td><td>日付</td><td>団体者名</td><td>代表者名</td><td>個人/団体</td><td>時間</td><td>人数</td><td>場所</td><td>詳細</td>
+                  <th></th>
+                  <th>日付</th>
+                  <th>団体者名</th>
+                  <th>代表者名</th>
+                  <th>時間</th>
+                  <th>場所</th>
+                  <th>詳細</th>
                 </tr>
               </thead>
               <tbody>

@@ -57,7 +57,7 @@ class Csv:
         created_at = i.reservation.created_at
         approval = i.approval.name
         writer.writerow([pk, group_name, reader_name, contact_name, address, tel, is_group, start, end, organizer_number, participant_number, purpose, usage_category_list, age_category_list, admission_fee, place, place_number, equipment, special_equipment, created_at, approval])
-    return '/static/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
+    return '/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
 
 
 def csv_export(request):

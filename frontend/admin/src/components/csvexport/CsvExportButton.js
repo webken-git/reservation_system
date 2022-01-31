@@ -41,7 +41,7 @@ const CsvExportButton = (props) => {
       type="button"
       className="btn"
       onClick={() => {
-          downloadDocument(`${process.env.REACT_APP_API}/reservation_system/backend/django${csvFile}`);
+          downloadDocument(`${process.env.REACT_APP_DOCUMENT_URL}${csvFile}`);
       }}
     >
       CSV出力
