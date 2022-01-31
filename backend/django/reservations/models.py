@@ -77,7 +77,7 @@ class Reservation(models.Model):
   """
   予約テーブル
   """
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(
       User, verbose_name='user',
       blank=True, null=True,
@@ -131,7 +131,7 @@ class UserInfo(models.Model):
   """
   ユーザー情報テーブル
   """
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(
       User, verbose_name='user',
       blank=True, null=True,
@@ -152,7 +152,7 @@ class ApprovalApplication(models.Model):
   """
   予約承認申請テーブル
   """
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',
       related_name='approval_app_reservation',

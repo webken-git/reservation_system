@@ -21,7 +21,7 @@ const Content = (props) =>{
     const approvalFilter = props.approvalFilter;
     const calendarType = props.calendarType;
 
-    console.log(filterType)
+    // console.log(filterType)
 
     useEffect(() => {
         let unmounted = false;
