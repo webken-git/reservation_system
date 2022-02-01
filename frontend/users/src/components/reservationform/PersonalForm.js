@@ -3,20 +3,22 @@ import { useForm, Controller } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { personalData, stepValue } from "../../recoil/form/atom";
 import "react-phone-input-2/lib/style.css";
-import { stepSchema } from "./stepYup";
+// import { stepSchema } from "./stepYup";
 import { Grid } from "@material-ui/core";
 import "./PersonalForm.scss";
 import { TextField } from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 export const PersonalForm = () => {
   const [, setData] = useRecoilState(personalData);
   const [, setStep] = useRecoilState(stepValue);
   const {
     handleSubmit,
+    register,
     formState: { errors },
     control,
   } = useForm({
-    resolver: yupResolver(stepSchema),
+    // resolver: yupResolver(stepSchema),
+    reValidateMode: "onSubmit",
   });
   const next = () => {
     setStep(2);
@@ -40,13 +42,16 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="group_name"
               control={control}
-              rules={{ required: "入力してください" }}
+              {...register("group_name", {
+                required: "必須項目です",
+              })}
               defaultValue=""
               render={({ field }) => (
                 <div>
                   <p>団体名</p>
 
                   <TextField
+                    type={"text"}
                     helperText={
                       errors.group_name ? "入力してください" : "※必須事項です"
                     }
@@ -64,12 +69,15 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="reader_name"
               control={control}
-              rules={{ required: "入力してください" }}
+              {...register("reader_name", {
+                required: "必須項目です",
+              })}
               defaultValue=""
               render={({ field }) => (
                 <div>
                   <p>代表者名</p>
                   <TextField
+                    type={"text"}
                     {...field}
                     label="代表者名を入力してください。"
                     variant="outlined"
@@ -87,12 +95,15 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="contact_name"
               control={control}
-              rules={{ required: "入力してください" }}
+              {...register("contact_name", {
+                required: "必須項目です",
+              })}
               defaultValue=""
               render={({ field }) => (
                 <div>
                   <p>連絡者名</p>
                   <TextField
+                    type={"text"}
                     {...field}
                     label="連絡者名を入力してください。"
                     variant="outlined"
@@ -110,12 +121,15 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="address"
               control={control}
-              rules={{ required: "入力してください" }}
+              {...register("address", {
+                required: "必須項目です",
+              })}
               defaultValue=""
               render={({ field }) => (
                 <div>
                   <p>住所</p>
                   <TextField
+                    type={"text"}
                     {...field}
                     label="住所を入力してください。"
                     variant="outlined"
@@ -133,18 +147,31 @@ export const PersonalForm = () => {
               //   TextFiledを制御するController
               name="tel"
               control={control}
-              rules={{
-                required: "入力してください",
-                pattern: /^[0-9]+$/,
-                maxLength: 11,
-              }}
+              {...register("tel", {
+                required: "必須項目です",
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "半角数字で入力してください",
+                },
+                minLength: {
+                  value: 5,
+                  message:
+                    "桁数が足りません。正しい電話番号が入力されているか確認してください。",
+                },
+                maxLength: {
+                  value: 11,
+                  message:
+                    "桁数が多過ぎます。正しい電話番号が入力されているか確認してください。",
+                },
+              })}
               defaultValue=""
               render={({ field }) => (
                 <div>
-                  <div>電話番号</div>
+                  <div>電話番号（ハイフンなし）</div>
                   <TextField
                     {...field}
-                    type="tel"
+                    type={"text"}
+                    inputMode="numeric"
                     label="電話番号を入力してください。"
                     variant="outlined"
                     error={"tel" in errors}
