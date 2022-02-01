@@ -33,7 +33,7 @@ const Content = (props) =>{
         // console.log(placeName);
         axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
             params: {
-                'approval': 2,
+                // 'approval': 2,
                 'reservation__start': year+'-'+month+'-'+day,
                 'reservation__place__name': placeName
             }
