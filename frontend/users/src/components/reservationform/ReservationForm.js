@@ -26,10 +26,7 @@ import {
   FormGroup,
   RadioGroup,
   Radio,
-  // Select,
   MenuItem,
-  // SelectField,
-  // Button,
   styled,
   FormHelperText,
 } from "@mui/material";
@@ -43,22 +40,26 @@ const Label = styled("p")({
 });
 
 // const schema = reservationSchema;
-export const ReservationForm = ({ placeLists }) => {
+export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
   const [FormData, setFormData] = useRecoilState(formData);
   let tab = useRecoilValue(tabState);
   const {
     control,
     handleSubmit,
+    getValues,
+    setValue,
+    register,
     reset,
     formState: { errors },
   } = useForm({
-    criteriaMode: "all",
+    // criteriaMode: "all",
+    reValidateMode: "onSubmit",
   });
+  const error = Object.values(errors); // エラーがあるかどうか
   const [, setList] = useState([]);
   const [checkValue, setCheckValue] = useState(false);
   const [checkPayment, setCheckPayment] = useState(false);
-  const [ageValue, setAgeValue] = useState([]);
-  // const [ageName, setAgeName] = useState([]);
+  const [message, setMessage] = useState("");
   const AgeData = useFetch({
     url: ReservationUrls.AGE,
   });
@@ -70,11 +71,9 @@ export const ReservationForm = ({ placeLists }) => {
   // });
   // 選択中の施設を取得
   const placeId = parseInt(tab.placeId);
-  // Intに変換
   const placeName = tab.placeName;
-  // スクロール位置を保持する
-  const formRef = useRef(null);
 
+  const formRef = useRef();
   // scrollToRefの位置にスクロールする
   const scrollToElement = (element) => {
     element.current.scrollIntoView({
@@ -82,8 +81,6 @@ export const ReservationForm = ({ placeLists }) => {
       block: "start",
     });
   };
-  // errorがある場合はエラーを表示
-  const error = Object.values(errors);
 
   const onSubmit = (e) => {
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
@@ -94,7 +91,7 @@ export const ReservationForm = ({ placeLists }) => {
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
     // const reservation = placeName;
-    const age = ageValue;
+    const age = getValues("ageGroup");
     const id = getId();
     delete e["ageGroup"];
     delete e["StartDate"];
@@ -128,7 +125,7 @@ export const ReservationForm = ({ placeLists }) => {
     setFormData(list);
     // フォームをリセット
     reset();
-    //
+    setMessage("予約情報を追加しました");
     scrollToElement(formRef);
   };
 
@@ -149,16 +146,26 @@ export const ReservationForm = ({ placeLists }) => {
     //trueなら TextFiledを表示
     setCheckPayment(e.target.value);
   };
-  const checkAgeValue = (e) => {
-    //apiに配列で渡す為にcheckした年齢のvalueを配列入れる
-    if ({ [e.target.value]: e.target.checked === true }) {
-      setAgeValue([...ageValue, e.target.value]);
+
+  const handleCheck = (ageGroupId, e) => {
+    let values = getValues("ageGroup") || [];
+
+    let newValues = [];
+    // 選択されている場合
+    if (e.target.checked) {
+      // 選択されているageGroupIdを追加
+      newValues = [...values, ageGroupId];
+    } else {
+      // 選択されていないageGroupIdを削除
+      newValues = values.filter((value) => value !== ageGroupId);
     }
+    setValue("ageGroup", newValues);
+    return newValues;
   };
 
   return (
-    <Grid container alignItems="center" justifyContent={"center"}>
-      <div className={form.parent_elements} ref={formRef}>
+    <Grid container alignItems="center" justifyContent={"center"} ref={formRef}>
+      <div className={form.parent_elements}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1>予約情報入力</h1>
           {error.length > 0 && (
@@ -173,6 +180,11 @@ export const ReservationForm = ({ placeLists }) => {
               </div>
             </>
           )}
+          {message && (
+            <div className="reserve-message">
+              <p>{message}</p>
+            </div>
+          )}
           <div>
             <Label>年齢：</Label>
             <FormControl error>
@@ -183,6 +195,7 @@ export const ReservationForm = ({ placeLists }) => {
                 <Controller
                   //Checkboxを制御するController
                   control={control}
+                  id="ageGroup"
                   name="ageGroup"
                   defaultValue={""}
                   rules={{ required: "選択してください。" }}
@@ -195,7 +208,16 @@ export const ReservationForm = ({ placeLists }) => {
                             key={id}
                             label={ageGroup.name}
                             value={ageGroup.id}
-                            control={<Checkbox onClick={checkAgeValue} />}
+                            onChange={(e) =>
+                              field.onChange(handleCheck(ageGroup.id, e))
+                            }
+                            control={
+                              <Checkbox
+                                // onClick={checkAgeValue}
+                                // onChange={checkAgeValue}
+                                checked={!!field.value.includes(ageGroup.id)}
+                              />
+                            }
                             labelPlacement="end"
                           />
                         ))}
@@ -458,7 +480,9 @@ export const ReservationForm = ({ placeLists }) => {
                 name="End"
                 defaultValue=""
                 control={control}
-                rules={{ required: "選択してください" }}
+                rules={{
+                  required: "選択してください",
+                }}
                 render={({ field }) => (
                   <div className={form.end}>
                     <TextField
@@ -527,46 +551,72 @@ export const ReservationForm = ({ placeLists }) => {
               )}
             />
           </div>
-          <div>
-            <Controller
-              name="staffNum"
-              defaultValue=""
-              control={control}
-              rules={{ required: "選択してください" }}
-              render={({ field }) => (
-                <div className={form.StaffNum}>
-                  <Label>主催関係者</Label>
-                  <TextField
-                    type={"number"}
-                    style={{ width: "150px" }}
-                    label="半角数字で入力"
-                    error={"staffNum" in errors}
-                    {...field}
-                  />
-                </div>
-              )}
-            />
-          </div>
-          <div>
-            <Label>参加人数</Label>
-            <Controller
-              name="useNum"
-              defaultValue=""
-              control={control}
-              rules={{ required: "選択してください" }}
-              render={({ field }) => (
-                <>
-                  <TextField
-                    type={"number"}
-                    style={{ width: "150px" }}
-                    label="半角数字で入力"
-                    error={"useNum" in errors}
-                    {...field}
-                  />
-                </>
-              )}
-            />
-          </div>
+          <Grid container>
+            <Grid item lg={3}>
+              <FormControl error>
+                <Label>主催関係者</Label>
+                <FormHelperText>
+                  {errors.staffNum && errors.staffNum.message}
+                </FormHelperText>
+                <Controller
+                  name="staffNum"
+                  defaultValue=""
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <TextField
+                        type={"text"}
+                        inputMode="numeric"
+                        style={{ width: "150px" }}
+                        placeholder="半角数字で入力"
+                        {...register("staffNum", {
+                          required: "必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "数字を入力してください",
+                          },
+                        })}
+                        error={"staffNum" in errors}
+                        {...field}
+                      />
+                    </>
+                  )}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item lg={3}>
+              <FormControl error>
+                <Label>参加人数</Label>
+                <FormHelperText>
+                  {errors.useNum && errors.useNum.message}
+                </FormHelperText>
+                <Controller
+                  name="useNum"
+                  defaultValue=""
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <TextField
+                        type={"text"}
+                        inputMode="numeric"
+                        style={{ width: "150px" }}
+                        placeholder="半角数字で入力"
+                        {...register("useNum", {
+                          required: "必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "数字を入力してください",
+                          },
+                        })}
+                        error={"useNum" in errors}
+                        {...field}
+                      />
+                    </>
+                  )}
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
           <Label>附属設備もしくは器具の使用：</Label>
           <FormControl error>
             <FormHelperText>
@@ -662,7 +712,7 @@ export const ReservationForm = ({ placeLists }) => {
       </div>
     </Grid>
   );
-};
+});
 let id = 0;
 function getId() {
   return id++;
