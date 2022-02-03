@@ -112,7 +112,7 @@ const ScheduleBlock = (props) =>{
     }), [backgroundColor]);
 
     const styleGeneratorHandler = useCallback(() =>{
-        let top = (startHours*6)+2+startMinutes*0.1;
+        let top = (startHours*6)-52+startMinutes*0.1;
         let height = (endHours-(startHours+1))*6+((6-startMinutes*0.1)+endMinutes*0.1);
 
         if((startDate < props.contentDate && startDate < endDate)){
