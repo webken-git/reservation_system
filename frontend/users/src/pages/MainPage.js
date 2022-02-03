@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 // import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { Tab, Box } from "@mui/material";
+import { Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import "react-tabs/style/react-tabs.scss";
 import { useSetRecoilState, useRecoilValue } from "recoil";
@@ -144,7 +144,7 @@ const MainPage = () => {
     if (isGroup.length === 0) {
       return (
         <TabPanel key={p_id} value={place.id.toString()}>
-          <Box className="list-wrapper">
+          <div className="list-wrapper">
             {/* <div className="scroll_box-wrapper"> */}
             {/* <div className="scroll_box"> */}
             <details open={true}>
@@ -160,7 +160,7 @@ const MainPage = () => {
             )}
             {/* </div> */}
             {/* </div> */}
-          </Box>
+          </div>
         </TabPanel>
       );
     } else if (timeId4.length === 0) {

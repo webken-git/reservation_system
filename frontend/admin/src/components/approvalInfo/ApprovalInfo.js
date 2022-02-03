@@ -10,9 +10,19 @@ const ApprovalInfo = (props) =>{
     const unmountRef = useUnmountRef();
     const [reservation, setReservation] = useState([]);
     const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
     const [usage, setUsage] = useSafeState(unmountRef, []);
     const [age, setAge] = useSafeState(unmountRef, []);
+=======
+    const [year, setYear] = useState("");
+    const [month, setMonth] = useState("");
+    const [date, setDate] = useState("");
+>>>>>>> feb0658adc8531a1b92335c7e8adbeed99159e33
     const id = props.id;
+
+    // setYear(reservation.start.substr(0, 4));
+    // setMonth(reservation.start.substr(5, 2));
+    // setDate(reservation.start.substr(8, 2));
 
     const pullReservation = () => {
         setLoading(true);
@@ -52,11 +62,9 @@ const ApprovalInfo = (props) =>{
 
     useEffect(() => {
         pullReservation();
-        // setYear(reservation.start.substr(0, 2))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    if (reservation.length === 0) {
+    if(reservation.length === 0) {
         return <Loading />;
     } else {
         return (
@@ -129,28 +137,7 @@ const ApprovalInfo = (props) =>{
             {loading && <Loading />}
         </>
         )
-    }
-
-    // const calendarType = props.calendarType;
-
-    // const dayOfWeek = props.date.getDay() ;
-    // const dayOfWeekStr = [ "日", "月", "火", "水", "木", "金", "土" ][dayOfWeek];
-
-    // if (calendarType === 'weekly') {
-    //     return (
-    //         <div className="head">
-    //             <p className="day">{props.day}</p>
-    //             <p className="date"><span className={(new Date(new Date().toDateString()).getTime()===new Date(props.date.toDateString()).getTime() ? "today" : "")}>{props.date.getDate()}</span></p>
-    //         </div>
-    //     )
-    // } else if (calendarType === 'daily') {
-    //     return (
-    //         <div className="daily-head">
-    //             <p className="day">{dayOfWeekStr}</p>
-    //             <p className="date"><span className={(new Date(new Date().toDateString()).getTime()===new Date(props.date.toDateString()).getTime() ? "today" : "")}>{props.date.getDate()}</span></p>
-    //         </div>
-    //     )
-    // }
+    }    
 }
 
 export default ApprovalInfo;

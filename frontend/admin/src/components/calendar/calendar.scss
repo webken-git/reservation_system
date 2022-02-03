@@ -23,6 +23,26 @@ $sub-color: #707070;
 $accent-color: #233b62;
 $bordercolor: gainsboro;
 
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
 //追加css
 .container {
   display: inline-block;
@@ -52,6 +72,9 @@ $bordercolor: gainsboro;
       font-size: 30px;
       margin-left: 50px;
       color: #707070;
+      @include mq(sp) {
+        display: none;
+      }
     }
 
     .date-selector {
