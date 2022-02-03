@@ -19,8 +19,8 @@ const ScheduleBlock = (props) =>{
     useEffect(()=>{
         let unmounted = false;
         if(!unmounted){
-            setStartHours(Number(props.schedule.reservation.start.substr(11, 2)));
-            setEndHours(Number(props.schedule.reservation.end.substr(11, 2)));
+            setStartHours(Number(props.schedule.reservation.start.substr(11, 2)) - 9);
+            setEndHours(Number(props.schedule.reservation.end.substr(11, 2)) - 9);
             setStartMinutes(Number(props.schedule.reservation.start.substr(14, 2)));
             setEndMinutes(Number(props.schedule.reservation.end.substr(14, 2)));
             let startDate = new Date(Number(props.schedule.reservation.start.substr(0, 4)),
@@ -32,11 +32,11 @@ const ScheduleBlock = (props) =>{
                 Number(props.schedule.reservation.end.substr(8, 2)));
             setEndDate(endDate);
 
-            if(props.schedule.reservation.repeat_interval !== 1){
-                let scheduleStartDate = "";
-                let scheduleEndDate = "";
-                scheduleStartDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate());
-                scheduleEndDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate());
+            // if(props.schedule.reservation.repeat_interval !== 1){
+            //     let scheduleStartDate = "";
+            //     let scheduleEndDate = "";
+            //     scheduleStartDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate());
+            //     scheduleEndDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate());
                 // if(props.schedule.repeat_interval === 2){
                 //     scheduleStartDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate());
                 //     scheduleEndDate = new Date(props.contentDate.getFullYear(), props.contentDate.getMonth(), props.contentDate.getDate());
@@ -73,10 +73,10 @@ const ScheduleBlock = (props) =>{
                 //     }
                 // }
                 
-                setScheduleStartDate(scheduleStartDate);
-                setScheduleEndDate(scheduleEndDate);
+            //     setScheduleStartDate(scheduleStartDate);
+            //     setScheduleEndDate(scheduleEndDate);
                 
-            }                        
+            // }                        
         }
 
         return () => { unmounted = true }
