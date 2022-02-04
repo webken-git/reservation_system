@@ -12,7 +12,7 @@ const DisApprovalTable = (props) => {
   const handleChange = (e) => {
     setReservationState({ id: e.target.id });
   };
-  return(
+  return (
     <tr>
       <td>
         <input
@@ -24,15 +24,35 @@ const DisApprovalTable = (props) => {
         />
       </td>
       {/* 予約日 */}
-      <td><label for={props.id} className="approval-label">{props.date}</label></td>
+      <td>
+        <label htmlFor={props.id} className="approval-label">
+          {props.date}
+        </label>
+      </td>
       {/* 団体者名 */}
-      <td><label for={props.id} className="approval-label">{props.group_name}</label></td>
+      <td>
+        <label htmlFor={props.id} className="approval-label">
+          {props.group_name}
+        </label>
+      </td>
       {/* 代表者名 */}
-      <td><label for={props.id} className="approval-label">{props.reader_name}</label></td>
+      <td>
+        <label htmlFor={props.id} className="approval-label">
+          {props.reader_name}
+        </label>
+      </td>
       {/* 予約時間 */}
-      <td><label for={props.id} className="approval-label">{props.start_time}~{props.end_time}</label></td>
+      <td>
+        <label htmlFor={props.id} className="approval-label">
+          {props.start_time}~{props.end_time}
+        </label>
+      </td>
       {/* 場所 */}
-      <td><label for={props.id} className="approval-label">{props.place}</label></td>
+      <td>
+        <label htmlFor={props.id} className="approval-label">
+          {props.place}
+        </label>
+      </td>
       <td>
         <DetailsButton
           id={props.id}
@@ -59,7 +79,7 @@ const DisApprovalTable = (props) => {
         />
       </td>
     </tr>
-  )
-}
+  );
+};
 
-export default DisApprovalTable
+export default DisApprovalTable;

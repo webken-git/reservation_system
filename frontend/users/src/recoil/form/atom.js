@@ -24,3 +24,12 @@ export const stepValue = atom({
   default: 0,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const popupState = atom({
+  key: "popupState",
+  default: {
+    isOpen: false,
+    message: "",
+  },
+  effects_UNSTABLE: [persistAtom],
+});

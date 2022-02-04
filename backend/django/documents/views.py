@@ -216,8 +216,14 @@ def create_new_word(request):
         tbl.rows[9].cells[1].paragraphs[0].text = tbl.rows[9].cells[1].paragraphs[0].text.replace('円', str(admission_fee) + '円')
       else:
         tbl.rows[9].cells[1].paragraphs[0].text = tbl.rows[9].cells[1].paragraphs[0].text.replace('無', '✓無')
+      if usage_fee:
+        # 料金データを書き込む
+        tbl.rows[10].cells[2].paragraphs[0].text = tbl.rows[10].cells[2].paragraphs[0].text.replace('円', '{}円'.format(usage_fee))
+        tbl.rows[11].cells[2].paragraphs[0].text = tbl.rows[11].cells[2].paragraphs[0].text.replace('円', '{}円'.format(heating_fee))
+        tbl.rows[12].cells[2].paragraphs[0].text = tbl.rows[12].cells[2].paragraphs[0].text.replace('円', '{}円'.format(electric_fee))
+        tbl.rows[10].cells[4].paragraphs[0].text = tbl.rows[10].cells[4].paragraphs[0].text.replace('円', '{}円'.format(usage_fee + heating_fee + electric_fee))
       if conditions:
-        tbl.rows[13].cells[1].paragraphs[0].text = tbl.rows[13].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
+        tbl.rows[13].cells[1].paragraphs[0].text = tbl.rows[13].cells[1].paragraphs[0].text.replace('）', '）\n{}'.format(conditions))
     # 稚内市体育施設使用等承認取消し等決定通知書
     elif query[0].name == '稚内市体育施設使用等承認取消し等決定通知書':
       if cancellation_reason:
@@ -227,7 +233,7 @@ def create_new_word(request):
         tbl.rows[5].cells[1].paragraphs[0].text = insert_string(tbl.rows[5].cells[1].paragraphs[0].text, 0, purpose)
         tbl.rows[6].cells[0].paragraphs[2].text = insert_string(tbl.rows[6].cells[0].paragraphs[2].text, 0, str(cancellation_reason))
       else:
-        return {'error': 'approval-applicationテーブルにあるcancellation_reasonフィールドの値が未入力です。'}
+        return {'error': '取り消しの理由に記入するデータがありません。'}
     # 稚内市体育施設使用等承認申請書
     elif query[0].name == '稚内市体育施設使用等承認申請書':
       tbl.rows[5].cells[3].paragraphs[0].text = insert_string(tbl.rows[5].cells[3].paragraphs[0].text, 0, purpose)
@@ -244,18 +250,30 @@ def create_new_word(request):
         tbl.rows[9].cells[3].paragraphs[0].text = tbl.rows[9].cells[3].paragraphs[0].text.replace('円', str(admission_fee) + '円')
       else:
         tbl.rows[9].cells[3].paragraphs[0].text = tbl.rows[9].cells[3].paragraphs[0].text.replace('無', '✓無')
+      if usage_fee:
+        # 料金データを書き込む
+        tbl.rows[10].cells[4].paragraphs[0].text = tbl.rows[10].cells[4].paragraphs[0].text.replace('円', '{}円'.format(usage_fee))
+        tbl.rows[11].cells[4].paragraphs[0].text = tbl.rows[11].cells[4].paragraphs[0].text.replace('円', '{}円'.format(heating_fee))
+        tbl.rows[12].cells[4].paragraphs[0].text = tbl.rows[12].cells[4].paragraphs[0].text.replace('円', '{}円'.format(electric_fee))
+        tbl.rows[10].cells[8].paragraphs[0].text = tbl.rows[10].cells[8].paragraphs[0].text.replace('円', '{}円'.format(usage_fee + heating_fee + electric_fee))
       if conditions:
         tbl.rows[16].cells[1].paragraphs[0].text = tbl.rows[16].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
     # 稚内市体育施設使用料等後納承認（不承認）通知書
     elif query[0].name == '稚内市体育施設使用料等後納承認（不承認）通知書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
-      tbl.rows[6].cells[1].paragraphs[1].text = insert_string(tbl.rows[6].cells[1].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+      if q:
+        tbl.rows[6].cells[1].paragraphs[1].text = insert_string(tbl.rows[6].cells[1].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+      else:
+        return {'error': '後納の理由に記入するデータがありません。'}
       if conditions:
         tbl.rows[7].cells[1].paragraphs[0].text = tbl.rows[7].cells[1].paragraphs[0].text.replace('）', '）\n' + str(conditions))
     # 稚内市体育施設使用料等後納申請書
     elif query[0].name == '稚内市体育施設使用料等後納申請書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
-      tbl.rows[6].cells[3].paragraphs[1].text = insert_string(tbl.rows[6].cells[3].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+      if q:
+        tbl.rows[6].cells[3].paragraphs[1].text = insert_string(tbl.rows[6].cells[3].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+      else:
+        return {'error': '後納の理由に記入するデータがありません。'}
       if conditions:
         tbl.rows[10].cells[3].paragraphs[0].text = tbl.rows[10].cells[3].paragraphs[0].text.replace('）', '）\n' + str(conditions))
   else:
@@ -331,8 +349,8 @@ class DocumentViewSet(viewsets.ModelViewSet):
     instance = self.get_object()
     serializer = self.get_serializer(instance)
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if os.path.exists(BASE_DIR + '/static/application_documents/docx/' + instance.file):
-      os.remove(BASE_DIR + '/static/application_documents/docx/' + instance.file)
+    if os.path.exists(BASE_DIR + '/static/documents/docx/' + instance.file):
+      os.remove(BASE_DIR + '/static/documents/docx/' + instance.file)
     self.perform_destroy(instance)
     return response.Response(serializer.data, status=status.HTTP_200_OK)
 

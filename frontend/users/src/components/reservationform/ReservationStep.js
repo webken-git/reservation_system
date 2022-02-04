@@ -78,20 +78,32 @@ export const ReservationStep = () => {
             </Link>
           </Grid>
         ) : (
-          <div>
-            <Grid container alignItems="center" justifyContent={"center"}>
+          <Grid container alignItems="center" justifyContent={"center"}>
+            <div>
+              <button
+                type="button"
+                className="back-btn"
+                onClick={() => {
+                  window.history.back();
+                }}
+                style={{
+                  marginRight: "30px",
+                }}
+              >
+                戻る
+              </button>
               <button
                 type="button"
                 className="btn"
                 onClick={Step1}
                 style={{
-                  width: "20%",
+                  marginLeft: "30px",
                 }}
               >
                 次へ
               </button>
-            </Grid>
-          </div>
+            </div>
+          </Grid>
         )}
       </div>
       <div style={{ display: activeStep === 1 ? "" : "none" }}>
@@ -100,8 +112,8 @@ export const ReservationStep = () => {
         </div>
       </div>
       <div style={{ display: activeStep === 2 ? "" : "none" }}>
-        <Grid container alignItems="center" justifyContent={"center"}>
-          <h2 className="title">
+        <Grid container className="title-grid">
+          <h2 className="verify-title">
             以下の入力内容で予約いたします。
             <br />
             入力内容を確認後、「予約する」ボタンを押してください。

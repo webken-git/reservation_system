@@ -179,17 +179,23 @@ $accent-color: #233b62;
 .password-container {
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding: 10px 10px;
-  margin: 5px 0;
-}
-.password-container:focus {
-  outline: #000 solid 1px;
+  padding: 10px;
+  margin: 10px 0;
+  @include mq(sp) {
+    padding: 10px 5px;
+  }
+  &:focus {
+    outline: #000 solid 1px;
+  }
 }
 .password {
   width: 275px;
   border: none;
   font-size: large;
-}
-.password:focus {
-  outline: none;
+  @include mq(sp) {
+    width: 265px;
+  }
+  &:focus {
+    outline: none;
+  }
 }

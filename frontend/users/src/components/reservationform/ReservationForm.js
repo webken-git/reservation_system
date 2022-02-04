@@ -13,11 +13,10 @@ import {
 } from "./FormDataList";
 import { format } from "date-fns";
 import form from "./ReservationForm.module.scss";
-import { formData } from "../../recoil/form/atom";
+import { formData, popupState } from "../../recoil/form/atom";
 import tabState from "../../recoil/tab";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useFetch } from "../../hooks/useFetch";
-// import { reservationSchema } from "./FormYup";
 import {
   FormControl,
   FormControlLabel,
@@ -30,10 +29,7 @@ import {
   styled,
   FormHelperText,
 } from "@mui/material";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as Yup from "yup";
 import { ReservationUrls } from "../../utils/reservationUrls";
-// import { ref } from "yup";
 const Label = styled("p")({
   marginRight: 15,
   fontSize: 17,
@@ -59,7 +55,8 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
   const [, setList] = useState([]);
   const [checkValue, setCheckValue] = useState(false);
   const [checkPayment, setCheckPayment] = useState(false);
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
+  const setPopup = useSetRecoilState(popupState);
   const AgeData = useFetch({
     url: ReservationUrls.AGE,
   });
@@ -125,8 +122,17 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     setFormData(list);
     // フォームをリセット
     reset();
-    setMessage("予約情報を追加しました");
-    scrollToElement(formRef);
+    setPopup({
+      isOpen: true,
+      message: "予約情報を追加しました",
+    });
+
+    // setTimeout(() => {
+    //   setPopup({
+    //     isOpen: false,
+    //     message: "",
+    //   });
+    // }, 1500);
   };
 
   // カーリングの時だけplace_numberにレーンのシート分投げる
@@ -180,11 +186,11 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               </div>
             </>
           )}
-          {message && (
+          {/* {message && (
             <div className="reserve-message">
               <p>{message}</p>
             </div>
-          )}
+          )} */}
           <div>
             <Label>年齢：</Label>
             <FormControl error>
@@ -703,7 +709,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               />
             )}
           </div>
-          <div className="submitBtn">
+          <div className="submit-btn">
             <button type="submit" className="btn">
               追加する
             </button>

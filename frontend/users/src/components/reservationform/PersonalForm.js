@@ -188,9 +188,8 @@ export const PersonalForm = () => {
             type="button"
             className="back-btn"
             style={{
-              marginTop: "20%",
-              marginRight: "80px",
-              marginBottom: "10%",
+              marginTop: "10%",
+              marginRight: "30px",
             }}
             onClick={back}
           >
@@ -200,9 +199,8 @@ export const PersonalForm = () => {
             type="submit"
             className="btn"
             style={{
-              marginTop: "20%",
-              marginLeft: "80px",
-              marginBottom: "10%",
+              marginTop: "10%",
+              marginLeft: "30px",
             }}
           >
             次へ

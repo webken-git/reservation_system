@@ -32,6 +32,9 @@ export const ReservationPost = () => {
     setStep(3);
   };
   const back = () => {
+    setStep(1);
+  };
+  const reset = () => {
     setStep(0);
   };
 
@@ -91,7 +94,7 @@ export const ReservationPost = () => {
         participant_number: item.useNum,
         purpose: item.reason,
         admission_fee: 0,
-        place_number: item.placeNumber,
+        place_number: item.placeNumber ? item.placeNumber : 1,
         place_id: item.placeId,
         equipment_id: [],
         special_equipment_id: [],
@@ -117,9 +120,9 @@ export const ReservationPost = () => {
       resetTab();
       resetFormData();
       resetPersonalData([]);
-      back();
+      reset();
       window.location.href = "/";
-    }, 2000);
+    }, 1500);
   };
   return (
     <>
@@ -130,9 +133,8 @@ export const ReservationPost = () => {
             className="back-btn"
             onClick={back}
             style={{
-              marginTop: "20%",
-              marginLeft: "80px",
-              marginBottom: "10%",
+              marginTop: "10%",
+              marginLeft: "30px",
             }}
           >
             戻る
@@ -142,9 +144,8 @@ export const ReservationPost = () => {
             className="btn"
             onClick={(next, postData)}
             style={{
-              marginTop: "20%",
-              marginLeft: "80px",
-              marginBottom: "10%",
+              marginTop: "10%",
+              marginLeft: "30px",
             }}
           >
             予約する
