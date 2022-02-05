@@ -10,14 +10,8 @@ const ApprovalInfo = (props) =>{
     const unmountRef = useUnmountRef();
     const [reservation, setReservation] = useState([]);
     const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
     const [usage, setUsage] = useSafeState(unmountRef, []);
     const [age, setAge] = useSafeState(unmountRef, []);
-=======
-    const [year, setYear] = useState("");
-    const [month, setMonth] = useState("");
-    const [date, setDate] = useState("");
->>>>>>> feb0658adc8531a1b92335c7e8adbeed99159e33
     const id = props.id;
 
     // setYear(reservation.start.substr(0, 4));

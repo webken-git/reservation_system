@@ -21,6 +21,9 @@ const Content = (props) =>{
     const placeName = props.placeName;
     const calendarType = props.calendarType;
 
+    let approvalList = [];
+    let unapprovalList = [];
+
     useEffect(() => {
         let unmounted = false;
         let year = date.getFullYear();
@@ -45,15 +48,32 @@ const Content = (props) =>{
             if(!unmounted){
                 setScheduleList(scheduleList);
                 setUpdateFlag(false);
-                // setHomeUpdateFlag(false);
             }
         })
         .catch( error => {
             console.log(error);
         });
-        
+
         return () => { unmounted = true }
     }, [placeName, date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading, approvalFilter]);
+
+    scheduleList.map((schedule, index) => {
+        if (schedule.approval.name = "未承認"){
+            unapprovalList.push(schedule);
+        } else if (schedule.approval.name = "承認") {
+            approvalList.push(schedule);
+        }
+    })
+
+    // const unapprovalCount = (unapprovalList) => {
+    //     let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    //     unapprovalList.map((unapproval, index) => {
+
+    //     })
+    // }
+
+    console.log("unapproval", unapprovalList)
+    console.log("approval", approvalList)
 
     if (calendarType === 'weekly'){
         return (
@@ -82,16 +102,14 @@ const Content = (props) =>{
                 <div className="schedule-block-column">
                 {
                     props.isMain ?
-                    scheduleList.map((schedule, index) => {
+                    approvalList.map((schedule, index) => {
                         return (
                             <ScheduleBlock
                                 key={uuidv4()}
                                 schedule={schedule}
                                 index={index}
-                                // openModal={props.openModal}
                                 setScheduleDict={props.setScheduleDict}
                                 contentDate={contentDate}
-                                // individualOrGroup={props.individualOrGroup}
                             />
                         )
                     })
