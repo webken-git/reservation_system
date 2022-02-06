@@ -46,15 +46,6 @@ const DetailsButton = (props) => {
       .catch((err) => {});
   };
 
-  // const getDefferdPayment = (reservationId) => {
-  //   axios
-  //     .get(`${ReservationUrls.DEFFERD_PAYMENT}?reservation=${reservationId}`)
-  //     .then((res) => {
-  //       setDefferdPayment(res.data);
-  //     })
-  //     .catch((err) => {});
-  // };
-
   return (
     <>
       <p className="details-button" onClick={modalToggle}>

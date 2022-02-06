@@ -5,7 +5,6 @@ import { formData, personalData, stepValue } from "../../recoil/form/atom";
 import authState from "../../recoil/auth";
 import tabState from "../../recoil/tab";
 import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-// import { useFetch } from "../../hooks/useFetch";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
 
@@ -19,9 +18,6 @@ export const ReservationPost = () => {
   const resetTab = useResetRecoilState(tabState);
   const resetFormData = useResetRecoilState(formData);
   const resetPersonalData = useSetRecoilState(personalData);
-  // const AgeData = useFetch({
-  //   url: ReservationUrls.AGE_CATEGORY,
-  // });
 
   const next = () => {
     setStep(3);

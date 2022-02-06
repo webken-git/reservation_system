@@ -22,23 +22,6 @@ $main-color: #1a8d89;
 $sub-color: #707070;
 $accent-color: #233b62;
 
-.btn {
-  width: 7rem;
-  color: #fff;
-  border: 1px solid $main-color;
-  // border-radius: 3px;
-  padding: 9px 17px;
-  background-color: $main-color;
-  margin: 3% 0;
-  font-size: 1rem;
-  cursor: pointer;
-}
-.btn:hover {
-  color: #707070;
-  background-color: #fff;
-  transition: color 80ms 190ms, background-color 150ms;
-}
-
 .auth-page {
   width: 100%;
   height: 100%;
@@ -109,48 +92,6 @@ $accent-color: #233b62;
   }
 }
 
-.back-btn {
-  @extend .btn;
-  background-color: $sub-color;
-  border: $sub-color solid 1px;
-}
-.verify-btn {
-  @extend .btn;
-}
-.auth-btn {
-  @extend .btn;
-  width: 10rem;
-  // margin: 0 auto;
-}
-
-.logout-btn {
-  @extend .btn;
-  width: 9rem;
-  margin-right: 2%;
-  border: $sub-color solid 1px;
-  background-color: $sub-color;
-}
-
-.approval-btn {
-  @extend .btn;
-  width: 4.5rem;
-  border: #f00 solid 1px;
-  background-color: #f00;
-}
-
-.disapproval-btn {
-  @extend .btn;
-  width: 5.5rem;
-  border: #1f00aa solid 1px;
-  background-color: #003caa;
-}
-.approval-cancel-btn {
-  @extend .btn;
-  width: 8rem;
-  border: #1f00aa solid 1px;
-  background-color: #003caa;
-}
-
 .logout-container {
   color: #000;
   cursor: pointer;
@@ -165,15 +106,6 @@ $accent-color: #233b62;
 }
 .logout-container:hover {
   text-decoration: underline;
-}
-
-.registration-link {
-  @extend .btn;
-  width: 12rem;
-  height: 3.5rem;
-}
-.login-link {
-  @extend .btn;
 }
 
 .password-container {

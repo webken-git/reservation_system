@@ -53,7 +53,7 @@ const UserListBody = () => {
     });
 
   return (
-    <div>
+    <>
       <div className="functions">
         <RegistrationButton />
       </div>
@@ -74,7 +74,7 @@ const UserListBody = () => {
           </table>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

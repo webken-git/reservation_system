@@ -16,7 +16,7 @@ const ScheduleBlock = (props) => {
   // console.log(props.schedule.reservation.start);
   // console.log(props.contentDate);
 
-  console.log(props.schedule);
+  // console.log(props.schedule)
 
   useEffect(() => {
     let unmounted = false;

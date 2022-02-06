@@ -74,13 +74,13 @@ const Content = (props) => {
     approvalFilter,
   ]);
 
-  scheduleList.map((schedule, index) => {
-    if ((schedule.approval.name = "未承認")) {
-      unapprovalList.push(schedule);
-    } else if ((schedule.approval.name = "承認")) {
-      approvalList.push(schedule);
-    }
-  });
+  // scheduleList.map((schedule, index) => {
+  //     if (schedule.approval.name = "未承認"){
+  //         unapprovalList.push(schedule);
+  //     } else if (schedule.approval.name = "承認") {
+  //         approvalList.push(schedule);
+  //     }
+  // })
 
   // const unapprovalCount = (unapprovalList) => {
   //     let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -89,8 +89,8 @@ const Content = (props) => {
   //     })
   // }
 
-  console.log("unapproval", unapprovalList);
-  console.log("approval", approvalList);
+  // console.log("unapproval", unapprovalList)
+  // console.log("approval", approvalList)
 
   if (calendarType === "weekly") {
     return (
@@ -116,7 +116,7 @@ const Content = (props) => {
                 /> */}
         <div className="schedule-block-column">
           {props.isMain
-            ? approvalList.map((schedule, index) => {
+            ? scheduleList.map((schedule, index) => {
                 return (
                   <ScheduleBlock
                     key={uuidv4()}

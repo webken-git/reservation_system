@@ -33,7 +33,8 @@ $breakpoints: (
   // タブレット
   "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
   // PC
-  "pc": "screen and (min-width: #{$layout-width-inner})"
+  "pc": "screen and (min-width: #{$layout-width-inner})",
+  "iphonese": "screen and (max-width: 376px)"
 );
 
 //mixinの引数は$breakpoint、引数の初期値はsp
@@ -100,6 +101,16 @@ $breakpoints: (
 
     .calendar-btn {
       width: 3rem;
+      @include mq(sp) {
+        width: 2.5rem;
+        font-size: 0.8rem;
+        padding: 7px 15px;
+      }
+      @include mq(iphonese) {
+        width: 1.5rem;
+        font-size: 0.5rem;
+        padding: 7px 12px;
+      }
     }
   }
 
@@ -146,6 +157,9 @@ $breakpoints: (
     width: 5.5%;
     height: 100%;
     vertical-align: top;
+    @include mq(sp) {
+      width: 10%;
+    }
   }
 
   .head {
@@ -156,6 +170,9 @@ $breakpoints: (
     height: 100%;
     position: relative;
     text-align: center;
+    @include mq(sp) {
+      width: 12.5%;
+    }
 
     .day {
       margin-top: 1vh;
@@ -178,8 +195,8 @@ $breakpoints: (
       background-color: $main-color;
       color: white;
       display: inline-block;
-      width: 3.7vh;
-      height: 3.7vh;
+      width: 4.2vh;
+      height: 4.2vh;
       border-radius: 50%;
       line-height: 3.7vh;
       box-sizing: border-box;
@@ -251,8 +268,8 @@ $breakpoints: (
       background-color: #1a8d89;
       color: white;
       display: inline-block;
-      width: 3.7vh;
-      height: 3.7vh;
+      width: 4.2vh;
+      height: 4.2vh;
       border-radius: 50%;
       line-height: 3.7vh;
       box-sizing: border-box;
@@ -296,11 +313,17 @@ $breakpoints: (
 }
 
 .content-row {
-  height: 90%;
+  height: 700px;
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE, Edge 対応 */
   scrollbar-width: none; /* Firefox 対応 */
   position: relative;
+  @include mq(sp) {
+    height: 600px;
+  }
+  @include mq(iphonese) {
+    height: 400px;
+  }
 
   .now-time {
     width: 95.8%;
@@ -314,6 +337,9 @@ $breakpoints: (
   .timeline {
     display: inline-block;
     width: 5.5%;
+    @include mq(sp) {
+      width: 10%;
+    }
 
     div:first-of-type {
       margin-top: 2vh;
@@ -332,6 +358,7 @@ $breakpoints: (
       position: relative;
       top: -1.6vh;
       margin: 0;
+      padding: 0 10px;
     }
   }
 
@@ -343,6 +370,9 @@ $breakpoints: (
     overflow: hidden;
     position: relative;
     vertical-align: top;
+    @include mq(sp) {
+      width: 12.5%;
+    }
 
     .content-div:first-of-type {
       margin-top: 2vh;
@@ -459,7 +489,7 @@ $breakpoints: (
   height: 100%;
 
   .header {
-    height: 12%;
+    // height: 12%;
     display: flex;
     // justify-content: center; //左右中央揃え
     align-items: center; //上下中央揃え

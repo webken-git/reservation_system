@@ -3,7 +3,6 @@ import axios from "axios";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
-import { formatDate, formatTime } from "./formatData";
 import Loading from "../loading/Loading";
 import "./history.scss";
 
@@ -142,6 +141,18 @@ const ReservationCancel = (props) => {
                   <span key={index}>{item.name}　</span>
                 ))}
             </li>
+            <li>
+              <label>主催関係者：</label>
+              <span className="table-cell">
+                {reservation.reservation.organizer_number}人{" "}
+              </span>
+            </li>
+            <li>
+              <label>参集人員：</label>
+              <span className="table-cell">
+                {reservation.reservation.participant_number}人
+              </span>
+            </li>
             {usage[0] &&
               usage[0].usage.find(
                 (item) => item.name === "入場料を徴収する"
@@ -161,7 +172,7 @@ const ReservationCancel = (props) => {
             )}
             {reservation.reservation.special_equipment !== null && (
               <li>
-                <label>特別設備・器具の使用：</label>
+                <label>特別設備：</label>
                 <span>{reservation.reservation.special_equipment}</span>
               </li>
             )}
