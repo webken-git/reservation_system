@@ -22,24 +22,6 @@ $main-color: #23ad39;
 $sub-color: #707070;
 $accent-color: #91c21f;
 
-// ボタンのスタイル
-.btn {
-  width: 7rem;
-  color: #fff;
-  border: 1px solid $main-color;
-  border-radius: 3px;
-  padding: 9px 17px;
-  background-color: $main-color;
-  margin: 3% 0;
-  font-size: 1rem;
-  cursor: pointer;
-  &:hover {
-    color: #000;
-    background-color: inherit;
-    transition: color 80ms 190ms, background-color 150ms;
-  }
-}
-
 .auth-page {
   width: 100%;
   height: 100%;
@@ -72,12 +54,9 @@ $accent-color: #91c21f;
       font-weight: normal;
     }
     .registration-link {
-      @extend .btn;
       display: inline-block;
       padding: 0 5px;
       margin: 0 0 0 10px;
-      border: 1px solid $accent-color;
-      background-color: $accent-color;
     }
   }
 
@@ -120,46 +99,6 @@ $accent-color: #91c21f;
   }
 }
 
-.back-btn {
-  @extend .btn;
-  background-color: $sub-color;
-  border: $sub-color solid 1px;
-}
-.verify-btn {
-  @extend .btn;
-  border: 1px solid $accent-color;
-  background-color: $accent-color;
-}
-.auth-btn {
-  @extend .btn;
-  width: 10rem;
-  border: 1px solid $accent-color;
-  background-color: $accent-color;
-  // margin: 0 auto;
-}
-
-.detail-btn {
-  @extend .btn;
-  @extend .btn;
-  width: 8rem;
-  @include mq(sp) {
-    width: 6rem;
-    font-size: 0.8rem;
-    margin: 0.3rem;
-  }
-}
-.cancel-btn {
-  @extend .btn;
-  width: 8rem;
-  border: 1px solid $accent-color;
-  background-color: $accent-color;
-  @include mq(sp) {
-    width: 6rem;
-    font-size: 0.8rem;
-    margin: 0.3rem;
-  }
-}
-
 .password-container {
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -191,15 +130,6 @@ $accent-color: #91c21f;
   &:hover {
     text-decoration: underline;
   }
-}
-
-.registration-link {
-  @extend .btn;
-  border: 1px solid $accent-color;
-  background-color: $accent-color;
-}
-.login-link {
-  @extend .btn;
 }
 
 .link {

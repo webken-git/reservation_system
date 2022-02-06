@@ -1,7 +1,10 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist();
+const { persistAtom } = recoilPersist({
+  key: "tab",
+  storage: typeof window !== "undefined" ? window.localStorage : null,
+});
 
 const tabState = atom({
   key: "tabState",

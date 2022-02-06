@@ -34,7 +34,7 @@ const Cart = (props) => {
           現在<b>{count}</b>件の予約が追加されています。
         </span>
         <span onClick={() => setIsOpen(false)}>
-          <PageLink url="/additional-data" pagename={"予約する"} />
+          <PageLink url="/reserve" pagename={"予約する"} />
         </span>
       </Modal>
       <Modal

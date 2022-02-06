@@ -12,7 +12,6 @@ router.register('csv-export', views.ApprovalApplicationCsvExportViewSet)
 router.register('approvals', views.ApprovalViewSet)
 router.register('places', views.PlaceViewSet)
 router.register('equipments', views.EquipmentViewSet)
-router.register('special-equipments', views.SpecialEquipmentViewSet)
 router.register('reservations', views.ReservationViewSet)
 router.register('reservation-lists', views.ReservationDeleteViewSet)
 router.register('userinfo', views.UserInfoViewSet)
@@ -46,11 +45,6 @@ equipments_router = nested_routers.NestedSimpleRouter(
     lookup='equipment'
 )
 
-special_equipmrnts_router = nested_routers.NestedSimpleRouter(
-    router,
-    'special-equipments',
-    lookup='special_equipment'
-)
 
 reservations_router = nested_routers.NestedSimpleRouter(
     router,
@@ -102,11 +96,6 @@ equipments_router.register(
     basename='equipment-equipment-fees'
 )
 
-special_equipmrnts_router.register(
-    'reservations',
-    views.SpecialEquipmentReservationViewSet,
-    basename='specialequipment-reservations'
-)
 
 reservations_router.register(
     'approval-applications',
@@ -149,7 +138,6 @@ urlpatterns = [
     path('', include(approvals_router.urls)),
     path('', include(places_router.urls)),
     path('', include(equipments_router.urls)),
-    path('', include(special_equipmrnts_router.urls)),
     path('', include(reservations_router.urls)),
     path('', include(usages_router.urls)),
     path('', include(ages_router.urls)),

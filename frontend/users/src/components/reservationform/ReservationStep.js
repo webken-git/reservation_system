@@ -16,7 +16,6 @@ export const ReservationStep = () => {
   const data = useRecoilValue(formData);
   const [activeStep, setActiveStep] = useState(0);
   const [step, setStep] = useRecoilState(stepValue);
-  console.log(activeStep);
   // const data2 = useRecoilValue(personalData);
   const Step1 = () => {
     setActiveStep(step);

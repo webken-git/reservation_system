@@ -29,6 +29,27 @@ $breakpoints: (
     font-size: 40px;
     color: grey;
   }
-  .line {
+  ul li {
+    // font-size: 1.2rem;
+    position: relative;
+    list-style: none;
+    label {
+      width: 100px;
+      display: table-cell;
+      font-weight: bold;
+    }
+    span {
+      display: table-cell;
+    }
+  }
+  ul li::after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0.65em;
+    left: -1em;
+    width: 8px;
+    height: 2px;
+    background-color: #666;
   }
 }

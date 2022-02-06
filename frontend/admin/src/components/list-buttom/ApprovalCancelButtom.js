@@ -74,15 +74,18 @@ const ApprovalCancelButtom = (props) => {
             </div>
             <div className="modal-form-group">
               {errors.cancellation_reason && (
-                <p className="modal-error">※この項目は必須です</p>
+                <p className="modal-error">
+                  {errors.cancellation_reason.message}
+                </p>
               )}
               <label className="modal-label">承認取り消しの理由：</label>
               <input
                 type="text"
-                inputMode="numeric"
                 name="cancellation_reason"
                 className="modal-input"
-                {...register("cancellation_reason", { required: true })}
+                {...register("cancellation_reason", {
+                  required: "必須項目です",
+                })}
               />
             </div>
             <div className="modal-form-group">

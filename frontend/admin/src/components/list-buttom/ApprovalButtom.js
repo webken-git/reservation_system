@@ -32,8 +32,20 @@ const ApprovalButton = (props) => {
         electric_fee: getValues("electric_fee"),
       })
       .then((response) => {
-        // console.log('Success')
-        // console.log(response.date);
+        if (props.defferd_payment.length > 0) {
+          axios
+            .patch(
+              `${ReservationUrls.DEFFERD_PAYMENT}${props.defferd_payment[0].id}/`,
+              {
+                reservation: props.reservation_id,
+                fee: getValues("defferd_payment_fee"),
+              }
+            )
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((error) => {});
+        }
         setMessage("承認に成功しました");
         setLoading(false);
         setTimeout(() => {
@@ -77,7 +89,7 @@ const ApprovalButton = (props) => {
             </div>
             <div className="modal-form-group">
               {errors.usage_fee && (
-                <p className="modal-error">※この項目は必須です</p>
+                <p className="modal-error">{errors.usage_fee.message}</p>
               )}
               <label className="modal-label">利用料金：</label>
               <input
@@ -85,12 +97,18 @@ const ApprovalButton = (props) => {
                 inputMode="numeric"
                 name="usage_fee"
                 className="modal-input"
-                {...register("usage_fee", { required: true })}
+                {...register("usage_fee", {
+                  required: "必須項目です",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "数字を入力してください",
+                  },
+                })}
               />
             </div>
             <div className="modal-form-group">
               {errors.electric_fee && (
-                <p className="modal-error">※この項目は必須です</p>
+                <p className="modal-error">{errors.electric_fee.message}</p>
               )}
               <label className="modal-label">電気料金：</label>
               <input
@@ -98,12 +116,18 @@ const ApprovalButton = (props) => {
                 inputMode="numeric"
                 name="electric_fee"
                 className="modal-input"
-                {...register("electric_fee", { required: true })}
+                {...register("electric_fee", {
+                  required: "必須項目です",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "数字を入力してください",
+                  },
+                })}
               />
             </div>
             <div className="modal-form-group">
               {errors.heating_fee && (
-                <p className="modal-error">※この項目は必須です</p>
+                <p className="modal-error">{errors.heating_fee.message}</p>
               )}
               <label className="modal-label">暖房料金：</label>
               <input
@@ -111,9 +135,38 @@ const ApprovalButton = (props) => {
                 inputMode="numeric"
                 name="heating_fee"
                 className="modal-input"
-                {...register("heating_fee", { required: true })}
+                {...register("heating_fee", {
+                  required: "必須項目です",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "数字を入力してください",
+                  },
+                })}
               />
             </div>
+            {props.defferd_payment.length > 0 && (
+              <div className="modal-form-group">
+                {errors.defferd_payment_fee && (
+                  <p className="modal-error">
+                    {errors.defferd_payment_fee.message}
+                  </p>
+                )}
+                <label className="modal-label">後納使用料金：</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  name="defferd_payment_fee"
+                  className="modal-input"
+                  {...register("defferd_payment_fee", {
+                    required: "必須項目です",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "数字を入力してください",
+                    },
+                  })}
+                />
+              </div>
+            )}
             <div className="modal-form-group">
               <button type="submit" className="btn">
                 承認

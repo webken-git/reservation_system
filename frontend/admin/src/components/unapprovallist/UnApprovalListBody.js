@@ -5,21 +5,24 @@ import UnApprovalTable from "./UnApprovalTable";
 import "../approvallist/approval.scss";
 import dayjs from "dayjs";
 import CsvExportButton from "../csvexport/CsvExportButton";
+import { ReservationUrls } from "../../utils/reservationUrls";
+import { useFetch } from "../../hooks/useFetch";
 
 const UnapprovalListBody = () => {
   const placeFiltering = (e) => {
     setPlaceFilter(e.target.value);
     // console.log(e.target.value);
   };
-
   const dateFiltering = (e) => {
     setDateFilter(e.target.value);
   };
-
   const [placeFilter, setPlaceFilter] = useState();
   const [dateFilter, setDateFilter] = useState();
-
   const [UnApprovalListData, setUnApprovalListData] = useState([]);
+
+  const getDefferdPayment = useFetch({
+    url: `${ReservationUrls.DEFFERD_PAYMENT}`,
+  });
   // 未承認リストのデータをAPIから受け取るaxios
   const GetUnApprovalList = () => {
     axios
@@ -50,6 +53,9 @@ const UnapprovalListBody = () => {
   const Table =
     // データをmapで回している
     UnApprovalListData.map((val, val_index) => {
+      let defferdPayment = getDefferdPayment.filter(
+        (item) => item.reservation === val.reservation.id
+      );
       return (
         // 未承認リストの中のコンポーネント
         <UnApprovalTable
@@ -73,8 +79,14 @@ const UnapprovalListBody = () => {
           participant_number={val.reservation.participant_number}
           place={val.reservation.place.name}
           admission_fee={val.reservation.admission_fee}
+          equipment={val.reservation.equipment}
+          special_equipment={val.reservation.special_equipment}
           email={val.reservation.user.email}
           approval={val.approval.name}
+          usage_fee={val.usage_fee}
+          electric_fee={val.electric_fee}
+          heating_fee={val.heating_fee}
+          defferd_payment={defferdPayment}
         />
       );
     });
@@ -118,6 +130,7 @@ const UnapprovalListBody = () => {
                 </td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
             </thead>
             <thead>
@@ -127,6 +140,7 @@ const UnapprovalListBody = () => {
                 <th>代表者名</th>
                 <th>時間</th>
                 <th>場所</th>
+                <th>後納申請</th>
                 <th>操作</th>
                 <th>詳細</th>
               </tr>

@@ -2,7 +2,7 @@ from django.db.models import query
 from rest_framework import serializers
 from rest_framework.relations import ManyRelatedField
 from reservations.models import (
-    Reservation, ReservationSuspensionSchedule, Approval, Place, Equipment, SpecialEquipment,
+    Reservation, ReservationSuspensionSchedule, Approval, Place, Equipment,
     Age, AgeCategory, Usage, UsageCategory, DefferdPayment, FacilityFee, EquipmentFee,
     ApprovalApplication, UserInfo, Time
 )
@@ -65,12 +65,6 @@ class EquipmentSerializer(serializers.ModelSerializer):
     return instance
 
 
-class SpecialEquipmentSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = SpecialEquipment
-    fields = '__all__'
-
-
 class ReservationSerializer(serializers.ModelSerializer):
   user = UserSerializer(read_only=True)
   user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
@@ -78,8 +72,6 @@ class ReservationSerializer(serializers.ModelSerializer):
   place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), write_only=True)
   equipment = EquipmentSerializer(many=True, read_only=True)
   equipment_id = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all(), many=True, write_only=True, required=False)
-  special_equipment = SpecialEquipmentSerializer(many=True, read_only=True)
-  special_equipment_id = serializers.PrimaryKeyRelatedField(queryset=SpecialEquipment.objects.all(), many=True, write_only=True, required=False)
 
   class Meta:
     model = Reservation
@@ -89,20 +81,16 @@ class ReservationSerializer(serializers.ModelSerializer):
     validated_data['user'] = validated_data.get('user_id', None)
     validated_data['place'] = validated_data.get('place_id', None)
     validated_data['equipment'] = validated_data.get('equipment_id', None)
-    validated_data['special_equipment'] = validated_data.get('special_equipment_id', None)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['user_id']
     del validated_data['place_id']
     del validated_data['equipment_id']
-    del validated_data['special_equipment_id']
 
     equipment_data = validated_data.pop('equipment')
-    special_equipment_data = validated_data.pop('special_equipment')
     reservation = Reservation.objects.create(**validated_data)
     reservation.save()
     reservation.equipment.set(equipment_data)
-    reservation.special_equipment.set(special_equipment_data)
 
     return reservation
 
@@ -111,7 +99,6 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.user = validated_data.get('user_id', instance.user)
     instance.place = validated_data.get('place_id', instance.place)
     validated_data['equipment'] = validated_data.get('equipment_id', instance.equipment)
-    validated_data['special_equipment'] = validated_data.get('special_equipment_id', instance.special_equipment)
     instance.group_name = validated_data.get('group_name', instance.group_name)
     instance.reader_name = validated_data.get('reader_name', instance.reader_name)
     instance.contact_name = validated_data.get('contact_name', instance.contact_name)
@@ -125,21 +112,19 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.participant_number = validated_data.get('participant_number', instance.participant_number)
     instance.purpose = validated_data.get('purpose', instance.purpose)
     instance.admission_fee = validated_data.get('admission_fee', instance.admission_fee)
+    instance.special_equipment = validated_data.get('special_equipment', instance.special_equipment)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['user_id']
     del validated_data['place_id']
     del validated_data['equipment_id']
-    del validated_data['special_equipment_id']
     instance.save()
 
     # 更新処理
 
     equipment_data = validated_data.pop('equipment')
-    special_equipment_data = validated_data.pop('special_equipment')
     instance.save()
     instance.equipment.set(equipment_data)
-    instance.special_equipment.set(special_equipment_data)
 
     return instance
 
@@ -407,6 +392,9 @@ class DefferdPaymentSerializer(serializers.ModelSerializer):
   class Meta:
     model = DefferdPayment
     fields = '__all__'
+    extra_kwargs = {
+        'fee': {'required': False},
+    }
 
   def create(self, validated_data):
     # validated_data['reservation'] = validated_data.get('reservation_id', None)
@@ -420,6 +408,7 @@ class DefferdPaymentSerializer(serializers.ModelSerializer):
     # 更新処理
     instance.reservation = validated_data.get('reservation', instance.reservation)
     instance.reason = validated_data.get('reason', instance.reason)
+    instance.fee = validated_data.get('fee', instance.fee)
     # PrimaryKeyRelatedFieldを削除
     # del validated_data['reservation_id']
     instance.save()

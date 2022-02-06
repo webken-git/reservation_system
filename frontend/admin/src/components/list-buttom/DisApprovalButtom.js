@@ -74,15 +74,16 @@ const DisApprovalButtom = (props) => {
             </div>
             <div className="modal-form-group">
               {errors.conditions && (
-                <p className="modal-error">※この項目は必須です</p>
+                <p className="modal-error">{errors.conditions.message}</p>
               )}
               <label className="modal-label">不承認の理由：</label>
               <input
                 type="text"
-                inputMode="numeric"
                 name="conditions"
                 className="modal-input"
-                {...register("conditions", { required: true })}
+                {...register("conditions", {
+                  required: "必須項目です",
+                })}
               />
             </div>
             <div className="modal-form-group">

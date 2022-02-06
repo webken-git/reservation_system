@@ -71,7 +71,7 @@ function App() {
         <LoginRoute>
           <Switch>
             <HeaderRoute
-              path="/additional-data"
+              path="/reserve"
               exact
               children={<ReservationStepPage />}
             />

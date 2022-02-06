@@ -59,7 +59,7 @@ def create_new_word(request):
   organizer_number = approval_applications[0].reservation.organizer_number
   participant_number = approval_applications[0].reservation.participant_number
   equipment = [e.name for e in approval_applications[0].reservation.equipment.all()]
-  special_equipment = [sp.name for sp in approval_applications[0].reservation.special_equipment.all()]
+  special_equipment = approval_applications[0].reservation.special_equipment
   admission_fee = approval_applications[0].reservation.admission_fee
   conditions = approval_applications[0].conditions
   cancellation_reason = approval_applications[0].cancellation_reason
@@ -147,21 +147,21 @@ def create_new_word(request):
       if 'アマチュアスポーツ' in usages:
         tbl.rows[2].cells[3].paragraphs[0].text = tbl.rows[2].cells[3].paragraphs[0].text.replace('□アマチュア', '☑アマチュア')
       if '一般使用' in usages:
-        tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□一般使用', '☑一般使用')
+        tbl.rows[2].cells[3].paragraphs[0].text = tbl.rows[2].cells[3].paragraphs[0].text.replace('□一般使用', '☑一般使用')
       if '競技会使用' in usages:
-        tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□競技会使用', '☑競技会使用')
+        tbl.rows[2].cells[3].paragraphs[0].text = tbl.rows[2].cells[3].paragraphs[0].text.replace('□競技会使用', '☑競技会使用')
       if '非営利' in usages:
-        tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□非営利', '☑非営利')
+        tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□非営利', '☑非営利')
+        if '入場料を徴収する' in usages:
+          tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□入場料を徴収する', '☑入場料を徴収する')
+        elif '入場料を徴収しない' in usages:
+          tbl.rows[2].cells[3].paragraphs[1].text = tbl.rows[2].cells[3].paragraphs[1].text.replace('□入場料を徴収しない', '☑入場料を徴収しない')
+      elif '営利' in usages:
+        tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□営　利', '☑営　利')
         if '入場料を徴収する' in usages:
           tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□入場料を徴収する', '☑入場料を徴収する')
         elif '入場料を徴収しない' in usages:
           tbl.rows[2].cells[3].paragraphs[2].text = tbl.rows[2].cells[3].paragraphs[2].text.replace('□入場料を徴収しない', '☑入場料を徴収しない')
-      elif '営利' in usages:
-        tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□営　利', '☑営　利')
-        if '入場料を徴収する' in usages:
-          tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□入場料を徴収する', '☑入場料を徴収する')
-        elif '入場料を徴収しない' in usages:
-          tbl.rows[2].cells[3].paragraphs[3].text = tbl.rows[2].cells[3].paragraphs[3].text.replace('□入場料を徴収しない', '☑入場料を徴収しない')
       # 年齢区分
       if '幼児' in ages:
         tbl.rows[3].cells[3].paragraphs[0].text = tbl.rows[3].cells[3].paragraphs[0].text.replace('□幼児', '☑幼児')
@@ -182,13 +182,13 @@ def create_new_word(request):
       # 利用日時
       tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('年', str(start.year) + ' 年').replace('　月', str(start.month) + ' 月').replace('　日', str(start.day) + ' 日').replace('　時', str(start.strftime('%I')) + ' 時').replace('　分', str(start.minute) + ' 分')
       tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('年', str(end.year) + ' 年').replace('　月', str(end.month) + ' 月').replace('　日', str(end.day) + ' 日').replace('　時', str(end.strftime('%I')) + ' 時').replace('　分', str(end.minute) + ' 分')
-      if start_hour < 0:
+      if start_hour - 12 < 0:
         tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('前', '☑前')
-      elif start_hour > 0:
+      elif start_hour - 12 > 0:
         tbl.rows[4].cells[3].paragraphs[0].text = tbl.rows[4].cells[3].paragraphs[0].text.replace('後', '☑後')
-      if end_hour < 0:
+      if end_hour - 12 < 0:
         tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('前', '☑前')
-      elif end_hour > 0:
+      elif end_hour - 12 > 0:
         tbl.rows[4].cells[3].paragraphs[1].text = tbl.rows[4].cells[3].paragraphs[1].text.replace('後', '☑後')
 
     # 稚内市体育施設使用等承認（不承認）通知書
@@ -209,7 +209,7 @@ def create_new_word(request):
       else:
         tbl.rows[7].cells[1].paragraphs[0].text = tbl.rows[7].cells[1].paragraphs[0].text.replace('無', '✓無')
       if special_equipment:
-        tbl.rows[8].cells[1].paragraphs[0].text = insert_string(tbl.rows[8].cells[1].paragraphs[0].text, 3, str(special_equipment)).replace("'", '').replace('[', '').replace(']　　　　　　　　　　　', '')
+        tbl.rows[8].cells[1].paragraphs[0].text = '有（　{}　）・無'.format(special_equipment)
       else:
         tbl.rows[8].cells[1].paragraphs[0].text = tbl.rows[8].cells[1].paragraphs[0].text.replace('無', '✓無')
       if admission_fee:
@@ -243,7 +243,7 @@ def create_new_word(request):
       else:
         tbl.rows[9].cells[3].paragraphs[0].text = tbl.rows[9].cells[3].paragraphs[0].text.replace('無', '✓無')
       if special_equipment:
-        tbl.rows[8].cells[3].paragraphs[0].text = insert_string(tbl.rows[8].cells[3].paragraphs[0].text, 3, str(special_equipment)).replace("'", '').replace('[', '').replace(']　　　　　　　　　　　', '')
+        tbl.rows[8].cells[3].paragraphs[0].text = insert_string(tbl.rows[8].cells[3].paragraphs[0].text, 3, str(special_equipment))
       else:
         tbl.rows[9].cells[3].paragraphs[0].text = tbl.rows[9].cells[3].paragraphs[0].text.replace('無', '✓無')
       if admission_fee:
@@ -262,7 +262,8 @@ def create_new_word(request):
     elif query[0].name == '稚内市体育施設使用料等後納承認（不承認）通知書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
       if q:
-        tbl.rows[6].cells[1].paragraphs[1].text = insert_string(tbl.rows[6].cells[1].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+        tbl.rows[5].cells[1].paragraphs[0].text = '　{}円'.format(q[0].fee)
+        tbl.rows[6].cells[1].paragraphs[1].text = '（　{}　）'.format(q[0].reason)
       else:
         return {'error': '後納の理由に記入するデータがありません。'}
       if conditions:
@@ -271,7 +272,8 @@ def create_new_word(request):
     elif query[0].name == '稚内市体育施設使用料等後納申請書':
       q = DefferdPayment.objects.filter(reservation=approval_applications[0].reservation.id)
       if q:
-        tbl.rows[6].cells[3].paragraphs[1].text = insert_string(tbl.rows[6].cells[3].paragraphs[1].text.replace('（　　　　　　　　　　　　　　　　　　　　　　　　　　', '（'), 2, q[0].reason)
+        tbl.rows[5].cells[3].paragraphs[0].text = '　{}円'.format(q[0].fee)
+        tbl.rows[6].cells[3].paragraphs[1].text = '（　{}　）'.format(q[0].reason)
       else:
         return {'error': '後納の理由に記入するデータがありません。'}
       if conditions:

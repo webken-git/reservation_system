@@ -46,7 +46,7 @@ $breakpoints: (
     position: relative;
     list-style: none;
     label {
-      width: 200px;
+      width: 250px;
       display: table-cell;
       font-weight: bold;
     }
@@ -58,6 +58,14 @@ $breakpoints: (
         display: block;
         text-align: left;
       }
+      @include mq(tab) {
+        // width: 100%;
+        display: block;
+        text-align: left;
+      }
+    }
+    .center {
+      text-align: center !important;
     }
   }
   ul li::after {

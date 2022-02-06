@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { ja } from "date-fns/locale";
@@ -30,6 +30,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { ReservationUrls } from "../../utils/reservationUrls";
+
 const Label = styled("p")({
   marginRight: 15,
   fontSize: 17,
@@ -48,24 +49,21 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     reset,
     formState: { errors },
   } = useForm({
-    // criteriaMode: "all",
     reValidateMode: "onSubmit",
   });
   const error = Object.values(errors); // エラーがあるかどうか
-  const [, setList] = useState([]);
-  const [checkValue, setCheckValue] = useState(false);
-  const [checkPayment, setCheckPayment] = useState(false);
   // const [message, setMessage] = useState("");
   const setPopup = useSetRecoilState(popupState);
+
   const AgeData = useFetch({
     url: ReservationUrls.AGE,
   });
-  // const UsageData = useFetch({
-  //   url: ReservationUrls.USAGE,
-  // });
-  // const EquipmentData = useFetch({
-  //   url: ReservationUrls.EQUIPMENT,
-  // });
+  const UsageData = useFetch({
+    url: ReservationUrls.USAGE,
+  });
+  const EquipmentData = useFetch({
+    url: ReservationUrls.EQUIPMENT,
+  });
   // 選択中の施設を取得
   const placeId = parseInt(tab.placeId);
   const placeName = tab.placeName;
@@ -89,34 +87,47 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     const end = endDate.concat(" ", endTime);
     // const reservation = placeName;
     const age = getValues("ageGroup");
+    // 配列ageに入っている値をAgeDataから取得
+    const ageName = [];
+    age.map((age) => {
+      const a = AgeData.find((data) => data.id === age).name;
+      ageName.push(a);
+      return ageName;
+    });
+    // 利用区分を取得
+    const usageList = [e.usage, e.profits, e.collect];
+    const usageName = [];
+    usageList.map((usage) => {
+      const u = UsageData.find((data) => data.id === Number(usage)).name;
+      usageName.push(u);
+      return usageName;
+    });
+    const equipmentName = [];
+    if (e.device === "true") {
+      e.equipment.map((equipment) => {
+        const equip = EquipmentData.find((data) => data.id === equipment).name;
+        equipmentName.push(equip);
+        return equipmentName;
+      });
+    }
     const id = getId();
     delete e["ageGroup"];
     delete e["StartDate"];
     delete e["EndDate"];
-    // 利用区分を取得
-    const i = e.usage;
-    const t = e.profits;
-    const w = e.collect;
-    const usageList = [i, t, w];
-    // var i_name = UsageData.filter((item) => {
-    //   if (item.id === i) return true;
-    // });
-    // const t_name = getUsageName(t);
-    // const w_name = getUsageName(w);
-    // const usageName = [i_name, t_name, w_name];
     const data = {
       ...e,
       start,
       end,
-      // reservation,
+      equipmentName,
       id,
       age,
+      ageName,
       placeId,
       placeName,
       startDate,
       endDate,
       usageList,
-      // usageName,
+      usageName,
     };
     const list = [...FormData, data];
     setFormData(list);
@@ -135,26 +146,8 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     // }, 1500);
   };
 
-  // カーリングの時だけplace_numberにレーンのシート分投げる
-  useEffect(() => {
-    const placeNum = [];
-    for (let i = 1; i < 4; i++) {
-      let numList = { id: i, value: i };
-      placeNum.push(numList);
-      setList(placeNum);
-    }
-  }, []);
-  const checkUseDevice = (e) => {
-    //trueなら TextFiledを表示
-    setCheckValue(e.target.value);
-  };
-  const paymentChange = (e) => {
-    //trueなら TextFiledを表示
-    setCheckPayment(e.target.value);
-  };
-
-  const handleCheck = (ageGroupId, e) => {
-    let values = getValues("ageGroup") || [];
+  const handleCheck = (ageGroupId, name, e) => {
+    let values = getValues(name) || [];
 
     let newValues = [];
     // 選択されている場合
@@ -165,7 +158,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
       // 選択されていないageGroupIdを削除
       newValues = values.filter((value) => value !== ageGroupId);
     }
-    setValue("ageGroup", newValues);
+    setValue(name, newValues);
     return newValues;
   };
 
@@ -215,7 +208,9 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             label={ageGroup.name}
                             value={ageGroup.id}
                             onChange={(e) =>
-                              field.onChange(handleCheck(ageGroup.id, e))
+                              field.onChange(
+                                handleCheck(ageGroup.id, "ageGroup", e)
+                              )
                             }
                             control={
                               <Checkbox
@@ -341,6 +336,43 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                         label="入場料を徴収しない"
                       />
                     </RadioGroup>
+                    {field.value === "6" && (
+                      <div>
+                        <FormControl error>
+                          <Label>
+                            徴収する入場料の最高額：
+                            <span className="red">※単位は不要です</span>
+                          </Label>
+                          <FormHelperText>
+                            {errors.admissionFee && errors.admissionFee.message}
+                          </FormHelperText>
+                          <Controller
+                            name="admissionFee"
+                            defaultValue=""
+                            control={control}
+                            render={({ field }) => (
+                              <>
+                                <TextField
+                                  type={"text"}
+                                  inputMode="numeric"
+                                  style={{ width: "150px" }}
+                                  placeholder="半角数字で入力"
+                                  {...register("admissionFee", {
+                                    required: "必須項目です",
+                                    pattern: {
+                                      value: /^[0-9]+$/,
+                                      message: "数字を入力してください",
+                                    },
+                                  })}
+                                  error={"admissionFee" in errors}
+                                  {...field}
+                                />
+                              </>
+                            )}
+                          />
+                        </FormControl>
+                      </div>
+                    )}
                   </>
                 )}
               />
@@ -536,31 +568,42 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
             </div>
           </div>
           <div>
-            <Controller
-              //   TextFiledを制御するController
-              name="reason"
-              control={control}
-              rules={{ required: "入力してください" }}
-              defaultValue=""
-              render={({ field }) => (
-                <div className={form.reason}>
-                  <Label>利用目的：</Label>
-                  <TextField
-                    {...field}
-                    label="利用目的を入力してください。"
-                    variant="outlined"
-                    error={"reason" in errors}
-                    // 公式で説明している書き方だけどerrorでる
-                    // helperText={errors.reason?.message}
-                  />
-                </div>
-              )}
-            />
+            <FormControl error>
+              <Label>利用目的：</Label>
+              <FormHelperText>
+                {errors.reason && errors.reason.message}
+              </FormHelperText>
+              <Controller
+                //   TextFiledを制御するController
+                name="reason"
+                defaultValue=""
+                control={control}
+                render={({ field }) => (
+                  <div className={form.reason}>
+                    <TextField
+                      {...field}
+                      type={"text"}
+                      style={{ width: "300px" }}
+                      {...register("reason", {
+                        required: "必須項目です",
+                      })}
+                      error={"reason" in errors}
+                    />
+                  </div>
+                )}
+              />
+            </FormControl>
           </div>
           <Grid container>
             <Grid item lg={3}>
               <FormControl error>
-                <Label>主催関係者</Label>
+                <Label>
+                  主催関係者数：
+                  <span className="red">
+                    <br />
+                    ※単位は不要です
+                  </span>
+                </Label>
                 <FormHelperText>
                   {errors.staffNum && errors.staffNum.message}
                 </FormHelperText>
@@ -592,7 +635,13 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
             </Grid>
             <Grid item lg={3}>
               <FormControl error>
-                <Label>参加人数</Label>
+                <Label>
+                  参集人員数：
+                  <span className="red">
+                    <br />
+                    ※単位は不要です
+                  </span>
+                </Label>
                 <FormHelperText>
                   {errors.useNum && errors.useNum.message}
                 </FormHelperText>
@@ -623,7 +672,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               </FormControl>
             </Grid>
           </Grid>
-          <Label>附属設備もしくは器具の使用：</Label>
+          <Label>附属設備・器具の使用：</Label>
           <FormControl error>
             <FormHelperText>
               {errors.device && errors.device.message}
@@ -646,26 +695,83 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                         key={index}
                         label={useDevices.label}
                         value={useDevices.value}
-                        control={<Radio onChange={checkUseDevice} />}
+                        control={<Radio />}
                         labelPlacement="end"
                       />
                     ))}
                   </RadioGroup>
+                  {field.value === "true" && (
+                    // valueがtrueの場合
+                    <>
+                      <div className={form.equipment}>
+                        <FormControl error>
+                          <FormHelperText>
+                            {errors.equipment && errors.equipment.message}
+                          </FormHelperText>
+                          <Controller
+                            control={control}
+                            name="equipment"
+                            defaultValue=""
+                            rules={{ required: "選択してください。" }}
+                            render={({ field }) =>
+                              EquipmentData &&
+                              EquipmentData.map((equipment, id) => (
+                                <FormControlLabel
+                                  {...field}
+                                  key={id}
+                                  label={equipment.name}
+                                  value={equipment.id}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      handleCheck(equipment.id, "equipment", e)
+                                    )
+                                  }
+                                  control={
+                                    <Checkbox
+                                      checked={
+                                        !!field.value.includes(equipment.id)
+                                      }
+                                    />
+                                  }
+                                  labelPlacement="end"
+                                />
+                              ))
+                            }
+                          />
+                        </FormControl>
+                      </div>
+                      <div className={form.specialEquipment}>
+                        <FormControl error>
+                          <Label>
+                            特別設備：
+                            <span className="red">※必須項目ではありません</span>
+                          </Label>
+                          <FormHelperText>
+                            {errors.specialEquipment &&
+                              errors.specialEquipment.message}
+                          </FormHelperText>
+                          <Controller
+                            control={control}
+                            name="specialEquipment"
+                            defaultValue=""
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                // {...register("specialEquipment", {
+                                //   required: "必須項目です",
+                                // })}
+                                // error={"specialEquipment" in errors}
+                              />
+                            )}
+                          />
+                        </FormControl>
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             />
           </FormControl>
-          <div className={form.usedevice}>
-            {checkValue === "true" && (
-              <Controller
-                control={control}
-                name="useDevice"
-                defaultValue=""
-                rules={{ required: "選択してください。" }}
-                render={({ field }) => <TextField {...field} />}
-              />
-            )}
-          </div>
           <Label>後納申請：</Label>
           <FormControl error>
             <FormHelperText>
@@ -689,26 +795,41 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                         key={index}
                         label={deferredPayments.label}
                         value={deferredPayments.value}
-                        control={<Radio onChange={paymentChange} />}
+                        control={<Radio />}
                         labelPlacement="end"
                       />
                     ))}
                   </RadioGroup>
+                  {field.value === "true" && (
+                    // valueがtrueの場合
+                    <div className={form.deferredPaymentReason}>
+                      <FormControl error>
+                        <Label>後納の理由：</Label>
+                        <FormHelperText>
+                          {errors.deferredPaymentReason &&
+                            errors.deferredPaymentReason.message}
+                        </FormHelperText>
+                        <Controller
+                          control={control}
+                          name="deferredPaymentReason"
+                          defaultValue=""
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              {...register("deferredPaymentReason", {
+                                required: "必須項目です",
+                              })}
+                              error={"deferredPaymentReason" in errors}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </div>
+                  )}
                 </>
               )}
             />
           </FormControl>
-          <div className={form.usedevice}>
-            {checkPayment === "true" && (
-              <Controller
-                control={control}
-                name="payLater"
-                defaultValue=""
-                rules={{ required: "選択してください。" }}
-                render={({ field }) => <TextField {...field} />}
-              />
-            )}
-          </div>
           <div className="submit-btn">
             <button type="submit" className="btn">
               追加する
@@ -723,3 +844,5 @@ let id = 0;
 function getId() {
   return id++;
 }
+
+export default Label;

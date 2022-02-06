@@ -45,6 +45,12 @@ $accent-color: #91c21f;
       }
     }
   }
+  .user-info-detail {
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
   .change-link {
     margin: 0;
   }

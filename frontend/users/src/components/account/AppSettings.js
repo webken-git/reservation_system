@@ -47,27 +47,30 @@ export const AppSettings = () => {
 
   return (
     <>
-      {/* <div className="account-wrapper">
-                <h2 className="title">アカウント</h2>
-                <table className="mail-pass">
-                    <tbody> */}
       <tr className="mail-address">
         <td className="mail-pass-title">リマインドメールの受信：</td>
-        <td class="toggle-switch">
+        <td className="toggle-switch">
           <input
             id="toggle"
-            class="toggle-input"
+            className="toggle-input"
             type="checkbox"
-            checked={settings.is_receive_reminder_email}
-            onClick={onClick}
+            checked={
+              settings.is_receive_reminder_email === undefined
+                ? false
+                : settings.is_receive_reminder_email
+            }
+            onChange={onClick}
           />
-          <label for="toggle" class="toggle-label" />
+          <label htmlFor="toggle" className="toggle-label" />
         </td>
       </tr>
-      {/* </tbody>
-                </table>
-            </div> */}
-      {loading && <Loading />}
+      {loading && (
+        <tr>
+          <td>
+            <Loading />
+          </td>
+        </tr>
+      )}
     </>
   );
 };

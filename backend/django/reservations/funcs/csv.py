@@ -37,6 +37,7 @@ class Csv:
         age_category = AgeCategory.objects.get(reservation=i.reservation.id)
         usage_category_list = [j.name for j in usage_category.usage.all()]
         age_category_list = [j.name for j in age_category.age.all()]
+        equipment_list = [j.name for j in i.reservation.equipment.all()]
         pk = i.id
         group_name = i.reservation.group_name
         reader_name = i.reservation.reader_name
@@ -52,11 +53,10 @@ class Csv:
         admission_fee = i.reservation.admission_fee
         place = i.reservation.place.name
         place_number = i.reservation.place_number
-        equipment = i.reservation.equipment.name
-        special_equipment = i.reservation.special_equipment.name
+        special_equipment = i.reservation.special_equipment
         created_at = i.reservation.created_at
         approval = i.approval.name
-        writer.writerow([pk, group_name, reader_name, contact_name, address, tel, is_group, start, end, organizer_number, participant_number, purpose, usage_category_list, age_category_list, admission_fee, place, place_number, equipment, special_equipment, created_at, approval])
+        writer.writerow([pk, group_name, reader_name, contact_name, address, tel, is_group, start, end, organizer_number, participant_number, purpose, usage_category_list, age_category_list, admission_fee, place, place_number, equipment_list, special_equipment, created_at, approval])
     return '/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
 
 

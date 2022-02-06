@@ -1,53 +1,71 @@
 // 詳細ボタンのコンポーネント
-import React from 'react';
-import axios from 'axios';
-import './detailsbutton.scss';
-import Modal from 'react-modal';
+import React from "react";
+import axios from "axios";
+import "./detailsbutton.scss";
+import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
-import { ReservationUrls } from '../../utils/reservationUrls';
-import Loading from '../loading/Loading';
-
+import { ReservationUrls } from "../../utils/reservationUrls";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
+import Loading from "../loading/Loading";
 
 const DetailsButton = (props) => {
-  const [modalIsOpen, setModalIsOpen] = React.useState(false);
-  const [usage, setUsage] = React.useState([]);
-  const [age, setAge] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const unmountRef = useUnmountRef();
+  const [modalIsOpen, setModalIsOpen] = useSafeState(unmountRef, false);
+  const [usage, setUsage] = useSafeState(unmountRef, []);
+  const [age, setAge] = useSafeState(unmountRef, []);
+  // const [defferdPayment, setDefferdPayment] = useSafeState(unmountRef, []);
+  const [loading, setLoading] = useSafeState(unmountRef, true);
 
   const modalToggle = () => {
     setLoading(true);
     getUsage(props.reservation_id);
     getAge(props.reservation_id);
+    // getDefferdPayment(props.reservation_id);
     setLoading(false);
     setModalIsOpen(!modalIsOpen);
-  }
+  };
 
   const getUsage = (reservationId) => {
-    axios.get(`${ReservationUrls.USAGE_CATEGORY}?reservation=${reservationId}`)
-        .then((res) => {
-            setUsage(res.data);
-            // console.log(res.data);
-        })
-        .catch((err) => {
-        });
+    axios
+      .get(`${ReservationUrls.USAGE_CATEGORY}?reservation=${reservationId}`)
+      .then((res) => {
+        setUsage(res.data);
+        // console.log(res.data);
+      })
+      .catch((err) => {});
   };
 
   const getAge = (reservationId) => {
-      axios.get(`${ReservationUrls.AGE_CATEGORY}?reservation=${reservationId}`)
-          .then((res) => {
-              setAge(res.data);
-          })
-          .catch((err) => {
-          });
+    axios
+      .get(`${ReservationUrls.AGE_CATEGORY}?reservation=${reservationId}`)
+      .then((res) => {
+        setAge(res.data);
+      })
+      .catch((err) => {});
   };
+
+  // const getDefferdPayment = (reservationId) => {
+  //   axios
+  //     .get(`${ReservationUrls.DEFFERD_PAYMENT}?reservation=${reservationId}`)
+  //     .then((res) => {
+  //       setDefferdPayment(res.data);
+  //     })
+  //     .catch((err) => {});
+  // };
 
   return (
     <>
       <p className="details-button" onClick={modalToggle}>
         <FontAwesomeIcon icon={faSearchPlus} />
       </p>
-      <Modal isOpen={modalIsOpen} onRequestClose={modalToggle} className="modal-content" overlayClassName="modal-overlay">
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={modalToggle}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
         <div className="modal-wrapper">
           <div className="modal-title">
             <h2>詳細</h2>
@@ -83,42 +101,82 @@ const DetailsButton = (props) => {
             </li>
             <li>
               <label>使用(利用)日時：</label>
-              <p>{props.start_day}  {props.start_time}  ~  {props.end_day}  {props.end_time}</p>
+              <p>
+                {props.start_day} {props.start_time} ~ {props.end_day}{" "}
+                {props.end_time}
+              </p>
             </li>
             <li>
               <label>使用(利用)目的：</label>
               <span>{props.purpose}</span>
             </li>
             <li>
-              <label>利用区分：</label>
-              <p>
-                {usage[0] && usage[0].usage.map((item, index) => (
+              <label>年齢区分：</label>
+              {age[0] &&
+                age[0].age.map((item, index) => (
                   <span key={index}>{item.name}　</span>
                 ))}
-              </p>
             </li>
             <li>
-              <label>年齢区分：</label>
-              {age[0] && age[0].age.map((item, index) => (
-                  <span key={index}>{item.name}　</span>
-              ))}
+              <label>利用区分：</label>
+              <p>
+                {usage[0] &&
+                  usage[0].usage.map((item, index) => (
+                    <span key={index}>{item.name}　</span>
+                  ))}
+              </p>
             </li>
             <li>
               <label>ステータス：</label>
               <span>{props.approval}</span>
             </li>
             <li>
-              <label>使用(利用)予定人数：</label>
-              <span>{(props.organizer_number) + (props.participant_number)}人</span>
+              <label>主催関係者：</label>
+              <span className="table-cell">{props.organizer_number}人 </span>
             </li>
             <li>
-              <label>入場料を徴収：</label>
-              <span>{props.admission_fee}円</span>
+              <label>参集人員：</label>
+              <span className="table-cell">{props.participant_number}人</span>
             </li>
-            <li>
-              <label>特別設備等：</label>
-              {/* <span>{props.special_equipment}</span> */}
-            </li>
+            {usage[0] &&
+              usage[0].usage.find(
+                (item) => item.name === "入場料を徴収する"
+              ) && (
+                <li>
+                  <label>徴収する入場料の最高額：</label>
+                  <span>{props.admission_fee}円</span>
+                </li>
+              )}
+            {props.equipment.length > 0 && (
+              <li>
+                <label>附属設備・器具の使用：</label>
+                {props.equipment.map((item, index) => (
+                  <span key={index}>{item.name}　</span>
+                ))}
+              </li>
+            )}
+            {props.special_equipment !== null && (
+              <li>
+                <label>特別設備：</label>
+                <span>{props.special_equipment}</span>
+              </li>
+            )}
+            {props.defferd_payment.length > 0 && (
+              <>
+                <li>
+                  <label>後納の理由：</label>
+                  <span>{props.defferd_payment[0].reason}　</span>
+                </li>
+                <li>
+                  <label>後納使用料：</label>
+                  <span>
+                    {props.defferd_payment[0].fee
+                      ? props.defferd_payment[0].fee + "円"
+                      : "円"}
+                  </span>
+                </li>
+              </>
+            )}
             <li>
               <label>利用料金：</label>
               <span>{props.usage_fee}円</span>
@@ -132,12 +190,18 @@ const DetailsButton = (props) => {
               <span>{props.heating_fee}円</span>
             </li>
           </ul>
-          <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>閉じる</button>
+          <button
+            type="button"
+            className="back-btn"
+            onClick={() => setModalIsOpen(false)}
+          >
+            閉じる
+          </button>
         </div>
         {loading ? <Loading /> : <></>}
       </Modal>
     </>
   );
-}
+};
 
-export default DetailsButton
+export default DetailsButton;

@@ -4,22 +4,14 @@ import axios from "axios";
 import { formData, personalData, stepValue } from "../../recoil/form/atom";
 import authState from "../../recoil/auth";
 import tabState from "../../recoil/tab";
-import {
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-  useResetRecoilState,
-} from "recoil";
+import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 // import { useFetch } from "../../hooks/useFetch";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
 
 export const ReservationPost = () => {
-  const [, setStep] = useRecoilState(stepValue);
+  const setStep = useSetRecoilState(stepValue);
   const auth = useRecoilValue(authState);
-  // const AgeData = useFetch({
-  //   url: ReservationUrls.AGE_CATEGORY,
-  // });
   const [loading, setLoading] = useState(false);
   const FormData = useRecoilValue(formData);
   const PersonalData = useRecoilValue(personalData);
@@ -27,6 +19,9 @@ export const ReservationPost = () => {
   const resetTab = useResetRecoilState(tabState);
   const resetFormData = useResetRecoilState(formData);
   const resetPersonalData = useSetRecoilState(personalData);
+  // const AgeData = useFetch({
+  //   url: ReservationUrls.AGE_CATEGORY,
+  // });
 
   const next = () => {
     setStep(3);
@@ -93,17 +88,23 @@ export const ReservationPost = () => {
         organizer_number: item.staffNum,
         participant_number: item.useNum,
         purpose: item.reason,
-        admission_fee: 0,
+        admission_fee: item.admissionFee ? item.admissionFee : 0,
         place_number: item.placeNumber ? item.placeNumber : 1,
         place_id: item.placeId,
-        equipment_id: [],
-        special_equipment_id: [],
+        equipment_id: item.equipment ? item.equipment : [],
+        special_equipment: item.specialEquipment ? item.specialEquipment : null,
       };
       axios
         .post(ReservationUrls.RESERVATION, data)
         .then((response) => {
           // api/reservations/へのPOSTリクエストが成功したら、
           // そのレコードのidを取得し、以下のPOSTリクエストに渡す
+          if (item.deferredPayment === "true") {
+            axios.post(ReservationUrls.DEFFERD_PAYMENT, {
+              reservation: response.data.id,
+              reason: item.deferredPaymentReason,
+            });
+          }
           postApprovalID(response.data.id);
           postAgeCategories(response.data.id, item.age);
           postUsageID(response.data.id, item.usageList);
@@ -111,6 +112,7 @@ export const ReservationPost = () => {
         .catch((error) => {
           setLoading(false);
         });
+      return item;
     });
   };
 

@@ -7,12 +7,29 @@ export const PersonalData = () => {
   return (
     <div>
       <div className="PD-root">
-        <div className="PD-title">登録情報：</div>
-        <div>団体名：{data.group_name}</div>
-        <div>代表者名：{data.reader_name}</div>
-        <div>連絡者名：{data.contact_name}</div>
-        <div>住所：{data.address}</div>
-        <div>電話番号：{data.tel}</div>
+        <h2 className="PD-title">登録情報：</h2>
+        <ul>
+          <li>
+            <label>団体名：</label>
+            <span>{data.group_name}</span>
+          </li>
+          <li>
+            <label>代表者名：</label>
+            <span>{data.reader_name}</span>
+          </li>
+          <li>
+            <label>連絡者名：</label>
+            <span>{data.contact_name}</span>
+          </li>
+          <li>
+            <label>住所：</label>
+            <span>{data.address}</span>
+          </li>
+          <li>
+            <label>電話番号：</label>
+            <span>{data.tel}</span>
+          </li>
+        </ul>
         <span className="line"></span>
       </div>
     </div>

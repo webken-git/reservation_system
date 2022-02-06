@@ -126,28 +126,6 @@ class EquipmentViewSet(viewsets.ModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class SpecialEquipmentViewSet(viewsets.ModelViewSet):
-  queryset = SpecialEquipment.objects.all()
-  serializer_class = SpecialEquipmentSerializer
-  filter_fields = [f.name for f in SpecialEquipment._meta.fields]
-  permission_classes = [permissions.ActionBasedPermission]
-  action_permissions = {
-      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
-      permissions.IsAuthenticated: [],
-      permissions.AllowAny: ['list', 'retrieve']
-  }
-
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
-  def list(self, request, *args, **kwargs):
-    return super().list(request, *args, **kwargs)
-
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
-  def retrieve(self, request, *args, **kwargs):
-    return super().retrieve(request, *args, **kwargs)
-
-
 class ReservationViewSet(viewsets.ModelViewSet):
   queryset = Reservation.objects.all()
   serializer_class = ReservationSerializer
@@ -196,8 +174,8 @@ class UserInfoViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1DAY))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1DAY))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -800,32 +778,6 @@ class EquipmentEquipmentFeeViewSet(viewsets.ReadOnlyModelViewSet):
 
   # @method_decorator(vary_on_cookie)
   # @method_decorator(cache_page(TIME_OUTS_1MONTH))
-  def retrieve(self, request, *args, **kwargs):
-    return super().retrieve(request, *args, **kwargs)
-
-
-class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
-  serializer_class = ReservationSerializer
-  filter_fields = [f.name for f in Reservation._meta.fields]
-  permission_classes = [permissions.ActionBasedPermission]
-  action_permissions = {
-      permissions.IsAdminUser: [],
-      permissions.IsAuthenticated: [],
-      permissions.AllowAny: ['list', 'retrieve']
-  }
-
-  def get_queryset(self):
-    special_equipment_pk = self.kwargs.get('special_equipment_pk')
-    queryset = Reservation.objects.all().prefetch_related('special_equipment')
-    return queryset.filter(special_equipment=special_equipment_pk)
-
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
-  def list(self, request, *args, **kwargs):
-    return super().list(request, *args, **kwargs)
-
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 

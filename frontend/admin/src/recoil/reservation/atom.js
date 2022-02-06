@@ -1,12 +1,15 @@
-import { atom } from 'recoil';
-import { recoilPersist } from 'recoil-persist'
+import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist();
-
-const reseravationState = atom({
-    key: 'reservationState',
-    default: [],
-    effects_UNSTABLE: [persistAtom],
+const { persistAtom } = recoilPersist({
+  key: "select-data",
+  storage: typeof window !== "undefined" ? window.localStorage : null,
 });
 
-export default reseravationState;
+const reseravationData = atom({
+  key: "reseravationData",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+export default reseravationData;

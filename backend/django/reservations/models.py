@@ -60,16 +60,16 @@ class Equipment(models.Model):
     return self.name
 
 
-class SpecialEquipment(models.Model):
-  """
-  特別設備テーブル
-  """
-  name = models.CharField('特別設備', max_length=25, blank=True, null=True)
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
+# class SpecialEquipment(models.Model):
+#   """
+#   特別設備テーブル
+#   """
+#   name = models.CharField('特別設備', max_length=25, blank=True, null=True)
+#   created_at = models.DateTimeField(auto_now_add=True)
+#   updated_at = models.DateTimeField(auto_now=True)
 
-  def __str__(self):
-    return self.name
+#   def __str__(self):
+#     return self.name
 
 
 class Reservation(models.Model):
@@ -114,11 +114,7 @@ class Reservation(models.Model):
       blank=True,
       related_name='reservation_equipment'
   )
-  special_equipment = models.ManyToManyField(
-      SpecialEquipment, verbose_name='special_equipment',
-      blank=True,
-      related_name='resercvation_special_equipment'
-  )
+  special_equipment = models.CharField('特別設備', max_length=50, blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
