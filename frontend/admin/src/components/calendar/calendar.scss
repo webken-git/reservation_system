@@ -21,7 +21,27 @@ $breakpoints: (
 $main-color: #1a8d89;
 $sub-color: #707070;
 $accent-color: #233b62;
-$bordercolor: gainsboro;
+$bordercolor: #dadce0;
+
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
 
 //追加css
 .container {
@@ -46,12 +66,15 @@ $bordercolor: gainsboro;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #707070;
+    border-bottom: 1.5px solid $bordercolor;
 
     .header_title {
       font-size: 30px;
       margin-left: 50px;
       color: #707070;
+      @include mq(sp) {
+        display: none;
+      }
     }
 
     .date-selector {
@@ -109,7 +132,7 @@ $bordercolor: gainsboro;
 }
 
 .head-row {
-  height: 10%;
+  height: 100px;
 
   ::-webkit-scrollbar {
     display: inline;
@@ -142,7 +165,7 @@ $bordercolor: gainsboro;
       font-size: 2.5vh;
       text-align: center;
       position: absolute;
-      top: 3vh;
+      top: 4.5vh;
       left: 0;
       width: 100%;
 
@@ -152,7 +175,7 @@ $bordercolor: gainsboro;
     }
 
     .today {
-      background-color: #1a8d89;
+      background-color: $main-color;
       color: white;
       display: inline-block;
       width: 3.7vh;
@@ -215,7 +238,7 @@ $bordercolor: gainsboro;
       font-size: 2.5vh;
       text-align: center;
       position: absolute;
-      top: 3vh;
+      top: 4.5vh;
       left: 0;
       width: 100%;
 
@@ -458,7 +481,8 @@ $bordercolor: gainsboro;
   table {
     width: 100%;
     height: 86%;
-    border: 2px $bordercolor solid;
+    border: 1px $bordercolor solid;
+    border-top: none;
     border-collapse: collapse;
 
     tbody {
@@ -469,14 +493,24 @@ $bordercolor: gainsboro;
       tr {
         width: 13%;
         height: 10%;
-        border-bottom: 1.5px $bordercolor solid;
+        border-bottom: 1px $bordercolor solid;
+        font-size: 1.2rem;
 
         th {
           display: table-cell;
           vertical-align: top;
           padding-top: 3px;
-          font-size: 12px;
-          border-right: 1.5px $bordercolor solid;
+          // font-size: 12px;
+          border-right: 1px $bordercolor solid;
+          &:first-child {
+            color: #f00;
+          }
+          &:last-child {
+            color: #0000ff;
+          }
+          p {
+            color: #000;
+          }
         }
       }
 
