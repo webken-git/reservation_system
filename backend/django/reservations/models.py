@@ -60,18 +60,6 @@ class Equipment(models.Model):
     return self.name
 
 
-# class SpecialEquipment(models.Model):
-#   """
-#   特別設備テーブル
-#   """
-#   name = models.CharField('特別設備', max_length=25, blank=True, null=True)
-#   created_at = models.DateTimeField(auto_now_add=True)
-#   updated_at = models.DateTimeField(auto_now=True)
-
-#   def __str__(self):
-#     return self.name
-
-
 class Reservation(models.Model):
   """
   予約テーブル
