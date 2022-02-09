@@ -1,8 +1,8 @@
 // 未承認リストテーブルのコンポーネント
 import React from "react";
 // import './approval.scss'
-import ApprovalButtom from "../list-buttom/ApprovalButtom"
-import DisApprovalButtom from "./../list-buttom/DisApprovalButtom"
+import ApprovalButtom from "../list-buttom/ApprovalButtom";
+import DisApprovalButtom from "./../list-buttom/DisApprovalButtom";
 import DetailsButton from "./../list-buttom/DetailsButton";
 
 const UnApprovalTable = (props) => {
@@ -15,13 +15,26 @@ const UnApprovalTable = (props) => {
       {/* 団体者名 */}
       <td>{props.reader_name}</td>
       {/* 予約時間 */}
-      <td>{props.start_time}~{props.end_time}</td>
+      <td>
+        {props.start_time}~{props.end_time}
+      </td>
       {/* 場所 */}
       <td>{props.place}</td>
       <td>
-        <ApprovalButtom id={props.id} reservation_id={props.reservation_id}/>
+        {props.defferd_payment && props.defferd_payment.length > 0 ? "〇" : "×"}
+      </td>
+      <td>
+        <ApprovalButtom
+          id={props.id}
+          reservation_id={props.reservation_id}
+          defferd_payment={props.defferd_payment}
+        />
         <span>　</span>
-        <DisApprovalButtom id={props.id} reservation_id={props.reservation_id}/>
+        <DisApprovalButtom
+          id={props.id}
+          reservation_id={props.reservation_id}
+          defferd_payment={props.defferd_payment}
+        />
       </td>
       <td>
         <DetailsButton
@@ -41,12 +54,18 @@ const UnApprovalTable = (props) => {
           participant_number={props.participant_number}
           purpose={props.purpose}
           admission_fee={props.admission_fee}
+          equipment={props.equipment}
+          special_equipment={props.special_equipment}
           email={props.email}
           approval={props.approval}
+          usage_fee={props.usage_fee}
+          electric_fee={props.electric_fee}
+          heating_fee={props.heating_fee}
+          defferd_payment={props.defferd_payment}
         />
       </td>
     </tr>
-  )
-}
+  );
+};
 
-export default UnApprovalTable
+export default UnApprovalTable;

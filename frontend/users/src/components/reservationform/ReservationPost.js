@@ -3,18 +3,14 @@ import { Grid } from "@material-ui/core";
 import axios from "axios";
 import { formData, personalData, stepValue } from "../../recoil/form/atom";
 import authState from "../../recoil/auth";
-import tabState from '../../recoil/tab';
-import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-// import { useFetch } from "../../hooks/useFetch";
+import tabState from "../../recoil/tab";
+import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
 
 export const ReservationPost = () => {
-  const [, setStep] = useRecoilState(stepValue);
+  const setStep = useSetRecoilState(stepValue);
   const auth = useRecoilValue(authState);
-  // const AgeData = useFetch({
-  //   url: ReservationUrls.AGE_CATEGORY,
-  // });
   const [loading, setLoading] = useState(false);
   const FormData = useRecoilValue(formData);
   const PersonalData = useRecoilValue(personalData);
@@ -27,6 +23,9 @@ export const ReservationPost = () => {
     setStep(3);
   };
   const back = () => {
+    setStep(1);
+  };
+  const reset = () => {
     setStep(0);
   };
 
@@ -38,8 +37,7 @@ export const ReservationPost = () => {
     };
     axios
       .post(ReservationUrls.AGE_CATEGORY, age)
-      .then((response) => {
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
   // usage-categoriesにPOSTする
@@ -63,8 +61,7 @@ export const ReservationPost = () => {
     };
     axios
       .post(ReservationUrls.APPROVAL_APPLICATION, data)
-      .then((response) => {
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
 
@@ -79,7 +76,7 @@ export const ReservationPost = () => {
         contact_name: PersonalData.contact_name,
         address: PersonalData.address,
         // 国際番号で登録する必要があるため、telには+818000000000という形で入力する
-        tel: `+${PersonalData.tel}`,
+        tel: PersonalData.tel,
         is_group: true,
         delete_flag: true,
         start: item.start,
@@ -87,17 +84,23 @@ export const ReservationPost = () => {
         organizer_number: item.staffNum,
         participant_number: item.useNum,
         purpose: item.reason,
-        admission_fee: 0,
-        place_number: item.placeNumber,
+        admission_fee: item.admissionFee ? item.admissionFee : 0,
+        place_number: item.placeNumber ? item.placeNumber : 1,
         place_id: item.placeId,
-        equipment_id: [],
-        special_equipment_id: [],
+        equipment_id: item.equipment ? item.equipment : [],
+        special_equipment: item.specialEquipment ? item.specialEquipment : null,
       };
       axios
         .post(ReservationUrls.RESERVATION, data)
         .then((response) => {
           // api/reservations/へのPOSTリクエストが成功したら、
           // そのレコードのidを取得し、以下のPOSTリクエストに渡す
+          if (item.deferredPayment === "true") {
+            axios.post(ReservationUrls.DEFFERD_PAYMENT, {
+              reservation: response.data.id,
+              reason: item.deferredPaymentReason,
+            });
+          }
           postApprovalID(response.data.id);
           postAgeCategories(response.data.id, item.age);
           postUsageID(response.data.id, item.usageList);
@@ -105,6 +108,7 @@ export const ReservationPost = () => {
         .catch((error) => {
           setLoading(false);
         });
+      return item;
     });
   };
 
@@ -114,9 +118,9 @@ export const ReservationPost = () => {
       resetTab();
       resetFormData();
       resetPersonalData([]);
-      back();
+      reset();
       window.location.href = "/";
-    }, 2000);
+    }, 1500);
   };
   return (
     <>
@@ -127,9 +131,8 @@ export const ReservationPost = () => {
             className="back-btn"
             onClick={back}
             style={{
-              marginTop: "20%",
-              marginLeft: "80px",
-              marginBottom: "10%",
+              marginTop: "10%",
+              marginLeft: "30px",
             }}
           >
             戻る
@@ -139,9 +142,8 @@ export const ReservationPost = () => {
             className="btn"
             onClick={(next, postData)}
             style={{
-              marginTop: "20%",
-              marginLeft: "80px",
-              marginBottom: "10%",
+              marginTop: "10%",
+              marginLeft: "30px",
             }}
           >
             予約する

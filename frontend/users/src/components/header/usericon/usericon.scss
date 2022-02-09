@@ -32,9 +32,6 @@ $accent-color: #91c21f;
 }
 
 .modal {
-  position: fixed;
-  top: 0px;
-  left: 0px;
   position: absolute;
   top: 10%;
   left: 80%;
@@ -44,10 +41,10 @@ $accent-color: #91c21f;
   z-index: 9999;
   border-radius: 1%;
   border: #ccc solid 1px;
-  // border-left: #ccc solid 1px;
-  // border-right: #ccc solid 1px;
-  // border-bottom: #ccc solid 1px;
   padding: 1.5rem;
+  &:focus {
+    outline: none;
+  }
   @include mq(sp) {
     top: 9%;
     left: 0;
@@ -57,16 +54,10 @@ $accent-color: #91c21f;
     height: 100%;
     border-top: #ccc solid 1px;
     border-radius: 0px;
-    // border-left: none;
-    // border-right: none;
-    // border-bottom: none;
   }
   b {
     font-size: 1.5rem;
   }
-}
-.modal:focus {
-  outline: none;
 }
 .overlay {
   position: fixed;

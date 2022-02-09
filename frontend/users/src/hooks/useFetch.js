@@ -1,10 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import axios from "axios";
+import useUnmountRef from "./useUnmountRef";
+import useSafeState from "./useSafeState";
 
 export const useFetch = ({ url }) => {
-  const [data, setData] = useState(null);
-  const [, setError] = useState(null);
-  const [, setLoading] = useState(false);
+  const unmountRef = useUnmountRef();
+  const [data, setData] = useSafeState(unmountRef, null);
+  const [, setError] = useSafeState(unmountRef, null);
+  const [, setLoading] = useSafeState(unmountRef, false);
   const fetchRequest = useCallback(async () => {
     try {
       setLoading(true);

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { useRecoilState, useRecoilValue } from "recoil";
 import "./Content.scss";
-import { useFetch } from "../../hooks/useFetch";
-import { formData, personalData, stepValue } from "../../recoil/form/atom";
+// import { useFetch } from "../../hooks/useFetch";
+import { formData, stepValue } from "../../recoil/form/atom";
 import { ReservationList } from "./ReservationList";
 import { Link } from "react-router-dom";
 import { PersonalForm } from "./PersonalForm";
@@ -16,17 +16,15 @@ export const ReservationStep = () => {
   const data = useRecoilValue(formData);
   const [activeStep, setActiveStep] = useState(0);
   const [step, setStep] = useRecoilState(stepValue);
-  console.log(activeStep);
-  const data2 = useRecoilValue(personalData);
-  // console.log(data2);
+  // const data2 = useRecoilValue(personalData);
   const Step1 = () => {
     setActiveStep(step);
     setStep(1);
   };
 
-  const Step3 = () => {
-    setActiveStep(3);
-  };
+  // const Step3 = () => {
+  //   setActiveStep(3);
+  // };
   useEffect(() => {
     setActiveStep(step);
   }, [step]);
@@ -60,38 +58,51 @@ export const ReservationStep = () => {
         <ReservationList />
         {data.length === 0 ? (
           <Grid container alignItems="center" justifyContent={"center"} margin>
-            <Link to="/"
+            <Link
+              to="/"
               style={{
                 textDecoration: "none",
                 fontSize: "25px",
               }}
             >
-            <button
-              type="button"
-              className="btn"
-              style={{
-                marginTop: "100px",
-              }}
-            >
+              <button
+                type="button"
+                className="btn"
+                style={{
+                  marginTop: "100px",
+                }}
+              >
                 予約する
               </button>
-              </Link>
+            </Link>
           </Grid>
         ) : (
-          <div>
-              <Grid container alignItems="center" justifyContent={"center"}>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={Step1}
-                  style={{
-                    width: "20%",
-                  }}
-                >
-                  次へ
-                </button>
-              </Grid>
-          </div>
+          <Grid container alignItems="center" justifyContent={"center"}>
+            <div>
+              <button
+                type="button"
+                className="back-btn"
+                onClick={() => {
+                  window.history.back();
+                }}
+                style={{
+                  marginRight: "30px",
+                }}
+              >
+                戻る
+              </button>
+              <button
+                type="button"
+                className="btn"
+                onClick={Step1}
+                style={{
+                  marginLeft: "30px",
+                }}
+              >
+                次へ
+              </button>
+            </div>
+          </Grid>
         )}
       </div>
       <div style={{ display: activeStep === 1 ? "" : "none" }}>
@@ -100,9 +111,10 @@ export const ReservationStep = () => {
         </div>
       </div>
       <div style={{ display: activeStep === 2 ? "" : "none" }}>
-        <Grid container alignItems="center" justifyContent={"center"}>
-          <h2 className="title">
-            以下の入力内容で予約いたします。<br/>
+        <Grid container className="title-grid">
+          <h2 className="verify-title">
+            以下の入力内容で予約いたします。
+            <br />
             入力内容を確認後、「予約する」ボタンを押してください。
           </h2>
         </Grid>

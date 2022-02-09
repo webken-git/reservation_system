@@ -1,7 +1,10 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist();
+const { persistAtom } = recoilPersist({
+  key: "authorization",
+  storage: typeof window !== "undefined" ? window.localStorage : null,
+});
 
 const authState = atom({
   key: "authState",
