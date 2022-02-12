@@ -353,8 +353,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             render={({ field }) => (
                               <>
                                 <TextField
-                                  type={"text"}
-                                  inputMode="numeric"
+                                  inputProps={{
+                                    inputMode: "numeric",
+                                    pattern: "[0-9]*",
+                                  }}
                                   style={{ width: "150px" }}
                                   placeholder="半角数字で入力"
                                   {...register("admissionFee", {
@@ -614,8 +616,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   render={({ field }) => (
                     <>
                       <TextField
-                        type={"text"}
-                        inputMode="numeric"
+                        inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                         style={{ width: "150px" }}
                         placeholder="半角数字で入力"
                         {...register("staffNum", {
@@ -652,8 +653,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   render={({ field }) => (
                     <>
                       <TextField
-                        type={"text"}
-                        inputMode="numeric"
+                        inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                         style={{ width: "150px" }}
                         placeholder="半角数字で入力"
                         {...register("useNum", {

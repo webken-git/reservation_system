@@ -232,8 +232,7 @@ export const PersonalForm = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      type={"text"}
-                      inputMode="numeric"
+                      inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                       variant="outlined"
                       placeholder="半角数字で入力"
                       {...register("tel", {

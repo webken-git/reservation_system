@@ -208,7 +208,7 @@ CSRF_COOKIE_SECURE = True
 
 REST_AUTH_SERIALIZERS = {
     # 'LOGIN_SERIALIZER': 'users.signin.serializers.LoginSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'users.serializers.PasswordResetSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'users.serializers.CustomPasswordResetSerializer',
 }
 
 CSRF_COOKIE_NAME = 'csrftoken'

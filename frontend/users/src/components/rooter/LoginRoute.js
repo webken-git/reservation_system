@@ -1,11 +1,13 @@
 import React from "react";
 import axios from "axios";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
 import { AuthUrls } from "../../utils/authUrls";
 import authState from "../../recoil/auth";
 import tabState from "../../recoil/tab";
 import { formData, personalData, stepValue } from "../../recoil/form/atom";
+import HeaderRoute from "./HeaderRoute";
+import NotFound from "../../pages/error/NotFound";
 
 const LoginRoute = (props) => {
   const [auth, setAuth] = useRecoilState(authState);
@@ -49,7 +51,7 @@ const LoginRoute = (props) => {
     return props.children;
   } else {
     // alert("再度ログインしてください");
-    return <Redirect to="/" />;
+    return <HeaderRoute children={<NotFound />} />;
   }
 };
 
