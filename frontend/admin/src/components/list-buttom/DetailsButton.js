@@ -90,6 +90,16 @@ const DetailsButton = (props) => {
               <label>場所：</label>
               <span>{props.place}</span>
             </li>
+            {props.place_min === 1 && props.place_max === 1 ? null : (
+              <li>
+                <label>シート数または範囲：</label>
+                <span>
+                  {(props.place_min === 0.5 &&
+                    (props.place_number === 0.5 ? "半面" : "全面")) ||
+                    (props.place_max > 1 && props.place_number)}
+                </span>
+              </li>
+            )}
             <li>
               <label>使用(利用)日時：</label>
               <p>

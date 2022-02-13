@@ -95,8 +95,9 @@ class Reservation(models.Model):
       blank=True, null=True,
       related_name='reservation_place', on_delete=models.SET_NULL
   )
-  place_number = models.IntegerField(
-      'シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
+  place_number = models.FloatField('シート数', default=1.0, validators=[
+      validators.MinValueValidator(0.5),
+      validators.MaxValueValidator(100.0)])
   equipment = models.ManyToManyField(
       Equipment, verbose_name='equipment',
       blank=True,
