@@ -15,8 +15,11 @@ import { ReservationDetailPage } from "./pages/ReservationDetailPage";
 import { ReservationCancelPage } from "./pages/ReservationCancelPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegistrationPage } from "./pages/RegistrationPage";
+import { RegistrationCompletePage } from "./pages/RegistrationCompletePage";
 import { AccountDeletePage } from "./pages/AccountDeletePage";
 import { ReservationStepPage } from "./pages/ReservationStepPage";
+import NotFound from "./pages/error/NotFound";
+import InternalServer from "./pages/error/InternalServer";
 import "./index.scss";
 
 function getCookie(name) {
@@ -49,8 +52,23 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
+        <HeaderRoute path="/" exact children={<MainPage />} />
         <Route path="/login" exact children={<LoginPage />} />
-        <Route path="/registration" exact children={<RegistrationPage />} />
+        <Route
+          path="/registration"
+          render={({ match: { url } }) => (
+            <>
+              <Switch>
+                <Route path={`${url}/`} exact children={<RegistrationPage />} />
+                <Route
+                  path={`${url}/complete/:key`}
+                  children={<RegistrationCompletePage />}
+                />
+                <HeaderRoute children={<NotFound />} />
+              </Switch>
+            </>
+          )}
+        />
         <Route
           path="/password"
           render={({ match: { url } }) => (
@@ -62,12 +80,12 @@ function App() {
                   exact
                   children={<PasswordResetPage />}
                 />
+                <HeaderRoute children={<NotFound />} />
               </Switch>
             </>
           )}
         />
-        {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
-        <HeaderRoute path="/" exact children={<MainPage />} />
+        <HeaderRoute path="/500" children={<InternalServer />} />
         <LoginRoute>
           <Switch>
             <HeaderRoute
@@ -108,6 +126,7 @@ function App() {
                       exact
                       children={<AccountDeletePage />}
                     />
+                    <HeaderRoute children={<NotFound />} />
                   </Switch>
                 </>
               )}
@@ -132,6 +151,7 @@ function App() {
                 </>
               )}
             />
+            <HeaderRoute children={<NotFound />} />
           </Switch>
         </LoginRoute>
       </Switch>

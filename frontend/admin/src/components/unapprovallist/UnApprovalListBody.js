@@ -4,7 +4,7 @@ import axios from "axios";
 import UnApprovalTable from "./UnApprovalTable";
 import "../approvallist/approval.scss";
 import dayjs from "dayjs";
-import CsvExportButton from "../csvexport/CsvExportButton";
+import CsvExportLayout from "../csvexport/CsvExportLayout";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
 
@@ -94,7 +94,7 @@ const UnapprovalListBody = () => {
     <>
       <div className="functions">
         <span className="space">
-          <CsvExportButton approval={1} />
+          <CsvExportLayout />
         </span>
       </div>
       <div className="scroll_box-wrapper">

@@ -20,7 +20,10 @@ class Csv:
     # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     BASE_DIR = settings.BASE_DIR
     queryset = ApprovalApplication.objects.order_by('id')
-    data = queryset.filter(approval=self.request.data['approval'])
+    if self.request.data['approval'] == "all":
+      data = queryset.filter(reservation__start__range=[self.request.data['start1'], self.request.data['start2']])
+    else:
+      data = queryset.filter(approval=self.request.data['approval'], reservation__start__range=[self.request.data['start1'], self.request.data['start2']])
 
     now = datetime.datetime.now(pytz.timezone('Asia/Tokyo')).strftime('%Y%m%d-%H%M_')
     file_path = BASE_DIR + '/static/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'

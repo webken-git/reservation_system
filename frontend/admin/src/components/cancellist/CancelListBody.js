@@ -4,7 +4,7 @@ import axios from "axios";
 import CancelTable from "./CancelTable";
 // import './../approvallist/approval.scss'
 import dayjs from "dayjs";
-import CsvExportButton from "../csvexport/CsvExportButton";
+import CsvExportLayout from "../csvexport/CsvExportLayout";
 import DocumentLayout from "../document/DocumentLayout";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
@@ -96,7 +96,7 @@ const CancelListBody = () => {
           <DocumentLayout />
         </span>
         <span className="space">
-          <CsvExportButton approval={4} />
+          <CsvExportLayout />
         </span>
       </div>
       <div className="scroll_box-wrapper">
@@ -122,9 +122,7 @@ const CancelListBody = () => {
                     defaultValue=""
                     onChange={(e) => placeFiltering(e)}
                   >
-                    <option value="" selected>
-                      全体
-                    </option>
+                    <option value="">全体</option>
                     <option value="1">カーリング場</option>
                     <option value="2">大会議室</option>
                     <option value="3">中会議室</option>

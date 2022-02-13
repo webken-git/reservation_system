@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -20,7 +20,7 @@ import { ReservationUrls } from "../../utils/reservationUrls";
 import Label from "./ReservationForm";
 import Loading from "../loading/Loading";
 
-export const PersonalForm = () => {
+export const PersonalForm = React.forwardRef((props, ref) => {
   const [, setData] = useRecoilState(personalData);
   const [, setStep] = useRecoilState(stepValue);
   const auth = useRecoilValue(authState);
@@ -34,6 +34,16 @@ export const PersonalForm = () => {
     // resolver: yupResolver(stepSchema),
     reValidateMode: "onSubmit",
   });
+  const error = Object.values(errors); // エラーがあるかどうか
+  const formRef = useRef();
+  // scrollToRefの位置にスクロールする
+  const scrollToElement = (element) => {
+    element.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   const next = () => {
     setStep(2);
   };
@@ -91,10 +101,30 @@ export const PersonalForm = () => {
 
   return (
     UserInfoData && (
-      <Grid container alignItems="center" justifyContent="center" row-gap="1em">
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="center"
+        row-gap="1em"
+        ref={formRef}
+      >
         <div className="PF-root">
           <form onSubmit={handleSubmit(onSubmit)}>
             <h2 className="PF-title">個人情報入力</h2>
+            {error.length > 0 && (
+              <>
+                {scrollToElement(formRef)}
+                <div className="reserve-error">
+                  <p>
+                    正しく入力されていない項目があります。
+                    <br />
+                    メッセージをご確認の上、
+                    <br />
+                    もう一度ご入力ください。
+                  </p>
+                </div>
+              </>
+            )}
             <div>
               <FormControl error>
                 <Label>団体名：</Label>
@@ -232,8 +262,7 @@ export const PersonalForm = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      type={"text"}
-                      inputMode="numeric"
+                      inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                       variant="outlined"
                       placeholder="半角数字で入力"
                       {...register("tel", {
@@ -331,4 +360,4 @@ export const PersonalForm = () => {
       </Grid>
     )
   );
-};
+});

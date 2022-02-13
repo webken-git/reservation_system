@@ -15,6 +15,7 @@ import datetime
 import os
 from dotenv import load_dotenv
 from users import permissions
+from users.models import User
 from reservations.models import *
 from reservations.serializers import *
 from reservations.funcs.filters import (
@@ -275,7 +276,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         },
     }
 
-    if request.data['approval_id'] == 2:
+    if request.data['approval_id'] == "2":
       # 予約承認メール送信
       automail = AutoMail.objects.get(name='予約承認メール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_approval_message.txt'
@@ -293,7 +294,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif request.data['approval_id'] == 3:
+    elif request.data['approval_id'] == "3":
       # 予約が不承認された場合
       # 予約承認メール送信
       automail = AutoMail.objects.get(name='予約不承認メール')
@@ -312,7 +313,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif request.user.is_staff == True and request.data['approval_id'] == 4:
+    elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == "4":
       # 施設側からキャンセルされた場合
       # 施設側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
@@ -331,7 +332,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif request.user.is_staff == False and request.data['approval_id'] == 4:
+    elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == "4":
       # 利用者側からキャンセルされた場合
       # 利用者側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')
@@ -974,11 +975,19 @@ class ApprovalApplicationCsvExportViewSet(
   }
 
   def create(self, request, *args, **kwargs):
-    csv = csv_export(request)
-    if csv:
-      return response.Response({'path': csv}, status=status.HTTP_200_OK)
+    # request.dataにapprovalが送られていない場合
+    if 'approval' not in request.data:
+      return response.Response({'error': 'approval is required'}, status=status.HTTP_400_BAD_REQUEST)
+    elif 'start1' not in request.data:
+      return response.Response({'error': 'start1 is required'}, status=status.HTTP_400_BAD_REQUEST)
+    elif 'start2' not in request.data:
+      return response.Response({'error': 'start2 is required'}, status=status.HTTP_400_BAD_REQUEST)
     else:
-      return response.Response({'detail': '失敗しました。'}, status=status.HTTP_400_BAD_REQUEST)
+      csv = csv_export(request)
+      if csv:
+        return response.Response({'path': csv}, status=status.HTTP_200_OK)
+      else:
+        return response.Response({'error': 'csv is not generated'}, status=status.HTTP_400_BAD_REQUEST)
     # serializer = self.serializer_class(data=csv_export(request), many=True)
     # if serializer:
     #   serializer.is_valid()

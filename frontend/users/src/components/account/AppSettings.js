@@ -6,6 +6,25 @@ import { AuthUrls } from "../../utils/authUrls";
 import Loading from "../loading/Loading";
 import "./account.scss";
 
+export function createAppSetting(userId, appSettingsUrl) {
+  axios
+    .get(`${appSettingsUrl}?user=${userId}`)
+    .then((res) => {
+      if (res.data.length === 0) {
+        // データが存在しない場合は作成
+        axios
+          .post(appSettingsUrl, {
+            user_id: userId,
+            is_receive_announcement_email: true,
+            is_receive_reminder_email: true,
+          })
+          .then((res) => {})
+          .catch((err) => {});
+      }
+    })
+    .catch((err) => {});
+}
+
 export const AppSettings = () => {
   const [settings, setSettings] = useState([]);
   const [loading, setLoading] = useState(false);
