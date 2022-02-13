@@ -85,7 +85,7 @@ $accent-color: #233b62;
   top: 0px;
   left: 0px;
   position: absolute;
-  top: 10%;
+  top: 10vh;
   left: 80%;
   right: 2%;
   bottom: 65%;
@@ -97,7 +97,7 @@ $accent-color: #233b62;
   // border-bottom: #ccc solid 1px;
   padding: 1.5rem;
   @include mq(sp) {
-    top: 9%;
+    top: 10vh;
     left: 0;
     right: 0;
     bottom: 0;

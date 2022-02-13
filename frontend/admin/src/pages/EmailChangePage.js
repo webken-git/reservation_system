@@ -2,6 +2,6 @@ import React from "react";
 import EmailChange from "../components/account/EmailChange";
 
 export const EmailChangePage = () => {
-  document.title = "予約管理アプリ | メール変更";
+  document.title = "メールアドレス変更 | 予約管理アプリ"; // ページタイトルを変更
   return <EmailChange />;
 };

@@ -4,6 +4,7 @@ const ROOT_URL = process.env.REACT_APP_API;
 export const AuthUrls = {
   STAFF_LOGIN: `${ROOT_URL}/account/staff-login/`,
   REGISTRATION: `${ROOT_URL}/account/registration/`,
+  ACCOUNT_CONFIRM: `${ROOT_URL}/account/confirm/`,
   LOGOUT: `${ROOT_URL}/account/logout/`,
   CHANGE_PASSWORD: `${ROOT_URL}/account/password/change/`,
   RESET_PASSWORD: `${ROOT_URL}/account/password/`,

@@ -59,6 +59,8 @@ export const ReservationList = () => {
                       <li className="number">
                         <label>主催関係者：</label>
                         <span className="table-cell">{item.staffNum}人 </span>
+                      </li>
+                      <li className="number">
                         <label>参集人員：</label>
                         <span className="table-cell">{item.useNum}人</span>
                       </li>

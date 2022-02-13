@@ -5,7 +5,7 @@ import DisapprovalTable from "./DisapprovalTable";
 import "../approvallist/approval.scss";
 import dayjs from "dayjs";
 import DocumentLayout from "../document/DocumentLayout";
-import CsvExportButton from "../csvexport/CsvExportButton";
+import CsvExportLayout from "../csvexport/CsvExportLayout";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
 
@@ -101,7 +101,7 @@ const DisapprovalListBody = () => {
           <DocumentLayout />
         </span>
         <span className="space">
-          <CsvExportButton approval={3} />
+          <CsvExportLayout />
         </span>
       </div>
       <div className="scroll_box-wrapper">

@@ -165,7 +165,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
   return (
     <Grid container alignItems="center" justifyContent={"center"} ref={formRef}>
       <div className={form.parent_elements}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <h1>予約情報入力</h1>
           {error.length > 0 && (
             <>
@@ -341,7 +341,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                         <FormControl error>
                           <Label>
                             徴収する入場料の最高額：
-                            <span className="red">※単位は不要です</span>
+                            <p className="red">※単位は不要です</p>
                           </Label>
                           <FormHelperText>
                             {errors.admissionFee && errors.admissionFee.message}
@@ -365,6 +365,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                                       value: /^[0-9]+$/,
                                       message: "数字を入力してください",
                                     },
+                                    maxLength: {
+                                      value: 5,
+                                      message: "5桁以内で入力してください",
+                                    },
                                   })}
                                   error={"admissionFee" in errors}
                                   {...field}
@@ -382,45 +386,55 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
           </div>
           {tab.max - tab.min > 0 && (
             <div>
-              <Label>予約するシート数または範囲の指定：</Label>
-              <Controller
-                name="placeNumber"
-                control={control}
-                defaultValue=""
-                rules={{ required: "入力" }}
-                render={({ field }) => (
-                  <div>
-                    <TextField
-                      style={{ width: "200px" }}
-                      select
-                      size="Normal"
-                      defaultValue=""
-                      label="選択してください"
-                      error={"placeNumber" in errors}
-                      {...field}
-                    >
-                      {(tab.min === 0.5 &&
-                        [tab.min, tab.max].map((value, index) => (
-                          <MenuItem key={index} value={value}>
-                            {value === 0.5 ? "半面" : "全面"}
-                          </MenuItem>
-                        ))) ||
-                        // max - minが1以上なら、max - min分のMenuItemを作成
-                        (tab.max - tab.min + 1 > 0 &&
-                          Array.from(Array(tab.max - tab.min + 1), (_v, i) => {
-                            return (
-                              <MenuItem key={i} value={i + tab.min}>
-                                {i + tab.min}
-                              </MenuItem>
-                            );
-                          }))}
-                    </TextField>
-                  </div>
-                )}
-              />
+              <FormControl error>
+                <Label>予約するシート数または範囲の指定：</Label>
+                <FormHelperText>
+                  {errors.placeNumber && errors.placeNumber.message}
+                </FormHelperText>
+                <Controller
+                  name="placeNumber"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <div>
+                      <TextField
+                        style={{ width: "200px" }}
+                        select
+                        size="Normal"
+                        defaultValue=""
+                        {...register("placeNumber", {
+                          required: "選択してください",
+                        })}
+                        error={"placeNumber" in errors}
+                        {...field}
+                      >
+                        {(tab.min === 0.5 &&
+                          [tab.min, tab.max].map((value, index) => (
+                            <MenuItem key={index} value={value}>
+                              {value === 0.5 ? "半面" : "全面"}
+                            </MenuItem>
+                          ))) ||
+                          // max - minが1以上なら、max - min分のMenuItemを作成
+                          (tab.max - tab.min + 1 > 0 &&
+                            Array.from(
+                              Array(tab.max - tab.min + 1),
+                              (_v, i) => {
+                                return (
+                                  <MenuItem key={i} value={i + tab.min}>
+                                    {i + tab.min}
+                                  </MenuItem>
+                                );
+                              }
+                            ))}
+                      </TextField>
+                    </div>
+                  )}
+                />
+              </FormControl>
             </div>
           )}
           <div>
+            <Label>利用開始日時：</Label>
             <div>
               <Controller
                 name="StartDate"
@@ -429,7 +443,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 rules={{ required: "入力" }}
                 render={({ field }) => (
                   <div className={form.StartDate}>
-                    <Label>利用日時：</Label>
                     <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
                       <DesktopDatePicker
                         {...field}
@@ -441,6 +454,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   </div>
                 )}
               />
+              <br />
             </div>
             <div>
               <Controller
@@ -492,6 +506,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 )}
               />
             </div>
+            <Label>利用終了日時：</Label>
             <div>
               <Controller
                 name="EndDate"
@@ -500,9 +515,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 rules={{ required: "入力" }}
                 render={({ field }) => (
                   <div className={form.EndDate}>
-                    <Label>
-                      <br />
-                    </Label>
                     <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
                       <DesktopDatePicker
                         {...field}
@@ -514,6 +526,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   </div>
                 )}
               />
+              <br />
             </div>
             <div>
               <Controller
@@ -583,6 +596,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 render={({ field }) => (
                   <div className={form.reason}>
                     <TextField
+                      inputProps={{ inputMode: "text" }}
                       {...field}
                       type={"text"}
                       style={{ width: "300px" }}
@@ -625,6 +639,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             value: /^[0-9]+$/,
                             message: "数字を入力してください",
                           },
+                          maxLength: {
+                            value: 3,
+                            message: "1000人以下で入力してください",
+                          },
                         })}
                         error={"staffNum" in errors}
                         {...field}
@@ -661,6 +679,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                           pattern: {
                             value: /^[0-9]+$/,
                             message: "数字を入力してください",
+                          },
+                          maxLength: {
+                            value: 3,
+                            message: "1000人以下で入力してください",
                           },
                         })}
                         error={"useNum" in errors}

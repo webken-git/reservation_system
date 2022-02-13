@@ -2,7 +2,7 @@ import React from "react";
 import VerifyEmail from "../components/account/VerifyEmail";
 
 export const VerifyEmailPage = () => {
-  document.title = "予約管理アプリ | メールアドレスの確認";
+  document.title = "メールアドレスの確認 | 予約管理アプリ"; // ページタイトルを変更
   // 現在開いているページのurlを取得
   const url = window.location.href;
   const protocol = window.location.protocol;
