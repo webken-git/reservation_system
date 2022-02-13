@@ -1,4 +1,12 @@
 import { useState, useEffect } from "react";
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemHeading,
+    AccordionItemButton,
+    AccordionItemPanel,
+} from "react-accessible-accordion";
+import "react-accessible-accordion/dist/fancy-example.css";
 import axios from "axios";
 import 'react-tabs/style/react-tabs.scss';
 import { useSetRecoilState } from "recoil";
@@ -100,6 +108,7 @@ export const DataList = () => {
     const divide = (pn) => {
         setTabState(pn);
         setPlaceName(pn)
+        console.log(pn)
         const divide_feelist = feeListData.filter(fld => {
             return fld.place === pn
         })
@@ -112,6 +121,7 @@ export const DataList = () => {
         const isGroup = divideFeeList.filter(fld => {
             return fld.place.name === place.name && fld.is_group === true;
         });
+
         const timeId4 = divideFeeList.filter(fld => {
             return fld.place.name === place.name && fld.is_group === true && fld.time.name.indexOf('１時間につき') !== -1;
         });
@@ -149,21 +159,23 @@ export const DataList = () => {
         }
 
         return (
-            <details>
-                <summary onClick={() => divide(place.name)}>
-                    <span>{place['name']}</span>
-                </summary>
-                <button className="btn" onClick={() => divide(place.name), () => setIsOpen(true)} >編集</button>
-                <FacilityFee />
-                <Modal
-                    overlayClassName='mdoverlay'
-                    isOpen={modalIsOpen}
-                    onRequestClose={() => setIsOpen(false)}
-                >
-                    <button onClick={() => setIsOpen(false)}>閉じる</button>
-                    <EditFacilityFee />
-                </Modal>
-            </details >
+            <AccordionItem key={place.id}>
+                <AccordionItemHeading>
+                    <AccordionItemButton onClick={() => divide(place.name)}>{place['name']}</AccordionItemButton>
+                </AccordionItemHeading>
+                <AccordionItemPanel>
+                    <button className="btn" onClick={() => divide(place.name), () => setIsOpen(true)} >編集</button>
+                    <FacilityFee />
+                    <Modal
+                        overlayClassName='mdoverlay'
+                        isOpen={modalIsOpen}
+                        onRequestClose={() => setIsOpen(false)}
+                    >
+                        <button onClick={() => setIsOpen(false)}>閉じる</button>
+                        <EditFacilityFee />
+                    </Modal>
+                </AccordionItemPanel>
+            </AccordionItem >
         )
     })
 
@@ -171,8 +183,10 @@ export const DataList = () => {
         <div className="list-wrapper">
             <div className="scroll_box-wrapper">
                 <div className="scroll_box">
-                    {fees}
-                    {loading && <Loading />}
+                    <Accordion allowZeroExpanded >
+                        {fees}
+                        {loading && <Loading />}
+                    </Accordion>
                 </div>
             </div>
         </div>

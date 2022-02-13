@@ -5,7 +5,6 @@ import './feelist.scss'
 const FeeList = (props) => {
   const agedata = props.age;
   const feelistdata = props.feelist;
-  console.log(agedata)
 
   // 表示する料金データを取得
   const age1 = agedata.filter(age => age.name === "小学生");
