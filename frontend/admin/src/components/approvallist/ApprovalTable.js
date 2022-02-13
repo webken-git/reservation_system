@@ -76,6 +76,9 @@ const ApprovalTable = (props) => {
           tel={props.tel}
           address={props.address}
           place={props.place}
+          place_min={props.place_min}
+          place_max={props.place_max}
+          place_number={props.place_number}
           start_day={props.start_day}
           start_time={props.start_time}
           end_day={props.end_day}

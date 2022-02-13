@@ -77,6 +77,9 @@ const CancelListBody = () => {
         organizer_number={val.reservation.organizer_number}
         participant_number={val.reservation.participant_number}
         place={val.reservation.place.name}
+        place_min={val.reservation.place.min}
+        place_max={val.reservation.place.max}
+        place_number={val.reservation.place_number}
         admission_fee={val.reservation.admission_fee}
         equipment={val.reservation.equipment}
         special_equipment={val.reservation.special_equipment}
