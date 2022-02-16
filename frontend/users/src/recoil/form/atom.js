@@ -24,3 +24,9 @@ export const stepValue = atom({
   default: 0,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const Id = atom({
+  key: "getId",
+  default: undefined,
+  effects_UNSTABLE: [persistAtom],
+});

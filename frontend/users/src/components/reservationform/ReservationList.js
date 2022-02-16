@@ -5,13 +5,36 @@ import { formData } from "../../recoil/form/atom";
 import { useRecoilValue, useRecoilState, selector } from "recoil";
 import "./ReservationList.scss";
 import Loading from "../loading/Loading";
+import Modal from "react-modal";
+import { useForm, Controller } from "react-hook-form";
+import { inputUnstyledClasses } from "@mui/material";
 
 export const ReservationList = () => {
   const [data, setData] = useRecoilState(formData);
-  const [usage, setUsage] = useState([]);
-  const [tas, setTas] = useState([]);
   const [loading, setLoading] = useState(false);
-  // console.log(data);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const { register, reset, handleSubmit } = useForm({});
+  const modalStyle = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      backgroundColor: "rgba(0,0,0,0.85)",
+    },
+    content: {
+      position: "absolute",
+      top: "5rem",
+      left: "5rem",
+      right: "5rem",
+      bottom: "5rem",
+      backgroundColor: "FFFFF",
+      borderRadius: "1rem",
+      padding: "1.5rem",
+    },
+  };
+  const onSubmit = (data) => {
+    console.log(data);
+  };
   const remove = (item) => {
     const list = [...data];
     const id = item.id;
@@ -75,6 +98,13 @@ export const ReservationList = () => {
                         >
                           削除
                         </button>
+                        <button onClick={() => setIsOpen(true)}>編集</button>
+                        <Modal isOpen={modalIsOpen} style={modalStyle}>
+                          <form onSubmit={handleSubmit(onSubmit)}></form>
+                          <button onClick={() => setIsOpen(false)}>
+                            閉じる
+                          </button>
+                        </Modal>
                       </div>
                     </Grid>
                   );

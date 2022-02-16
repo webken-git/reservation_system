@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useForm, Controller, get } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { ja } from "date-fns/locale";
 import DateAdapter from "@mui/lab/AdapterDateFns";
@@ -14,7 +14,7 @@ import {
 import { format } from "date-fns";
 import { usePlaceName } from "../../hooks/usePlaceName";
 import form from "./ReservationForm.module.scss";
-import { formData } from "../../recoil/form/atom";
+import { formData, Id } from "../../recoil/form/atom";
 import tabState from "../../recoil/tab";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { useFetch } from "../../hooks/useFetch";
@@ -39,7 +39,7 @@ const Label = styled("p")({
 });
 
 export const ReservationForm = () => {
-  const resetFormData = useResetRecoilState(formData);
+  // const resetFormData = useResetRecoilState(formData);
   const [FormData, setFormData] = useRecoilState(formData);
   const tab = useRecoilValue(tabState);
   const [list, setList] = useState([]);
@@ -47,6 +47,7 @@ export const ReservationForm = () => {
   const [checkPayment, setCheckPayment] = useState(false);
   const [ageValue, setAgeValue] = useState([]);
   const [ageList, setAgeList] = useState([]);
+  const [startCheckDate, setStartCheckDate] = useState("");
   const AgeData = useFetch({
     url: ReservationUrls.AGE,
   });
@@ -58,6 +59,7 @@ export const ReservationForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm({
     criteriaMode: "all",
     defaultValues: {
@@ -84,7 +86,6 @@ export const ReservationForm = () => {
     //tabを変更する度にformをリセット
     reset();
   }, [tab]);
-  // console.log(getId());
   const onSubmit = (e) => {
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
     const startDate = format(e.StartDate, "yyyy-LL-dd");
@@ -92,11 +93,10 @@ export const ReservationForm = () => {
     const startTime = e.Start;
     const endTime = e.End;
     console.log(startDate <= endDate);
-    if (startDate <= endDate === true) {
+    if (startDate <= endDate && startTime < endTime === true) {
       const start = startDate.concat(" ", startTime);
       const end = endDate.concat(" ", endTime);
       const age = ageValue;
-      // const id = getId();
       // 選択中の施設を取得
       const placeId = tab.placeId;
       const placeName = tab.placeName;
@@ -108,20 +108,6 @@ export const ReservationForm = () => {
       const t = e.profits;
       const w = e.collect;
       const usageList = [i, t, w];
-      // const data = {
-      //   ...e,
-      //   start,
-      //   end,
-      //   placeName,
-      //   age,
-      //   placeId,
-      //   placeName,
-      //   startDate,
-      //   endDate,
-      //   usageList,
-      //   id: getId(),
-      // };
-      // const list = [...FormData, data, ];
       setFormData((oldFormData) => [
         ...oldFormData,
         {
@@ -140,10 +126,11 @@ export const ReservationForm = () => {
       ]);
       reset();
     }
-    if (startDate <= endDate === false) {
+    if (startDate <= endDate && startTime < endTime === false) {
+      return <div></div>;
     }
   };
-  console.log(FormData);
+  // console.log(FormData);
   // カーリングの時だけplace_numberにレーンのシート分投げる
   useEffect(() => {
     const placeNum = [];
@@ -170,12 +157,11 @@ export const ReservationForm = () => {
       setAgeValue(list);
     }
   };
-
   return (
     <Grid container alignItems="center" justifyContent={"center"}>
       <div className={form.parent_elements}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* <button onClick={resetFormData()}>aaa</button> */}
+          {/* <button onClick={(resetFormData(), restId())}>aaa</button> */}
           <h1>予約情報入力</h1>
           <div>
             <Label>年齢：</Label>
