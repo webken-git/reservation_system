@@ -20,13 +20,6 @@ const TabContent = (props) => {
     const isGroup = props.facilityFee.filter((fld) => {
       return fld.place.name === place.name && fld.is_group === true;
     });
-    const timeId4 = props.facilityFee.filter((fld) => {
-      return (
-        fld.place.name === place.name &&
-        fld.is_group === true &&
-        fld.time.name.indexOf("１時間につき") !== -1
-      );
-    });
 
     if (isGroup.length === 0) {
       return (
@@ -46,7 +39,7 @@ const TabContent = (props) => {
           </div>
         </TabPanel>
       );
-    } else if (timeId4.length === 0) {
+    } else if (place.max > 1) {
       return (
         <TabPanel key={p_id} value={place.id.toString()}>
           <div className="tab-content">
@@ -56,10 +49,11 @@ const TabContent = (props) => {
             </details>
             <details>
               <summary>料金一覧</summary>
-              <GroupFeeList
+              <CurlingFeeList
                 key={p_id}
                 feelist={props.facilityFee}
                 age={props.age}
+                time={props.time}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
@@ -78,7 +72,7 @@ const TabContent = (props) => {
             </details>
             <details>
               <summary>料金一覧</summary>
-              <CurlingFeeList
+              <GroupFeeList
                 key={p_id}
                 feelist={props.facilityFee}
                 age={props.age}

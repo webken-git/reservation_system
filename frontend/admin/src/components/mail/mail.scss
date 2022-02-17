@@ -31,9 +31,13 @@ $accent-color: #233b62;
       margin-right: auto;
       @include mq("sp") {
         // margin-right: 0;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
     }
+  }
+
+  .mail-list__button {
+    width: 10rem;
   }
   .mail-list__content {
     height: 70vh;

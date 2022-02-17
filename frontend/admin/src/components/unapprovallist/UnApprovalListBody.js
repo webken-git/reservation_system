@@ -7,38 +7,52 @@ import dayjs from "dayjs";
 import CsvExportLayout from "../csvexport/CsvExportLayout";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
+import {
+  useSortedPlaces,
+  useSortedStartDate,
+  useSortedGroupName,
+  useSortedLeaderName,
+} from "../../hooks/useSortData";
+import useSearch from "../../hooks/useFilter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSort } from "@fortawesome/free-solid-svg-icons";
 
 const UnapprovalListBody = () => {
-  const placeFiltering = (e) => {
-    setPlaceFilter(e.target.value);
-    // console.log(e.target.value);
-  };
-  const dateFiltering = (e) => {
-    setDateFilter(e.target.value);
-  };
-  const [placeFilter, setPlaceFilter] = useState();
-  const [dateFilter, setDateFilter] = useState();
   const [UnApprovalListData, setUnApprovalListData] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [sortStartDate] = useSortedStartDate(allData, setUnApprovalListData);
+  const [sortGroupName] = useSortedGroupName(
+    UnApprovalListData,
+    setUnApprovalListData
+  );
+  const [sortLeaderName] = useSortedLeaderName(
+    UnApprovalListData,
+    setUnApprovalListData
+  );
+  const [sortPlace] = useSortedPlaces(
+    UnApprovalListData,
+    setUnApprovalListData
+  );
+  const [search] = useSearch(allData, setUnApprovalListData);
 
   const getDefferdPayment = useFetch({
     url: `${ReservationUrls.DEFFERD_PAYMENT}`,
   });
+  const getPlace = useFetch({
+    url: `${ReservationUrls.PLACE}`,
+  });
+
   // 未承認リストのデータをAPIから受け取るaxios
   const GetUnApprovalList = () => {
     axios
       .get(
-        `${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=1`,
-        {
-          params: {
-            reservation__place: placeFilter,
-            reservation__start: dateFilter,
-          },
-        }
+        `${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=1`
       )
       .then((response) => {
         const data = response.data;
         // 未承認リストのデータをuseStateに入れている
         setUnApprovalListData(data);
+        setAllData(data);
       })
       .catch((error) => {
         // console.log(error);
@@ -48,7 +62,7 @@ const UnapprovalListBody = () => {
   useEffect(() => {
     GetUnApprovalList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placeFilter, dateFilter]);
+  }, []);
 
   const Table =
     // データをmapで回している
@@ -110,25 +124,27 @@ const UnapprovalListBody = () => {
                   <input
                     type="date"
                     className="datefilter"
-                    onChange={(e) => dateFiltering(e)}
+                    onChange={(e) => search("start", e.target.value)}
                   />
                 </td>
                 <td></td>
                 <td></td>
-                <td></td>
+                {/* <td></td> */}
                 <td>
                   <select
                     className="placefilter"
                     defaultValue=""
-                    onChange={(e) => placeFiltering(e)}
+                    onChange={(e) => search("place", e.target.value)}
                   >
                     <option value="">全体</option>
-                    <option value="1">カーリング場</option>
-                    <option value="2">大会議室</option>
-                    <option value="3">中会議室</option>
-                    <option value="4">小会議室</option>
-                    <option value="5">アーチェリー場</option>
-                    <option value="6">武道場</option>
+                    {getPlace &&
+                      getPlace.map((val, val_index) => {
+                        return (
+                          <option value={val.id} key={val_index}>
+                            {val.name}
+                          </option>
+                        );
+                      })}
                   </select>
                 </td>
                 <td></td>
@@ -138,11 +154,23 @@ const UnapprovalListBody = () => {
             </thead>
             <thead>
               <tr>
-                <th>日付</th>
-                <th>団体者名</th>
-                <th>代表者名</th>
-                <th>時間</th>
-                <th>場所</th>
+                <th className="table-sort" onClick={sortStartDate}>
+                  利用開始日時
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
+                <th className="table-sort" onClick={sortGroupName}>
+                  団体者名
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
+                <th className="table-sort" onClick={sortLeaderName}>
+                  代表者名
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
+                {/* <th>時間</th> */}
+                <th className="table-sort" onClick={sortPlace}>
+                  場所
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
                 <th>後納申請</th>
                 <th>操作</th>
                 <th>詳細</th>

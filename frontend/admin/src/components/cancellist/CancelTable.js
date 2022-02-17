@@ -29,7 +29,7 @@ const CancelTable = (props) => {
       {/* 予約日 */}
       <td>
         <label for={props.id} className="approval-label">
-          {props.date}
+          {props.date} {props.start_time}
         </label>
       </td>
       {/* 団体者名 */}
@@ -45,11 +45,11 @@ const CancelTable = (props) => {
         </label>
       </td>
       {/* 予約時間 */}
-      <td>
+      {/* <td>
         <label for={props.id} className="approval-label">
           {props.start_time}~{props.end_time}
         </label>
-      </td>
+      </td> */}
       {/* 場所 */}
       <td>
         <label for={props.id} className="approval-label">

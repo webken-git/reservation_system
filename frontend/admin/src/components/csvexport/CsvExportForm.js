@@ -46,7 +46,7 @@ const CsvExportForm = (props) => {
           />
         </div>
         <p>
-          <label>出力する予約データ：</label>
+          <label>承認状態：</label>
           <div>
             <input
               type="radio"

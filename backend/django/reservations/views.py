@@ -787,11 +787,7 @@ class EquipmentEquipmentFeeViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   """
-    「現在～指定した日付」の範囲の予約データを検索する。
-    現在の日付はdatetime.nowで取得する。
-    そのため、物凄い先の未来の日付を指定して検索すると期日が過ぎていないデータを取得可能。
-    ~/api/reservatios/9999-01-01T00:00（指定した日付）/approval-applications/
-    の様に利用すると良いかと。
+  予約日の期日が過ぎていないデータを検索する。
   """
   serializer_class = ApprovalApplicationSerializer
   filter_backends = [filters.DjangoFilterBackend]
@@ -804,13 +800,6 @@ class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
   }
 
   def get_queryset(self):
-    """
-    「現在～指定した日付」の範囲の予約データを検索する。
-    現在の日付はdatetime.nowで取得する。
-    そのため、物凄い先の未来の日付を指定して検索すると期日が過ぎていないデータを取得可能。
-    ~/api/reservations/9999-01-01T00:00（指定した日付）/approval-applications/
-    の様に利用すると良いかと。
-    """
     date = self.kwargs.get('reservation_pk')
     now = str(datetime.datetime.now(pytz.timezone('Asia/Tokyo')).strftime('%Y-%m-%dT%H:%M'))
     queryset = ApprovalApplication.objects.all().prefetch_related('reservation')

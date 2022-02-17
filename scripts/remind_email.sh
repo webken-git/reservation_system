@@ -1,6 +1,6 @@
 #!/bin/sh
 
 cd $(dirname $0)
-. ../backend/env/Scripts/activate
+. ../../env/bin/activate
 
 python ../backend/django/manage.py remind_email
