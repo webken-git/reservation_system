@@ -5,6 +5,7 @@ import UnApprovalTable from "./UnApprovalTable";
 import "../approvallist/approval.scss";
 import dayjs from "dayjs";
 import CsvExportLayout from "../csvexport/CsvExportLayout";
+import ReservationDeleteLayout from "../reservationdelete/ReservationDeleteLayout";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
 import {
@@ -112,6 +113,9 @@ const UnapprovalListBody = () => {
       <div className="functions">
         <span className="space">
           <CsvExportLayout />
+        </span>
+        <span className="space">
+          <ReservationDeleteLayout />
         </span>
       </div>
       <div className="scroll_box-wrapper">

@@ -19,14 +19,21 @@ export const ReservationPost = () => {
   const resetFormData = useResetRecoilState(formData);
   const resetPersonalData = useSetRecoilState(personalData);
 
+  const scrollToTop = () => {
+    // 画面の一番上までスクロール
+    window.scrollTo(0, 0);
+  };
+
   const next = () => {
     setStep(3);
   };
   const back = () => {
     setStep(1);
+    scrollToTop();
   };
   const reset = () => {
     setStep(0);
+    scrollToTop();
   };
 
   // age-categoriesにPOSTする

@@ -5,6 +5,7 @@ import CancelTable from "./CancelTable";
 // import './../approvallist/approval.scss'
 import dayjs from "dayjs";
 import CsvExportLayout from "../csvexport/CsvExportLayout";
+import ReservationDeleteLayout from "../reservationdelete/ReservationDeleteLayout";
 import DocumentLayout from "../document/DocumentLayout";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
@@ -107,6 +108,9 @@ const CancelListBody = () => {
         </span>
         <span className="space">
           <CsvExportLayout />
+        </span>
+        <span className="space">
+          <ReservationDeleteLayout />
         </span>
       </div>
       <div className="scroll_box-wrapper">

@@ -6,7 +6,8 @@ $breakpoints: (
   // スマホ
   "sp": "screen and (max-width: 767px)",
   // タブレット
-  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  "tab":
+    "screen and (min-width: 768px) and (max-width: #{$layout-width-inner - 1px})",
   // PC
   "pc": "screen and (min-width: #{$layout-width-inner})"
 );
@@ -44,6 +45,20 @@ code {
 .red {
   color: #d32f2f;
   font-size: 0.8rem;
+}
+
+.pc-tab {
+  @include mq("sp") {
+    display: none;
+  }
+}
+.sp {
+  @include mq("pc") {
+    display: none;
+  }
+  @include mq("tab") {
+    display: none;
+  }
 }
 
 // ボタンのスタイル

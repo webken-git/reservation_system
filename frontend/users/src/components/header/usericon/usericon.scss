@@ -45,8 +45,11 @@ $accent-color: #91c21f;
   &:focus {
     outline: none;
   }
+  @include mq(tab) {
+    left: 70%;
+    bottom: 65%;
+  }
   @include mq(sp) {
-    top: 9%;
     left: 0;
     right: 0;
     bottom: 0;
@@ -57,6 +60,13 @@ $accent-color: #91c21f;
   }
   b {
     font-size: 1.5rem;
+  }
+  .center {
+    // text-align: center;
+    margin: 0 auto;
+
+    span {
+    }
   }
 }
 .overlay {

@@ -42,10 +42,10 @@ $accent-color: #91c21f;
       width: fit-content;
       padding-top: 30px;
       margin-top: 30px;
-      margin-right: 10%;
+      margin-right: 5%;
       border-top: #ccc 1px solid;
       @include mq(tab) {
-        margin-right: 8%;
+        // margin-right: 5%;
       }
     }
   }

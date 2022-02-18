@@ -1004,12 +1004,18 @@ class ReservationDeleteViewSet(
   }
 
   def destroy(self, request, *args, **kwargs):
-    queryset = Reservation.objects.filter(start__range=[request.data['start1'], request.data['start2']])
-
-    if queryset.exists():
-      queryset.delete()
-      return response.Response({'detail': '正常に削除されました。'}, status=status.HTTP_200_OK)
+    print(request.data)
+    if 'start1' not in request.data:
+      return response.Response({'error': 'start1 is required'}, status=status.HTTP_400_BAD_REQUEST)
+    elif 'start2' not in request.data:
+      return response.Response({'error': 'start2 is required'}, status=status.HTTP_400_BAD_REQUEST)
     else:
-      serializer = self.serializer_class(data=queryset)
-      serializer.is_valid()
-      return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+      queryset = Reservation.objects.filter(start__range=[request.data['start1'], request.data['start2']])
+
+      if queryset.exists():
+        queryset.delete()
+        return response.Response({'detail': '正常に削除されました。'}, status=status.HTTP_200_OK)
+      else:
+        serializer = self.serializer_class(data=queryset)
+        serializer.is_valid()
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

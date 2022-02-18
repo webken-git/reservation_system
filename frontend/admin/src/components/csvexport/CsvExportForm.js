@@ -13,8 +13,10 @@ const CsvExportForm = (props) => {
   } = useForm();
 
   const onSubmit = (e) => {
-    props.setStart1(e.start1);
-    props.setStart2(e.start2);
+    const start1 = `${e.start1} 00:00:00`;
+    const start2 = `${e.start2} 00:00:00`;
+    props.setStart1(start1);
+    props.setStart2(start2);
     props.setApproval(radioValue);
     props.changeState("complete");
   };
@@ -28,7 +30,7 @@ const CsvExportForm = (props) => {
         <div>
           <label>期間1：</label>
           <input
-            type="datetime-local"
+            type="date"
             name="start1"
             {...register("start1", {
               required: "※必須項目です",
@@ -38,14 +40,15 @@ const CsvExportForm = (props) => {
         <div>
           <label>期間2：</label>
           <input
-            type="datetime-local"
+            type="date"
             name="start2"
             {...register("start2", {
               required: "※必須項目です",
             })}
           />
         </div>
-        <p>
+        <br />
+        <div>
           <label>承認状態：</label>
           <div>
             <input
@@ -103,7 +106,8 @@ const CsvExportForm = (props) => {
             />
             <label htmlFor="cancel">キャンセルのみ</label>
           </div>
-        </p>
+        </div>
+        <br />
         <button type="submit" className="modal-open-btn">
           発行
         </button>
