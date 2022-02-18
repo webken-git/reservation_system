@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { withCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
-
 import ScheduleBlock from "./ScheduleBlock";
 
 const Content = (props) => {
@@ -21,11 +20,38 @@ const Content = (props) => {
   const placeName = props.placeName;
   const calendarType = props.calendarType;
 
-  let approvalList = [];
+  const [approvalList, setApprovalList] = useState([]);
+
+  let approvals = [];
   let unapprovalList = [];
 
-  useEffect(() => {
-    let unmounted = false;
+  let unmounted = false;
+
+  const approvalDevide = (scheduleList) => {
+    scheduleList.map((schedule, index) => {
+      if (schedule.approval.name === "未承認"){
+        unapprovalList.push(schedule);
+      } else if (schedule.approval.name === "承認") {
+        approvals.push(schedule);
+      }
+    })
+    setApprovalList(approvals);
+  }
+  
+  const unapprovalCount = (unapprovalList) => {
+      let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      unapprovalList.map((unapproval, index) => {
+        let startHours = Number(unapproval.reservation.start.substr(11, 2));
+        let endHours = Number(unapproval.reservation.end.substr(11, 2));
+
+        for (let i = startHours; i < endHours; i ++) {
+          count[i-9] = count[i-9] + 1;
+        }
+        // count[startHours-9] = count[startHours-9] + 1;
+      })
+  }
+
+  const reservationPull = () => {
     let year = date.getFullYear();
     let month =
       date.getMonth() + 1 < 10
@@ -35,8 +61,6 @@ const Content = (props) => {
     if (!unmounted) {
       setContentDate(new Date(Number(year), Number(month) - 1, Number(day)));
     }
-    // console.log(year+'-'+month+'-'+day);
-    // console.log(placeName);
     axios
       .get(`${process.env.REACT_APP_API}/api/approval-applications/`, {
         params: {
@@ -47,20 +71,25 @@ const Content = (props) => {
       })
       .then((res) => {
         const scheduleList = res.data;
-        // console.log(scheduleList)
         setLoading(false);
         if (!unmounted) {
           setScheduleList(scheduleList);
           setUpdateFlag(false);
+          approvalDevide(scheduleList);
+          unapprovalCount(unapprovalList);
         }
       })
       .catch((error) => {
         console.log(error);
       });
+  }
 
-    return () => {
-      unmounted = true;
-    };
+  useEffect(() => {
+    reservationPull();
+    // approvalDevide(scheduleList);
+    // unapprovalCount(unapprovalList);
+
+    return () => {unmounted = true}
   }, [
     placeName,
     date,
@@ -74,23 +103,10 @@ const Content = (props) => {
     approvalFilter,
   ]);
 
-  // scheduleList.map((schedule, index) => {
-  //     if (schedule.approval.name = "未承認"){
-  //         unapprovalList.push(schedule);
-  //     } else if (schedule.approval.name = "承認") {
-  //         approvalList.push(schedule);
-  //     }
-  // })
-
-  // const unapprovalCount = (unapprovalList) => {
-  //     let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  //     unapprovalList.map((unapproval, index) => {
-
-  //     })
+  // if(!unmounted) {
+  //   approvalDevide(scheduleList);
+  //   unapprovalCount(unapprovalList);    
   // }
-
-  // console.log("unapproval", unapprovalList)
-  // console.log("approval", approvalList)
 
   if (calendarType === "weekly") {
     return (
@@ -110,13 +126,10 @@ const Content = (props) => {
           <div className="content-div"></div>
           <div className="content-div"></div>
         </div>
-        {/* <CreateModalComponent
-                    stringContentDate={stringContentDate}
-                    setHomeUpdateFlag={props.setHomeUpdateFlag}
-                /> */}
+
         <div className="schedule-block-column">
           {props.isMain
-            ? scheduleList.map((schedule, index) => {
+            ? approvalList.map((schedule, index) => {
                 return (
                   <ScheduleBlock
                     key={uuidv4()}
