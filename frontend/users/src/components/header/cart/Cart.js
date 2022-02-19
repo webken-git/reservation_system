@@ -30,18 +30,20 @@ const Cart = (props) => {
         isOpen={modalIsOpen}
         onRequestClose={() => setIsOpen(false)}
       >
-        <p>
-          現在<b>{count}</b>件の予約情報が追加されています。
-          <br />
-          以下のボタンを押し、予約手続きを進めてください。
-        </p>
-        <span onClick={() => setIsOpen(false)}>
-          <Link to="/reserve">
-            <button type="button" className="btn">
-              予約する
-            </button>
-          </Link>
-        </span>
+        <div className="center">
+          <p>
+            現在<b>{count}</b>件の予約情報が追加されています。
+            <br />
+            以下のボタンを押し、予約手続きを進めてください。
+          </p>
+          <span onClick={() => setIsOpen(false)}>
+            <Link to="/reserve">
+              <button type="button" className="btn">
+                予約する
+              </button>
+            </Link>
+          </span>
+        </div>
       </Modal>
       <Modal
         className="popup-modal"

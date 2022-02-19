@@ -47,8 +47,8 @@ const ReservationDeleteLayout = () => {
 
   return (
     <>
-      <button onClick={modalToggle} className="registration-link">
-        予約データ削除
+      <button onClick={modalToggle} className="modal-open-btn">
+        予約削除
       </button>
       <ReactModal
         isOpen={modalIsOpen}

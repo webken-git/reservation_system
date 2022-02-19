@@ -1004,7 +1004,6 @@ class ReservationDeleteViewSet(
   }
 
   def destroy(self, request, *args, **kwargs):
-    print(request.data)
     if 'start1' not in request.data:
       return response.Response({'error': 'start1 is required'}, status=status.HTTP_400_BAD_REQUEST)
     elif 'start2' not in request.data:
