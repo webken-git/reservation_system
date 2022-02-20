@@ -158,7 +158,7 @@ const PassWordChange = () => {
             戻る
           </button>
           <span>　</span>
-          <button type="submit" className="auth-btn">
+          <button type="submit" className="btn">
             確認
           </button>
         </div>

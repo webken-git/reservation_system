@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import ReactModal from "react-modal";
+import Modal from "react-modal";
 import Loading from "../loading/Loading";
 import { AuthUrls } from "../../utils/authUrls";
 import useUnmountRef from "../../hooks/useUnmountRef";
@@ -112,7 +112,7 @@ const AutomaticMailList = () => {
                     </div>
                   </div>
                 </details>
-                <ReactModal
+                <Modal
                   isOpen={modalIsOpen}
                   onRequestClose={modalToggle}
                   className="modal-content send-mail"
@@ -179,7 +179,7 @@ const AutomaticMailList = () => {
                     </button>
                   </form>
                   {loading && <Loading />}
-                </ReactModal>
+                </Modal>
               </div>
             );
           })}

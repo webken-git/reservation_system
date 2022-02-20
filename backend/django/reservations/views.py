@@ -615,8 +615,8 @@ class FacilityFeeViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1DAY))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1DAY))
   def list(self, request, *args, **kwargs):
     self.queryset = FacilityFee.objects.all().values('place__name').order_by('place__name').distinct()
     self.serializer_class = GetFacilityFeeSerializer
@@ -639,8 +639,8 @@ class EquipmentFeeViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 

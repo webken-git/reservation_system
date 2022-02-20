@@ -17,6 +17,7 @@ import {
 import useSearch from "../../hooks/useFilter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
+import Loading from "../loading/Loading";
 
 const TopPageList = () => {
   const [TodayList, setTodayList] = useState([]);
@@ -26,6 +27,7 @@ const TopPageList = () => {
   const [sortLeaderName] = useSortedLeaderName(TodayList, setTodayList);
   const [sortPlace] = useSortedPlaces(TodayList, setTodayList);
   const [search] = useSearch(allData, setTodayList);
+  const [loading, setLoading] = useState(true);
 
   const getDefferdPayment = useFetch({
     url: `${ReservationUrls.DEFFERD_PAYMENT}`,
@@ -60,8 +62,11 @@ const TopPageList = () => {
             setAllData(todaydata);
           }
         }
+        setLoading(false);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -181,6 +186,7 @@ const TopPageList = () => {
           </table>
         </div>
       </div>
+      {loading && <Loading />}
     </>
   );
 };

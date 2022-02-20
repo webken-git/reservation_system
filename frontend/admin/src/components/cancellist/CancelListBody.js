@@ -18,6 +18,7 @@ import {
 import useSearch from "../../hooks/useFilter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
+import Loading from "../loading/Loading";
 
 const CancelListBody = () => {
   const [CancelListData, setCancelListData] = useState([]);
@@ -30,6 +31,7 @@ const CancelListBody = () => {
   );
   const [sortPlace] = useSortedPlaces(CancelListData, setCancelListData);
   const [search] = useSearch(allData, setCancelListData);
+  const [loading, setLoading] = useState(true);
 
   const getDefferdPayment = useFetch({
     url: `${ReservationUrls.DEFFERD_PAYMENT}`,
@@ -49,8 +51,11 @@ const CancelListBody = () => {
         // キャンセルリストのデータをuseStateに入れている
         setCancelListData(data);
         setAllData(data);
+        setLoading(false);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+      });
   };
 
   // ページのレンダリング時にキャンセルリストのデータを受け取っている
@@ -101,7 +106,7 @@ const CancelListBody = () => {
     );
   });
   return (
-    <div>
+    <>
       <div className="functions">
         <span className="space">
           <DocumentLayout />
@@ -177,7 +182,8 @@ const CancelListBody = () => {
           </table>
         </div>
       </div>
-    </div>
+      {loading && <Loading />}
+    </>
   );
 };
 

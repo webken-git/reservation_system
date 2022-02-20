@@ -20,6 +20,7 @@ import {
 import useSearch from "../../hooks/useFilter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
+import Loading from "../loading/Loading";
 
 const ApprovalListBody = () => {
   const [ApprovalListData, setApprovalListData] = useState([]);
@@ -35,6 +36,7 @@ const ApprovalListBody = () => {
   );
   const [sortPlace] = useSortedPlaces(ApprovalListData, setApprovalListData);
   const [search] = useSearch(allData, setApprovalListData);
+  const [loading, setLoading] = useState(true);
 
   const getDefferdPayment = useFetch({
     url: `${ReservationUrls.DEFFERD_PAYMENT}`,
@@ -55,8 +57,11 @@ const ApprovalListBody = () => {
         // 承認リストのデータをuseStateに入れている
         setApprovalListData(data);
         setAllData(data);
+        setLoading(false);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -186,6 +191,7 @@ const ApprovalListBody = () => {
           </table>
         </div>
       </div>
+      {loading && <Loading />}
     </>
   );
 };

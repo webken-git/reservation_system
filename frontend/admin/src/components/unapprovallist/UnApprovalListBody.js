@@ -17,6 +17,7 @@ import {
 import useSearch from "../../hooks/useFilter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
+import Loading from "../loading/Loading";
 
 const UnapprovalListBody = () => {
   const [UnApprovalListData, setUnApprovalListData] = useState([]);
@@ -35,6 +36,7 @@ const UnapprovalListBody = () => {
     setUnApprovalListData
   );
   const [search] = useSearch(allData, setUnApprovalListData);
+  const [loading, setLoading] = useState(true);
 
   const getDefferdPayment = useFetch({
     url: `${ReservationUrls.DEFFERD_PAYMENT}`,
@@ -54,9 +56,11 @@ const UnapprovalListBody = () => {
         // 未承認リストのデータをuseStateに入れている
         setUnApprovalListData(data);
         setAllData(data);
+        setLoading(false);
       })
       .catch((error) => {
         // console.log(error);
+        setLoading(false);
       });
   };
   // ページレンダリング時に未承認リストのデータを受け取っている
@@ -184,6 +188,7 @@ const UnapprovalListBody = () => {
           </table>
         </div>
       </div>
+      {loading && <Loading />}
     </>
   );
 };

@@ -31,7 +31,12 @@ const TabContent = (props) => {
             </details>
             <details>
               <summary>料金一覧</summary>
-              <FeeList key={p_id} feelist={props.facilityFee} age={props.age} />
+              <FeeList
+                key={p_id}
+                feelist={props.facilityFee}
+                age={props.age}
+                time={props.time}
+              />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
               <ReservationForm placeLists={place} />
@@ -76,6 +81,7 @@ const TabContent = (props) => {
                 key={p_id}
                 feelist={props.facilityFee}
                 age={props.age}
+                time={props.time}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (

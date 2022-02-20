@@ -18,6 +18,7 @@ import {
 import useSearch from "../../hooks/useFilter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
+import Loading from "../loading/Loading";
 
 const DisapprovalListBody = () => {
   const [DisApprovalListData, setDisApprovalListData] = useState([]);
@@ -36,6 +37,7 @@ const DisapprovalListBody = () => {
     setDisApprovalListData
   );
   const [search] = useSearch(allData, setDisApprovalListData);
+  const [loading, setLoading] = useState(true);
 
   const getDefferdPayment = useFetch({
     url: `${ReservationUrls.DEFFERD_PAYMENT}`,
@@ -56,9 +58,11 @@ const DisapprovalListBody = () => {
         // 不承認リストのデータをuseStateに入れている
         setDisApprovalListData(data);
         setAllData(data);
+        setLoading(false);
       })
       .catch((error) => {
         // console.log(error);
+        setLoading(false);
       });
   };
 
@@ -188,6 +192,7 @@ const DisapprovalListBody = () => {
           </table>
         </div>
       </div>
+      {loading && <Loading />}
     </>
   );
 };
