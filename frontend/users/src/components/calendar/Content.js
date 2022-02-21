@@ -13,12 +13,12 @@ const Content = (props) => {
   const individualOrGroup = props.individualOrGroup;
   const setUpdateFlag = props.setUpdateFlag;
   const setHomeUpdateFlag = props.setHomeUpdateFlag;
-  const count = props.count;
   const filterType = props.filterType;
   const setLoading = props.setLoading;
   const approvalFilter = props.approvalFilter;
   const placeName = props.placeName;
   const calendarType = props.calendarType;
+  let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   const [approvalList, setApprovalList] = useState([]);
 
@@ -26,6 +26,8 @@ const Content = (props) => {
   let unapprovalList = [];
 
   let unmounted = false;
+
+  // console.log(placeName)
 
   const approvalDevide = (scheduleList) => {
     scheduleList.map((schedule, index) => {
@@ -36,10 +38,10 @@ const Content = (props) => {
       }
     })
     setApprovalList(approvals);
+    console.log(unapprovalList)
   }
   
   const unapprovalCount = (unapprovalList) => {
-      let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       unapprovalList.map((unapproval, index) => {
         let startHours = Number(unapproval.reservation.start.substr(11, 2));
         let endHours = Number(unapproval.reservation.end.substr(11, 2));
@@ -47,8 +49,9 @@ const Content = (props) => {
         for (let i = startHours; i < endHours; i ++) {
           count[i-9] = count[i-9] + 1;
         }
-        // count[startHours-9] = count[startHours-9] + 1;
       })
+      // setUnCount(count)
+      console.log(count)
   }
 
   const reservationPull = () => {
@@ -98,7 +101,6 @@ const Content = (props) => {
     setUpdateFlag,
     setHomeUpdateFlag,
     filterType,
-    count,
     setLoading,
     approvalFilter,
   ]);
@@ -137,6 +139,7 @@ const Content = (props) => {
                     index={index}
                     setScheduleDict={props.setScheduleDict}
                     contentDate={contentDate}
+                    count={count}
                   />
                 );
               })

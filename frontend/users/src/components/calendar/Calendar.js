@@ -14,6 +14,7 @@ import {
 import useSafeState from "../../hooks/useSafeState";
 import useUnmountRef from "../../hooks/useUnmountRef";
 import "../header/header.scss";
+import axios from "axios";
 
 const Calendar = (props) => {
   const unmountRef = useUnmountRef();
@@ -29,10 +30,9 @@ const Calendar = (props) => {
   const [, setSt] = useState(0);
   const [calendarType, setCalendarType] = useSafeState(unmountRef, "weekly");
   const [loading, setLoading] = useSafeState(unmountRef, true);
-  const placeName = "カーリング場";
+  const placeId = props.placeId;
   const isMain = true;
-
-  // console.log(placeName)
+  const [placeName, setPlaceName] = useState();
 
   const dateChange = (e) => {
     if (calendarType === "weekly") {
@@ -53,6 +53,17 @@ const Calendar = (props) => {
       }
     }
   };
+
+  const placeSet = (e) => {
+    axios
+      .get(`${process.env.REACT_APP_API}/api/places/${e}`)
+      .then((res) => {
+        setPlaceName(res.data.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -88,21 +99,22 @@ const Calendar = (props) => {
       }
     };
     sortDateList();
+    placeSet(placeId);
 
     //現在時刻までスクロール
-    let margin = window.innerHeight * 0.02;
-    let blockHeight = window.innerHeight * 0.06;
-    let now = new Date();
-    let hours = now.getHours() - 4;
-    let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-    if (!unmounted) {
-      setSt(margin + blockHeight * now.getHours());
-    }
-    document.getElementsByClassName("content-row")[0].scrollTo({
-      top: st,
-      left: 0,
-      behavior: "smooth",
-    });
+    // let margin = window.innerHeight * 0.02;
+    // let blockHeight = window.innerHeight * 0.06;
+    // let now = new Date();
+    // let hours = now.getHours() - 4;
+    // let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
+    // if (!unmounted) {
+    //   setSt(margin + blockHeight * now.getHours());
+    // }
+    // document.getElementsByClassName("content-row")[0].scrollTo({
+    //   top: st,
+    //   left: 0,
+    //   behavior: "smooth",
+    // });
 
     return () => {
       unmounted = true;
