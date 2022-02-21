@@ -4,13 +4,14 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.conf import settings
 from rest_framework import viewsets, response, status, mixins
-from rest_framework.decorators import action
+# from rest_framework.decorators import action
 from django_filters import rest_framework as filters
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
-import datetime
 import pytz
+import datetime
 import os
 from dotenv import load_dotenv
 from users import permissions
@@ -21,6 +22,7 @@ from reservations.funcs.filters import (
     ApprovalApplicationFilter, ApprovalFilter
 )
 from reservations.funcs.csv import csv_export
+from app_settings.models import AutoMail
 
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分
@@ -124,28 +126,6 @@ class EquipmentViewSet(viewsets.ModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
-class SpecialEquipmentViewSet(viewsets.ModelViewSet):
-  queryset = SpecialEquipment.objects.all()
-  serializer_class = SpecialEquipmentSerializer
-  filter_fields = [f.name for f in SpecialEquipment._meta.fields]
-  permission_classes = [permissions.ActionBasedPermission]
-  action_permissions = {
-      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
-      permissions.IsAuthenticated: [],
-      permissions.AllowAny: ['list', 'retrieve']
-  }
-
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
-  def list(self, request, *args, **kwargs):
-    return super().list(request, *args, **kwargs)
-
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
-  def retrieve(self, request, *args, **kwargs):
-    return super().retrieve(request, *args, **kwargs)
-
-
 class ReservationViewSet(viewsets.ModelViewSet):
   queryset = Reservation.objects.all()
   serializer_class = ReservationSerializer
@@ -161,6 +141,9 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
   def create(self, request, *args, **kwargs):
     schedules = ReservationSuspensionSchedule.objects.all()
+    # schedulesが空ならば、予約可能
+    if not schedules:
+      return super().create(request, *args, **kwargs)
     for schedule in schedules:
       if str(schedule.start) <= request.data['start'] <= str(schedule.end):
         return response.Response({'error': {'入力された日時は予約できません。'}})
@@ -169,8 +152,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
       else:
         return super().create(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -191,8 +174,8 @@ class UserInfoViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1DAY))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1DAY))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -219,8 +202,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -231,10 +214,18 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
   def create(self, request, *args, **kwargs):
     if ApprovalApplication.objects.filter(reservation=request.data['reservation_id']).exists():
-      return response.Response({'error': 'リクエストされたreservation_idが追加されているデータが既に存在しています。'})
+      return response.Response({'error': 'リクエストされたreservation_idが追加されているデータが既に存在しています。'}, status=status.HTTP_400_BAD_REQUEST)
     else:
       super().create(request, *args, **kwargs)
       data = ApprovalApplication.objects.filter(reservation__id=request.data['reservation_id'], approval__id=request.data['approval_id'])
+      # 予約手続き完了メール送信
+      automail = AutoMail.objects.get(name='予約手続き完了メール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_complete_message.txt'
+      # automail.bodyの\r\nを改行に変換
+      automail.body = automail.body.replace('\r\n', '\n')
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
 
       """送信元メールアドレス"""
       load_dotenv()
@@ -254,7 +245,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
 
       # メール送信
       email = EmailMessage(
-          subject="予約手続き完了のご連絡/稚内市みどりスポーツパーク",
+          subject=automail.subject,
           body=render_to_string("reservations/email/reservation_complete_message.txt", context),
           from_email=from_email,
           to=[to_email],
@@ -263,8 +254,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       email.send()
       return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
-  def patch(self, request, pk, *args, **kwargs):
-    super().update(request, pk, *args, **kwargs)
+  def partial_update(self, request, *args, **kwargs):
+    super().partial_update(request, *args, **kwargs)
 
     data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
 
@@ -284,51 +275,76 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         },
     }
 
-    if request.data['approval_id'] == '2':
+    if request.data['approval_id'] == 2:
+      # 予約承認メール送信
+      automail = AutoMail.objects.get(name='予約承認メール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_approval_message.txt'
+      # automail.bodyの\r\nを改行に変換
+      automail.body = automail.body.replace('\r\n', '\n')
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="【重要】本予約完了のご連絡/稚内市みどりスポーツパーク",
+          subject=automail.subject,
           body=render_to_string("reservations/email/reservation_approval_message.txt", context),
           from_email=from_email,
           to=[to_email],
           bcc=[from_email]
       )
       email.send()
-    elif request.data['approval_id'] == '3':
-      """
-      予約が不承認された場合
-      """
+    elif request.data['approval_id'] == 3:
+      # 予約が不承認された場合
+      # 予約承認メール送信
+      automail = AutoMail.objects.get(name='予約不承認メール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_unapproval_message.txt'
+      # automail.bodyの\r\nを改行に変換
+      automail.body = automail.body.replace('\r\n', '\n')
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="【重要】予約不承認のお詫び/稚内市みどりスポーツパーク",
+          subject=automail.subject,
           body=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
           from_email=from_email,
           to=[to_email],
           bcc=[from_email]
       )
       email.send()
-    elif ApprovalApplication.objects.filter(reservation__user=request.user.id, reservation=request.data['reservation_id'], approval=4).exists():
-      """
-      利用者側からキャンセルされた場合
-      """
+    elif request.user.is_staff == True and request.data['approval_id'] == 4:
+      # 施設側からキャンセルされた場合
+      # 施設側からのキャンセルメール送信
+      automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/facility_side_cancel_message.txt'
+      # automail.bodyの\r\nを改行に変換
+      automail.body = automail.body.replace('\r\n', '\n')
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="予約キャンセル手続き完了のご連絡/稚内市みどりスポーツパーク",
-          body=render_to_string("reservations/email/user_side_cancel_message.txt", context, request),
+          subject=automail.subject,
+          body=render_to_string("reservations/email/facility_side_cancel_message.txt", context),
           from_email=from_email,
           to=[to_email],
           bcc=[from_email]
       )
       email.send()
-    elif request.user.id != ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=4)[0].reservation.user.id\
-            and User.objects.filter(id=request.user.id, is_staff=True).exists():
-      """
-      施設側からキャンセルされた場合
-      """
+    elif request.user.is_staff == False and request.data['approval_id'] == 4:
+      # 利用者側からキャンセルされた場合
+      # 利用者側からのキャンセルメール送信
+      automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')
+      file_path = settings.BASE_DIR + '/templates/reservations/email/user_side_cancel_message.txt'
+      # automail.bodyの\r\nを改行に変換
+      automail.body = automail.body.replace('\r\n', '\n')
+      # ファイルに書き込み
+      with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(automail.body)
       # メール送信
       email = EmailMessage(
-          subject="予約キャンセルのお詫び/稚内市みどりスポーツパーク",
-          body=render_to_string("reservations/email/facility_side_cancel_message.txt", context),
+          subject=automail.subject,
+          body=render_to_string("reservations/email/user_side_cancel_message.txt", context, request),
           from_email=from_email,
           to=[to_email],
           bcc=[from_email]
@@ -345,6 +361,12 @@ class ApprovalCountMonthlyViewSet(viewsets.ReadOnlyModelViewSet):
   """
   queryset = ApprovalApplication.objects.all()
   serializer_class = ApprovalCountMonthlySerializer
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
 
   @extend_schema(
       parameters=[
@@ -490,6 +512,28 @@ class TimeViewSet(viewsets.ModelViewSet):
     return super().retrieve(request, *args, **kwargs)
 
 
+class TimeViewSet(viewsets.ModelViewSet):
+  queryset = Time.objects.all()
+  serializer_class = TimeSerializer
+  filter_fields = [f.name for f in Time._meta.fields]
+  # permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  def list(self, request, *args, **kwargs):
+    return super().list(request, *args, **kwargs)
+
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+
 class UsageCategoryViewSet(viewsets.ModelViewSet):
   queryset = UsageCategory.objects.all()
   serializer_class = UsageCategorySerializer
@@ -502,8 +546,8 @@ class UsageCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -525,8 +569,8 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -548,8 +592,8 @@ class DefferdPaymentViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -570,8 +614,8 @@ class FacilityFeeViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_1DAY))
   def list(self, request, *args, **kwargs):
     self.queryset = FacilityFee.objects.all().values('place__name').order_by('place__name').distinct()
     self.serializer_class = GetFacilityFeeSerializer
@@ -737,36 +781,17 @@ class EquipmentEquipmentFeeViewSet(viewsets.ReadOnlyModelViewSet):
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
-
-class SpecialEquipmentReservationViewSet(viewsets.ReadOnlyModelViewSet):
-  serializer_class = ReservationSerializer
-  filter_fields = [f.name for f in Reservation._meta.fields]
-  permission_classes = [permissions.ActionBasedPermission]
-  action_permissions = {
-      permissions.IsAdminUser: [],
-      permissions.IsAuthenticated: [],
-      permissions.AllowAny: ['list', 'retrieve']
-  }
-
-  def get_queryset(self):
-    special_equipment_pk = self.kwargs.get('special_equipment_pk')
-    queryset = Reservation.objects.all().prefetch_related('special_equipment')
-    return queryset.filter(special_equipment=special_equipment_pk)
-
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
-  def list(self, request, *args, **kwargs):
-    return super().list(request, *args, **kwargs)
-
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
-  def retrieve(self, request, *args, **kwargs):
-    return super().retrieve(request, *args, **kwargs)
-
 # 予約日の期日が過ぎていないデータを検索
 
 
 class ReservationApprovalApplicationViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+    「現在～指定した日付」の範囲の予約データを検索する。
+    現在の日付はdatetime.nowで取得する。
+    そのため、物凄い先の未来の日付を指定して検索すると期日が過ぎていないデータを取得可能。
+    ~/api/reservatios/9999-01-01T00:00（指定した日付）/approval-applications/
+    の様に利用すると良いかと。
+  """
   serializer_class = ApprovalApplicationSerializer
   filter_backends = [filters.DjangoFilterBackend]
   filter_class = ApprovalFilter
@@ -966,6 +991,11 @@ class ApprovalApplicationCsvExportViewSet(
 class ReservationDeleteViewSet(
         mixins.DestroyModelMixin,
         viewsets.GenericViewSet):
+  """
+  日時を指定し、指定された期間のデータを全て削除する。
+  start1および、start2という名前のパラメータを送り、
+  start1 ～ start2の期間のデータを削除。
+  """
   queryset = Reservation.objects
   serializer_class = ReservationSerializer
   permission_classes = [permissions.ActionBasedPermission]

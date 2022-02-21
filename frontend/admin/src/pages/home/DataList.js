@@ -25,7 +25,6 @@ import EditCurlingFeeList from '../../components/editdatas/EditCurlingFeeList'
 
 // import { Link as Scroll } from 'react-scroll';
 import './datalist.scss'
-
 Modal.setAppElement('#root');
 
 export const DataList = () => {

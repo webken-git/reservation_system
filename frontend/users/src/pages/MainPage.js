@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect } from "react";
 import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -160,3 +161,15 @@ const MainPage = () => {
 }
 
 export default MainPage
+=======
+import React from "react";
+import TabContainer from "../components/tab/Tab";
+
+const MainPage = () => {
+  document.title = "施設予約"; // ページタイトルを変更
+
+  return <TabContainer />;
+};
+
+export default MainPage;
+>>>>>>> origin/kitaura

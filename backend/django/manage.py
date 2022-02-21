@@ -2,7 +2,10 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import pymysql
 from dotenv import load_dotenv
+
+pymysql.install_as_MySQLdb()
 
 
 def main():

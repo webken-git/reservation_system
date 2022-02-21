@@ -18,6 +18,7 @@
     "axios": "^0.21.1",
     "cp": "^0.2.0",
     "dayjs": "^1.10.5",
+    "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "framer-motion": "^4.1.17",
     "google-libphonenumber": "^3.2.23",
@@ -41,7 +42,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cp ./config/.env.dev .env && react-scripts start",
     "start:test": "cp ./config/.env.test .env && react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",

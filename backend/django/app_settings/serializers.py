@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_settings.models import AppSettings
+from app_settings.models import AppSettings, AutoMail
 from users.models import User
 from users.serializers import UserSerializer
 
@@ -28,3 +28,18 @@ class AppSettingsSerializer(serializers.ModelSerializer):
     del validated_data['user_id']
     instance.save()
     return instance
+
+
+class AutoMailSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = AutoMail
+    fields = '__all__'
+
+
+class SendMailSerializer(serializers.Serializer):
+  subject = serializers.CharField(max_length=30)
+  body = serializers.CharField(style={'base_template': 'textarea.html'}, max_length=1000)
+
+  class Meta:
+    model = AutoMail
+    fields = 'subject', 'body'

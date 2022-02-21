@@ -1,5 +1,4 @@
 """config URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
@@ -32,7 +31,7 @@ from users.urls import router as users_router
 from reservations.urls import router as reservations_router
 from announcements.urls import router as announcements_router
 from app_settings.urls import router as app_settings_router
-from application_documents.urls import router as application_documents_router
+from documents.urls import router as documents_router
 from questionnaire.urls import router as questionnaire_router
 
 
@@ -41,7 +40,7 @@ router.registry.extend(users_router.registry)
 router.registry.extend(reservations_router.registry)
 router.registry.extend(announcements_router.registry)
 router.registry.extend(app_settings_router.registry)
-router.registry.extend(application_documents_router.registry)
+router.registry.extend(documents_router.registry)
 router.registry.extend(questionnaire_router.registry)
 
 reference_uris = [
@@ -85,8 +84,8 @@ account_uris = [
 ]
 
 urlpatterns = [
-    path('admin/business_diary/', include('business_diary.urls')),
-    path('admin/', admin.site.urls),
+    # path('admin/business_diary/', include('business_diary.urls')),
+    # path('admin/', admin.site.urls),
     path('api/', include(api_uris)),
     path('account/', include(account_uris)),
 ]

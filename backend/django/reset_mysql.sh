@@ -5,7 +5,6 @@
 # reset MySQL
 mysql -uroot -e "drop database ${DATABASE_NAME};"
 mysql -uroot -e "create database ${DATABASE_NAME} default character set utf8;"
-
 . ../env/Scripts/activate
 python manage.py migrate
 

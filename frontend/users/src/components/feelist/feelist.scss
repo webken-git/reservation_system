@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // レイアウト幅
 $layout-width-inner: 1180px;
 
@@ -84,3 +85,78 @@ $breakpoints: (
     }
   }
 }
+=======
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+.feelist {
+  width: 90%;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+
+  table {
+    border-collapse: collapse;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+  table tr {
+    border: 1px solid #fff;
+    padding: 0.35rem;
+  }
+  table th {
+    padding: 1%;
+    border-right: 1px solid #fff;
+    background-color: #ddd;
+    font-size: 1.2rem;
+  }
+  table thead {
+    @include mq(sp) {
+      display: none;
+    }
+  }
+  table td {
+    text-align: center;
+    border: 1px solid #dfdfdf;
+    padding: 1.5% 0;
+    font-size: 1.2rem;
+    @include mq(sp) {
+      width: 100%;
+      display: block;
+      text-align: right;
+      font-size: 1rem;
+    }
+  }
+  table td:first-child {
+    @include mq(sp) {
+      text-align: center;
+      background-color: #ddd;
+      font-weight: bold;
+    }
+  }
+  table td:before {
+    @include mq(sp) {
+      content: attr(data-label);
+      float: left;
+    }
+  }
+}
+>>>>>>> origin/kitaura

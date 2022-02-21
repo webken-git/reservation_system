@@ -1,38 +1,59 @@
 import React from "react";
-import axios from 'axios';
-import { CookiesProvider } from 'react-cookie';
+import axios from "axios";
+import { CookiesProvider } from "react-cookie";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LoginRoute from "./components/rooter/LoginRoute";
-
-import { LoginPage } from "./pages/home/LoginPage";
-import Registration from "./components/auth/Registration";
-import { TopPage } from "./pages/home/TopPage";
-import { AccountPage } from "./pages/home/AccountPage";
-import { EmailChangePage } from "./pages/home/EmailChangePage";
-import { AccountDeletePage } from "./pages/home/AccountDeletePage";
-import { PassWordChangePage } from "./pages/home/PasswordChangePage";
-import { VerifyEmailPage } from "./pages/home/VerifyEmailPage";
-import { PasswordResetPage } from "./pages/home/PasswordResetPage";
-import { ApprovalList } from "./pages/home/ApprovalList";
-import { UnapprovalList } from "./pages/home/UnapprovalList";
-import { DisapprovalList } from "./pages/home/DisapprovalList";
-import { CancelList } from "./pages/home/CancelList";
-import { UserList } from "./pages/home/UserList";
-import { DataList } from "./pages/home/DataList"
-import { CalendarPage } from "./pages/home/CalendarPage";
-import { DocumentListPage } from "./pages/home/DocumentListPage";
-import "./index.css"
-import GetDate from "./components/toppage/GetDate"
-
 import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
 import SideBarRoute from "./components/rooter/SideBarRoute";
 
-// var csrftoken = Cookies.get('csrftoken');
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+import { LoginPage } from "./pages/LoginPage";
+import Registration from "./components/auth/Registration";
+import { TopPage } from "./pages/TopPage";
+import { AccountPage } from "./pages/AccountPage";
+import { EmailChangePage } from "./pages/EmailChangePage";
+import { AccountDeletePage } from "./pages/AccountDeletePage";
+import { PassWordChangePage } from "./pages/PasswordChangePage";
+import { VerifyEmailPage } from "./pages/VerifyEmailPage";
+import { PasswordResetPage } from "./pages/PasswordResetPage";
+import { ApprovalList } from "./pages/ApprovalList";
+import { UnapprovalList } from "./pages/UnapprovalList";
+import { DisapprovalList } from "./pages/DisapprovalList";
+import { CancelList } from "./pages/CancelList";
+import { UserList } from "./pages/UserList";
+import { DataList } from "./pages/DataList";
+import { CalendarPage } from "./pages/CalendarPage";
+import { DocumentListPage } from "./pages/DocumentListPage";
+import { ApprovalInfoPage } from "./pages/ApprovalInfoPage";
+import { MailPage } from "./pages/MailPage";
+import { SendEmailPage } from "./pages/SendEmailPage";
+import "./index.scss";
+import GetDate from "./components/toppage/GetDate";
+import NotFound from "./pages/error/NotFound";
+import InternalServer from "./pages/error/InternalServer";
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+var csrftoken = getCookie("csrftoken");
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
-axios.defaults.headers = {
-  'Content-Type': 'application/json',
+axios.defaults.headers.common = {
+  "X-Requested-With": "XMLHttpRequest",
+  "X-CSRFToken": csrftoken,
 };
 
 function App() {
@@ -41,33 +62,173 @@ function App() {
       <CookiesProvider>
         <Switch>
           <Route path="/login" exact children={<LoginPage />} />
+          <Route
+            path="/password"
+            render={({ match: { url } }) => (
+              <>
+                <Switch>
+                  <Route
+                    path={`${url}/`}
+                    exact
+                    children={<VerifyEmailPage />}
+                  />
+                  <Route
+                    path={`${url}/reset/:uid/:token`}
+                    exact
+                    children={<PasswordResetPage />}
+                  />
+                  <Route component={NotFound} />
+                </Switch>
+              </>
+            )}
+          />
+          <Route path="/500" children={<InternalServer />} />
           <LoginRoute>
-            <Route path="/registration" exact children={<Registration />} />
-            <SideBarAndHeaderRoute pagename={<GetDate />} path="/" exact children={<Route path="/" exact children={<TopPage />} />} />
-            <Route path="/account"
-              render={({ match: { url } }) => (
-                <>
-                  <Switch>
-                    <SideBarAndHeaderRoute path={`${url}/`} pagename={"アカウント"} exact children={<AccountPage />} />
-                    <SideBarAndHeaderRoute path={`${url}/email`} exact children={<EmailChangePage />} />
-                    <SideBarAndHeaderRoute path={`${url}/password`} pagename={"アカウント"} exact children={<PassWordChangePage />} />
-                    <SideBarAndHeaderRoute path={`${url}/password/verify`} pagename={"アカウント"} exact children={<VerifyEmailPage />} />
-                    <Route path={`${url}/password/reset/:uid/:token`}>
-                      <SideBarAndHeaderRoute pagename={"アカウント"} exact children={<PasswordResetPage />} />
-                    </Route>
-                    <SideBarAndHeaderRoute path={`${url}/delete`} pagename={"アカウント"} exact children={<AccountDeletePage />} />
-                  </Switch>
-                </>
-              )}
-            />
-            <SideBarAndHeaderRoute pagename="承認リスト" path="/approvalList" exact children={<Route path="/approvalList" exact children={<ApprovalList />} />} />
-            <SideBarAndHeaderRoute pagename="不承認リスト" path="/disapprovalList" exact children={<Route path="/disapprovalList" exact children={<DisapprovalList />} />} />
-            <SideBarAndHeaderRoute pagename="未承認リスト" path="/unapprovalList" exact children={<Route path="/unapprovalList" exact children={<UnapprovalList />} />} />
-            <SideBarAndHeaderRoute pagename="キャンセルリスト" path="/cancellist" exact children={<Route path="/cancelList" exact children={<CancelList />} />} />
-            <SideBarAndHeaderRoute pagename="ドキュメントリスト" path="/documentlist" exact children={<Route path="/documentList" exact children={<DocumentListPage />} />} />
-            <SideBarAndHeaderRoute pagename="ユーザーリスト" path="/userlist" exact children={<Route path="/userlist" exact children={<UserList />} />} />
-            <SideBarAndHeaderRoute pagename="データリスト" path="/datalist" exact children={<Route path="/datalist" exact children={<DataList />} />} />
-            <SideBarRoute path="/calendar" exact children={<Route path="/calendar" exact children={<CalendarPage />} />} />
+            <Switch>
+              <SideBarAndHeaderRoute
+                pagename={<GetDate />}
+                path="/"
+                exact
+                children={<Route path="/" exact children={<TopPage />} />}
+              />
+              <Route path="/registration" exact children={<Registration />} />
+              {/* ネストされたルーティングを定義 */}
+              <Route
+                path="/account"
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <SideBarAndHeaderRoute
+                        path={`${url}/`}
+                        pagename={"アカウント"}
+                        exact
+                        children={<AccountPage />}
+                      />
+                      <SideBarAndHeaderRoute
+                        path={`${url}/email`}
+                        exact
+                        children={<EmailChangePage />}
+                      />
+                      <SideBarAndHeaderRoute
+                        path={`${url}/password`}
+                        pagename={"アカウント"}
+                        exact
+                        children={<PassWordChangePage />}
+                      />
+                      <SideBarAndHeaderRoute
+                        path={`${url}/password/verify`}
+                        pagename={"アカウント"}
+                        exact
+                        children={<VerifyEmailPage />}
+                      />
+                      <Route path={`${url}/password/reset/:uid/:token`}>
+                        <SideBarAndHeaderRoute
+                          pagename={"アカウント"}
+                          exact
+                          children={<PasswordResetPage />}
+                        />
+                      </Route>
+                      <SideBarAndHeaderRoute
+                        path={`${url}/delete`}
+                        pagename={"アカウント"}
+                        exact
+                        children={<AccountDeletePage />}
+                      />
+                      <Route component={NotFound} />
+                    </Switch>
+                  </>
+                )}
+              />
+              <SideBarAndHeaderRoute
+                path="/approval-list"
+                pagename="承認リスト"
+                exact
+                children={<ApprovalList />}
+              />
+              <SideBarAndHeaderRoute
+                path="/disapproval-list"
+                pagename="不承認リスト"
+                exact
+                children={<DisapprovalList />}
+              />
+              <SideBarAndHeaderRoute
+                path="/unapproval-list"
+                pagename="未承認リスト"
+                exact
+                children={<UnapprovalList />}
+              />
+              <SideBarAndHeaderRoute
+                path="/cancel-list"
+                pagename="キャンセルリスト"
+                exact
+                children={<CancelList />}
+              />
+              <SideBarAndHeaderRoute
+                path="/document-list"
+                pagename="ドキュメントリスト"
+                exact
+                children={<DocumentListPage />}
+              />
+              <SideBarAndHeaderRoute
+                path="/user-list"
+                pagename="ユーザーリスト"
+                exact
+                children={<UserList />}
+              />
+              <SideBarAndHeaderRoute
+                path="/data-list"
+                pagename="データリスト"
+                exact
+                children={<DataList />}
+              />
+              <Route
+                path="/calendar"
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <SideBarRoute
+                        path={`${url}/`}
+                        pagename={"カレンダー"}
+                        exact
+                        children={<CalendarPage />}
+                      />
+                      <Route path={`${url}/approval-info/:id`}>
+                        <SideBarAndHeaderRoute
+                          pagename={"予約詳細"}
+                          exact
+                          children={<ApprovalInfoPage />}
+                        />
+                      </Route>
+                      <Route component={NotFound} />
+                    </Switch>
+                  </>
+                )}
+              />
+              <Route
+                path="/mail"
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <SideBarAndHeaderRoute
+                        path={`${url}/`}
+                        pagename={"メール"}
+                        exact
+                        children={<MailPage />}
+                      />
+                      <Route path={`${url}/send`}>
+                        <SideBarAndHeaderRoute
+                          pagename={"メール一斉送信"}
+                          exact
+                          children={<SendEmailPage />}
+                        />
+                      </Route>
+                      <Route component={NotFound} />
+                    </Switch>
+                  </>
+                )}
+              />
+              <Route component={NotFound} />
+            </Switch>
           </LoginRoute>
         </Switch>
       </CookiesProvider>

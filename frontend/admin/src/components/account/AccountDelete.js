@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash  } from "@fortawesome/free-regular-svg-icons";
 
@@ -14,30 +14,18 @@ import useUnmountRef from '../../hooks/useUnmountRef';
 const AccountDelete = (props) => {
     const unmountRef = useUnmountRef();
     const [loading, setLoading] = useSafeState(unmountRef, false);
-    const setAuthState = useSetRecoilState(authState);
+    const [auth, setAuth] = useRecoilState(authState);
     const [email, setEmail] = useSafeState(unmountRef, '');
     const [password, setPassword] = useSafeState(unmountRef, '');
     const [showPassword, setShowPassword] = useSafeState(unmountRef, false);
     const [message, setMessage] = useSafeState(unmountRef, '以下の項目を入力して下さい。');
-    const [user, setUser] = useSafeState(unmountRef, []);
     const [error, setError] = useSafeState(unmountRef, null);
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     // 一度アカウントの確認を行い、成功したらアカウントを削除する
     const url = AuthUrls.STAFF_LOGIN;
-    const userData = AuthUrls.GET_USER_DATA;
     const logout = AuthUrls.LOGOUT;
     const userDeleteUrl = AuthUrls.GET_USER_LIST;
-
-    // ログインユーザー情報を取得
-    const getUserData = async () => {
-        try {
-            const response = await axios.get(userData);
-            setUser(response.data);
-        } catch (error) {
-            // console.log(error);
-        }
-    };
 
     const logoutUser = async () => {
         try {
@@ -52,7 +40,6 @@ const AccountDelete = (props) => {
         formData.append('email', email);
         formData.append('password', password);
         setLoading(true);
-        getUserData();
         axios.post(url, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -62,7 +49,7 @@ const AccountDelete = (props) => {
                 setMessage('アカウント削除処理中です。');
                 // ログアウト
                 logoutUser();
-                axios.delete(`${userDeleteUrl}${user.pk}`, {
+                axios.delete(`${userDeleteUrl}${auth.userId}/`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -71,8 +58,9 @@ const AccountDelete = (props) => {
                         setLoading(false);
                         setMessage('アカウントを削除しました。');
                         setTimeout(() => {
-                            setAuthState({
+                            setAuth({
                                 isAuthenticated: false,
+                                user: '',
                             });
                             window.location.href = '/login';
                         }, 500);
@@ -101,11 +89,6 @@ const AccountDelete = (props) => {
             setShowPassword(false);
         }
     };
-
-    useEffect(() => {
-        getUserData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <div className="auth-page">
@@ -143,9 +126,10 @@ const AccountDelete = (props) => {
                             id="password"
                             {...register("password", {
                                 required: true,
-                                minLength: 6,
+                                minLength: 8,
                             })}
                             value={password} onChange={(e) => setPassword(e.target.value)}
+                            placeholder="全角半角英数字8文字以上"
                         />
                         {
                             showPassword ?

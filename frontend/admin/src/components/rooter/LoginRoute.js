@@ -7,41 +7,43 @@ import authState from "../../recoil/auth/atom";
 import reseravationState from "../../recoil/reservation/atom";
 
 const LoginRoute = (props) => {
-    const [auth, setAuth] = useRecoilState(authState);
-    const setReservationState = useSetRecoilState(reseravationState);
-    // const [user, setUser] = useState([]);
-    // トークンが有効か確認
-    const getUser = AuthUrls.GET_USER_LIST;
-    const logout = AuthUrls.LOGOUT;
-    const loginCheck = () => {
-        axios.get(getUser+"1")
-            .then((res) => {
-                // setUser(res.data);
-            })
-            .catch((err) => {
-                // トークンが無効な場合ログアウト
-                axios.post(logout)
-                    .then(res => {
-                        setReservationState([]);
-                        // ログアウト成功時、authStateをfalseにする
-                        setAuth({
-                            isAuthenticated: false,
-                        });
-                    })
-                    .catch(err => {
-                        // console.log(err);
-                    })
+  const [auth, setAuth] = useRecoilState(authState);
+  const setReservationState = useSetRecoilState(reseravationState);
+  // トークンが有効か確認
+  const getUser = AuthUrls.GET_USER_LIST;
+  const logout = AuthUrls.LOGOUT;
+  const loginCheck = () => {
+    axios
+      .get(`${getUser}${auth.userId}/`)
+      .then((res) => {
+        // setUser(res.data);
+      })
+      .catch((err) => {
+        // トークンが無効な場合ログアウト
+        axios
+          .post(logout)
+          .then((res) => {
+            setReservationState([]);
+            // ログアウト成功時、authStateをfalseにする
+            setAuth({
+              isAuthenticated: false,
+              userId: "",
             });
-    };
-    loginCheck();
+          })
+          .catch((err) => {
+            // console.log(err);
+          });
+      });
+  };
+  loginCheck();
 
-    // props.childrenにuserをpropsとして渡す
-    if(auth.isAuthenticated === true) {
-        return props.children;
-    } else {
-        // alert("再度ログインしてください");
-        return <Redirect to="/login" />;
-    }
-}
+  // props.childrenにuserをpropsとして渡す
+  if (auth.isAuthenticated === true) {
+    return props.children;
+  } else {
+    // alert("再度ログインしてください");
+    return <Redirect to="/login" />;
+  }
+};
 
 export default LoginRoute;

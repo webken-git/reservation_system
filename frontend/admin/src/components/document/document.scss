@@ -31,47 +31,6 @@ $breakpoints: (
   }
 */
 
-.modal-content {
-  position: absolute;
-  top: 40px;
-  left: 20%;
-  right: 20%;
-  bottom: 40px;
-  display: block;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  //   border-radius: 4px;
-  outline: none;
-  padding: 20px;
-  text-align: center;
-  margin: 0 auto;
-  // font-size: 18px;
-  .text-danger {
-    color: #f00;
-    font-weight: bold;
-  }
-  form,
-  .document-preparation {
-    display: inline-block;
-    text-align: left;
-  }
-  @include mq("sp") {
-    left: 40px;
-    right: 40px;
-    // font-size: 18px;
-  }
-}
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
 .checkbox-container {
   margin-bottom: 1rem;
 
@@ -99,6 +58,16 @@ $breakpoints: (
     @include mq("sp") {
       padding: 1% 2%;
     }
+  }
+}
+
+.document-preparation-table {
+  border-bottom: #ccc 1px solid;
+  border-collapse: collapse;
+  th,
+  td {
+    border-bottom: #ccc 1px solid;
+    padding: 0.5rem;
   }
 }
 

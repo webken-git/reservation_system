@@ -1,23 +1,26 @@
 from django.db import models
 from django.core import validators
 from django.db.models.fields.related import ForeignKey
-from phonenumber_field.modelfields import PhoneNumberField
 from users.models import User
+import uuid
 
 # Create your models here.
 
 
-# 予約停止スケジュールテーブル
 class ReservationSuspensionSchedule(models.Model):
+  """
+  予約停止スケジュールテーブル
+  """
   start = models.DateTimeField('開始日時')
   end = models.DateTimeField('終了日時')
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-# 予約状態マスタ（承認、未承認など）
-
 
 class Approval(models.Model):
+  """
+  予約承認テーブル
+  """
   name = models.CharField('状態', max_length=25)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -25,23 +28,25 @@ class Approval(models.Model):
   def __str__(self):
     return self.name
 
-# 施設名マスタ
-
 
 class Place(models.Model):
+  """
+  予約場所テーブル
+  """
   name = models.CharField('利用体育施設の名称', max_length=25)
-  max = models.IntegerField(
-      '最大シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
+  min = models.FloatField('最小利用時間', default=1.0)
+  max = models.FloatField('最大利用時間', default=1.0, validators=[validators.MinValueValidator(1.0), validators.MaxValueValidator(25.0)])
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
     return self.name
 
-# 附属設備・器具マスタ
-
 
 class Equipment(models.Model):
+  """
+  附属設備・器具テーブル
+  """
   name = models.CharField('附属設備・器具', max_length=25, blank=True, null=True)
   place = models.ManyToManyField(
       Place,
@@ -54,32 +59,23 @@ class Equipment(models.Model):
   def __str__(self):
     return self.name
 
-# 特別設備マスタ
-
-
-class SpecialEquipment(models.Model):
-  name = models.CharField('特別設備', max_length=25, blank=True, null=True)
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-
-  def __str__(self):
-    return self.name
-
-# 予約テーブル
-
 
 class Reservation(models.Model):
+  """
+  予約テーブル
+  """
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(
       User, verbose_name='user',
       blank=True, null=True,
       related_name='reservation_user',
-      on_delete=models.SET_NULL
+      on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号')
+  tel = models.CharField('電話番号', max_length=15, blank=True, null=True)
   is_group = models.BooleanField('is_group', default=False)
   delete_flag = models.BooleanField('delete_flag', default=False)
   start = models.DateTimeField('利用開始日時')
@@ -106,40 +102,40 @@ class Reservation(models.Model):
       blank=True,
       related_name='reservation_equipment'
   )
-  special_equipment = models.ManyToManyField(
-      SpecialEquipment, verbose_name='special_equipment',
-      blank=True,
-      related_name='resercvation_special_equipment'
-  )
+  special_equipment = models.CharField('特別設備', max_length=50, blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
     return self.reader_name + ' ' + self.contact_name + ' ' + self.address
 
-# 保存した予約情報テーブル
-
 
 class UserInfo(models.Model):
+  """
+  ユーザー情報テーブル
+  """
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(
       User, verbose_name='user',
       blank=True, null=True,
       related_name='user_info_user',
-      on_delete=models.SET_NULL
+      on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
   reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号')
+  tel = models.CharField('電話番号', max_length=15, blank=True, null=True)
   is_group = models.BooleanField('is_group', default=False)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-# 承認申請テーブル
-
 
 class ApprovalApplication(models.Model):
+  """
+  予約承認申請テーブル
+  """
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',
       related_name='approval_app_reservation',
@@ -158,7 +154,7 @@ class ApprovalApplication(models.Model):
       validators.MaxValueValidator(20000)],
       blank=True, null=True)
   conditions = models.TextField('承認の条件', max_length=255, blank=True, null=True)
-  cancellation_reason = models.TextField('取り消しの理由', max_length=255, blank=True, null=True)
+  cancellation_reason = models.TextField('キャンセルの理由', max_length=255, blank=True, null=True)
   approval = models.ForeignKey(
       Approval, verbose_name='approval',
       related_name='approval_app_approval',
@@ -168,10 +164,10 @@ class ApprovalApplication(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
 
 
-# 利用区分マスタ
-
-
 class Usage(models.Model):
+  """
+  利用テーブル
+  """
   name = models.CharField('利用区分', max_length=25)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -179,10 +175,11 @@ class Usage(models.Model):
   def __str__(self):
     return self.name
 
-# 年齢区分マスタ
-
 
 class Age(models.Model):
+  """
+  年齢テーブル
+  """
   name = models.CharField('年齢区分', max_length=10)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -190,10 +187,11 @@ class Age(models.Model):
   def __str__(self):
     return self.name
 
-# 時間区分マスタ
-
 
 class Time(models.Model):
+  """
+  時間テーブル
+  """
   name = models.CharField('時間区分', max_length=25)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -201,10 +199,12 @@ class Time(models.Model):
   def __str__(self):
     return self.name
 
-# 利用区分テーブル
-
 
 class UsageCategory(models.Model):
+  """
+  利用区分テーブル
+  """
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   usage = models.ManyToManyField(
       Usage,
       verbose_name='usage',
@@ -219,10 +219,11 @@ class UsageCategory(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
 
 
-# 年齢区分テーブル
-
-
 class AgeCategory(models.Model):
+  """
+  年齢区分テーブル
+  """
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   age = models.ManyToManyField(
       Age,
       verbose_name='age',
@@ -236,16 +237,22 @@ class AgeCategory(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-# 後納テーブル
-
 
 class DefferdPayment(models.Model):
+  """
+  後納テーブル
+  """
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   reason = models.CharField('後納の理由', max_length=50)
   reservation = models.ForeignKey(
       Reservation, verbose_name='reservation',
       related_name='defferd_payment_reservation',
       on_delete=models.CASCADE
   )
+  fee = models.IntegerField('後納料', validators=[
+      validators.MinValueValidator(0),
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -254,6 +261,9 @@ class DefferdPayment(models.Model):
 
 
 class FacilityFee(models.Model):
+  """
+  施設料金テーブル
+  """
   place = ForeignKey(
       Place, verbose_name='place',
       related_name='facility_fee_place',
@@ -277,6 +287,9 @@ class FacilityFee(models.Model):
 
 
 class EquipmentFee(models.Model):
+  """
+  設備料金テーブル
+  """
   equipment = ForeignKey(
       Equipment, verbose_name='equipment',
       related_name='equipment_fee_equipment',

@@ -1,8 +1,7 @@
 from django.contrib import admin
 from reservations.models import (
     EquipmentFee, FacilityFee, Reservation, UserInfo, Place,
-    Equipment, SpecialEquipment,
-    Approval, ApprovalApplication,
+    Equipment, Approval, ApprovalApplication,
     Age, Usage, Time, DefferdPayment,
     AgeCategory, UsageCategory,
     ReservationSuspensionSchedule
@@ -36,11 +35,6 @@ class EquipmentAdmin(admin.ModelAdmin):
   list_display_links = ('id', 'name')
 
 
-class SpecialEquipmentAdmin(admin.ModelAdmin):
-  list_display = [f.name for f in SpecialEquipment._meta.fields]
-  list_display_links = ('id', 'name')
-
-
 class ApprovalAdmin(admin.ModelAdmin):
   list_display = [f.name for f in Approval._meta.fields]
   list_display_links = ('id', 'name')
@@ -63,6 +57,11 @@ class TimeAdmin(admin.ModelAdmin):
 
 class UsageAdmin(admin.ModelAdmin):
   list_display = [f.name for f in Usage._meta.fields]
+  list_display_links = ('id', 'name')
+
+
+class TimeAdmin(admin.ModelAdmin):
+  list_display = [f.name for f in Time._meta.fields]
   list_display_links = ('id', 'name')
 
 
@@ -96,7 +95,6 @@ admin.site.register(Reservation, ReservationAdmin)
 admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(Equipment, EquipmentAdmin)
-admin.site.register(SpecialEquipment, SpecialEquipmentAdmin)
 admin.site.register(Age, AgeAdmin)
 admin.site.register(Usage, UsageAdmin)
 admin.site.register(Time, TimeAdmin)

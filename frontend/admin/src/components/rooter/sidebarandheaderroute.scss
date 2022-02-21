@@ -37,6 +37,9 @@ $accent-color: #233b62;
       display: block;
     }
   }
+  .drawer-menu:hover {
+    cursor: pointer;
+  }
   .menu {
     display: block;
     @include mq("sp") {
@@ -58,11 +61,17 @@ $accent-color: #233b62;
   }
 
   .mainbox {
-    width: 100%;
+    width: 85%;
     // align-items: center;
     // height: 100vh;
+    @include mq(sp) {
+      width: 100%;
+    }
+    @include mq(tab) {
+      width: 100%;
+    }
     .contents {
-      margin: 2% 2% 0 2%;
+      margin: 1% 2% 0 2%;
     }
   }
 }

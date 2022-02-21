@@ -1,7 +1,12 @@
 import React from 'react'
+import {
+    Box,
+    HStack,
+    Stack,
+} from "@chakra-ui/react";
 import { Route } from 'react-router-dom'
 import SideBar from '../sidebar/SideBar'
-import './sideandheader.scss'
+// import './sideandheader.scss'
 
 // サイドバーとヘッダーを表示するページに使用するルーティング
 
@@ -17,14 +22,18 @@ const SideBarRoute = (props) => {
             children={
                 <>
                     <div className="allbox">
-                        <div className="sidebar">
-                            <SideBar />
-                        </div>
+                        <Stack >
+                            <HStack alignItems="start" className='menu' style={{"merginTop":"0"}}>
+                                <Box display={{ base: "none", md: "block" }}>
+                                    <div className="sidebar">
+                                        <SideBar />
+                                    </div>
+                                </Box>
+                            </HStack>
+                        </Stack>
                         <div className="mainbox">
-                            <div className="contents">
                                 {children}
                                 {/* ここに承認リストページやカレンダーを表示する */}
-                            </div>
                         </div>
                     </div>
                 </>
