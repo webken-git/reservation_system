@@ -77,7 +77,7 @@ const ReservationDetail = (props) => {
             </li>
             <li>
               <label>代表者名：</label>
-              <span>{reservation.reservation.reader_name}</span>
+              <span>{reservation.reservation.leader_name}</span>
             </li>
             <li>
               <label>連絡者名：</label>

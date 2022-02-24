@@ -6,12 +6,10 @@ import authState from "../../recoil/auth";
 import tabState from "../../recoil/tab";
 import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { ReservationUrls } from "../../utils/reservationUrls";
-import Loading from "../loading/Loading";
 
-export const ReservationPost = () => {
+export const ReservationPost = (props) => {
   const setStep = useSetRecoilState(stepValue);
   const auth = useRecoilValue(authState);
-  const [loading, setLoading] = useState(false);
   const FormData = useRecoilValue(formData);
   const PersonalData = useRecoilValue(personalData);
   // recoilで保存しているStateを初期化
@@ -55,9 +53,7 @@ export const ReservationPost = () => {
     };
     axios
       .post(ReservationUrls.USAGE_CATEGORY, data)
-      .then((response) => {
-        setLoading(false);
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
   // approval-applicationsにPOSTする
@@ -74,12 +70,12 @@ export const ReservationPost = () => {
 
   // reservationにPOSTする
   const postReservations = () => {
-    setLoading(true);
+    props.setLoading(true);
     FormData.map((item) => {
       let data = {
         user_id: auth.userId,
         group_name: PersonalData.group_name,
-        reader_name: PersonalData.reader_name,
+        leader_name: PersonalData.leader_name,
         contact_name: PersonalData.contact_name,
         address: PersonalData.address,
         // 国際番号で登録する必要があるため、telには+818000000000という形で入力する
@@ -113,10 +109,11 @@ export const ReservationPost = () => {
           postUsageID(response.data.id, item.usageList);
         })
         .catch((error) => {
-          setLoading(false);
+          props.setLoading(false);
         });
       return item;
     });
+    props.setLoading(false);
   };
 
   const postData = () => {
@@ -157,7 +154,6 @@ export const ReservationPost = () => {
           </button>
         </div>
       </Grid>
-      {loading && <Loading />}
     </>
   );
 };

@@ -107,7 +107,7 @@ const EmailChange = () => {
           >
             戻る
           </button>
-          <span>　</span>
+          <span className="btn-space"></span>
           <button className="verify-btn" type="submit">
             変更
           </button>

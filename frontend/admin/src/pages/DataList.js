@@ -20,11 +20,6 @@ import EditFeeList from "../components/datalist/edit/EditFeeList";
 import EditGroupFeeList from "../components/datalist/edit/EditGroupFeeList";
 import EditCurlingFeeList from "../components/datalist/edit/EditCurlingFeeList";
 
-// import { Link as Scroll } from 'react-scroll';
-// import "./datalist.scss";
-
-// Modal.setAppElement("#root");
-
 export const DataList = () => {
   document.title = "データリスト | 予約管理アプリ"; // ページタイトルを変更
   const unmountRef = useUnmountRef();

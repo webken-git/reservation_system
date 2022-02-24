@@ -281,7 +281,7 @@ const ScheduleBlock = (props) => {
         {props.schedule.reservation.is_group === false ? (
           <span>
             <p>{props.schedule.reservation.place.name}</p>
-            <p>{props.schedule.reservation.reader_name}</p>
+            <p>{props.schedule.reservation.leader_name}</p>
           </span>
         ) : (
           <span>

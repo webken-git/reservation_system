@@ -18,7 +18,7 @@ const EditFeeList = (props) => {
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
 
   const age1 = ageData.filter((age) => age.name === "小学生");
@@ -74,14 +74,15 @@ const EditFeeList = (props) => {
         })
         .then((res) => {
           console.log("Success");
+          setMessage("変更しました");
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
+          setMessage("変更に失敗しました");
         });
       return fee;
     });
     setLoading(false);
-    setMessage("変更しました");
     // 0.5秒後にリロード
     setTimeout(() => {
       window.location.reload();
@@ -126,6 +127,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee1-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -160,6 +163,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee2-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -194,6 +199,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee3-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -228,6 +235,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee4-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -262,6 +271,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee5-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -300,6 +311,7 @@ const EditFeeList = (props) => {
               <button type="submit" className="btn">
                 完了
               </button>
+              <span className="btn-space"></span>
               <button
                 type="button"
                 className="back-btn"

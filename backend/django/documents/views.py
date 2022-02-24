@@ -43,7 +43,7 @@ def create_new_word(request):
   age_categorizes = AgeCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)
   # 記入内容データ
   group_name = approval_applications[0].reservation.group_name
-  reader_name = approval_applications[0].reservation.reader_name
+  leader_name = approval_applications[0].reservation.leader_name
   contact_name = approval_applications[0].reservation.contact_name
   address = approval_applications[0].reservation.address
   tel = approval_applications[0].reservation.tel
@@ -132,8 +132,8 @@ def create_new_word(request):
       # 右揃えにしてgroup_nameを挿入
       tbl.rows[0].cells[3].paragraphs[4].text = "　　　　　　　　　　　　　　　　　　　　　　　・団 体 名　{}".format(group_name)
       tbl.rows[0].cells[3].paragraphs[4].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
-      tbl.rows[0].cells[3].paragraphs[5].text = "　　　　　　　　　　　　　　　　　　　　　　　　代表者名　{}".format(reader_name)
-      # reader_nameの位置をgroup_nameの位置に合わせる
+      tbl.rows[0].cells[3].paragraphs[5].text = "　　　　　　　　　　　　　　　　　　　　　　　　代表者名　{}".format(leader_name)
+      # leader_nameの位置をgroup_nameの位置に合わせる
       tbl.rows[0].cells[3].paragraphs[5].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
       tbl.rows[0].cells[3].paragraphs[7].text = "　　　　　　　　　　　　　　　　　　　　　　　・連絡者名　{}".format(contact_name)
       tbl.rows[0].cells[3].paragraphs[7].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT

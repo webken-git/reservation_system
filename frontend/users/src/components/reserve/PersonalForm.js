@@ -65,7 +65,7 @@ export const PersonalForm = (props) => {
           .post(ReservationUrls.USER_INFO, {
             user_id: auth.userId,
             group_name: e.group_name,
-            reader_name: e.reader_name,
+            leader_name: e.leader_name,
             contact_name: e.contact_name,
             address: e.address,
             tel: e.tel,
@@ -82,7 +82,7 @@ export const PersonalForm = (props) => {
           .patch(`${ReservationUrls.USER_INFO}${UserInfoData[0].id}/`, {
             user_id: auth.userId,
             group_name: e.group_name,
-            reader_name: e.reader_name,
+            leader_name: e.leader_name,
             contact_name: e.contact_name,
             address: e.address,
             tel: e.tel,
@@ -153,15 +153,15 @@ export const PersonalForm = (props) => {
               <FormControl error>
                 <Label>代表者名：</Label>
                 <FormHelperText>
-                  {errors.reader_name && errors.reader_name.message}
+                  {errors.leader_name && errors.leader_name.message}
                 </FormHelperText>
                 <Controller
                   //   TextFiledを制御するController
-                  name="reader_name"
+                  name="leader_name"
                   control={control}
                   defaultValue={
                     UserInfoData && UserInfoData.length !== 0
-                      ? UserInfoData[0].reader_name
+                      ? UserInfoData[0].leader_name
                       : ""
                   }
                   render={({ field }) => (
@@ -171,10 +171,10 @@ export const PersonalForm = (props) => {
                       {...field}
                       variant="outlined"
                       placeholder="稚内太郎"
-                      {...register("reader_name", {
+                      {...register("leader_name", {
                         required: "必須項目です",
                       })}
-                      error={"reader_name" in errors}
+                      error={"leader_name" in errors}
                     />
                   )}
                 />

@@ -34,7 +34,7 @@ package "予約システム" as reservation_system {
     --
     # users [fk]
     group_name : char 25
-    reader_name : char 25
+    leader_name : char 25
     contact_name : char 25
     address : char 125
     TEL : phone number
@@ -56,7 +56,7 @@ package "予約システム" as reservation_system {
     --
     # users [fk]
     group_name : char 25
-    reader_name : char 25
+    leader_name : char 25
     contact_name : char 25
     address : char 125
     TEL : phone number

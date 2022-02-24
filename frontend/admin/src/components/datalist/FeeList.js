@@ -22,7 +22,7 @@ const FeeList = (props) => {
       timeName: feelist.time.name,
     });
   });
-  // timeIdListから重複しているデータを削除
+  // timeListから重複しているデータを削除
   timeList = timeList.filter(
     (timeId, index, self) =>
       index === self.findIndex((t) => t.timeId === timeId.timeId)

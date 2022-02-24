@@ -4,7 +4,7 @@ import Calendar from "../calendar/Calendar.js";
 import FeeList from "../feelist/FeeList";
 import GroupFeeList from "../feelist/GroupFeeList";
 import CurlingFeeList from "../feelist/CurlingFeeList";
-import { ReservationForm } from "../reservationform/ReservationForm";
+import { ReservationForm } from "../reserve/ReservationForm";
 import { createAppSetting } from "../account/AppSettings.js";
 import { ReservationUrls } from "../../utils/reservationUrls.js";
 

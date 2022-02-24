@@ -10,11 +10,13 @@ import { Stepper } from "react-form-stepper";
 import { PersonalData } from "./PersonalData";
 import { ReservationPost } from "./ReservationPost";
 import { Thanks } from "./Thanks";
+import Loading from "../loading/Loading";
 
 export const ReservationStep = () => {
   const data = useRecoilValue(formData);
   const [activeStep, setActiveStep] = useState(0);
   const [step, setStep] = useRecoilState(stepValue);
+  const [loading, setLoading] = useState(false);
   const Step1 = () => {
     setActiveStep(step);
     setStep(1);
@@ -46,7 +48,7 @@ export const ReservationStep = () => {
             ]}
             styleConfig={{
               size: "3em",
-              labelFontSize: "1rem",
+              labelFontSize: "1.1rem",
               completedBgColor: "#707070",
               completedTextColor: "#ffffff",
               inactiveBgColor: "#707070",
@@ -54,6 +56,9 @@ export const ReservationStep = () => {
               activeBgColor: "#23ad39",
             }}
             activeStep={activeStep}
+            style={{
+              fontFamily: "Noto Sans JP",
+            }}
           />
         </div>
       )}
@@ -104,13 +109,14 @@ export const ReservationStep = () => {
         </Grid>
         <PersonalData />
         <ReservationList />
-        <ReservationPost />
+        <ReservationPost setLoading={setLoading} />
       </div>
       <div style={{ display: activeStep === 3 ? "" : "none" }}>
         <Grid container alignItems="center" justifyContent={"center"}>
           <Thanks />
         </Grid>
       </div>
+      {loading && <Loading />}
     </div>
   );
 };

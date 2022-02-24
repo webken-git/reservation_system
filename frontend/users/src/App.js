@@ -3,8 +3,8 @@ import axios from "axios";
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-import HeaderRoute from "./components/rooter/HeaderRoute";
-import LoginRoute from "./components/rooter/LoginRoute";
+import HeaderRoute from "./components/routes/HeaderRoute";
+import LoginRoute from "./components/routes/LoginRoute";
 import { AccountPage } from "./pages/AccountPage";
 import { EmailChangePage } from "./pages/EmailChangePage";
 import { VerifyEmailPage } from "./pages/VerifyEmailPage";

@@ -43,7 +43,7 @@ class Csv:
         equipment_list = [j.name for j in i.reservation.equipment.all()]
         pk = i.id
         group_name = i.reservation.group_name
-        reader_name = i.reservation.reader_name
+        leader_name = i.reservation.leader_name
         contact_name = i.reservation.contact_name
         address = i.reservation.address
         tel = i.reservation.tel
@@ -59,7 +59,7 @@ class Csv:
         special_equipment = i.reservation.special_equipment
         created_at = i.reservation.created_at
         approval = i.approval.name
-        writer.writerow([pk, group_name, reader_name, contact_name, address, tel, start, end, organizer_number, participant_number, purpose, usage_category_list, age_category_list, admission_fee, place, place_number, equipment_list, special_equipment, created_at, approval])
+        writer.writerow([pk, group_name, leader_name, contact_name, address, tel, start, end, organizer_number, participant_number, purpose, usage_category_list, age_category_list, admission_fee, place, place_number, equipment_list, special_equipment, created_at, approval])
     return '/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
 
 

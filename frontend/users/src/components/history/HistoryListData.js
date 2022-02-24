@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import { formatDate, formatTime } from "./formatData";
 import { Link } from "react-router-dom";
 import {
-  sortedPlaces,
-  sortedStartDate,
-  sortedStatus,
+  useSortPlace,
+  useSortStartDate,
+  useSortStatus,
 } from "../../hooks/useSortData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 
 const HistoryListData = (props) => {
   const [sortData, setSortData] = useState(props.data);
-  const [sortPlace] = sortedPlaces(sortData, setSortData);
-  const [sortStartDate] = sortedStartDate(sortData, setSortData);
-  const [sortStatus] = sortedStatus(sortData, setSortData);
+  const [sortPlace] = useSortPlace(sortData, setSortData);
+  const [sortStartDate] = useSortStartDate(sortData, setSortData);
+  const [sortStatus] = useSortStatus(sortData, setSortData);
 
   // 並び替えをリセットする
   const resetSort = () => {
@@ -49,7 +49,7 @@ const HistoryListData = (props) => {
       <tbody>
         {sortData.map((reservation) => (
           <tr key={reservation.id}>
-            <td>{reservation.reservation.reader_name}</td>
+            <td>{reservation.reservation.leader_name}</td>
             <td data-label="場所">{reservation.reservation.place.name}</td>
             <td data-label="利用開始日時">
               {formatDate(

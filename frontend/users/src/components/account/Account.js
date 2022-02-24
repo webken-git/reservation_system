@@ -96,7 +96,7 @@ export const Account = () => {
                         </li>
                         <li>
                           <label>代表者名：</label>
-                          <span>{UserInfoData[0].reader_name}</span>
+                          <span>{UserInfoData[0].leader_name}</span>
                         </li>
                         <li>
                           <label>連絡者名：</label>

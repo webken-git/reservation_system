@@ -68,7 +68,7 @@ const DetailsButton = (props) => {
             </li>
             <li>
               <label>代表者名：</label>
-              <span>{props.reader_name}</span>
+              <span>{props.leader_name}</span>
             </li>
             <li>
               <label>連絡者名：</label>

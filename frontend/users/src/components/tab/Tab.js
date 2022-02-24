@@ -109,6 +109,7 @@ const TabContainer = () => {
   // tabのスタイルをカスタマイズ
   const StyledTab = styled((props) => <Tab {...props} />)(() => ({
     fontSize: "1.2rem",
+    fontFamily: "Noto Sans JP",
     //   メディアクエリで指定した値を反映
     [`@media (max-width: 767px)`]: {
       fontSize: "1rem",

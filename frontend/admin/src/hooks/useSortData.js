@@ -81,10 +81,10 @@ export const useSortedLeaderName = (sortData, setSortData) => {
   let sortItems = [...sortData];
   const sortBy = () => {
     sortItems.sort((a, b) => {
-      if (a.reservation.reader_name > b.reservation.reader_name) {
+      if (a.reservation.leader_name > b.reservation.leader_name) {
         return order === "asc" ? 1 : -1;
       }
-      if (a.reservation.reader_name < b.reservation.reader_name) {
+      if (a.reservation.leader_name < b.reservation.leader_name) {
         return order === "asc" ? -1 : 1;
       }
       return 0;

@@ -460,7 +460,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                           {...field}
                           label="年/月/日"
                           mask="____/__/__"
-                          minDate={new Date()}
+                          minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -579,7 +579,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                           {...field}
                           label="年/月/日"
                           mask="____/__/__"
-                          minDate={new Date()}
+                          minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
                           renderInput={(params) => (
                             <TextField
                               {...params}
