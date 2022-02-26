@@ -3,6 +3,7 @@ import axios from "axios";
 import { withCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
 import ScheduleBlock from "./ScheduleBlock";
+import UnapprovalBlock from "./UnapprovalBlock";
 
 const Content = (props) => {
   const [scheduleList, setScheduleList] = useState([]);
@@ -130,20 +131,26 @@ const Content = (props) => {
         </div>
 
         <div className="schedule-block-column">
-          {props.isMain
-            ? approvalList.map((schedule, index) => {
-                return (
-                  <ScheduleBlock
-                    key={uuidv4()}
-                    schedule={schedule}
-                    index={index}
-                    setScheduleDict={props.setScheduleDict}
-                    contentDate={contentDate}
-                    count={count}
-                  />
-                );
-              })
-            : null}
+            {approvalList.map((schedule, index) => {
+              return (
+                <ScheduleBlock
+                  key={uuidv4()}
+                  schedule={schedule}
+                  index={index}
+                  setScheduleDict={props.setScheduleDict}
+                  contentDate={contentDate}
+                  count={count}
+                />
+              );
+            })}
+            {count.map((n, index) => {
+              return (
+                <UnapprovalBlock
+                  hour={index}
+                  count={n}
+                />
+              );
+            })}
         </div>
       </div>
     );
