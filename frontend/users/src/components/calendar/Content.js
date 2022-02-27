@@ -19,12 +19,12 @@ const Content = (props) => {
   const approvalFilter = props.approvalFilter;
   const placeName = props.placeName;
   const calendarType = props.calendarType;
-  let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const [count, setCount] = useState([]);
 
   const [approvalList, setApprovalList] = useState([]);
 
   let approvals = [];
-  let unapprovalList = [];
+  let unapprovals = [];
 
   let unmounted = false;
 
@@ -33,27 +33,41 @@ const Content = (props) => {
   const approvalDevide = (scheduleList) => {
     scheduleList.map((schedule, index) => {
       if (schedule.approval.name === "未承認"){
-        unapprovalList.push(schedule);
+        unapprovals.push(schedule);
       } else if (schedule.approval.name === "承認") {
         approvals.push(schedule);
       }
     })
     setApprovalList(approvals);
-    console.log(unapprovalList)
+    // setUnapprovalList(unapprovals);
+    // console.log(unapprovals)
+
+    let list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    unapprovals.map((unapproval, index) => {
+      let startHours = Number(unapproval.reservation.start.substr(11, 2));
+      let endHours = Number(unapproval.reservation.end.substr(11, 2));
+
+      for (let i = startHours; i < endHours; i ++) {
+        list[i-9] = list[i-9] + 1;
+      }
+    })
+    setCount(list);
   }
   
-  const unapprovalCount = (unapprovalList) => {
-      unapprovalList.map((unapproval, index) => {
-        let startHours = Number(unapproval.reservation.start.substr(11, 2));
-        let endHours = Number(unapproval.reservation.end.substr(11, 2));
+  // const unapprovalCount = (n) => {
+  //     // console.log(n)
+  //     let list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  //     n.map((unapproval, index) => {
+  //       let startHours = Number(unapproval.reservation.start.substr(11, 2));
+  //       let endHours = Number(unapproval.reservation.end.substr(11, 2));
 
-        for (let i = startHours; i < endHours; i ++) {
-          count[i-9] = count[i-9] + 1;
-        }
-      })
-      // setUnCount(count)
-      console.log(count)
-  }
+  //       for (let i = startHours; i < endHours; i ++) {
+  //         list[i-9] = list[i-9] + 1;
+  //       }
+  //     })
+  //     console.log(list)
+  //     setCount(list)
+  // }
 
   const reservationPull = () => {
     let year = date.getFullYear();
@@ -80,7 +94,7 @@ const Content = (props) => {
           setScheduleList(scheduleList);
           setUpdateFlag(false);
           approvalDevide(scheduleList);
-          unapprovalCount(unapprovalList);
+          // unapprovalCount(unapprovalList);
         }
       })
       .catch((error) => {

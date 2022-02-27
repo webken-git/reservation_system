@@ -159,6 +159,7 @@ const Calendar = (props) => {
         <MonthlyCalendar
           dayList={dayList}
           date={date}
+          setDate={setDate}
           setCalendarType={setCalendarType}
           calendarType={calendarType}
           setLoading={setLoading}
