@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios"
 import "./calendar.scss";
 import Head from "./Head";
 import Content from "./Content";
@@ -40,8 +39,12 @@ import {
   curlingTimetable,
 } from "./FormDataList";
 import form from "./ReservationForm.module.scss";
-import {useRecoilValue} from "recoil";
 import tabState from "../../recoil/tab";
+import { format } from "date-fns";
+import { formData, popupState } from "../../recoil/form/atom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import axios from "axios";
+import { ReservationUrls } from "../../utils/reservationUrls";
 
 const Label = styled("p")({
   marginRight: 15,
@@ -63,6 +66,8 @@ const Calendar = (props) => {
   const [loading, setLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const isMain = true;
+  const [FormData, setFormData] = useRecoilState(formData);
+  const setPopup = useSetRecoilState(popupState);
 
   const {
     control,
@@ -112,6 +117,74 @@ const Calendar = (props) => {
         setDate(nextDate);
       }
     }
+  };
+
+  const onSubmit = (e) => {
+    //このままだとbackend側で使えないのでyyyy-LL-ddに変換
+    const startDate = format(e.StartDate, "yyyy-LL-dd");
+    const endDate = format(e.EndDate, "yyyy-LL-dd");
+    const startTime = e.Start;
+    const endTime = e.End;
+    const start = startDate.concat(" ", startTime);
+    const end = endDate.concat(" ", endTime);
+
+    // console.log(startDate)
+    // console.log(startTime)
+    console.log(start)
+
+    // const suspensionStart = new Date(start)
+    // const suspensionStart = format(start, "yyyy-LL-dd HH:mm")
+    // const suspensionEnd = format(end, "yyyy-LL-dd HH:mm")
+    // console.log(suspensionStart)
+    
+    axios.post(`${ReservationUrls.SUSPENSION}`,{
+        'start': start,
+        'end': end
+      })
+    .then(res => {
+      console.log(res.data);
+      setModalIsOpen(false)
+    })
+    .catch( error => {
+      console.log(error);
+      // setModalIsOpen(false)
+    })
+
+    // const n = new Date(start);
+    // console.log(n)
+
+    delete e["StartDate"];
+    delete e["EndDate"];
+    const data = {
+      ...e,
+      start,
+      end,
+      // equipmentName,
+      // id,
+      // age,
+      // ageName,
+      // placeId,
+      // placeName,
+      startDate,
+      endDate,
+      // usageList,
+      // usageName,
+    };
+    const list = [...FormData, data];
+    setFormData(list);
+    // フォームをリセット
+    reset();
+    setPopup({
+      isOpen: true,
+      message: "予約情報を追加しました",
+    });
+
+    // setTimeout(() => {
+    //   setPopup({
+    //     isOpen: false,
+    //     message: "",
+    //   });
+    // }, 1500);
   };
 
   useEffect(() => {
@@ -225,11 +298,11 @@ const Calendar = (props) => {
               >
                 <div className="modal-wrapper">
                   <div className="modal-title">
-                    <h2>予約停止</h2>
+                    <h2>予約停止の設定</h2>
                   </div>
+                  <form onSubmit={handleSubmit(onSubmit)}>
                   <ul>
                     <li>
-                      <label>開始日時：</label>
                       <div>
                         <Controller
                           name="StartDate"
@@ -238,7 +311,7 @@ const Calendar = (props) => {
                           rules={{ required: "入力" }}
                           render={({ field }) => (
                             <div className={form.StartDate}>
-                              {/* <Label>利用日時：</Label> */}
+                              <Label>開始日時：</Label>
                               <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
                                 <DesktopDatePicker
                                   {...field}
@@ -303,7 +376,6 @@ const Calendar = (props) => {
                       </div>
                     </li>
                     <li>
-                      <label>終了日時：</label>
                       <div>
                         <Controller
                           name="EndDate"
@@ -312,9 +384,7 @@ const Calendar = (props) => {
                           rules={{ required: "入力" }}
                           render={({ field }) => (
                             <div className={form.EndDate}>
-                              <Label>
-                                <br />
-                              </Label>
+                              <Label>終了日時</Label>
                               <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
                                 <DesktopDatePicker
                                   {...field}
@@ -382,6 +452,12 @@ const Calendar = (props) => {
                       </div>
                     </li>
                   </ul>
+                  <div className="submit-btn">
+                    <button type="submit" className="btn">
+                      設定する
+                    </button>
+                  </div>
+                  </form>
                 </div>
               </Modal>
             </div>

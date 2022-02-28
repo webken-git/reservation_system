@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { withCookies } from 'react-cookie'
 import {v4 as uuidv4} from 'uuid'
-
+import { ReservationUrls } from "../../utils/reservationUrls";
 import ScheduleBlock from './ScheduleBlock';
 // import { fil } from 'date-fns/locale';
 
@@ -31,7 +31,7 @@ const Content = (props) =>{
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
             // setStringContentDate(year+'-'+month+'-'+day);    
         }
-        axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
+        axios.get(`${ReservationUrls.APPROVAL_APPLICATION}`,{
             params: {
                 'approval': approvalFilter,
                 'reservation__start': year+'-'+month+'-'+day,
