@@ -1,7 +1,7 @@
 // キャンセルリストの中身
 import React from "react";
 // import './approval.scss'
-import DetailsButton from "./../list-buttom/DetailsButton";
+import DetailsButton from "./../listbutton/DetailsButton";
 // recoil
 import { useSetRecoilState } from "recoil";
 import reseravationData from "../../recoil/reservation";

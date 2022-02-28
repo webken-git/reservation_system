@@ -1,9 +1,9 @@
 // 未承認リストテーブルのコンポーネント
 import React from "react";
 // import './approval.scss'
-import ApprovalButtom from "../list-buttom/ApprovalButtom";
-import DisApprovalButtom from "./../list-buttom/DisApprovalButtom";
-import DetailsButton from "./../list-buttom/DetailsButton";
+import ApprovalButtom from "../listbutton/ApprovalButtom";
+import DisApprovalButtom from "../listbutton/DisApprovalButtom";
+import DetailsButton from "../listbutton/DetailsButton";
 
 const UnApprovalTable = (props) => {
   return (

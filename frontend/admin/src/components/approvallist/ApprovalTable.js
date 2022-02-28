@@ -1,8 +1,8 @@
 // 承認リストの中身
 import React from "react";
 // import './approval.scss'
-import DetailsButton from "../list-buttom/DetailsButton";
-import ApprovalCancelButtom from "../list-buttom/ApprovalCancelButtom";
+import DetailsButton from "../listbutton/DetailsButton";
+import ApprovalCancelButtom from "../listbutton/ApprovalCancelButtom";
 // recoil
 import { useSetRecoilState } from "recoil";
 import reseravationData from "../../recoil/reservation";

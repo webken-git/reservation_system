@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
-import "./list_send_button.scss";
+import "./listbutton.scss";
 
 const ApprovalButton = (props) => {
   // 承認ボタンのモーダルウィンドウ
@@ -30,6 +30,11 @@ const ApprovalButton = (props) => {
         usage_fee: getValues("usage_fee"),
         heating_fee: getValues("heating_fee"),
         electric_fee: getValues("electric_fee"),
+        send_mail: true,
+        document_id: 1,
+        number: getValues("number"),
+        // number: 1,
+        approval_application_id: props.id,
       })
       .then((response) => {
         if (props.defferd_payment.length > 0) {
@@ -168,10 +173,32 @@ const ApprovalButton = (props) => {
               </div>
             )}
             <div className="modal-form-group">
+              {errors.number && (
+                <p className="modal-error">{errors.number.message}</p>
+              )}
+              <label className="modal-label">
+                承認通知書に記載する発行番号を入力：
+              </label>
+              <input
+                type="text"
+                inputMode="numeric"
+                name="number"
+                className="modal-input"
+                autoComplete="off"
+                {...register("number", {
+                  required: "必須項目です",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "数字を入力してください",
+                  },
+                })}
+              />
+            </div>
+            <div className="modal-form-group">
               <button type="submit" className="btn">
                 承認
               </button>
-              <span>　</span>
+              <span className="btn-space"></span>
               <button
                 type="button"
                 className="back-btn"

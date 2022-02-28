@@ -28,15 +28,15 @@ def insert_string(string, index, add_string):
 
 def create_new_word(request):
   """
-  必須フォームフィールド:
-  id: Documents テーブル id
-  approval_application: approval applications テーブル id
+  必須フォームデータ:
+  document_id: Documentsテーブル id
+  approval_application_id: approval applicationsテーブル id
   任意:
   number: 書類の発行番号
   """
   BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
   now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
-  query = DocumentTemplate.objects.filter(id=request.data['id'])
+  query = DocumentTemplate.objects.filter(id=request.data['document_id'])
   # DBから検索
   approval_applications = ApprovalApplication.objects.filter(id=request.data['approval_application_id'])
   usage_categorizes = UsageCategory.objects.filter(reservation__id=approval_applications[0].reservation.id)

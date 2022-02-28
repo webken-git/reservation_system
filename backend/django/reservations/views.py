@@ -276,25 +276,58 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         },
     }
 
-    if request.data['approval_id'] == "2":
-      # 予約承認メール送信
-      automail = AutoMail.objects.get(name='予約承認メール')
-      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_approval_message.txt'
-      # automail.bodyの\r\nを改行に変換
-      automail.body = automail.body.replace('\r\n', '\n')
-      # ファイルに書き込み
-      with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(automail.body)
-      # メール送信
-      email = EmailMessage(
-          subject=automail.subject,
-          body=render_to_string("reservations/email/reservation_approval_message.txt", context),
-          from_email=from_email,
-          to=[to_email],
-          bcc=[from_email]
-      )
-      email.send()
-    elif request.data['approval_id'] == "3":
+    if request.data['approval_id'] == 2:
+      # メール送信をする場合
+      if request.data['send_mail'] is True:
+        from documents.views import create_new_word
+        from docx2pdf import convert
+        import pythoncom
+        from documents.models import Document
+        from documents.serializers import DocumentSerializer
+
+        pythoncom.CoInitialize()
+        BASE_DIR = settings.BASE_DIR
+        file, file_name = create_new_word(self.request)
+        word = '{}/static/documents/docx/{}'.format(BASE_DIR, file)
+        pdf = '{}/static/documents/pdf/{}'.format(BASE_DIR, file).replace('.docx', '.pdf')
+        # wordファイルをpdfに変換
+        f = open(pdf, 'w')
+        f.close()
+        convert(word, pdf)
+
+        # 予約承認メール送信
+        automail = AutoMail.objects.get(name='予約承認メール')
+        file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_approval_message.txt'
+        # automail.bodyの\r\nを改行に変換
+        automail.body = automail.body.replace('\r\n', '\n')
+        # ファイルに書き込み
+        with open(file_path, 'w', encoding='utf-8') as f:
+          f.write(automail.body)
+        # メール送信
+        email = EmailMessage(
+            subject=automail.subject,
+            body=render_to_string("reservations/email/reservation_approval_message.txt", context),
+            from_email=from_email,
+            to=[to_email],
+            bcc=[from_email]
+        )
+        email.attach_file(pdf)
+        email.send()
+        # Documentテーブルに登録
+        document = Document(
+            number=self.request.data['number'],
+            file=file,
+            file_name=file_name,
+            approval_application_id=self.request.data['approval_application_id']
+        )
+        document.save()
+        # メール送信後にファイルを削除
+        os.remove(pdf)
+        pythoncom.CoUninitialize()
+      else:
+        # 予約承認メール送信しない場合
+        pass
+    elif request.data['approval_id'] == 3:
       # 予約が不承認された場合
       # 予約承認メール送信
       automail = AutoMail.objects.get(name='予約不承認メール')
@@ -313,7 +346,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == "4":
+    elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == 4:
       # 施設側からキャンセルされた場合
       # 施設側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
@@ -332,7 +365,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == "4":
+    elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == 4:
       # 利用者側からキャンセルされた場合
       # 利用者側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')
@@ -547,8 +580,8 @@ class UsageCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -570,8 +603,8 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  # @method_decorator(vary_on_cookie)
-  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  @method_decorator(vary_on_cookie)
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
