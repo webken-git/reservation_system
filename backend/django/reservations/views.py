@@ -276,7 +276,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         },
     }
 
-    if request.data['approval_id'] == 2:
+    if request.data['approval_id'] == "2":
       # メール送信をする場合
       if request.data['send_mail'] is True:
         from documents.views import create_new_word
@@ -327,7 +327,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       else:
         # 予約承認メール送信しない場合
         pass
-    elif request.data['approval_id'] == 3:
+    elif request.data['approval_id'] == "3":
       # 予約が不承認された場合
       # 予約承認メール送信
       automail = AutoMail.objects.get(name='予約不承認メール')
@@ -346,7 +346,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == 4:
+    elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == "4":
       # 施設側からキャンセルされた場合
       # 施設側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
@@ -365,7 +365,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == 4:
+    elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == "4":
       # 利用者側からキャンセルされた場合
       # 利用者側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')

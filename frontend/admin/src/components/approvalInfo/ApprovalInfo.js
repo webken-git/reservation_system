@@ -76,14 +76,14 @@ const ApprovalInfo = (props) => {
             </li>
             <li>
               <label>年齢区分：</label>
-              {getAge[0] &&
+              {getAge &&
                 getAge[0].age.map((item, index) => (
                   <span key={index}>{item.name}　</span>
                 ))}
             </li>
             <li>
               <label>利用区分：</label>
-              {getUsage[0] &&
+              {getUsage &&
                 getUsage[0].usage.map((item, index) => (
                   <span key={index}>{item.name}　</span>
                 ))}
@@ -100,7 +100,7 @@ const ApprovalInfo = (props) => {
                 {reservation.reservation.participant_number}人
               </span>
             </li>
-            {getUsage[0] &&
+            {getUsage &&
               getUsage[0].usage.find(
                 (item) => item.name === "入場料を徴収する"
               ) && (
@@ -123,7 +123,7 @@ const ApprovalInfo = (props) => {
                 <span>{reservation.reservation.special_equipment}</span>
               </li>
             )}
-            {getDefferdPayment[0] && (
+            {getDefferdPayment && (
               <>
                 <li>
                   <label>後納の理由：</label>

@@ -14,6 +14,8 @@ const ReservationCancel = (props) => {
   const [defferdPayment, setDefferdPayment] = useSafeState(unmountRef, []);
   const [isLoading, setIsLoading] = useSafeState(unmountRef, true);
   const [message, setMessage] = useSafeState(unmountRef, "");
+  // 現在の日時を取得(yyyy-mm-dd hh:mm:ss)
+  const now = new Date();
 
   const approvalApplication = ReservationUrls.APPROVAL_APPLICATION;
 
@@ -81,6 +83,11 @@ const ReservationCancel = (props) => {
         // 前のページに戻る
         setIsLoading(false);
         setMessage("キャンセル手続きに失敗しました。");
+        if (err.response.status === 500) {
+          setTimeout(() => {
+            window.location.href = "/500";
+          }, 500);
+        }
       });
   };
 
@@ -97,6 +104,7 @@ const ReservationCancel = (props) => {
         <div className="history-list">
           <h2 className="title">キャンセル手続き</h2>
           <p>こちらの予約をキャンセルしてもよろしいでしょうか。</p>
+          <p>キャンセル手続きは、利用開始日時の4日前まで可能です。</p>
           {message && <p className="message">{message}</p>}
           <ul>
             <li>
@@ -251,13 +259,25 @@ const ReservationCancel = (props) => {
               戻る
             </button>
             <span>　</span>
-            <button
-              type="button"
-              className="btn auth-btn"
-              onClick={() => onClick()}
-            >
-              キャンセル
-            </button>
+            {
+              // 予約日時の4日以上前の場合のみキャンセルボタンを表示
+              reservation.approval.id === 4 ||
+              new Date(reservation.reservation.start).setDate(
+                new Date(reservation.reservation.start).getDate() - 4
+              ) < now.getTime() ? (
+                <button type="button" className="cancel-btn" disabled>
+                  キャンセル
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => onClick()}
+                >
+                  キャンセル
+                </button>
+              )
+            }
           </div>
         </div>
         {isLoading && <Loading />}

@@ -23,7 +23,7 @@ export const Account = (props) => {
   };
 
   const UserInfoData = useFetch({
-    url: `${ReservationUrls.USER_INFO}?user__id=${auth.userId}`,
+    url: `${ReservationUrls.USER_INFO}?user=${auth.userId}`,
   });
   const pullUserData = () => {
     setLoading(true);
