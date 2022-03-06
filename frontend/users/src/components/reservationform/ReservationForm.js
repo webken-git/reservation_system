@@ -121,7 +121,6 @@ export const ReservationForm = () => {
           startDate,
           endDate,
           usageList,
-          id: getId(),
         },
       ]);
       reset();
@@ -641,7 +640,3 @@ export const ReservationForm = () => {
     </Grid>
   );
 };
-let id = 0;
-function getId() {
-  return id++;
-}

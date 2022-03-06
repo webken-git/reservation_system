@@ -6,22 +6,71 @@ import { useRecoilValue, useRecoilState, selector } from "recoil";
 import "./ReservationList.scss";
 import Loading from "../loading/Loading";
 import Modal from "react-modal";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useController } from "react-hook-form";
 import { inputUnstyledClasses } from "@mui/material";
-
+import { useNextMonthDisabled } from "@mui/lab/internal/pickers/hooks/date-helpers-hooks";
+import { useEffect } from "react";
+import { ReservationUrls } from "../../utils/reservationUrls";
+import { useFetch } from "../../hooks/useFetch";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import { ja } from "date-fns/locale";
+import DateAdapter from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import {
+  timetable,
+  useDevice,
+  deferredPayment,
+  curlingTimetable,
+} from "./FormDataList";
+import {
+  FormControl,
+  FormControlLabel,
+  TextField,
+  Checkbox,
+  FormGroup,
+  RadioGroup,
+  Radio,
+  MenuItem,
+  Button,
+  styled,
+  FormHelperText,
+} from "@mui/material";
+import { format } from "date-fns";
 export const ReservationList = () => {
   const [data, setData] = useRecoilState(formData);
   const [loading, setLoading] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
-  const { register, reset, handleSubmit } = useForm({});
+  const [deleteIndex, setDeleteIndex] = useState(0);
+  const [indexCheck, setIndexCheck] = useState(0);
+  const {
+    register,
+    reset,
+    handleSubmit,
+    getValue,
+    setValue,
+    control,
+    formState: { errors },
+    watch,
+  } = useForm({});
+  const UsageData = useFetch({
+    url: ReservationUrls.PLACE,
+  });
+  console.log(UsageData);
+  useEffect(() => {
+    //modalIsOpenの値が変わる度にformをresetする
+    //resetしないとdefaultValueが前の値のままになる
+    reset();
+  }, [modalIsOpen]);
   const modalStyle = {
     overlay: {
+      //modalの外側
       position: "fixed",
       top: 0,
       left: 0,
       backgroundColor: "rgba(0,0,0,0.85)",
     },
     content: {
+      //modalの内側
       position: "absolute",
       top: "5rem",
       left: "5rem",
@@ -32,21 +81,76 @@ export const ReservationList = () => {
       padding: "1.5rem",
     },
   };
-  const onSubmit = (data) => {
-    console.log(data);
+  console.log(data);
+  const checkIndex = (index) => {
+    //編集するために予約でのmapのindexを知る必要がある。
+    setIndexCheck(index);
+    console.log(indexCheck);
   };
-  const remove = (item) => {
+  const deleteIndexCheck = (index) => {
+    setDeleteIndex(index);
+  };
+  const onSubmit = (e) => {
+    // const startDate = format(e.StartDate, "yyyy-LL-dd");
+    // const endDate = format(e.EndDate, "yyyy-LL-dd");
+    // const listAfterChang = e;
+    const id = indexCheck;
+    const list = data[id];
+    const start = list.start;
+    const end = list.end;
+    const placeName = list.placeName;
+    const age = list.age;
+    const placeId = list.placeId;
+    // const startDate = list.startDate;
+    const startDate = format(e.StartDate, "yyyy-LL-dd");
+    const endDate = list.endDate;
+    // const endDate = format(e.EndDate, "yyyy-LL-dd");
+    const usageList = list.usageList;
+    const collect = list.collect;
+    const deferredPayment = list.deferredPayment;
+    const device = list.device;
+    const payLater = list.payLater;
+    const reason = list.reason;
+    const profits = list.profits;
+    const staffNum = list.staffNum;
+    const useNum = list.useNum;
+    const usage = list.usage;
+    const useDevice = list.useDevice;
+    console.log(e);
+    // console.log(list);
+    // setData((oldData) => [
+    //   ...oldData,
+    //   {
+    //     ...e,
+    //     start,
+    //     end,
+    //     placeName,
+    //     age,
+    //     placeId,
+    //     placeName,
+    //     startDate,
+    //     endDate,
+    //     usageList,
+    //     collect,
+    //     deferredPayment,
+    //     device,
+    //     payLater,
+    //     reason,
+    //     profits,
+    //     staffNum,
+    //     useNum,
+    //     usage,
+    //     useDevice,
+    //   },
+    // ]);
+    // console.log(data);
+  };
+  const remove = () => {
+    //spliceを使うためにlistに
     const list = [...data];
-    const id = item.id;
-    console.log(list);
-    if (data.length < 1) {
-      list.splice([id], 1);
-    } else {
-      list.splice([0], 1);
-    }
-    console.log(list);
+    const id = deleteIndex;
+    list.splice([id], 1);
     setData([...list]);
-    console.log(data);
   };
   return (
     <>
@@ -62,7 +166,6 @@ export const ReservationList = () => {
             <Grid container>
               {data &&
                 data.map((item, index) => {
-                  // console.log(item);
                   return (
                     <Grid
                       className="reserve-data"
@@ -94,16 +197,343 @@ export const ReservationList = () => {
                       <div className="RL-btn">
                         <button
                           className="removeBtn"
-                          onClick={() => remove(item)}
+                          onClick={() => {
+                            deleteIndexCheck(index);
+                            remove();
+                          }}
                         >
                           削除
                         </button>
-                        <button onClick={() => setIsOpen(true)}>編集</button>
-                        <Modal isOpen={modalIsOpen} style={modalStyle}>
-                          <form onSubmit={handleSubmit(onSubmit)}></form>
-                          <button onClick={() => setIsOpen(false)}>
-                            閉じる
-                          </button>
+                        <button
+                          className="removeBtn"
+                          onClick={() => {
+                            setIsOpen(true);
+                            checkIndex(index);
+                          }}
+                        >
+                          編集
+                        </button>
+                        <Modal
+                          isOpen={modalIsOpen}
+                          style={modalStyle}
+                          onRequestClose={() => setIsOpen(false)}
+                        >
+                          <div className="rootModal">
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                              <div className="modalPlaceName">
+                                <div>
+                                  施設名:
+                                  <Controller
+                                    name="placeId"
+                                    control={control}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <TextField
+                                        style={{ width: "100px" }}
+                                        select
+                                        size="Normal"
+                                        defaultValue=""
+                                        label="施設名"
+                                        error={"placeName" in errors}
+                                        helperText={
+                                          errors.placeName
+                                            ? "入力してください"
+                                            : ""
+                                        }
+                                        {...field}
+                                      >
+                                        {UsageData.map((i, index) => (
+                                          <MenuItem
+                                            key={index}
+                                            label={i.name}
+                                            value={
+                                              i.id === undefined ? "" : i.id
+                                            }
+                                          >
+                                            {i.name}
+                                          </MenuItem>
+                                        ))}
+                                      </TextField>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="modalStartDate">
+                                <div>
+                                  <Controller
+                                    name="StartDate"
+                                    control={control}
+                                    defaultValue={data.startDate}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <div>
+                                        <div>開始日：</div>
+                                        <LocalizationProvider
+                                          dateAdapter={DateAdapter}
+                                          locale={ja}
+                                        >
+                                          <DesktopDatePicker
+                                            {...field}
+                                            label="利用日時:年/月/日"
+                                            mask="____/__/__"
+                                            renderInput={(params) => (
+                                              <TextField {...params} />
+                                            )}
+                                          />
+                                        </LocalizationProvider>
+                                      </div>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="modalStart">
+                                開始時間
+                                <div>
+                                  <Controller
+                                    name="Start"
+                                    control={control}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <div>
+                                        <TextField
+                                          style={{ width: "100px" }}
+                                          size="Normal"
+                                          select
+                                          defaultValue={data.Start}
+                                          label=" 開始時間"
+                                          error={"Start" in errors}
+                                          helperText={
+                                            errors.Start
+                                              ? "入力してください"
+                                              : ""
+                                          }
+                                          {...field}
+                                        >
+                                          {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
+                                          {data.placeId === 1
+                                            ? curlingTimetable.map(
+                                                (timetables, id) => (
+                                                  <MenuItem
+                                                    key={id}
+                                                    label={timetables.label}
+                                                    value={
+                                                      timetables.value ===
+                                                      undefined
+                                                        ? ""
+                                                        : timetables.value
+                                                    }
+                                                  >
+                                                    {timetables.label}
+                                                  </MenuItem>
+                                                )
+                                              )
+                                            : timetable.map(
+                                                (timetables, id) => (
+                                                  <MenuItem
+                                                    key={id}
+                                                    label={timetables.label}
+                                                    value={
+                                                      timetables.value ===
+                                                      undefined
+                                                        ? ""
+                                                        : timetables.value
+                                                    }
+                                                  >
+                                                    {timetables.label}
+                                                  </MenuItem>
+                                                )
+                                              )}
+                                        </TextField>
+                                      </div>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="modalEndDate">
+                                <div>
+                                  <Controller
+                                    name="EndDate"
+                                    control={control}
+                                    defaultValue={data.endDate}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <div>
+                                        <div>終了日：</div>
+                                        <LocalizationProvider
+                                          dateAdapter={DateAdapter}
+                                          locale={ja}
+                                        >
+                                          <DesktopDatePicker
+                                            {...field}
+                                            label="利用日時:年/月/日"
+                                            mask="____/__/__"
+                                            renderInput={(params) => (
+                                              <TextField {...params} />
+                                            )}
+                                          />
+                                        </LocalizationProvider>
+                                      </div>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="modalEnd">
+                                終了時間:
+                                <div>
+                                  <Controller
+                                    name="End"
+                                    control={control}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <div>
+                                        <TextField
+                                          style={{ width: "100px" }}
+                                          size="Normal"
+                                          select
+                                          defaultValue={data.Start}
+                                          label="終了時間"
+                                          error={"Start" in errors}
+                                          helperText={
+                                            errors.Start
+                                              ? "入力してください"
+                                              : ""
+                                          }
+                                          {...field}
+                                        >
+                                          {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
+                                          {data.placeId === 1
+                                            ? curlingTimetable.map(
+                                                (timetables, id) => (
+                                                  <MenuItem
+                                                    key={id}
+                                                    label={timetables.label}
+                                                    value={
+                                                      timetables.value ===
+                                                      undefined
+                                                        ? ""
+                                                        : timetables.value
+                                                    }
+                                                  >
+                                                    {timetables.label}
+                                                  </MenuItem>
+                                                )
+                                              )
+                                            : timetable.map(
+                                                (timetables, id) => (
+                                                  <MenuItem
+                                                    key={id}
+                                                    label={timetables.label}
+                                                    value={
+                                                      timetables.value ===
+                                                      undefined
+                                                        ? ""
+                                                        : timetables.value
+                                                    }
+                                                  >
+                                                    {timetables.label}
+                                                  </MenuItem>
+                                                )
+                                              )}
+                                        </TextField>
+                                      </div>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="modalStaffNum">
+                                <div>
+                                  <Controller
+                                    //   TextFiledを制御するController
+                                    name="staffNum"
+                                    control={control}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <div>
+                                        <div> 主催者:</div>
+                                        <TextField
+                                          {...field}
+                                          label="主催者人数を入力してください。"
+                                          variant="outlined"
+                                          error={"staffNum" in errors}
+                                          helperText={
+                                            errors.staffNum
+                                              ? "入力してください"
+                                              : ""
+                                          }
+                                          type="tel"
+                                        />
+                                      </div>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="modalUseNum">
+                                <div>
+                                  <Controller
+                                    //   TextFiledを制御するController
+                                    name="useNum"
+                                    control={control}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <div>
+                                        <div> 参加者：</div>
+                                        <TextField
+                                          {...field}
+                                          label="参加者人数を入力してください。"
+                                          variant="outlined"
+                                          error={"useNum" in errors}
+                                          helperText={
+                                            errors.useNum
+                                              ? "入力してください"
+                                              : ""
+                                          }
+                                          type="tel"
+                                        />
+                                      </div>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="modalReason">
+                                <div>
+                                  <Controller
+                                    //   TextFiledを制御するController
+                                    name="reason"
+                                    control={control}
+                                    rules={{ required: "選択してください。" }}
+                                    render={({ field }) => (
+                                      <div>
+                                        <div>利用目的：</div>
+                                        <TextField
+                                          {...field}
+                                          label="利用目的を入力してください。"
+                                          variant="outlined"
+                                          error={"reason" in errors}
+                                          helperText={
+                                            errors.reason
+                                              ? "入力してください"
+                                              : ""
+                                          }
+                                        />
+                                      </div>
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <button
+                                className="removeBtn"
+                                ｄ
+                                onClick={() => {
+                                  setIsOpen(false);
+                                }}
+                              >
+                                閉じる
+                              </button>
+                              <button type="submit" className="removeBtn">
+                                編集する
+                              </button>
+                            </form>
+                          </div>
                         </Modal>
                       </div>
                     </Grid>
