@@ -260,12 +260,9 @@ const Calendar = (props) => {
                   <Content
                     key={index}
                     date={date}
-                    // setScheduleDict={setScheduleDict}
-                    // openModal={openModal}
                     updateFlag={updateFlag}
                     setUpdateFlag={setUpdateFlag}
                     isMain={isMain}
-                    // individualOrGroup={props.individualOrGroup}
                     homeUpdateFlag={props.homeUpdateFlag}
                     setHomeUpdateFlag={props.setHomeUpdateFlag}
                     setLoading={setLoading}

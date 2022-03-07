@@ -12,6 +12,8 @@ const ScheduleBlock = (props) => {
   const [scheduleStartDate, setScheduleStartDate] = useState(new Date());
   const [scheduleEndDate, setScheduleEndDate] = useState(new Date());
 
+  console.log(props.schedule)
+
   // console.log(props.schedule)
   // console.log(typeof(props.schedule))
 

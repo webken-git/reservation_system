@@ -23,9 +23,9 @@ const Content = (props) => {
   const calendarType = props.calendarType;
   const [count, setCount] = useState([]);
   const [suspensions, setSuspensions] = useState([]);
-
   const [approvalList, setApprovalList] = useState([]);
 
+  // let suspensions = [];
   let approvals = [];
   let unapprovals = [];
 
@@ -56,21 +56,31 @@ const Content = (props) => {
     })
     setCount(list);
   }
-  
-  // const unapprovalCount = (n) => {
-  //     // console.log(n)
-  //     let list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  //     n.map((unapproval, index) => {
-  //       let startHours = Number(unapproval.reservation.start.substr(11, 2));
-  //       let endHours = Number(unapproval.reservation.end.substr(11, 2));
 
-  //       for (let i = startHours; i < endHours; i ++) {
-  //         list[i-9] = list[i-9] + 1;
-  //       }
-  //     })
-  //     console.log(list)
-  //     setCount(list)
-  // }
+  const suspensionPull = () => {
+    let year = date.getFullYear();
+    let month =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+    let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    // if (!unmounted) {
+    //   setContentDate(new Date(Number(year), Number(month) - 1, Number(day)));
+    // }
+    axios
+      .get(ReservationUrls.SUSPENSION, {
+        params: {
+          start: year + "-" + month + "-" + day,
+        },
+      })
+      .then((res) => {
+        const suspensionList = res.data;
+        setSuspensions(suspensionList);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const reservationPull = () => {
     let year = date.getFullYear();
@@ -79,9 +89,6 @@ const Content = (props) => {
         ? "0" + (date.getMonth() + 1)
         : date.getMonth() + 1;
     let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    if (!unmounted) {
-      setContentDate(new Date(Number(year), Number(month) - 1, Number(day)));
-    }
     axios
       .get(`${ReservationUrls.APPROVAL_APPLICATION}`, {
         params: {
@@ -97,6 +104,7 @@ const Content = (props) => {
           setScheduleList(scheduleList);
           setUpdateFlag(false);
           approvalDevide(scheduleList);
+          suspensionPull();
           // unapprovalCount(unapprovalList);
         }
       })
@@ -105,36 +113,9 @@ const Content = (props) => {
       });
   }
 
-  const suspensionPull = () => {
-    console.log("sus")
-    let year = date.getFullYear();
-    let month =
-      date.getMonth() + 1 < 10
-        ? "0" + (date.getMonth() + 1)
-        : date.getMonth() + 1;
-    let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    if (!unmounted) {
-      setContentDate(new Date(Number(year), Number(month) - 1, Number(day)));
-    }
-    axios
-      .get(`${ReservationUrls.SUSPENSION}`, {
-        params: {
-          start: year + "-" + month + "-" + day,
-        },
-      })
-      .then((res) => {
-        console.log(res.data)
-        setSuspensions(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-
   useEffect(() => {
     reservationPull();
-    suspensionPull();
+    // suspensionPull();
     // approvalDevide(scheduleList);
     // unapprovalCount(unapprovalList);
 
@@ -195,9 +176,9 @@ const Content = (props) => {
               return (
                 <SuspensionBlock
                   suspension={suspension}
-                  index={index}
+                  key={index}
                 />
-              )
+              );
             })}
         </div>
       </div>

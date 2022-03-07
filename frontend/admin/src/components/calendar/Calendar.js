@@ -20,6 +20,8 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import { ja } from "date-fns/locale";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
 import {
   FormControl,
   FormControlLabel,
@@ -52,6 +54,7 @@ const Label = styled("p")({
 });
 
 const Calendar = (props) => {
+  const unmountRef = useUnmountRef();
   const dayList = ["日", "月", "火", "水", "木", "金", "土"];
   const [date, setDate] = useState(new Date());
   const [dateList, setDateList] = useState([]); //表示用のリスト
@@ -68,6 +71,7 @@ const Calendar = (props) => {
   const isMain = true;
   const [FormData, setFormData] = useRecoilState(formData);
   const setPopup = useSetRecoilState(popupState);
+  const [place, setPlace] = useSafeState(unmountRef, []);
 
   const {
     control,
@@ -80,6 +84,17 @@ const Calendar = (props) => {
   } = useForm({
     reValidateMode: "onSubmit",
   });
+
+  const GetPlaceList = () => {
+    axios
+      .get(ReservationUrls.PLACE)
+      .then((response) => {
+        const placeLists = response.data;
+        console.log(response.data)
+        setPlace(placeLists);
+      })
+      .catch((error) => {});    
+  };
 
   let tab = useRecoilValue(tabState);
 
@@ -118,6 +133,7 @@ const Calendar = (props) => {
       }
     }
   };
+
 
   const onSubmit = (e) => {
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
@@ -220,6 +236,7 @@ const Calendar = (props) => {
       }
     };
     sortDateList();
+    GetPlaceList();
 
     //現在時刻までスクロール
     let margin = window.innerHeight * 0.02;
@@ -468,14 +485,14 @@ const Calendar = (props) => {
               <div className="filter-base">
                 <select
                   className="filter"
-                  defaultValue="カーリング場"
+                  defaultValue={place[0] && place[0].name}
                   onChange={(e) => filtering(e)}
                 >
-                  <option value="カーリング場">カーリング場</option>
-                  <option value="小会議室">小会議室</option>
-                  <option value="中会議室">中会議室</option>
-                  <option value="武道場">武道場</option>
-                  <option value="多目的体育館">多目的体育館</option>
+                  {place.map((i, index) => {
+                    return (
+                      <option value={i.name}>{i.name}</option>
+                    )                    
+                  })}
                 </select>
               </div>
               <div className="filter-base">

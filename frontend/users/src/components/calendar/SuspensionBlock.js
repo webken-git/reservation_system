@@ -7,6 +7,8 @@ const SuspensionBlock = (props) => {
   const hour = suspension.start.substr(11, 2);
   const endHour = suspension.end.substr(11, 2);
 
+  console.log(suspension)
+
   let backgroundColor = "red";
 
   const styleGenerator = useCallback(
@@ -19,7 +21,7 @@ const SuspensionBlock = (props) => {
   );
 
   const styleGeneratorHandler = useCallback(() => {
-    let top = (hour) * 6 + 2;
+    let top = (hour-9) * 6 + 2;
     let height = (endHour - hour) * 6;
 
     return styleGenerator(top, height);
