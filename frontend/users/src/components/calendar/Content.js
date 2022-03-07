@@ -4,6 +4,8 @@ import { withCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
 import ScheduleBlock from "./ScheduleBlock";
 import UnapprovalBlock from "./UnapprovalBlock";
+import SuspensionBlock from "./SuspensionBlock";
+import { ReservationUrls } from "../../utils/reservationUrls";
 
 const Content = (props) => {
   const [scheduleList, setScheduleList] = useState([]);
@@ -20,6 +22,7 @@ const Content = (props) => {
   const placeName = props.placeName;
   const calendarType = props.calendarType;
   const [count, setCount] = useState([]);
+  const [suspensions, setSuspensions] = useState([]);
 
   const [approvalList, setApprovalList] = useState([]);
 
@@ -80,7 +83,7 @@ const Content = (props) => {
       setContentDate(new Date(Number(year), Number(month) - 1, Number(day)));
     }
     axios
-      .get(`${process.env.REACT_APP_API}/api/approval-applications/`, {
+      .get(`${ReservationUrls.APPROVAL_APPLICATION}`, {
         params: {
           // 'approval': 2,
           reservation__start: year + "-" + month + "-" + day,
@@ -102,8 +105,36 @@ const Content = (props) => {
       });
   }
 
+  const suspensionPull = () => {
+    console.log("sus")
+    let year = date.getFullYear();
+    let month =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+    let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    if (!unmounted) {
+      setContentDate(new Date(Number(year), Number(month) - 1, Number(day)));
+    }
+    axios
+      .get(`${ReservationUrls.SUSPENSION}`, {
+        params: {
+          start: year + "-" + month + "-" + day,
+        },
+      })
+      .then((res) => {
+        console.log(res.data)
+        setSuspensions(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
   useEffect(() => {
     reservationPull();
+    suspensionPull();
     // approvalDevide(scheduleList);
     // unapprovalCount(unapprovalList);
 
@@ -119,11 +150,6 @@ const Content = (props) => {
     setLoading,
     approvalFilter,
   ]);
-
-  // if(!unmounted) {
-  //   approvalDevide(scheduleList);
-  //   unapprovalCount(unapprovalList);    
-  // }
 
   if (calendarType === "weekly") {
     return (
@@ -164,6 +190,14 @@ const Content = (props) => {
                   count={n}
                 />
               );
+            })}
+            {suspensions.map((suspension, index) => {
+              return (
+                <SuspensionBlock
+                  suspension={suspension}
+                  index={index}
+                />
+              )
             })}
         </div>
       </div>
