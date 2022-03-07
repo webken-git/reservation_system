@@ -60,6 +60,13 @@ const DetailsButton = (props) => {
               <p>aaaaaaaaaaaaaaa</p>
               <p>aaaaaaaaaaaaaaa</p>
               <p>aaaaaaaaaaaaaaa</p>
+              <p>aaaaaaaaaaaaaaa</p>
+              <p>aaaaaaaaaaaaaaa</p>
+              <p>aaaaaaaaaaaaaaa</p>
+              <p>aaaaaaaaaaaaaaa</p>
+              <p>aaaaaaaaaaaaaaa</p>
+              <p>aaaaaaaaaaaaaaa</p>
+              <p>aaaaaaaaaaaaaaa</p>
               {/* start_day={dayjs(val.reservation.start).format('YYYY/MM/DD')} */}
             </div>
           </div>
@@ -70,3 +77,8 @@ const DetailsButton = (props) => {
 }
 
 export default DetailsButton
+
+
+
+// https://webhok.net/reservation_system/api/reservations/9999-01-01T00:00/approval-applications/
+// （userの予約情報を見るやつ）

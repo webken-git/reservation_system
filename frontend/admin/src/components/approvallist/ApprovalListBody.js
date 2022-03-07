@@ -10,9 +10,23 @@ import DocumentLayout from "../document/DocumentLayout";
 import CsvExportButton from "../csvexport/CsvExportButton";
 
 const ApprovalListBody = () => {
+  const [dateFilter, setDateFilter] = useState();
+  const [filterYear, setFilterYear] = useState();
+  const [filterMonth, setFilterMonth] = useState();
+  const [filterDay, setFilterDay] = useState();
   const dateFiltering = (e) => {
     setDateFilter(e.target.value);
+    setFilterYear(dateFilterContent.getFullYear());
+    setFilterMonth(('00' + (dateFilterContent.getMonth() + 1)).slice(-2));
+    setFilterDay(('00' + dateFilterContent.getDate()).slice(-2));
   }
+
+  var dateFilterContent = dateFilter;
+  console.log(dateFilterContent);
+  dateFilterContent = new Date(dateFilterContent);
+  // dateFilterは最初文字列。getFullYearなどはdate型じゃないと使えないため上記でdate型に直している
+
+  // console.log(dateFilter);
 
   const groupFiltering = (e) => {
     setGroupFilter(e.target.value);
@@ -24,18 +38,8 @@ const ApprovalListBody = () => {
     // console.log(e.target.value);
   }
 
-  const [dateFilter, setDateFilter] = useState();
   const [groupFilter, setGroupFilter] = useState();
   const [placeFilter, setPlaceFilter] = useState();
-
-  console.log(dateFilter);
-  const FilterYear = dayjs(dateFilter).format('YYYY');
-  const FilterMonth = dayjs(dateFilter).format('M');
-  const FilterDay = dayjs(dateFilter).format('D');
-  console.log(FilterDay);
-  console.log(FilterMonth);
-  console.log(FilterYear);
-
 
 
   const [ApprovalListData, setApprovalListData] = useState([]);
@@ -43,9 +47,9 @@ const ApprovalListBody = () => {
   const GetApporovalList = () => {
     axios.get(`${process.env.REACT_APP_API}/api/reservations/9999-01-01T00:00/approval-applications/?approval=2`, {
       params: {
-        'reservation__start__year': FilterYear,
-        'reservation__start__month': FilterMonth,
-        'reservation__start__day': FilterDay,
+        'reservation__start__year': filterYear,
+        'reservation__start__month': filterMonth,
+        'reservation__start__day': filterDay,
         'reservation__place': placeFilter,
         'reservation__is_group': groupFilter
       }
