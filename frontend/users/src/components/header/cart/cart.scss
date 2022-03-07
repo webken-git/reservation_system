@@ -45,12 +45,12 @@ $accent-color: #91c21f;
 }
 
 .popup-modal {
-  height: 150px;
   position: absolute;
   display: inline-block;
-  top: 10%;
+  top: 12%;
   left: 85%;
   right: 0.5%;
+  bottom: 60%;
   background-color: #fff;
   z-index: 9999;
   border-radius: 1%;
@@ -60,7 +60,7 @@ $accent-color: #91c21f;
     outline: none;
   }
   @include mq(tab) {
-    top: 10%;
+    top: 12%;
     left: 60%;
     right: 0;
     bottom: 0;
@@ -80,8 +80,8 @@ $accent-color: #91c21f;
   &::before {
     content: "";
     position: absolute;
-    left: 85%;
-    top: -8.5%;
+    left: 81%;
+    top: -8%;
     display: block;
     width: 0;
     height: 0;
