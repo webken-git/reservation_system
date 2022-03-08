@@ -14,6 +14,8 @@ const HistoryListData = (props) => {
   const [sortPlace] = useSortPlace(sortData, setSortData);
   const [sortStartDate] = useSortStartDate(sortData, setSortData);
   const [sortStatus] = useSortStatus(sortData, setSortData);
+  // 現在の日時を取得(yyyy-mm-dd hh:mm:ss)
+  const now = new Date();
 
   // 並び替えをリセットする
   const resetSort = () => {
@@ -71,15 +73,21 @@ const HistoryListData = (props) => {
               <Link
                 to={`/history/cancel/${reservation.id}/${reservation.reservation.id}`}
               >
-                {reservation.approval.id === 4 ? (
-                  <button type="button" className="cancel-btn" disabled>
-                    キャンセル
-                  </button>
-                ) : (
-                  <button type="button" className="cancel-btn">
-                    キャンセル
-                  </button>
-                )}
+                {
+                  // 予約日時の4日以上前の場合のみキャンセルボタンを表示
+                  reservation.approval.id === 4 ||
+                  new Date(reservation.reservation.start).setDate(
+                    new Date(reservation.reservation.start).getDate() - 4
+                  ) < now.getTime() ? (
+                    <button type="button" className="cancel-btn" disabled>
+                      キャンセル
+                    </button>
+                  ) : (
+                    <button type="button" className="cancel-btn">
+                      キャンセル
+                    </button>
+                  )
+                }
               </Link>
             </td>
           </tr>

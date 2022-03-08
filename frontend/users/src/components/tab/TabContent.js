@@ -27,7 +27,7 @@ const TabContent = (props) => {
           <div className="tab-content">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <Calendar placeId={place.id.toString()} />
             </details>
             <details>
               <summary>料金一覧</summary>
@@ -50,7 +50,7 @@ const TabContent = (props) => {
           <div className="tab-content">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <Calendar placeId={place.id.toString()} />
             </details>
             <details>
               <summary>料金一覧</summary>
@@ -73,7 +73,7 @@ const TabContent = (props) => {
           <div className="tab-content">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <Calendar placeId={place.id.toString()} />
             </details>
             <details>
               <summary>料金一覧</summary>

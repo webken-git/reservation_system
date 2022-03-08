@@ -112,6 +112,36 @@ $breakpoints: (
         padding: 7px 12px;
       }
     }
+
+    .date-title {
+      // width: 50%;
+      display: flex;
+      justify-content: center;
+      // margin: 0 auto;
+
+      // アイコンをホバーした時
+      .last-button:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+      .next-button:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+
+      p {
+        font-size: 1.1rem;
+        margin: 0 30px;
+        @include mq(sp) {
+          margin: 0 5px;
+        }
+      }
+
+      .filter-base {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
   }
 
   .main {

@@ -18,6 +18,7 @@ import { RegistrationPage } from "./pages/RegistrationPage";
 import { RegistrationCompletePage } from "./pages/RegistrationCompletePage";
 import { AccountDeletePage } from "./pages/AccountDeletePage";
 import { ReservationStepPage } from "./pages/ReservationStepPage";
+import { ReservationCompletePage } from "./pages/ReservationCompletePage";
 import NotFound from "./pages/error/NotFound";
 import InternalServer from "./pages/error/InternalServer";
 import "./index.scss";
@@ -88,10 +89,25 @@ function App() {
         <HeaderRoute path="/500" children={<InternalServer />} />
         <LoginRoute>
           <Switch>
-            <HeaderRoute
+            <Route
               path="/reserve"
-              exact
-              children={<ReservationStepPage />}
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <HeaderRoute
+                      path={`${url}/`}
+                      exact
+                      children={<ReservationStepPage />}
+                    />
+                    <HeaderRoute
+                      path={`${url}/complete`}
+                      exact
+                      children={<ReservationCompletePage />}
+                    />
+                    <HeaderRoute children={<NotFound />} />
+                  </Switch>
+                </>
+              )}
             />
             <Route
               path="/account"

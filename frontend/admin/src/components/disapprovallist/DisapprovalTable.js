@@ -2,7 +2,7 @@
 import React from "react";
 import { useSetRecoilState } from "recoil";
 // import './approval.scss'
-import DetailsButton from "../list-buttom/DetailsButton";
+import DetailsButton from "../listbutton/DetailsButton";
 import reseravationData from "../../recoil/reservation";
 
 const DisApprovalTable = (props) => {

@@ -18,12 +18,10 @@ const UserListBody = () => {
       .get(`${AuthUrls.GET_USER_LIST}`)
       .then((response) => {
         const data = response.data;
-        // ユーザーリストのデータをuseStateに入れている
-
         // 自分のデータを削除する
         const myData = data.filter((user) => user.id !== auth.userId);
+        // ユーザーリストのデータをuseStateに入れている
         setUserListData(myData);
-        // setUserListData(data);
       })
       .catch((error) => {});
   };
@@ -56,7 +54,9 @@ const UserListBody = () => {
   return (
     <>
       <div className="functions">
-        <RegistrationButton />
+        <span className="space">
+          <RegistrationButton />
+        </span>
       </div>
       <div className="scroll_box-wrapper">
         {/* スクロールバーボックス */}

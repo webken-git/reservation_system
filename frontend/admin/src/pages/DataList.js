@@ -76,6 +76,7 @@ export const DataList = () => {
       .catch((error) => {});
   };
 
+  // 利用区分の取得
   const GetUsage = () => {
     axios
       .get(ReservationUrls.USAGE)

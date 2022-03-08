@@ -29,7 +29,7 @@ const FeeList = (props) => {
   );
 
   // リストに値が入っているか確認
-  if (timeList === 0) {
+  if (age1.length === 0 || timeList === 0) {
     return <Loading />;
   } else {
     return (

@@ -45,11 +45,12 @@ $accent-color: #91c21f;
 }
 
 .popup-modal {
+  // height: 150px;
   position: absolute;
   display: inline-block;
   top: 12%;
-  left: 85%;
-  right: 0.5%;
+  left: 80%;
+  right: 0;
   bottom: 60%;
   background-color: #fff;
   z-index: 9999;
@@ -63,7 +64,7 @@ $accent-color: #91c21f;
     top: 12%;
     left: 60%;
     right: 0;
-    bottom: 0;
+    bottom: 60%;
     border-top: #ccc solid 1px;
     border-radius: 0px;
   }
@@ -71,8 +72,7 @@ $accent-color: #91c21f;
     top: 11.5%;
     left: 40%;
     right: 0;
-    bottom: 0;
-    height: 200px;
+    bottom: 50%;
     border-top: #ccc solid 1px;
     border-radius: 0px;
   }
@@ -80,19 +80,20 @@ $accent-color: #91c21f;
   &::before {
     content: "";
     position: absolute;
-    left: 81%;
-    top: -8%;
+    left: 86%;
+    top: -7%;
     display: block;
     width: 0;
     height: 0;
     border-right: 18px solid transparent;
     border-bottom: 18px solid #fff;
     border-left: 18px solid transparent;
-    // @include mq(tab) {
-    //   left: 85%;
-    // }
+    @include mq(tab) {
+      top: -5%;
+      left: 85%;
+    }
     @include mq(sp) {
-      top: -7%;
+      top: -5%;
       left: 80%;
     }
   }

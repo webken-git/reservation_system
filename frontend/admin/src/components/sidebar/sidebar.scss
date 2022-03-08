@@ -8,7 +8,8 @@ $breakpoints: (
   // タブレット
   "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
   // PC
-  "pc": "screen and (min-width: #{$layout-width-inner})"
+  "pc": "screen and (min-width: #{$layout-width-inner})",
+  "iphonese": "screen and (max-width: 376px)"
 );
 
 //mixinの引数は$breakpoint、引数の初期値はsp
@@ -25,7 +26,8 @@ $accent-color: #233b62;
 .sideBox {
   width: 100%;
   background-color: #233b62;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   // @include mq(tab) {
   //   overflow-y: scroll;
   // }
@@ -58,7 +60,10 @@ $accent-color: #233b62;
     font-size: 1.2rem;
   }
   @include mq(sp) {
-    font-size: 0.8rem;
+    font-size: 1rem;
+  }
+  @include mq(iphonese) {
+    font-size: 0.9rem;
   }
   p {
     margin-left: 15px;

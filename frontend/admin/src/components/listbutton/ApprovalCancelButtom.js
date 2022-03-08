@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import Loading from "../loading/Loading";
-import "./list_send_button.scss";
+import "./listbutton.scss";
 
 const ApprovalCancelButtom = (props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -92,7 +92,7 @@ const ApprovalCancelButtom = (props) => {
               <button type="submit" className="auth-btn">
                 キャンセル
               </button>
-              <span>　</span>
+              <span className="btn-space"></span>
               <button
                 type="button"
                 className="back-btn"
