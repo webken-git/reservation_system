@@ -19,53 +19,6 @@ $breakpoints: (
   }
 }
 
-@mixin btn-style {
-  display: inline-block;
-  padding: 0.3em 0.5em;
-  text-decoration: none;
-  color: white;
-  border-radius: 7px;
-  font-size: 14px;
-}
-.list-send-button-wrapper {
-  display: flex;
-  justify-content: center;
-  .approval-button {
-    @include btn-style;
-    background-color: red;
-    border: solid 2px red;
-  }
-  .disapproval-button {
-    @include btn-style;
-    background-color: blue;
-    border: solid 2px blue;
-  }
-  .approval-cancel-button {
-    @include btn-style;
-    background-color: deepskyblue;
-    border: solid 2px deepskyblue;
-  }
-}
-
-@mixin yesno-btn-style {
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 5px;
-  background-color: deepskyblue;
-  padding: 10px;
-  text-align: center;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  width: 65px;
-}
-.modal-question-wrapper {
-  display: flex;
-  justify-content: center;
-  .modal-question {
-    font-size: 20px;
-  }
-}
-
 .buttom-modal-wrapper {
   text-align: left;
 
@@ -76,17 +29,17 @@ $breakpoints: (
       width: 100%;
     }
     h2 {
-      // 見出しをおしゃれにする
       font-size: 20px;
       font-weight: bold;
       margin: 0;
       padding: 0;
+      // text-align: center;
     }
   }
 
   .modal-form-group {
-    width: 300px;
-    margin: 5% auto;
+    width: 350px;
+    margin: 2% auto;
     @include mq(sp) {
       width: 100%;
     }
@@ -107,17 +60,6 @@ $breakpoints: (
       @include mq(sp) {
         width: 90%;
       }
-    }
-  }
-  .modal-yesno-wrapper {
-    display: flex;
-    justify-content: center;
-    .modal-yes {
-      @include yesno-btn-style;
-    }
-    .modal-no {
-      @include yesno-btn-style;
-      margin-left: 1.5rem;
     }
   }
 }

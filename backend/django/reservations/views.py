@@ -24,6 +24,10 @@ from reservations.funcs.filters import (
 )
 from reservations.funcs.csv import csv_export
 from app_settings.models import AutoMail
+from documents.views import create_new_word
+from docx2pdf import convert
+import pythoncom
+from documents.models import Document
 
 
 # データの変更が頻繫にあるAPIのキャッシュの期限は5分
@@ -222,7 +226,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       # 予約手続き完了メール送信
       automail = AutoMail.objects.get(name='予約手続き完了メール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_complete_message.txt'
-      # automail.bodyの\r\nを改行に変換
+      # automail.bodyのCRLFの改行コードをLFに変換
       automail.body = automail.body.replace('\r\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:
@@ -276,29 +280,29 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         },
     }
 
-    if request.data['approval_id'] == "2":
-      # メール送信をする場合
-      if request.data['send_mail'] is True:
-        from documents.views import create_new_word
-        from docx2pdf import convert
-        import pythoncom
-        from documents.models import Document
-        from documents.serializers import DocumentSerializer
-
+    if request.data['approval_id'] == 2:
+      # 承認された場合
+      # 承認通知書を発行する場合
+      if request.data['is_issued'] is True:
         pythoncom.CoInitialize()
         BASE_DIR = settings.BASE_DIR
         file, file_name = create_new_word(self.request)
         word = '{}/static/documents/docx/{}'.format(BASE_DIR, file)
         pdf = '{}/static/documents/pdf/{}'.format(BASE_DIR, file).replace('.docx', '.pdf')
-        # wordファイルをpdfに変換
-        f = open(pdf, 'w')
-        f.close()
-        convert(word, pdf)
-
+        # Documentテーブルに登録
+        document = Document(
+            number=self.request.data['number'],
+            file=file,
+            file_name=file_name,
+            approval_application_id=self.request.data['approval_application_id']
+        )
+        document.save()
+      # メール送信をする場合
+      if request.data['is_send_mail'] is True:
         # 予約承認メール送信
         automail = AutoMail.objects.get(name='予約承認メール')
         file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_approval_message.txt'
-        # automail.bodyの\r\nを改行に変換
+        # automail.bodyのCRLFの改行コードをLFに変換
         automail.body = automail.body.replace('\r\n', '\n')
         # ファイルに書き込み
         with open(file_path, 'w', encoding='utf-8') as f:
@@ -311,8 +315,28 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
             to=[to_email],
             bcc=[from_email]
         )
-        email.attach_file(pdf)
-        email.send()
+        if request.data['is_issued'] is True:
+          # wordファイルをpdfに変換
+          f = open(pdf, 'w')
+          f.close()
+          convert(word, pdf)
+          # 承認通知書を発行している場合は、添付ファイルを追加
+          email.attach_file(pdf)
+          email.send()
+        else:
+          email.send()
+      # メール送信後にファイルを削除
+      if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
+        os.remove(pdf)
+        pythoncom.CoUninitialize()
+    elif request.data['approval_id'] == 3:
+      # 予約が不承認された場合
+      if request.data['is_issued'] is True:
+        pythoncom.CoInitialize()
+        BASE_DIR = settings.BASE_DIR
+        file, file_name = create_new_word(self.request)
+        word = '{}/static/documents/docx/{}'.format(BASE_DIR, file)
+        pdf = '{}/static/documents/pdf/{}'.format(BASE_DIR, file).replace('.docx', '.pdf')
         # Documentテーブルに登録
         document = Document(
             number=self.request.data['number'],
@@ -321,37 +345,44 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
             approval_application_id=self.request.data['approval_application_id']
         )
         document.save()
-        # メール送信後にファイルを削除
+      # メール送信をする場合
+      if request.data['is_send_mail'] is True:
+        # 予約承認メール送信
+        automail = AutoMail.objects.get(name='予約不承認メール')
+        file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_unapproval_message.txt'
+        # automail.bodyのCRLFの改行コードをLFに変換
+        automail.body = automail.body.replace('\r\n', '\n')
+        # ファイルに書き込み
+        with open(file_path, 'w', encoding='utf-8') as f:
+          f.write(automail.body)
+        # メール送信
+        email = EmailMessage(
+            subject=automail.subject,
+            body=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
+            from_email=from_email,
+            to=[to_email],
+            bcc=[from_email]
+        )
+        if request.data['is_issued'] is True:
+          # wordファイルをpdfに変換
+          f = open(pdf, 'w')
+          f.close()
+          convert(word, pdf)
+          # 承認通知書を発行している場合は、添付ファイルを追加
+          email.attach_file(pdf)
+          email.send()
+        else:
+          email.send()
+      # メール送信後にファイルを削除
+      if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         os.remove(pdf)
         pythoncom.CoUninitialize()
-      else:
-        # 予約承認メール送信しない場合
-        pass
-    elif request.data['approval_id'] == "3":
-      # 予約が不承認された場合
-      # 予約承認メール送信
-      automail = AutoMail.objects.get(name='予約不承認メール')
-      file_path = settings.BASE_DIR + '/templates/reservations/email/reservation_unapproval_message.txt'
-      # automail.bodyの\r\nを改行に変換
-      automail.body = automail.body.replace('\r\n', '\n')
-      # ファイルに書き込み
-      with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(automail.body)
-      # メール送信
-      email = EmailMessage(
-          subject=automail.subject,
-          body=render_to_string("reservations/email/reservation_unapproval_message.txt", context),
-          from_email=from_email,
-          to=[to_email],
-          bcc=[from_email]
-      )
-      email.send()
     elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == "4":
       # 施設側からキャンセルされた場合
       # 施設側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/facility_side_cancel_message.txt'
-      # automail.bodyの\r\nを改行に変換
+      # automail.bodyのCRLFの改行コードをLFに変換
       automail.body = automail.body.replace('\r\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:
@@ -365,12 +396,12 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-    elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == "4":
+    elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == 4:
       # 利用者側からキャンセルされた場合
       # 利用者側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/user_side_cancel_message.txt'
-      # automail.bodyの\r\nを改行に変換
+      # automail.bodyのCRLFの改行コードをLFに変換
       automail.body = automail.body.replace('\r\n', '\n')
       # ファイルに書き込み
       with open(file_path, 'w', encoding='utf-8') as f:

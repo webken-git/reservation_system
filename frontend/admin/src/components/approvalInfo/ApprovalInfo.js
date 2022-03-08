@@ -100,7 +100,7 @@ const ApprovalInfo = (props) => {
                 {reservation.reservation.participant_number}人
               </span>
             </li>
-            {getUsage &&
+            {getUsage[0] &&
               getUsage[0].usage.find(
                 (item) => item.name === "入場料を徴収する"
               ) && (

@@ -10,6 +10,8 @@ import "./listbutton.scss";
 const ApprovalButton = (props) => {
   // 承認ボタンのモーダルウィンドウ
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isIssued, setIsIssued] = useState(false);
+  const [isSendMail, setIsSendMail] = useState(false);
   const {
     register,
     handleSubmit,
@@ -22,7 +24,7 @@ const ApprovalButton = (props) => {
   // データを承認リストに送るaxios
   const ApporovalSend = () => {
     setLoading(true);
-    setMessage("承認メールを送信しています...");
+    setMessage("承認処理中です...");
     axios
       .patch(`${ReservationUrls.APPROVAL_APPLICATION}${props.id}/`, {
         approval_id: 2,
@@ -30,10 +32,10 @@ const ApprovalButton = (props) => {
         usage_fee: getValues("usage_fee"),
         heating_fee: getValues("heating_fee"),
         electric_fee: getValues("electric_fee"),
-        send_mail: true,
+        is_issued: isIssued,
+        is_send_mail: isSendMail,
         document_id: 1,
         number: getValues("number"),
-        // number: 1,
         approval_application_id: props.id,
       })
       .then((response) => {
@@ -90,13 +92,18 @@ const ApprovalButton = (props) => {
           <form onSubmit={handleSubmit(ApporovalSend)}>
             <div className="modal-title">
               <h2>以下の項目を入力後、承認ボタンを押してください</h2>
+              <p className="modal-text">
+                承認通知書を発行しメール送信をする場合、
+                <br />
+                発行された承認通知書のPDFファイルを添付し、メール送信ボタンを行います。
+              </p>
               {message && <p className="message">{message}</p>}
             </div>
             <div className="modal-form-group">
               {errors.usage_fee && (
                 <p className="modal-error">{errors.usage_fee.message}</p>
               )}
-              <label className="modal-label">利用料金：</label>
+              <p>利用料金：</p>
               <input
                 type="text"
                 inputMode="numeric"
@@ -115,7 +122,7 @@ const ApprovalButton = (props) => {
               {errors.electric_fee && (
                 <p className="modal-error">{errors.electric_fee.message}</p>
               )}
-              <label className="modal-label">電気料金：</label>
+              <p>電気料金：</p>
               <input
                 type="text"
                 inputMode="numeric"
@@ -134,7 +141,7 @@ const ApprovalButton = (props) => {
               {errors.heating_fee && (
                 <p className="modal-error">{errors.heating_fee.message}</p>
               )}
-              <label className="modal-label">暖房料金：</label>
+              <p>暖房料金：</p>
               <input
                 type="text"
                 inputMode="numeric"
@@ -175,7 +182,7 @@ const ApprovalButton = (props) => {
                     {errors.defferd_payment_fee.message}
                   </p>
                 )}
-                <label className="modal-label">後納使用料金：</label>
+                <p>後納使用料金：</p>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -192,26 +199,88 @@ const ApprovalButton = (props) => {
               </div>
             )}
             <div className="modal-form-group">
-              {errors.number && (
-                <p className="modal-error">{errors.number.message}</p>
+              {errors.is_issued && (
+                <p className="modal-error">{errors.is_issued.message}</p>
               )}
-              <label className="modal-label">
-                承認通知書に記載する発行番号を入力：
-              </label>
+              <p>承認通知書の発行：</p>
               <input
-                type="text"
-                inputMode="numeric"
-                name="number"
-                className="modal-input"
-                autoComplete="off"
-                {...register("number", {
+                type="radio"
+                name="is_issued"
+                id="is_issued_true"
+                className="modal-radio"
+                value="true"
+                {...register("is_issued", {
                   required: "必須項目です",
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "数字を入力してください",
-                  },
                 })}
+                onChange={() => setIsIssued(true)}
               />
+              <label htmlFor="is_issued_true">発行する</label>
+              <input
+                type="radio"
+                name="is_issued"
+                id="is_issued_false"
+                className="modal-radio"
+                value="false"
+                {...register("is_issued", {
+                  required: "必須項目です",
+                })}
+                onChange={() => setIsIssued(false)}
+              />
+              <label htmlFor="is_issued_false">発行しない</label>
+            </div>
+            {isIssued && (
+              <>
+                <div className="modal-form-group">
+                  {errors.number && (
+                    <p className="modal-error">{errors.number.message}</p>
+                  )}
+                  <p>承認通知書に記載する発行番号を入力：</p>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    name="number"
+                    className="modal-input"
+                    autoComplete="off"
+                    {...register("number", {
+                      required: "必須項目です",
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "数字を入力してください",
+                      },
+                    })}
+                  />
+                </div>
+              </>
+            )}
+            <div className="modal-form-group">
+              {errors.is_send_mail && (
+                <p className="modal-error">{errors.is_send_mail.message}</p>
+              )}
+              <p>メール送信：</p>
+              <input
+                type="radio"
+                name="is_send_mail"
+                id="is_send_mail_true"
+                className="modal-radio"
+                value="true"
+                {...register("is_send_mail", {
+                  required: "必須項目です",
+                })}
+                onChange={() => setIsSendMail(true)}
+              />
+              <label htmlFor="is_send_mail_true">送信する</label>
+              <input
+                type="radio"
+                name="is_send_mail"
+                id="is_send_mail_false"
+                className="modal-radio"
+                value="false"
+                {...register("is_send_mail", {
+                  required: "必須項目です",
+                })}
+                onChange={() => setIsSendMail(false)}
+              />
+              <label htmlFor="is_send_mail_false">送信しない</label>
             </div>
             <div className="modal-form-group">
               <button type="submit" className="btn">
