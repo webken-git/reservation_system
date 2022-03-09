@@ -72,6 +72,7 @@ const Calendar = (props) => {
   const [FormData, setFormData] = useRecoilState(formData);
   const setPopup = useSetRecoilState(popupState);
   const [place, setPlace] = useSafeState(unmountRef, []);
+  const [approvals, setApprovals] = useSafeState(unmountRef, []);
 
   const {
     control,
@@ -85,13 +86,22 @@ const Calendar = (props) => {
     reValidateMode: "onSubmit",
   });
 
-  const GetPlaceList = () => {
+  const getPlaceList = () => {
     axios
       .get(ReservationUrls.PLACE)
       .then((response) => {
         const placeLists = response.data;
-        console.log(response.data)
         setPlace(placeLists);
+      })
+      .catch((error) => {});    
+  };
+
+  const getApprovalList = () => {
+    axios
+      .get(ReservationUrls.APPROVALS)
+      .then((response) => {
+        const approvalLists = response.data;
+        setApprovals(approvalLists);
       })
       .catch((error) => {});    
   };
@@ -236,7 +246,8 @@ const Calendar = (props) => {
       }
     };
     sortDateList();
-    GetPlaceList();
+    getPlaceList();
+    getApprovalList();
 
     //現在時刻までスクロール
     let margin = window.innerHeight * 0.02;
@@ -498,13 +509,18 @@ const Calendar = (props) => {
               <div className="filter-base">
                 <select
                   className="filter"
-                  defaultValue="2"
+                  defaultValue={approvals[0] && approvals[0].name}
                   onChange={(e) => approvalFiltering(e)}
                 >
-                  <option value="2">承認済み</option>
+                  {/* <option value="2">承認済み</option>
                   <option value="1">未承認</option>
                   <option value="3">不承認</option>
-                  <option value="4">キャンセル</option>
+                  <option value="4">キャンセル</option> */}
+                  {approvals.map((j, index) => {
+                    return (
+                      <option value={j.id}>{j.name}</option>
+                    )
+                  })}
                 </select>
               </div>
             </div>
