@@ -5,7 +5,6 @@ import "./Content.scss";
 // import { useFetch } from "../../hooks/useFetch";
 import { formData, stepValue } from "../../recoil/form/atom";
 import { ReservationList } from "./ReservationList";
-import { Link } from "react-router-dom";
 import { PersonalForm } from "./PersonalForm";
 import { Stepper } from "react-form-stepper";
 import { PersonalData } from "./PersonalData";
@@ -16,15 +15,20 @@ export const ReservationStep = () => {
   const data = useRecoilValue(formData);
   const [activeStep, setActiveStep] = useState(0);
   const [step, setStep] = useRecoilState(stepValue);
-  // const data2 = useRecoilValue(personalData);
   const Step1 = () => {
     setActiveStep(step);
     setStep(1);
+    scrollToTop();
   };
 
   // const Step3 = () => {
   //   setActiveStep(3);
   // };
+
+  const scrollToTop = () => {
+    // 画面の一番上までスクロール
+    window.scrollTo(0, 0);
+  };
   useEffect(() => {
     setActiveStep(step);
   }, [step]);
@@ -56,27 +60,7 @@ export const ReservationStep = () => {
       {/* <Grid container alignItems="center" justify="center"> */}
       <div style={{ display: activeStep === 0 ? "" : "none" }}>
         <ReservationList />
-        {data.length === 0 ? (
-          <Grid container alignItems="center" justifyContent={"center"} margin>
-            <Link
-              to="/"
-              style={{
-                textDecoration: "none",
-                fontSize: "25px",
-              }}
-            >
-              <button
-                type="button"
-                className="btn"
-                style={{
-                  marginTop: "100px",
-                }}
-              >
-                予約する
-              </button>
-            </Link>
-          </Grid>
-        ) : (
+        {data.length > 0 && (
           <Grid container alignItems="center" justifyContent={"center"}>
             <div>
               <button
@@ -127,7 +111,6 @@ export const ReservationStep = () => {
           <Thanks />
         </Grid>
       </div>
-      {/* </Grid> */}
     </div>
   );
 };

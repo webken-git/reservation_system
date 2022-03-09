@@ -7,7 +7,8 @@ import SideBarAndHeaderRoute from "./components/rooter/SideBarAndHeaderRoute";
 import SideBarRoute from "./components/rooter/SideBarRoute";
 
 import { LoginPage } from "./pages/LoginPage";
-import Registration from "./components/auth/Registration";
+import { RegistrationPage } from "./pages/RegistrationPage";
+import { RegistrationCompletePage } from "./pages/RegistrationCompletePage";
 import { TopPage } from "./pages/TopPage";
 import { AccountPage } from "./pages/AccountPage";
 import { EmailChangePage } from "./pages/EmailChangePage";
@@ -91,7 +92,25 @@ function App() {
                 exact
                 children={<Route path="/" exact children={<TopPage />} />}
               />
-              <Route path="/registration" exact children={<Registration />} />
+              <Route
+                path="/registration"
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <Route
+                        path={`${url}/`}
+                        exact
+                        children={<RegistrationPage />}
+                      />
+                      <Route
+                        path={`${url}/complete/:key`}
+                        children={<RegistrationCompletePage />}
+                      />
+                      <Route children={<NotFound />} />
+                    </Switch>
+                  </>
+                )}
+              />
               {/* ネストされたルーティングを定義 */}
               <Route
                 path="/account"

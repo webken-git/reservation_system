@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import { formData } from "../../recoil/form/atom";
 import { useRecoilValue } from "recoil";
@@ -12,17 +12,24 @@ export const ReservationList = () => {
     <>
       <div className="RL-root">
         {data.length === 0 ? (
-          <Grid container alignItems="center" justifyContent={"center"}>
-            <h2 className="notFacility">追加した予約がありません</h2>
-          </Grid>
+          // <Grid container alignItems="center" justifyContent={"center"}>
+          <div className="reservation-list">
+            <h2 className="title">追加された予約情報がありません</h2>
+            <Link to="/">
+              <button type="button" className="back-btn">
+                戻る
+              </button>
+            </Link>
+          </div>
         ) : (
+          // </Grid>
           <div className="reservation-list">
             <h2 className="title">追加した予約一覧</h2>
             {/* 追加されたデータを1件ずつ表示 */}
             <Grid container>
               {data.map((item, index) => {
                 return (
-                  <Grid className="reserve-data" key={index} item lg={3} md={5}>
+                  <Grid className="reserve-data" key={index} item lg={3} sm={5}>
                     <ul>
                       <li>
                         <label>施設名：</label>
@@ -59,6 +66,8 @@ export const ReservationList = () => {
                       <li className="number">
                         <label>主催関係者：</label>
                         <span className="table-cell">{item.staffNum}人 </span>
+                      </li>
+                      <li className="number">
                         <label>参集人員：</label>
                         <span className="table-cell">{item.useNum}人</span>
                       </li>

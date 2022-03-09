@@ -19,14 +19,21 @@ export const ReservationPost = () => {
   const resetFormData = useResetRecoilState(formData);
   const resetPersonalData = useSetRecoilState(personalData);
 
+  const scrollToTop = () => {
+    // 画面の一番上までスクロール
+    window.scrollTo(0, 0);
+  };
+
   const next = () => {
     setStep(3);
   };
   const back = () => {
     setStep(1);
+    scrollToTop();
   };
   const reset = () => {
     setStep(0);
+    scrollToTop();
   };
 
   // age-categoriesにPOSTする
@@ -85,7 +92,7 @@ export const ReservationPost = () => {
         participant_number: item.useNum,
         purpose: item.reason,
         admission_fee: item.admissionFee ? item.admissionFee : 0,
-        place_number: item.placeNumber ? item.placeNumber : 1,
+        place_number: item.placeNumber ? parseFloat(item.placeNumber) : 1.0,
         place_id: item.placeId,
         equipment_id: item.equipment ? item.equipment : [],
         special_equipment: item.specialEquipment ? item.specialEquipment : null,

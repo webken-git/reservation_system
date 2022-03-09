@@ -1,0 +1,58 @@
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
+
+.editfeelist {
+  h2 {
+    text-align: left;
+  }
+
+  table {
+    border-collapse: collapse;
+    padding: 0;
+    width: 98%;
+    table-layout: fixed;
+    font-size: 1rem;
+  }
+  table tr {
+    background-color: #fff;
+    border: 1px solid #fff;
+    padding: 0.35em;
+  }
+  table th {
+    text-align: center;
+    padding: 1%;
+    border-right: 1px solid #fff;
+    background-color: #dfdfdf;
+    &:first-child {
+      border-left: 1px solid #dfdfdf;
+    }
+    &:last-child {
+      border-right: 1px solid #dfdfdf;
+    }
+  }
+  table td {
+    text-align: center;
+    border: 1px solid #dfdfdf;
+    margin: 1%;
+    input {
+      width: 95%;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 1rem;
+      border: none;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  table td:hover {
+    border: $main-color solid 2px;
+  }
+}
+
+.data-list-modal {
+  .back-btn {
+    display: block;
+  }
+}

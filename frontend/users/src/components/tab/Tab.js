@@ -18,7 +18,7 @@ const TabContainer = () => {
   const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
   const [facilityFee, setFacilityFee] = useSafeState(unmountRef, []);
   const [age, setAge] = useSafeState(unmountRef, []);
-  const [, setTime] = useSafeState(unmountRef, []);
+  const [time, setTime] = useSafeState(unmountRef, []);
   const [, setUsage] = useSafeState(unmountRef, []);
   const [loading, setLoading] = useSafeState(unmountRef, true);
   const setTabState = useSetRecoilState(tabState);
@@ -152,6 +152,7 @@ const TabContainer = () => {
           place={place}
           facilityFee={facilityFee}
           age={age}
+          time={time}
           CheckAuth={CheckAuth}
         />
       </TabContext>

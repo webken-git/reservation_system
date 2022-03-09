@@ -1,6 +1,6 @@
 import React from "react";
 import EditData from "./EditData";
-// import './feeedit.scss'
+import './feeedit.scss'
 
 const FeeEdit = (props) => {
     const agedata = props.age

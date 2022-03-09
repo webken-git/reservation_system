@@ -1,34 +1,58 @@
-.feelist {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1em;
-    
-    h3, h4, h5 {
-        margin-top: 0.4em;
-        margin-bottom: 0;
-    }
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
 
-    table {
-        border-collapse: collapse;
-        padding: 0;
-        width: 70vw;
-        table-layout: fixed;
+.editfeelist {
+  h2 {
+    text-align: left;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    padding: 0;
+    width: 98%;
+    table-layout: fixed;
+    font-size: 1rem;
+  }
+  table tr {
+    background-color: #fff;
+    padding: 0.35em;
+  }
+  table th {
+    text-align: center;
+    padding: 1%;
+    border-right: 2px solid #fff;
+    background-color: #dfdfdf;
+    &:first-child {
+      border-left: 2px solid #dfdfdf;
     }
-    table tr {
-        background-color: #fff;
-        border: 1px solid #fff;
-        padding: .35em;
+    &:last-child {
+      border-right: 2px solid #dfdfdf;
     }
-    table th {
-        padding: 1em 1em 1em 1em;
-        border-right: 1px solid #fff;
-        background-color: #DFDFDF;
-        font-size: 0.8em;
+  }
+  table td {
+    text-align: center;
+    border: 2px solid #dfdfdf;
+    &:hover {
+      border-style: double;
+      border-color: $main-color;
     }
-    table td {
-        text-align: center;
-        border-right: 1px solid #DFDFDF;
-        border-bottom: 1px solid #DFDFDF;
-    }    
+    input {
+      width: 95%;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 1rem;
+      border: none;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.data-list-modal {
+  .back-btn {
+    display: block;
+  }
 }

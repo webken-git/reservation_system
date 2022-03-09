@@ -11,11 +11,25 @@ import { AuthUrls } from "../../utils/authUrls";
 import authState from "../../recoil/auth/atom";
 import "./auth.scss";
 
+// パスワード表示切り替え
+export function showPassword(setShowPassword, element) {
+  let passwordInput = document.getElementById(element);
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    // アイコンをfaEyeに変更
+    setShowPassword(true);
+  } else {
+    passwordInput.type = "password";
+    // アイコンをfaEyeSlashに変更
+    setShowPassword(false);
+  }
+}
+
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const {
     register,
@@ -62,31 +76,23 @@ const Login = () => {
       });
   };
 
-  // パスワード表示切り替え
-  const hidePassword = () => {
-    let passwordInput = document.getElementById("password");
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      // アイコンをfaEyeに変更
-      setShowPassword(true);
-    } else {
-      passwordInput.type = "password";
-      // アイコンをfaEyeSlashに変更
-      setShowPassword(false);
-    }
-  };
-
   return (
     <div className="auth-page">
       <h1 className="auth-page__title">管理者ログイン</h1>
-      {error && <p className="auth-page__error">{error}</p>}
-      <form className="auth-page__form" onSubmit={handleSubmit(onSubmit)}>
+      {error && <p className="error">{error}</p>}
+      <form
+        className="auth-page__form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
         <div className="auth-page__form-group">
           <label className="auth-page__form-label" htmlFor="email">
             メールアドレス
           </label>
           {errors.email && (
-            <span className="auth-page__form-error">※この項目は必須です</span>
+            <span className="auth-page__form-error">
+              {errors.email.message}
+            </span>
           )}
           <input
             className="auth-page__form-input"
@@ -96,8 +102,11 @@ const Login = () => {
             autoComplete="off"
             // id="email"
             {...register("email", {
-              required: true,
-              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              required: "※必須項目です",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                message: "※メールアドレスの形式で入力してください",
+              },
             })}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -108,7 +117,7 @@ const Login = () => {
             パスワード
           </label>
           {errors.password && (
-            <span className="auth-page__form-error">※この項目は必須です</span>
+            <span className="error">{errors.password.message}</span>
           )}
           <div className="password-container">
             <input
@@ -117,24 +126,27 @@ const Login = () => {
               name="password"
               id="password"
               {...register("password", {
-                required: true,
-                minLength: 8,
+                required: "※必須項目です",
+                minLength: {
+                  value: 8,
+                  message: "※パスワードは8文字以上入力してください",
+                },
               })}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="全角半角英数字8文字以上"
             />
-            {showPassword ? (
+            {isShowPassword ? (
               <FontAwesomeIcon
                 icon={faEye}
                 id="btn-eye"
-                onClick={hidePassword}
+                onClick={showPassword.bind(this, setIsShowPassword, "password")}
               />
             ) : (
               <FontAwesomeIcon
                 icon={faEyeSlash}
                 id="btn-eye"
-                onClick={hidePassword}
+                onClick={showPassword.bind(this, setIsShowPassword, "password")}
               />
             )}
           </div>

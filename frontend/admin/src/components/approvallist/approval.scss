@@ -23,7 +23,7 @@ $sub-color: #707070;
 $accent-color: #233b62;
 
 .scroll_box-wrapper {
-  height: 650px;
+  height: 75vh;
   display: flex;
   justify-content: center;
   .scroll_box {
@@ -83,6 +83,16 @@ $accent-color: #233b62;
         height: 100%;
       }
     }
+    .table-sort {
+      &:hover {
+        cursor: pointer;
+        color: #f5f5f5;
+        background-color: #000;
+      }
+    }
+    .sort-icon {
+      margin-left: 1rem;
+    }
     td {
       text-align: center;
       width: 1%;
@@ -103,7 +113,7 @@ $accent-color: #233b62;
   // display: flex;
   // justify-content: center;
   .space {
-    margin: 0 10px;
+    margin: 0 5px;
     button {
       margin: 0;
     }

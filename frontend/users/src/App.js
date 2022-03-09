@@ -15,6 +15,7 @@ import { ReservationDetailPage } from "./pages/ReservationDetailPage";
 import { ReservationCancelPage } from "./pages/ReservationCancelPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegistrationPage } from "./pages/RegistrationPage";
+import { RegistrationCompletePage } from "./pages/RegistrationCompletePage";
 import { AccountDeletePage } from "./pages/AccountDeletePage";
 import { ReservationStepPage } from "./pages/ReservationStepPage";
 import NotFound from "./pages/error/NotFound";
@@ -53,7 +54,21 @@ function App() {
       <Switch>
         <HeaderRoute path="/" exact children={<MainPage />} />
         <Route path="/login" exact children={<LoginPage />} />
-        <Route path="/registration" exact children={<RegistrationPage />} />
+        <Route
+          path="/registration"
+          render={({ match: { url } }) => (
+            <>
+              <Switch>
+                <Route path={`${url}/`} exact children={<RegistrationPage />} />
+                <Route
+                  path={`${url}/complete/:key`}
+                  children={<RegistrationCompletePage />}
+                />
+                <HeaderRoute children={<NotFound />} />
+              </Switch>
+            </>
+          )}
+        />
         <Route
           path="/password"
           render={({ match: { url } }) => (
@@ -65,6 +80,7 @@ function App() {
                   exact
                   children={<PasswordResetPage />}
                 />
+                <HeaderRoute children={<NotFound />} />
               </Switch>
             </>
           )}

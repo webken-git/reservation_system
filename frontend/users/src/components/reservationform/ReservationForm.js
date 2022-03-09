@@ -32,8 +32,8 @@ import {
 import { ReservationUrls } from "../../utils/reservationUrls";
 
 const Label = styled("p")({
-  marginRight: 15,
-  fontSize: 17,
+  fontSize: "1.2rem",
+  fontWeight: "bold",
 });
 
 // const schema = reservationSchema;
@@ -79,10 +79,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
 
   const onSubmit = (e) => {
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
-    const startDate = format(e.StartDate, "yyyy-LL-dd");
-    const endDate = format(e.EndDate, "yyyy-LL-dd");
-    const startTime = e.Start;
-    const endTime = e.End;
+    const startDate = format(e.startDate, "yyyy-LL-dd");
+    const endDate = format(e.endDate, "yyyy-LL-dd");
+    const startTime = e.startTime;
+    const endTime = e.endTime;
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
     // const reservation = placeName;
@@ -112,8 +112,8 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     }
     const id = getId();
     delete e["ageGroup"];
-    delete e["StartDate"];
-    delete e["EndDate"];
+    delete e["startDate"];
+    delete e["endDate"];
     const data = {
       ...e,
       start,
@@ -124,8 +124,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
       ageName,
       placeId,
       placeName,
-      startDate,
-      endDate,
       usageList,
       usageName,
     };
@@ -137,13 +135,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
       isOpen: true,
       message: "予約情報を追加しました",
     });
-
-    // setTimeout(() => {
-    //   setPopup({
-    //     isOpen: false,
-    //     message: "",
-    //   });
-    // }, 1500);
   };
 
   const handleCheck = (ageGroupId, name, e) => {
@@ -165,7 +156,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
   return (
     <Grid container alignItems="center" justifyContent={"center"} ref={formRef}>
       <div className={form.parent_elements}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <h1>予約情報入力</h1>
           {error.length > 0 && (
             <>
@@ -185,7 +176,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
             </div>
           )} */}
           <div>
-            <Label>年齢：</Label>
+            <Label>年齢区分：</Label>
             <FormControl error>
               <FormHelperText>
                 {errors.ageGroup && errors.ageGroup.message}
@@ -197,7 +188,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   id="ageGroup"
                   name="ageGroup"
                   defaultValue={""}
-                  rules={{ required: "選択してください。" }}
+                  rules={{ required: "選択してください" }}
                   render={({ field }) => (
                     <div className={form.ageGroup}>
                       {AgeData &&
@@ -214,8 +205,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             }
                             control={
                               <Checkbox
-                                // onClick={checkAgeValue}
-                                // onChange={checkAgeValue}
                                 checked={!!field.value.includes(ageGroup.id)}
                               />
                             }
@@ -239,15 +228,17 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   //radio buttonを制御するController
                   name="usage"
                   control={control}
-                  rules={{ required: "選択してください。" }}
+                  rules={{ required: "選択してください" }}
                   render={({ field }) => (
                     <>
+                      <p className="sp">(1)　</p>
                       <RadioGroup
                         {...field}
                         row
                         value={field.value === undefined ? "" : field.value}
                         className={form.usage}
                       >
+                        <p className="pc-tab">(1)　</p>
                         <FormControlLabel
                           value={1}
                           control={<Radio />}
@@ -257,13 +248,11 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                           value={2}
                           control={<Radio />}
                           label="一般利用"
-                          // error={"usage" in errors}
                         />
                         <FormControlLabel
                           value={3}
                           control={<Radio />}
                           label="競技会使用"
-                          // error={"usage" in errors}
                         />
                       </RadioGroup>
                     </>
@@ -281,15 +270,17 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 //radio buttonを制御するController
                 name="profits"
                 control={control}
-                rules={{ required: "選択してください。" }}
+                rules={{ required: "選択してください" }}
                 render={({ field }) => (
                   <>
+                    <p className="sp">(2)　</p>
                     <RadioGroup
                       {...field}
                       row
                       value={field.value === undefined ? "" : field.value}
                       className={form.profits}
                     >
+                      <p className="pc-tab">(2)　</p>
                       <FormControlLabel
                         value={5}
                         control={<Radio />}
@@ -316,15 +307,17 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 //radio buttonを制御するController
                 name="collect"
                 control={control}
-                rules={{ required: "選択してください。" }}
+                rules={{ required: "選択してください" }}
                 render={({ field }) => (
                   <>
+                    <p className="sp">(3)　</p>
                     <RadioGroup
                       {...field}
                       row
                       value={field.value === undefined ? "" : field.value}
                       className={form.profits}
                     >
+                      <p className="pc-tab">(3)　</p>
                       <FormControlLabel
                         value={6}
                         control={<Radio />}
@@ -341,7 +334,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                         <FormControl error>
                           <Label>
                             徴収する入場料の最高額：
-                            <span className="red">※単位は不要です</span>
+                            <span className="red">
+                              <br />
+                              ※単位は不要です
+                            </span>
                           </Label>
                           <FormHelperText>
                             {errors.admissionFee && errors.admissionFee.message}
@@ -365,6 +361,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                                       value: /^[0-9]+$/,
                                       message: "数字を入力してください",
                                     },
+                                    maxLength: {
+                                      value: 5,
+                                      message: "5桁以内で入力してください",
+                                    },
                                   })}
                                   error={"admissionFee" in errors}
                                   {...field}
@@ -382,72 +382,125 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
           </div>
           {tab.max - tab.min > 0 && (
             <div>
-              <Label>予約するシート数または範囲の指定：</Label>
-              <Controller
-                name="placeNumber"
-                control={control}
-                defaultValue=""
-                rules={{ required: "入力" }}
-                render={({ field }) => (
-                  <div>
-                    <TextField
-                      style={{ width: "200px" }}
-                      select
-                      size="Normal"
-                      defaultValue=""
-                      label="選択してください"
-                      error={"placeNumber" in errors}
-                      {...field}
-                    >
-                      {(tab.min === 0.5 &&
-                        [tab.min, tab.max].map((value, index) => (
-                          <MenuItem key={index} value={value}>
-                            {value === 0.5 ? "半面" : "全面"}
-                          </MenuItem>
-                        ))) ||
-                        // max - minが1以上なら、max - min分のMenuItemを作成
-                        (tab.max - tab.min + 1 > 0 &&
-                          Array.from(Array(tab.max - tab.min + 1), (_v, i) => {
-                            return (
-                              <MenuItem key={i} value={i + tab.min}>
-                                {i + tab.min}
-                              </MenuItem>
-                            );
-                          }))}
-                    </TextField>
-                  </div>
-                )}
-              />
+              <FormControl error>
+                <Label>予約するシート数または範囲の指定：</Label>
+                <FormHelperText>
+                  {errors.placeNumber && errors.placeNumber.message}
+                </FormHelperText>
+                <Controller
+                  name="placeNumber"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <div>
+                      <TextField
+                        style={{ width: "200px" }}
+                        select
+                        size="Normal"
+                        defaultValue=""
+                        {...register("placeNumber", {
+                          required: "選択してください",
+                        })}
+                        error={"placeNumber" in errors}
+                        {...field}
+                      >
+                        {(tab.min === 0.5 &&
+                          [tab.min, tab.max].map((value, index) => (
+                            <MenuItem key={index} value={value}>
+                              {value === 0.5 ? "半面" : "全面"}
+                            </MenuItem>
+                          ))) ||
+                          // max - minが1以上なら、max - min分のMenuItemを作成
+                          (tab.max - tab.min + 1 > 0 &&
+                            Array.from(
+                              Array(tab.max - tab.min + 1),
+                              (_v, i) => {
+                                return (
+                                  <MenuItem key={i} value={i + tab.min}>
+                                    {i + tab.min}
+                                  </MenuItem>
+                                );
+                              }
+                            ))}
+                      </TextField>
+                    </div>
+                  )}
+                />
+              </FormControl>
             </div>
           )}
           <div>
-            <div>
-              <Controller
-                name="StartDate"
-                control={control}
-                defaultValue={new Date()}
-                rules={{ required: "入力" }}
-                render={({ field }) => (
-                  <div className={form.StartDate}>
-                    <Label>利用日時：</Label>
-                    <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
-                      <DesktopDatePicker
-                        {...field}
-                        label="利用日時:年/月/日"
-                        mask="____/__/__"
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </div>
+            <FormControl error>
+              <Label>利用開始日時：</Label>
+              <FormHelperText>
+                {errors.startDate && (
+                  <>
+                    {errors.startDate.message}
+                    <br />
+                    <br />
+                  </>
                 )}
-              />
-            </div>
-            <div>
+              </FormHelperText>
+              <div>
+                <Controller
+                  name="startDate"
+                  control={control}
+                  defaultValue={
+                    // 初期値は現在の日付 + 1日
+                    new Date().getTime() + 1000 * 60 * 60 * 24
+                  }
+                  // rules={{ required: "入力" }}
+                  render={({ field }) => (
+                    <div className={form.StartDate}>
+                      <LocalizationProvider
+                        dateAdapter={DateAdapter}
+                        locale={ja}
+                      >
+                        <DesktopDatePicker
+                          {...field}
+                          label="年/月/日"
+                          mask="____/__/__"
+                          minDate={new Date()}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              {...register("startDate", {
+                                validate: (value) => {
+                                  if (value === "") {
+                                    return "必須項目です";
+                                  }
+                                  // 現在または過去の日付を選択された場合はエラー
+                                  if (value < new Date()) {
+                                    return "現在及び過去の日付は選択できません";
+                                  }
+                                },
+                              })}
+                            />
+                          )}
+                        />
+                      </LocalizationProvider>
+                    </div>
+                  )}
+                />
+                <br />
+              </div>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl error>
+              <FormHelperText>
+                {errors.startTime && (
+                  <>
+                    {errors.startTime.message}
+                    <br />
+                    <br />
+                  </>
+                )}
+              </FormHelperText>
               <Controller
-                name="Start"
+                name="startTime"
                 defaultValue=""
                 control={control}
-                rules={{ required: "選択してください" }}
                 render={({ field }) => (
                   <div className={form.start}>
                     <TextField
@@ -456,7 +509,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                       select
                       defaultValue=""
                       label="利用開始時間"
-                      error={"Start" in errors}
+                      {...register("startTime", {
+                        required: "選択してください",
+                      })}
+                      error={"startTime" in errors}
                       {...field}
                     >
                       {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
@@ -491,33 +547,78 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   </div>
                 )}
               />
-            </div>
-            <div>
-              <Controller
-                name="EndDate"
-                control={control}
-                defaultValue={new Date()}
-                rules={{ required: "入力" }}
-                render={({ field }) => (
-                  <div className={form.EndDate}>
-                    <Label>
-                      <br />
-                    </Label>
-                    <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
-                      <DesktopDatePicker
-                        {...field}
-                        label="年/月/日"
-                        mask="____/__/__"
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </div>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl error>
+              <Label>利用終了日時：</Label>
+              <FormHelperText>
+                {errors.endDate && (
+                  <>
+                    {errors.endDate.message}
+                    <br />
+                    <br />
+                  </>
                 )}
-              />
-            </div>
-            <div>
+              </FormHelperText>
+              <div>
+                <Controller
+                  name="endDate"
+                  control={control}
+                  defaultValue={
+                    // 初期値は現在の日付 + 1日
+                    new Date().getTime() + 1000 * 60 * 60 * 24
+                  }
+                  render={({ field }) => (
+                    <div className={form.endDate}>
+                      <LocalizationProvider
+                        dateAdapter={DateAdapter}
+                        locale={ja}
+                      >
+                        <DesktopDatePicker
+                          {...field}
+                          label="年/月/日"
+                          mask="____/__/__"
+                          minDate={new Date()}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              {...register("endDate", {
+                                validate: (value) => {
+                                  if (value === "") {
+                                    return "必須項目です";
+                                  }
+                                  // startDateより過去の日付を選択された場合はエラー
+                                  if (value < getValues("startDate")) {
+                                    return "利用開始日時より前の日付は選択できません";
+                                  }
+                                },
+                              })}
+                              error={"endDate" in errors}
+                            />
+                          )}
+                        />
+                      </LocalizationProvider>
+                    </div>
+                  )}
+                />
+                <br />
+              </div>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl error>
+              <FormHelperText>
+                {errors.endTime && (
+                  <>
+                    {errors.endTime.message}
+                    <br />
+                    <br />
+                  </>
+                )}
+              </FormHelperText>
               <Controller
-                name="End"
+                name="endTime"
                 defaultValue=""
                 control={control}
                 rules={{
@@ -531,7 +632,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                       size="Normal"
                       defaultValue=""
                       label="利用終了時間"
-                      error={"End" in errors}
+                      {...register("endTime", {
+                        required: "選択してください",
+                      })}
+                      error={"endTime" in errors}
                       {...field}
                     >
                       {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
@@ -567,7 +671,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                   </div>
                 )}
               />
-            </div>
+            </FormControl>
           </div>
           <div>
             <FormControl error>
@@ -583,6 +687,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 render={({ field }) => (
                   <div className={form.reason}>
                     <TextField
+                      inputProps={{ inputMode: "text" }}
                       {...field}
                       type={"text"}
                       style={{ width: "300px" }}
@@ -597,7 +702,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
             </FormControl>
           </div>
           <Grid container>
-            <Grid item lg={3}>
+            <Grid item sm={3}>
               <FormControl error>
                 <Label>
                   主催関係者数：
@@ -625,6 +730,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             value: /^[0-9]+$/,
                             message: "数字を入力してください",
                           },
+                          maxLength: {
+                            value: 3,
+                            message: "1000人以下で入力してください",
+                          },
                         })}
                         error={"staffNum" in errors}
                         {...field}
@@ -634,7 +743,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                 />
               </FormControl>
             </Grid>
-            <Grid item lg={3}>
+            <Grid item sm={3}>
               <FormControl error>
                 <Label>
                   参集人員数：
@@ -662,6 +771,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             value: /^[0-9]+$/,
                             message: "数字を入力してください",
                           },
+                          maxLength: {
+                            value: 3,
+                            message: "1000人以下で入力してください",
+                          },
                         })}
                         error={"useNum" in errors}
                         {...field}
@@ -682,7 +795,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               control={control}
               name="device"
               defaultValue={""}
-              rules={{ required: "選択してください。" }}
+              rules={{ required: "選択してください" }}
               render={({ field }) => (
                 <>
                   <RadioGroup
@@ -712,7 +825,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             control={control}
                             name="equipment"
                             defaultValue=""
-                            rules={{ required: "選択してください。" }}
+                            rules={{ required: "選択してください" }}
                             render={({ field }) =>
                               EquipmentData &&
                               EquipmentData.map((equipment, id) => (
@@ -782,7 +895,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               control={control}
               name="deferredPayment"
               defaultValue={""}
-              rules={{ required: "選択してください。" }}
+              rules={{ required: "選択してください" }}
               render={({ field }) => (
                 <>
                   <RadioGroup

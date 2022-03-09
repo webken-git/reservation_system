@@ -14,7 +14,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from dj_rest_auth.registration.views import VerifyEmailView
@@ -70,12 +70,10 @@ account_uris = [
     path('staff-login/', views.StaffLoginView.as_view()),
     path('superuser-login/', views.SuperUserLoginView.as_view()),
     path('password/reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('confirm-email/',
+    path('confirm/',
          VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    # path('confirm/',
-    #  VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    # re_path(r'^confirm/(?P<key>[-:\w]+)/$',
-    # VerifyEmailView.as_view(), name='account_confirm_email'),
+    re_path(r'^confirm/(?P<key>[-:\w]+)/$',
+            VerifyEmailView.as_view(), name='account_confirm_email'),
     # path('token/', TokenObtainView.as_view(), name='token_obtain_pair'),
     # path('token/refresh/', refresh_get, name='token_refresh'),
     # path('token/new/', TokenRefresh.as_view(), name='token_refresh'),

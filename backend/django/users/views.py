@@ -41,6 +41,19 @@ class UserViewSet(mixins.RetrieveModelMixin,
         )
     return super().partial_update(request, *args, **kwargs)
 
+  def destroy(self, request, *args, **kwargs):
+    """
+    本人以外のユーザーが削除する場合、is_superuserがFalseの場合は、エラーを返す
+    """
+    if str(request.user.pk) == kwargs['pk']:
+      return super().destroy(request, *args, **kwargs)
+    elif not request.user.is_superuser:
+      return response.Response(
+          {'detail': '権限がありません'},
+          status=status.HTTP_403_FORBIDDEN
+      )
+    return super().destroy(request, *args, **kwargs)
+
 
 class AuthInfoGetView(RetrieveAPIView):
   """

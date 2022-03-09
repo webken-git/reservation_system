@@ -3,14 +3,39 @@ import axios from "axios";
 import Table from "./Table";
 import "./toppage.scss";
 import dayjs from "dayjs";
+import DocumentLayout from "../document/DocumentLayout";
+import CsvExportLayout from "../csvexport/CsvExportLayout";
+import ReservationDeleteLayout from "../reservationdelete/ReservationDeleteLayout";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
+import {
+  useSortedPlaces,
+  useSortedStartDate,
+  useSortedGroupName,
+  useSortedLeaderName,
+} from "../../hooks/useSortData";
+import useSearch from "../../hooks/useFilter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSort } from "@fortawesome/free-solid-svg-icons";
+import Loading from "../loading/Loading";
 
 const TopPageList = () => {
   const [TodayList, setTodayList] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [sortStartDate] = useSortedStartDate(allData, setTodayList);
+  const [sortGroupName] = useSortedGroupName(TodayList, setTodayList);
+  const [sortLeaderName] = useSortedLeaderName(TodayList, setTodayList);
+  const [sortPlace] = useSortedPlaces(TodayList, setTodayList);
+  const [search] = useSearch(allData, setTodayList);
+  const [loading, setLoading] = useState(true);
+
   const getDefferdPayment = useFetch({
     url: `${ReservationUrls.DEFFERD_PAYMENT}`,
   });
+  const getPlace = useFetch({
+    url: `${ReservationUrls.PLACE}`,
+  });
+
   const GetTodayList = () => {
     axios
       .get(
@@ -34,10 +59,14 @@ const TopPageList = () => {
           if (r_start_format === today) {
             todaydata.push(data[i]);
             setTodayList(todaydata);
+            setAllData(todaydata);
           }
         }
+        setLoading(false);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -82,24 +111,83 @@ const TopPageList = () => {
   });
 
   return (
-    <div className="scroll_box-wrapper">
-      <div className="scroll_box">
-        <table className="list-body">
-          <thead>
-            <tr>
-              <th>日付</th>
-              <th>団体者名</th>
-              <th>連絡者名</th>
-              <th>時間</th>
-              <th>場所</th>
-              <th>後納申請</th>
-              <th>詳細</th>
-            </tr>
-          </thead>
-          <tbody>{TodayTable}</tbody>
-        </table>
+    <>
+      <div className="functions">
+        <span className="space">
+          <DocumentLayout />
+        </span>
+        <span className="space">
+          <CsvExportLayout />
+        </span>
+        <span className="space">
+          <ReservationDeleteLayout />
+        </span>
       </div>
-    </div>
+      <div className="scroll_box-wrapper">
+        <div className="scroll_box">
+          <table className="list-body">
+            <thead>
+              <tr>
+                <td></td>
+                <td>
+                  <input
+                    type="date"
+                    className="datefilter"
+                    onChange={(e) => search("start", e.target.value)}
+                  />
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                  <select
+                    className="placefilter"
+                    defaultValue=""
+                    onChange={(e) => search("place", e.target.value)}
+                  >
+                    <option value="">全体</option>
+                    {getPlace &&
+                      getPlace.map((val, val_index) => {
+                        return (
+                          <option value={val.id} key={val_index}>
+                            {val.name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </thead>
+            <thead>
+              <tr>
+                <th></th>
+                <th className="table-sort" onClick={sortStartDate}>
+                  利用開始日時
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
+                <th className="table-sort" onClick={sortGroupName}>
+                  団体者名
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
+                <th className="table-sort" onClick={sortLeaderName}>
+                  連絡者名
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
+                <th className="table-sort" onClick={sortPlace}>
+                  場所
+                  <FontAwesomeIcon icon={faSort} className="sort-icon" />
+                </th>
+                <th>後納申請</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody>{TodayTable}</tbody>
+          </table>
+        </div>
+      </div>
+      {loading && <Loading />}
+    </>
   );
 };
 

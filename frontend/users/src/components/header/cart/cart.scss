@@ -51,7 +51,6 @@ $accent-color: #91c21f;
   top: 10%;
   left: 85%;
   right: 0.5%;
-  bottom: 65%;
   background-color: #fff;
   z-index: 9999;
   border-radius: 1%;
@@ -62,21 +61,18 @@ $accent-color: #91c21f;
   }
   @include mq(tab) {
     top: 10%;
-    left: 70%;
+    left: 60%;
     right: 0;
     bottom: 0;
     border-top: #ccc solid 1px;
     border-radius: 0px;
-    // border-left: none;
-    // border-right: none;
-    // border-bottom: none;
   }
   @include mq(sp) {
     top: 11.5%;
-    left: 50%;
+    left: 40%;
     right: 0;
     bottom: 0;
-    height: 150px;
+    height: 200px;
     border-top: #ccc solid 1px;
     border-radius: 0px;
   }
@@ -92,11 +88,12 @@ $accent-color: #91c21f;
     border-right: 18px solid transparent;
     border-bottom: 18px solid #fff;
     border-left: 18px solid transparent;
-    @include mq(tab) {
-      left: 82%;
-    }
+    // @include mq(tab) {
+    //   left: 85%;
+    // }
     @include mq(sp) {
-      left: 75%;
+      top: -7%;
+      left: 80%;
     }
   }
 }

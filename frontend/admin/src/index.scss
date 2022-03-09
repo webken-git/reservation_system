@@ -22,7 +22,7 @@ $main-color: #1a8d89;
 $sub-color: #707070;
 $accent-color: #233b62;
 
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
 
 body {
   font-family: "Noto Sans JP", sans-serif;
@@ -38,6 +38,7 @@ body {
   background-color: $main-color;
   margin: 3% 0;
   font-size: 1rem;
+  font-family: "Noto Sans JP", sans-serif;
   cursor: pointer;
   &:hover {
     color: #707070;
@@ -86,10 +87,57 @@ body {
 .registration-link {
   @extend .btn;
   width: 12rem;
-  height: 3.5rem;
 }
 .login-link {
   @extend .btn;
+}
+.modal-open-btn {
+  @extend .btn;
+  @include mq(sp) {
+    width: 6rem;
+    font-size: 0.8rem;
+  }
+}
+.modal-close-btn {
+  @extend .btn;
+  border: 1px solid #707070;
+  background-color: #707070;
+  margin-left: 1rem;
+  @include mq(sp) {
+    width: 6rem;
+    font-size: 0.8rem;
+  }
+}
+.download-btn {
+  @extend .btn;
+  width: auto;
+}
+.selection-screen-btn {
+  @extend .btn;
+  border: 1px solid #233b62;
+  background-color: #233b62;
+  &:hover {
+    border: 1px solid #233b62;
+  }
+}
+.copy-btn {
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.5;
+  }
+  &:focus {
+    outline: none;
+  }
+  .icon:hover {
+    color: #707070;
+  }
+}
+.delete-btn {
+  @extend .btn;
+  border: 1px solid rgb(185, 0, 0);
+  background-color: rgb(185, 0, 0);
 }
 
 // モーダルのスタイル

@@ -40,8 +40,19 @@ $accent-color: #91c21f;
     border: solid 1px;
     width: 100%;
     thead {
+      align-items: center;
       @include mq(sp) {
         display: none;
+      }
+      .history-table-thead__sort {
+        &:hover {
+          cursor: pointer;
+          color: #ddd;
+          background-color: #000;
+        }
+      }
+      .sort-icon {
+        margin-left: 1rem;
       }
     }
     th,

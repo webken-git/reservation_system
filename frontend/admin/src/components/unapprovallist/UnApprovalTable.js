@@ -9,15 +9,17 @@ const UnApprovalTable = (props) => {
   return (
     <tr>
       {/* 予約日 */}
-      <td>{props.date}</td>
+      <td>
+        {props.date} {props.start_time}
+      </td>
       {/* 代表者名 */}
       <td>{props.group_name}</td>
       {/* 団体者名 */}
       <td>{props.reader_name}</td>
       {/* 予約時間 */}
-      <td>
+      {/* <td>
         {props.start_time}~{props.end_time}
-      </td>
+      </td> */}
       {/* 場所 */}
       <td>{props.place}</td>
       <td>
@@ -46,6 +48,9 @@ const UnApprovalTable = (props) => {
           tel={props.tel}
           address={props.address}
           place={props.place}
+          place_min={props.place_min}
+          place_max={props.place_max}
+          place_number={props.place_number}
           start_day={props.start_day}
           start_time={props.start_time}
           end_day={props.end_day}

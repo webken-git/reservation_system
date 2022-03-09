@@ -1,14 +1,34 @@
 import React from "react";
 import "./toppage.scss";
 import DetailsButton from "../list-buttom/DetailsButton";
+// recoil
+import { useSetRecoilState } from "recoil";
+import reseravationData from "../../recoil/reservation";
 
 const Table = (props) => {
+  // reservationStateにデータをsetする
+  const setReservation = useSetRecoilState(reseravationData);
+
+  // ラジオボタンのチェック状態をstateに保存
+  const handleChange = (e) => {
+    // reservation idをreservationStateにsetする
+    setReservation({ id: e.target.id });
+  };
   return (
     <tr>
+      <td>
+        <input
+          type="radio"
+          id={props.id}
+          name="approval"
+          value={props.contact_name}
+          onChange={handleChange}
+        />
+      </td>
       {/* 予約日 */}
       <td>
         <label htmlFor={props.id} className="approval-label">
-          {props.date}
+          {props.date} {props.start_time}
         </label>
       </td>
       {/* 団体者名 */}
@@ -24,11 +44,11 @@ const Table = (props) => {
         </label>
       </td>
       {/* 予約時間 */}
-      <td>
+      {/* <td>
         <label htmlFor={props.id} className="approval-label">
           {props.start_time}~{props.end_time}
         </label>
-      </td>
+      </td> */}
       {/* 場所 */}
       <td>
         <label htmlFor={props.id} className="approval-label">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 // import { Redirect } from "react-router-dom";
@@ -44,7 +44,11 @@ const LoginRoute = (props) => {
           });
       });
   };
-  loginCheck();
+
+  useEffect(() => {
+    loginCheck();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // props.childrenにuserをpropsとして渡す
   if (auth.isAuthenticated === true) {

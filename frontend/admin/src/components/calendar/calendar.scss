@@ -49,7 +49,7 @@ $breakpoints: (
   display: inline-block;
   // width: 80%;
   width: 100%;
-  height: 97vh;
+  height: 100vh;
   vertical-align: top;
 }
 
@@ -86,7 +86,7 @@ $breakpoints: (
 
       .last-button,
       .next-button {
-        margin: 0 20px;
+        margin: 0 5px;
         &:hover {
           cursor: pointer;
           opacity: 0.5;
@@ -107,8 +107,8 @@ $breakpoints: (
         padding: 7px 15px;
       }
       @include mq(iphonese) {
-        width: 1.5rem;
-        font-size: 0.5rem;
+        width: 2rem;
+        font-size: 0.7rem;
         padding: 7px 12px;
       }
     }
@@ -122,8 +122,8 @@ $breakpoints: (
 
   .monthly-calendar {
     height: 100vh;
-    margin-right: 10px;
-    margin-left: 10px;
+    // margin-right: 10px;
+    // margin-left: 10px;
   }
 
   .main {
@@ -144,6 +144,9 @@ $breakpoints: (
 
 .head-row {
   height: 100px;
+  @include mq(sp) {
+    height: 90px;
+  }
 
   ::-webkit-scrollbar {
     display: inline;
@@ -242,7 +245,7 @@ $breakpoints: (
     border-bottom: $bordercolor 1px dashed;
     box-sizing: border-box;
     display: inline-block;
-    width: 94.5%;
+    width: 90%;
     height: 100%;
     position: relative;
     text-align: center;
@@ -428,7 +431,7 @@ $breakpoints: (
     border-left: $bordercolor 1px solid;
     box-sizing: border-box;
     display: inline-block;
-    width: 94.5%;
+    width: 90%;
     overflow: hidden;
     position: relative;
     vertical-align: top;
@@ -509,11 +512,16 @@ $breakpoints: (
   }
 
   table {
-    width: 100%;
-    height: 86%;
+    width: 95%;
+    height: 80%;
+    margin: 1% auto;
     border: 1px $bordercolor solid;
-    border-top: none;
+    // border-top: none;
     border-collapse: collapse;
+    @include mq(sp) {
+      // width: 100%;
+      margin: 5% auto;
+    }
 
     tbody {
       width: 100%;
