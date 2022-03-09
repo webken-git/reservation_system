@@ -19,6 +19,8 @@ import Modal from "react-modal";
 import EditFeeList from "../components/datalist/edit/EditFeeList";
 import EditGroupFeeList from "../components/datalist/edit/EditGroupFeeList";
 import EditCurlingFeeList from "../components/datalist/edit/EditCurlingFeeList";
+import AddDataButton from "../components/datalist/add/AddDataButton";
+import DeletePlaceButton from "../components/datalist/delete/DeletePlaceButton";
 
 export const DataList = () => {
   document.title = "データリスト | 予約管理アプリ"; // ページタイトルを変更
@@ -137,7 +139,7 @@ export const DataList = () => {
       return (
         <AccordionItem key={place.id}>
           <AccordionItemHeading>
-            <AccordionItemButton>{place["name"]}</AccordionItemButton>
+            <AccordionItemButton>{place.name}</AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
             <button
@@ -149,6 +151,8 @@ export const DataList = () => {
             >
               編集
             </button>
+            <span className="btn-space"></span>
+            <DeletePlaceButton placeId={place.id} placeName={place.name} />
             <FacilityFee />
           </AccordionItemPanel>
         </AccordionItem>
@@ -158,7 +162,13 @@ export const DataList = () => {
 
   // 編集画面
   const EditFacilityFee = () => {
-    if (editPlaceData.name.indexOf("会議室") !== -1) {
+    const isGroup = feeListData.filter((fld) => {
+      return (
+        fld.place === editPlaceData.name &&
+        fld.data.find((f) => f.is_group === true)
+      );
+    });
+    if (isGroup.length === 0) {
       return (
         <EditFeeList
           feelist={divideFeeList}
@@ -167,7 +177,7 @@ export const DataList = () => {
           setIsOpen={setIsOpen}
         />
       );
-    } else if (editPlaceData.name.indexOf("カーリング場") !== -1) {
+    } else if (editPlaceData.max > 1) {
       return (
         <EditCurlingFeeList
           feelist={divideFeeList}
@@ -190,6 +200,7 @@ export const DataList = () => {
 
   return (
     <div className="list-wrapper">
+      <AddDataButton />
       <div className="scroll_box-wrapper">
         <div className="scroll_box data-list__scroll">
           <Accordion allowZeroExpanded>

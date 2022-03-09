@@ -27,6 +27,7 @@ const EditFeeList = (props) => {
   const age4 = ageData.filter((age) => age.name === "大学生");
   const age5 = ageData.filter((age) => age.name === "一般");
   // const age6 = ageData.filter((age) => age.name === "高齢者");
+  // const age7 = ageData.filter((age) => age.name === "障害者");
 
   // feelistdataに含まれているtimeIdとnameを取得
   feelistData.map((feelist) => {

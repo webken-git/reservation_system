@@ -268,24 +268,24 @@ const GroupFeeList = (props) => {
               <tr>
                 <th></th>
                 <th>{time10[0].purpose}</th>
-                <th>{time11[0].purpose}</th>
+                <th>{time13[0].purpose}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>{time10[0].time.name}</td>
                 <td data-label={time10[0].purpose}>{fee49[0].fee}</td>
-                <td data-label={time11[0].purpose}>{fee52[0].fee}</td>
+                <td data-label={time13[0].purpose}>{fee52[0].fee}</td>
               </tr>
               <tr>
                 <td>{time11[0].time.name}</td>
-                <td data-label={time10[0].purpose}>{fee50[0].fee}</td>
-                <td data-label={time11[0].purpose}>{fee53[0].fee}</td>
+                <td data-label={time11[0].purpose}>{fee50[0].fee}</td>
+                <td data-label={time14[0].purpose}>{fee53[0].fee}</td>
               </tr>
               <tr>
                 <td>{time12[0].time.name}</td>
-                <td data-label={time10[0].purpose}>{fee51[0].fee}</td>
-                <td data-label={time11[0].purpose}>{fee54[0].fee}</td>
+                <td data-label={time12[0].purpose}>{fee51[0].fee}</td>
+                <td data-label={time15[0].purpose}>{fee54[0].fee}</td>
               </tr>
             </tbody>
           </table>
