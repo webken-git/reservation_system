@@ -1,7 +1,7 @@
 // キャンセルリストの中身
 import React from "react";
 // import './approval.scss'
-import DetailsButton from "./../list-buttom/DetailsButton";
+import DetailsButton from "./../listbutton/DetailsButton";
 // recoil
 import { useSetRecoilState } from "recoil";
 import reseravationData from "../../recoil/reservation";
@@ -41,7 +41,7 @@ const CancelTable = (props) => {
       {/* 団体者名 */}
       <td>
         <label for={props.id} className="approval-label">
-          {props.reader_name}
+          {props.leader_name}
         </label>
       </td>
       {/* 予約時間 */}
@@ -64,7 +64,7 @@ const CancelTable = (props) => {
           id={props.id}
           reservation_id={props.reservation_id}
           group_name={props.group_name}
-          reader_name={props.reader_name}
+          leader_name={props.leader_name}
           contact_name={props.contact_name}
           tel={props.tel}
           address={props.address}

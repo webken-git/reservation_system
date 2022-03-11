@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const sortedPlaces = (sortData, setSortData) => {
+export const useSortPlace = (sortData, setSortData) => {
   const [order, setOrder] = useState("asc");
   let sortItems = [...sortData];
   const sortBy = () => {
@@ -19,7 +19,7 @@ export const sortedPlaces = (sortData, setSortData) => {
   return [sortBy, order];
 };
 
-export const sortedStartDate = (sortData, setSortData) => {
+export const useSortStartDate = (sortData, setSortData) => {
   const [order, setOrder] = useState("asc");
   let sortItems = [...sortData];
   const sortBy = () => {
@@ -38,7 +38,7 @@ export const sortedStartDate = (sortData, setSortData) => {
   return [sortBy, order];
 };
 
-export const sortedEndDate = (sortData, setSortData) => {
+export const useSortEndDate = (sortData, setSortData) => {
   const [order, setOrder] = useState("asc");
   let sortItems = [...sortData];
   const sortBy = () => {
@@ -57,7 +57,7 @@ export const sortedEndDate = (sortData, setSortData) => {
   return [sortBy, order];
 };
 
-export const sortedStatus = (sortData, setSortData) => {
+export const useSortStatus = (sortData, setSortData) => {
   const [order, setOrder] = useState("asc");
   let sortItems = [...sortData];
   const sortBy = () => {

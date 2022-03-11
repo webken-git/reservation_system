@@ -28,6 +28,7 @@ const EditGroupFeeList = (props) => {
   const age4 = ageData.filter((age) => age.name === "大学生");
   const age5 = ageData.filter((age) => age.name === "一般");
   const age6 = ageData.filter((age) => age.name === "高齢者");
+  const age7 = ageData.filter((age) => age.name === "障がい者");
 
   // feelistdataに含まれているpurposeを取得
   feelistData.map((feelist) => {
@@ -122,6 +123,7 @@ const EditGroupFeeList = (props) => {
             ・ 「完了」ボタンを押すと料金が変更されます。
             <br />
           </p>
+          <h2>{placeData.name}</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* {errors && <p className="red">入力内容に誤りがあります。</p>} */}
             <h2>個人使用</h2>
@@ -135,6 +137,7 @@ const EditGroupFeeList = (props) => {
                   <th>{age4[0].name}</th>
                   <th>{age5[0].name}</th>
                   <th>{age6[0].name}</th>
+                  <th>{age7[0].name}</th>
                 </tr>
               </thead>
               <tbody>
@@ -311,7 +314,7 @@ const EditGroupFeeList = (props) => {
                         }}
                       />
                     </td>
-                    {/* <td>
+                    <td>
                       <input
                         type="text"
                         name={`fee6-${index}`}
@@ -344,7 +347,41 @@ const EditGroupFeeList = (props) => {
                           )
                         }
                       />
-                    </td> */}
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee7-${index}`}
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age7[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee7-${index}`, {
+                          required: "必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age7[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age7[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -360,6 +397,7 @@ const EditGroupFeeList = (props) => {
                   <th>{age4[0].name}</th>
                   <th>{age5[0].name}</th>
                   <th>{age6[0].name}</th>
+                  <th>{age7[0].name}</th>
                 </tr>
               </thead>
               <tbody>
@@ -546,7 +584,7 @@ const EditGroupFeeList = (props) => {
                         }}
                       />
                     </td>
-                    {/* <td>
+                    <td>
                       <input
                         type="text"
                         name={`groupfee6-${index}`}
@@ -581,7 +619,43 @@ const EditGroupFeeList = (props) => {
                           )
                         }
                       />
-                    </td> */}
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee7-${index}`}
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age7[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee7-${index}`, {
+                          required: "必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age7[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age7[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -597,6 +671,7 @@ const EditGroupFeeList = (props) => {
                   <th>{age4[0].name}</th>
                   <th>{age5[0].name}</th>
                   <th>{age6[0].name}</th>
+                  <th>{age7[0].name}</th>
                 </tr>
               </thead>
               <tbody>
@@ -783,7 +858,7 @@ const EditGroupFeeList = (props) => {
                         }}
                       />
                     </td>
-                    {/* <td>
+                    <td>
                       <input
                         type="text"
                         name={`competitionfee6-${index}`}
@@ -818,7 +893,43 @@ const EditGroupFeeList = (props) => {
                           )
                         }
                       />
-                    </td> */}
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee7-${index}`}
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age7[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee7-${index}`, {
+                          required: "必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age7[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age7[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>

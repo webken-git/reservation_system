@@ -19,6 +19,8 @@ $breakpoints: (
   }
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
+
 $main-color: #23ad39;
 $sub-color: #707070;
 $accent-color: #91c21f;
@@ -27,12 +29,9 @@ body,
 html {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Noto Sans JP", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Noto Sans JP", sans-serif;
   // background-color: #333;
   // color: #fff;
 }
@@ -71,6 +70,7 @@ code {
   background-color: $main-color;
   margin: 3% 0;
   font-size: 1rem;
+  font-family: "Noto Sans JP", sans-serif;
   cursor: pointer;
   &:hover {
     color: #000;
@@ -216,7 +216,8 @@ code {
 }
 
 // error page
-.error-page {
+.error-page,
+.reservation-complete {
   width: 100%;
   height: 100%;
   display: flex;
@@ -229,7 +230,8 @@ code {
     margin: 0;
     padding: 0;
   }
-  .error-message {
+  .error-message,
+  .reservation-complete-message {
     font-size: 1.2rem;
     margin: 0;
     padding: 0;

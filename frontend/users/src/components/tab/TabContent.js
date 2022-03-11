@@ -4,7 +4,7 @@ import Calendar from "../calendar/Calendar.js";
 import FeeList from "../feelist/FeeList";
 import GroupFeeList from "../feelist/GroupFeeList";
 import CurlingFeeList from "../feelist/CurlingFeeList";
-import { ReservationForm } from "../reservationform/ReservationForm";
+import { ReservationForm } from "../reserve/ReservationForm";
 import { createAppSetting } from "../account/AppSettings.js";
 import { ReservationUrls } from "../../utils/reservationUrls.js";
 
@@ -27,7 +27,7 @@ const TabContent = (props) => {
           <div className="tab-content">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <Calendar placeId={place.id.toString()} />
             </details>
             <details>
               <summary>料金一覧</summary>
@@ -50,7 +50,7 @@ const TabContent = (props) => {
           <div className="tab-content">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <Calendar placeId={place.id.toString()} />
             </details>
             <details>
               <summary>料金一覧</summary>
@@ -73,7 +73,7 @@ const TabContent = (props) => {
           <div className="tab-content">
             <details open={true}>
               <summary>カレンダー</summary>
-              <Calendar />
+              <Calendar placeId={place.id.toString()} />
             </details>
             <details>
               <summary>料金一覧</summary>

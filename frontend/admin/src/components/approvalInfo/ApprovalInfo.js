@@ -52,7 +52,7 @@ const ApprovalInfo = (props) => {
             </li>
             <li>
               <label>代表者名：</label>
-              <span>{reservation.reservation.reader_name}</span>
+              <span>{reservation.reservation.leader_name}</span>
             </li>
             <li>
               <label>連絡者名：</label>
@@ -76,14 +76,14 @@ const ApprovalInfo = (props) => {
             </li>
             <li>
               <label>年齢区分：</label>
-              {getAge[0] &&
+              {getAge &&
                 getAge[0].age.map((item, index) => (
                   <span key={index}>{item.name}　</span>
                 ))}
             </li>
             <li>
               <label>利用区分：</label>
-              {getUsage[0] &&
+              {getUsage &&
                 getUsage[0].usage.map((item, index) => (
                   <span key={index}>{item.name}　</span>
                 ))}

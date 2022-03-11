@@ -37,7 +37,12 @@ const TabContainer = () => {
         const placeLists = response.data;
         setPlace(placeLists);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+        if (error.response.status === 500) {
+          window.location.href = "/500";
+        }
+      });
   };
 
   //料金表データ取得
@@ -49,15 +54,28 @@ const TabContainer = () => {
         setFeeListData(feelists);
         setFacilityFee(feelists[1].data);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+        if (error.response.status === 500) {
+          window.location.href = "/500";
+        }
+      });
   };
 
   //年齢データの取得
   const GetAge = () => {
-    axios.get(ReservationUrls.AGE).then((response) => {
-      const ages = response.data;
-      setAge(ages);
-    });
+    axios
+      .get(ReservationUrls.AGE)
+      .then((response) => {
+        const ages = response.data;
+        setAge(ages);
+      })
+      .catch((error) => {
+        setLoading(false);
+        if (error.response.status === 500) {
+          window.location.href = "/500";
+        }
+      });
   };
 
   //時間区分の取得
@@ -68,7 +86,12 @@ const TabContainer = () => {
         const times = response.data;
         setTime(times);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+        if (error.response.status === 500) {
+          window.location.href = "/500";
+        }
+      });
   };
 
   const GetUsage = () => {
@@ -79,7 +102,10 @@ const TabContainer = () => {
         setUsage(usages);
       })
       .catch((error) => {
-        console.log(error);
+        setLoading(false);
+        if (error.response.status === 500) {
+          window.location.href = "/500";
+        }
       });
   };
 
@@ -109,6 +135,7 @@ const TabContainer = () => {
   // tabのスタイルをカスタマイズ
   const StyledTab = styled((props) => <Tab {...props} />)(() => ({
     fontSize: "1.2rem",
+    fontFamily: "Noto Sans JP",
     //   メディアクエリで指定した値を反映
     [`@media (max-width: 767px)`]: {
       fontSize: "1rem",

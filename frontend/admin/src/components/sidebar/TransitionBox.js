@@ -11,9 +11,7 @@ const TransitionBox = (props) => {
   return (
     <div className="transBox">
       <Link to={props.url} className="linkdeco">
-        <p>
-          {props.icon} {props.pagename}
-        </p>
+        <p>{props.pagename}</p>
       </Link>
     </div>
   );

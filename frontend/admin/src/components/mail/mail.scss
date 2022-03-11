@@ -40,21 +40,29 @@ $accent-color: #233b62;
     width: 10rem;
   }
   .mail-list__content {
-    height: 70vh;
+    height: fit-content;
+    max-height: 70vh;
     overflow-y: scroll;
+    overflow-x: hidden;
+    /* スクロールの幅の設定 */
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    /* スクロールの背景の設定 */
+    &::-webkit-scrollbar-track {
+      background-color: rgba($accent-color, 0.3);
+    }
+    /* スクロールのつまみ部分の設定 */
+    &::-webkit-scrollbar-thumb {
+      background: $accent-color;
+    }
     @include mq("sp") {
       height: auto;
       overflow-y: none;
     }
-    details {
-      font-size: 1.3rem;
-      margin-bottom: 2%;
-      summary {
-        &:hover {
-          cursor: pointer;
-          opacity: 0.7;
-        }
-      }
+    .accordion__button {
+      font-size: 1.2rem;
     }
 
     .mail-list__content__detail {

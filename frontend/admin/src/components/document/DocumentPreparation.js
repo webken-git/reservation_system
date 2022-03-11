@@ -24,7 +24,7 @@ const DocumentPreparation = (props) => {
     props.document.id.map(async (id) => {
       axios
         .post(post_DocumentUrl, {
-          id: id,
+          document_id: id,
           number: props.document.number,
           approval_application_id: reservation.id,
         })

@@ -167,7 +167,7 @@ const AccountDelete = (props) => {
           >
             戻る
           </button>
-          <span>　</span>
+          <span className="btn-space"></span>
           <button className="btn auth-btn" type="submit">
             アカウント削除
           </button>

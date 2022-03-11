@@ -36,7 +36,7 @@ $accent-color: #91c21f;
   top: 10%;
   left: 80%;
   right: 2%;
-  bottom: 65%;
+  bottom: 60%;
   background-color: #fff;
   z-index: 9999;
   border-radius: 1%;
@@ -47,7 +47,7 @@ $accent-color: #91c21f;
   }
   @include mq(tab) {
     left: 70%;
-    bottom: 65%;
+    // bottom: 65%;
   }
   @include mq(sp) {
     top: 10vh;

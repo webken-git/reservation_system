@@ -17,6 +17,7 @@ import UserIcon from "../header/usericon/UserIcon";
 const MonthlyCalendar = (props) => {
   const dayList = props.dayList;
   const date = props.date;
+  const setDate = props.setDate;
   const [approvalList, setApprovalList] = useState([]);
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
@@ -31,11 +32,14 @@ const MonthlyCalendar = (props) => {
     if (12 < nextMonth) {
       setMonth(1);
       setYear(year + 1);
+      setDate(new Date(year + 1, 0, 1))
     } else if (nextMonth < 1) {
       setMonth(12);
       setYear(year - 1);
+      setDate(new Date(year - 1, 11, 1))
     } else {
       setMonth(nextMonth);
+      setDate(new Date(date.getFullYear(), nextMonth - 1, 1))
     }
   };
 

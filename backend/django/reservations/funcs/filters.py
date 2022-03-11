@@ -20,8 +20,8 @@ class ReservationFilter(filters.FilterSet):
 
 class ReservationSuspensionScheduleFilter(filters.FilterSet):
   # フィルタの定義
-  start = filters.DateFilter(lookup_expr='exact')
-  end = filters.DateFilter(lookup_expr='exact')
+  start = filters.DateFilter(lookup_expr='contains')
+  end = filters.DateFilter(lookup_expr='contains')
 
   class Meta:
     model = ReservationSuspensionSchedule

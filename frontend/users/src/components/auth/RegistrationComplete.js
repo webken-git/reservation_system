@@ -22,12 +22,12 @@ const RegistrationComplete = (props) => {
       .then((res) => {
         setLoading(false);
         setMessage(
-          "アカウント確認が完了しました。ログインページに移動し、ログインしてください。"
+          "アカウント登録が完了しました。ログインページに移動し、ログインしてください。"
         );
       })
       .catch((err) => {
         setLoading(false);
-        setMessage("アカウント確認に失敗しました。");
+        setMessage("アカウント登録に失敗しました。");
       });
   };
 
@@ -41,7 +41,7 @@ const RegistrationComplete = (props) => {
       <div className="auth-page__logo">
         <img src={logo} alt="logo" />
       </div>
-      <h1 className="auth-page__title-registration">アカウント確認</h1>
+      <h1 className="auth-page__title-registration">本人確認</h1>
       <div className="auth-page__message">{message}</div>
       {loading === false && (
         <Link to="/login">

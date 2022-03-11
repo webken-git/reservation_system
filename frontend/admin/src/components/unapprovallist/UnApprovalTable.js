@@ -1,9 +1,9 @@
 // 未承認リストテーブルのコンポーネント
 import React from "react";
 // import './approval.scss'
-import ApprovalButtom from "../list-buttom/ApprovalButtom";
-import DisApprovalButtom from "./../list-buttom/DisApprovalButtom";
-import DetailsButton from "./../list-buttom/DetailsButton";
+import ApprovalButtom from "../listbutton/ApprovalButtom";
+import DisApprovalButtom from "../listbutton/DisApprovalButtom";
+import DetailsButton from "../listbutton/DetailsButton";
 
 const UnApprovalTable = (props) => {
   return (
@@ -15,7 +15,7 @@ const UnApprovalTable = (props) => {
       {/* 代表者名 */}
       <td>{props.group_name}</td>
       {/* 団体者名 */}
-      <td>{props.reader_name}</td>
+      <td>{props.leader_name}</td>
       {/* 予約時間 */}
       {/* <td>
         {props.start_time}~{props.end_time}
@@ -43,7 +43,7 @@ const UnApprovalTable = (props) => {
           id={props.id}
           reservation_id={props.reservation_id}
           group_name={props.group_name}
-          reader_name={props.reader_name}
+          leader_name={props.leader_name}
           contact_name={props.contact_name}
           tel={props.tel}
           address={props.address}

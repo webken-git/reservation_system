@@ -100,7 +100,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.place = validated_data.get('place_id', instance.place)
     validated_data['equipment'] = validated_data.get('equipment_id', instance.equipment)
     instance.group_name = validated_data.get('group_name', instance.group_name)
-    instance.reader_name = validated_data.get('reader_name', instance.reader_name)
+    instance.leader_name = validated_data.get('leader_name', instance.leader_name)
     instance.contact_name = validated_data.get('contact_name', instance.contact_name)
     instance.address = validated_data.get('address', instance.address)
     instance.tel = validated_data.get('tel', instance.tel)
@@ -130,10 +130,9 @@ class ReservationSerializer(serializers.ModelSerializer):
 
 
 class ReservationParameterSerializer(serializers.Serializer):
-  # reservation = ReservationSerializer(read_only=True)
-  # approval = ApprovalSerializer(read_only=True)
-  # approval_id = serializers.PrimaryKeyRelatedField(queryset=Approval.objects.all(), write_only=True)
-  # reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  """
+  startの日付検索用
+  """
   start1 = serializers.DateTimeField(help_text='開始(yyyy-mm-ddTH:M:S.fz)', required=True)
   start2 = serializers.DateTimeField(help_text='終了(yyyy-mm-ddTH:M:S.fz)', required=True)
 
@@ -162,7 +161,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
     # 更新処理
     instance.user = validated_data.get('user_id', instance.user)
     instance.group_name = validated_data.get('group_name', instance.group_name)
-    instance.reader_name = validated_data.get('reader_name', instance.reader_name)
+    instance.leader_name = validated_data.get('leader_name', instance.leader_name)
     instance.contact_name = validated_data.get('contact_name', instance.contact_name)
     instance.address = validated_data.get('address', instance.address)
     instance.tel = validated_data.get('tel', instance.tel)

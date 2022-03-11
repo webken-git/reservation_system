@@ -22,9 +22,9 @@ const ReservationDeleteForm = (props) => {
       <form className="modal-wrapper" onSubmit={handleSubmit(onSubmit)}>
         <h3>削除する予約データを指定</h3>
         <p>
-          期間1から期間2の間のデータを削除します。
+          ・期間1から期間2の間のデータを削除します。
           <br />
-          削除された予約データは復元できません。
+          ・削除された予約データは復元できません。
         </p>
         {errors.start1 && <p className="error">{errors.start1.message}</p>}
         <div>

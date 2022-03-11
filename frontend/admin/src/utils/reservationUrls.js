@@ -18,4 +18,5 @@ export const ReservationUrls = {
   DEFFERD_PAYMENT: `${ROOT_URL}/api/defferd-payments/`,
   APP_SETTING: `${ROOT_URL}/api/app-settings/`,
   RESERVATION_DELETE: `${ROOT_URL}/api/reservation-lists/1/`,
+  SUSPENSION: `${ROOT_URL}/api/reservation-suspension-schedules/`,
 };

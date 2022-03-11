@@ -73,18 +73,24 @@ $bordercolor: #dadce0;
       // width: 50%;
       display: flex;
       justify-content: center;
+      // margin: 0 auto;
 
       // アイコンをホバーした時
       .last-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
       .next-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
 
       p {
         font-size: 1.1rem;
-        margin: 0;
+        margin: 0 30px;
+        @include mq(sp) {
+          margin: 0 5px;
+        }
       }
 
       .filter-base {
@@ -172,7 +178,7 @@ $bordercolor: #dadce0;
       width: 4vh;
       height: 4vh;
       border-radius: 50%;
-      line-height: 4.2vh;
+      // line-height: 4.2vh;  // 不要
       box-sizing: border-box;
       padding-right: 1px;
     }
@@ -481,14 +487,19 @@ $bordercolor: #dadce0;
 
       .last-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
       .next-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
 
       p {
-        margin: 0;
         font-size: 1.1rem;
+        margin: 0 30px;
+        @include mq(sp) {
+          margin: 0 5px;
+        }
       }
     }
   }

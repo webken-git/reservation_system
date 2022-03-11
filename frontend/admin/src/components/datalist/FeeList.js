@@ -12,8 +12,8 @@ const FeeList = (props) => {
   const age3 = ageData.filter((age) => age.name === "高校生");
   const age4 = ageData.filter((age) => age.name === "大学生");
   const age5 = ageData.filter((age) => age.name === "一般");
-  // 高齢者料金については、まだデータを追加していないためとりあえず非表示にする
-  // const age6 = ageData.filter((age) => age.name === "高齢者");
+  const age6 = ageData.filter((age) => age.name === "高齢者");
+  const age7 = ageData.filter((age) => age.name === "障がい者");
 
   // feelistdataに含まれているtimeIdとnameを取得
   feelistData.map((feelist) => {
@@ -33,8 +33,8 @@ const FeeList = (props) => {
     return <Loading />;
   } else {
     return (
-      <div className="feelist">
-        <div>
+      <>
+        <div className="feelist">
           <table>
             <thead>
               <tr>
@@ -44,14 +44,15 @@ const FeeList = (props) => {
                 <th>{age3[0].name}</th>
                 <th>{age4[0].name}</th>
                 <th>{age5[0].name}</th>
-                {/* <th>{age6[0].name}</th> */}
+                <th>{age6[0].name}</th>
+                <th>{age7[0].name}</th>
               </tr>
             </thead>
             <tbody>
               {timeList.map((time, index) => (
                 <tr key={time.timeId}>
                   <td>{time.timeName}</td>
-                  <td data-label={age1[0].name}>
+                  <td name={`fee1-${index}`}>
                     {
                       feelistData.find(
                         (feelist) =>
@@ -61,7 +62,7 @@ const FeeList = (props) => {
                       ).fee
                     }
                   </td>
-                  <td data-label={age2[0].name}>
+                  <td name={`fee2-${index}`}>
                     {
                       feelistData.find(
                         (feelist) =>
@@ -71,7 +72,7 @@ const FeeList = (props) => {
                       ).fee
                     }
                   </td>
-                  <td data-label={age3[0].name}>
+                  <td name={`fee3-${index}`}>
                     {
                       feelistData.find(
                         (feelist) =>
@@ -81,7 +82,7 @@ const FeeList = (props) => {
                       ).fee
                     }
                   </td>
-                  <td data-label={age4[0].name}>
+                  <td name={`fee4-${index}`}>
                     {
                       feelistData.find(
                         (feelist) =>
@@ -91,7 +92,7 @@ const FeeList = (props) => {
                       ).fee
                     }
                   </td>
-                  <td data-label={age5[0].name}>
+                  <td name={`fee5-${index}`}>
                     {
                       feelistData.find(
                         (feelist) =>
@@ -101,18 +102,32 @@ const FeeList = (props) => {
                       ).fee
                     }
                   </td>
-                  {/* <td data-label={age6[0].name}>{feelistData.find(
-                      (feelist) =>
-                        feelist.time.id === time.timeId &&
-                        feelist.age.id === age6[0].id &&
-                        feelist.is_group === false
-                    ).fee}</td> */}
+                  <td name={`fee6-${index}`}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age6[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                  <td name={`fee7-${index}`}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age7[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </>
     );
   }
 };

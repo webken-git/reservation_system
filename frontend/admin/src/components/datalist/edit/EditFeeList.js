@@ -18,7 +18,7 @@ const EditFeeList = (props) => {
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
 
   const age1 = ageData.filter((age) => age.name === "小学生");
@@ -27,6 +27,7 @@ const EditFeeList = (props) => {
   const age4 = ageData.filter((age) => age.name === "大学生");
   const age5 = ageData.filter((age) => age.name === "一般");
   const age6 = ageData.filter((age) => age.name === "高齢者");
+  const age7 = ageData.filter((age) => age.name === "障がい者");
 
   // feelistdataに含まれているtimeIdとnameを取得
   feelistData.map((feelist) => {
@@ -74,14 +75,15 @@ const EditFeeList = (props) => {
         })
         .then((res) => {
           console.log("Success");
+          setMessage("変更しました");
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
+          setMessage("変更に失敗しました");
         });
       return fee;
     });
     setLoading(false);
-    setMessage("変更しました");
     // 0.5秒後にリロード
     setTimeout(() => {
       window.location.reload();
@@ -104,6 +106,7 @@ const EditFeeList = (props) => {
             ・ 「完了」ボタンを押すと料金が変更されます。
             <br />
           </p>
+          <h2>{placeData.name}</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* {errors && <p className="red">入力内容に誤りがあります。</p>} */}
             <table>
@@ -116,6 +119,7 @@ const EditFeeList = (props) => {
                   <th>{age4[0].name}</th>
                   <th>{age5[0].name}</th>
                   <th>{age6[0].name}</th>
+                  <th>{age7[0].name}</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,6 +130,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee1-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -160,6 +166,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee2-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -194,6 +202,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee3-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -228,6 +238,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee4-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -262,6 +274,8 @@ const EditFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee5-${index}`}
+                        inputMode="numeric"
+                        autoComplete="off"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -292,7 +306,7 @@ const EditFeeList = (props) => {
                         }}
                       />
                     </td>
-                    {/* <td>
+                    <td>
                       <input
                         type="text"
                         name={`fee6-${index}`}
@@ -325,7 +339,41 @@ const EditFeeList = (props) => {
                           )
                         }
                       />
-                    </td> */}
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee7-${index}`}
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age7[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee7-${index}`, {
+                          required: "必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age7[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age7[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -334,6 +382,7 @@ const EditFeeList = (props) => {
               <button type="submit" className="btn">
                 完了
               </button>
+              <span className="btn-space"></span>
               <button
                 type="button"
                 className="back-btn"

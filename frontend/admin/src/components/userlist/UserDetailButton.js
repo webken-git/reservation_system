@@ -89,7 +89,7 @@ const UserDetailButton = (props) => {
           >
             閉じる
           </button>
-          <span>　</span>
+          <span className="btn-space"></span>
           <button type="button" className="approval-btn" onClick={deleteUser}>
             削除
           </button>
