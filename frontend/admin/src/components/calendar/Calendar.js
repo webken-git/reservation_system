@@ -153,22 +153,12 @@ const Calendar = (props) => {
     const endTime = e.End;
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
-
-    // console.log(startDate)
-    // console.log(startTime)
-    console.log(start)
-
-    // const suspensionStart = new Date(start)
-    // const suspensionStart = format(start, "yyyy-LL-dd HH:mm")
-    // const suspensionEnd = format(end, "yyyy-LL-dd HH:mm")
-    // console.log(suspensionStart)
     
-    axios.post(`${ReservationUrls.SUSPENSION}`,{
-        'start': start,
-        'end': end
+    axios.post(ReservationUrls.SUSPENSION,{
+        start: start,
+        end: end
       })
     .then(res => {
-      console.log(res.data);
       setModalIsOpen(false)
     })
     .catch( error => {
@@ -512,10 +502,6 @@ const Calendar = (props) => {
                   defaultValue={approvals[0] && approvals[0].name}
                   onChange={(e) => approvalFiltering(e)}
                 >
-                  {/* <option value="2">承認済み</option>
-                  <option value="1">未承認</option>
-                  <option value="3">不承認</option>
-                  <option value="4">キャンセル</option> */}
                   {approvals.map((j, index) => {
                     return (
                       <option value={j.id}>{j.name}</option>

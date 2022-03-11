@@ -24,6 +24,7 @@ import { DataList } from "./pages/DataList"
 import { CalendarPage } from "./pages/CalendarPage";
 import { DocumentListPage } from "./pages/DocumentListPage";
 import { ApprovalInfoPage } from "./pages/ApprovalInfoPage";
+import { SuspensionInfoPage } from "./pages/SuspensionInfoPage";
 import { MailPage } from "./pages/MailPage";
 import { SendEmailPage } from "./pages/SendEmailPage";
 import "./index.scss"
@@ -109,6 +110,9 @@ function App() {
                     <SideBarRoute path={`${url}/`} pagename={"カレンダー"} exact children={<CalendarPage />} />
                     <Route path={`${url}/approval-info/:id`}>
                       <SideBarAndHeaderRoute pagename={"予約詳細"} exact children={<ApprovalInfoPage />} />
+                    </Route>
+                    <Route path={`${url}/suspension-info/:id`}>
+                      <SideBarAndHeaderRoute pagename={"予約停止詳細"} exact children={<SuspensionInfoPage />} />
                     </Route>
                   </Switch>
                 </>

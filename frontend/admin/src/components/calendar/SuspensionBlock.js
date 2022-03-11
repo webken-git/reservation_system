@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { withCookies } from "react-cookie";
 
 const SuspensionBlock = (props) => {
@@ -30,15 +31,18 @@ const SuspensionBlock = (props) => {
     endHour
   ]);
 
+  const id = suspension.id;
+
   return (
-    <div
+    <Link
     className="schedule-block"
     style={styleGeneratorHandler()}
+    to={`/calendar/suspension-info/${id}`}
     >
       <p>
         予約停止中
       </p>
-    </div>
+    </Link>
   );  
 };
 

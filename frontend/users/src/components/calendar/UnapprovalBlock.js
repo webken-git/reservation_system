@@ -24,7 +24,10 @@ const UnapprovalBlock = (props) => {
 
     return styleGenerator(top, height);
   }, [
-    styleGenerator
+    styleGenerator,
+    hour,
+    count,
+    endHour,
   ]);
 
   if (count !== 0) {
@@ -41,4 +44,4 @@ const UnapprovalBlock = (props) => {
   } else { return null; }
 };
 
-export default withCookies(UnapprovalBlock);
+export default UnapprovalBlock;
