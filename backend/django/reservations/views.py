@@ -145,7 +145,9 @@ class ReservationViewSet(viewsets.ModelViewSet):
   }
 
   def create(self, request, *args, **kwargs):
-    schedules = ReservationSuspensionSchedule.objects.all()
+    schedules = ReservationSuspensionSchedule.objects.filter(
+        places__id=request.data['place_id'],
+    )
     # schedulesが空ならば、予約可能
     if not schedules:
       return super().create(request, *args, **kwargs)

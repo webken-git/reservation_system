@@ -7,16 +7,6 @@ import uuid
 # Create your models here.
 
 
-class ReservationSuspensionSchedule(models.Model):
-  """
-  予約停止スケジュールテーブル
-  """
-  start = models.DateTimeField('開始日時')
-  end = models.DateTimeField('終了日時')
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-
-
 class Approval(models.Model):
   """
   予約承認テーブル
@@ -51,13 +41,28 @@ class Equipment(models.Model):
   place = models.ManyToManyField(
       Place,
       verbose_name='place',
-      related_name='equipment_place'
+      related_name='equipment_place',
   )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
     return self.name
+
+
+class ReservationSuspensionSchedule(models.Model):
+  """
+  予約停止スケジュールテーブル
+  """
+  places = models.ManyToManyField(
+      Place,
+      verbose_name='place',
+      related_name='schedule_place',
+  )
+  start = models.DateTimeField('開始日時')
+  end = models.DateTimeField('終了日時')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 
 class Reservation(models.Model):

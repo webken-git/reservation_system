@@ -12,12 +12,6 @@ from django.db.models.aggregates import Count
 from users.models import User
 
 
-class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = ReservationSuspensionSchedule
-    fields = '__all__'
-
-
 class ApprovalSerializer(serializers.ModelSerializer):
   class Meta:
     model = Approval
@@ -54,6 +48,44 @@ class EquipmentSerializer(serializers.ModelSerializer):
   def update(self, instance, validated_data):
     # 更新処理
     validated_data['place'] = validated_data.get('place_id', None)
+    instance.name = validated_data.get('name', instance.name)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    instance.save()
+    instance.place.set(place_data)
+
+    return instance
+
+
+class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
+  place = PlaceSerializer(many=True, read_only=True)
+  place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), many=True, write_only=True)
+
+  class Meta:
+    model = ReservationSuspensionSchedule
+    fields = '__all__'
+
+  def create(self, validated_data):
+    validated_data['place'] = validated_data.get('place_id', None)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    schedule = ReservationSuspensionSchedule.objects.create(**validated_data)
+    schedule.save()
+    schedule.place.set(place_data)
+
+    return schedule
+
+  def update(self, instance, validated_data):
+    # 更新処理
+    validated_data['place'] = validated_data.get('place_id', None)
+    instance.start = validated_data.get('start', instance.start)
+    instance.end = validated_data.get('end', instance.end)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['place_id']
