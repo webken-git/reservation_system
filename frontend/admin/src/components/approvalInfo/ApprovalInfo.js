@@ -4,18 +4,28 @@ import Loading from "../loading/Loading";
 import "./approvalInfo.scss";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import { useFetch } from "../../hooks/useFetch";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
 
 const ApprovalInfo = (props) => {
-  const [reservation, setReservation] = useState([]);
+  const unmountRef = useUnmountRef();
+  const [reservation, setReservation] = useSafeState(unmountRef, []);
+  const [reservationId, setReservationId] = useState();
   const [loading, setLoading] = useState(false);
+  const [usage, setUsage] = useSafeState(unmountRef, []);
+  const [age, setAge] = useSafeState(unmountRef, []);
+  const [defferdPayment, setDefferdPayment] = useSafeState(unmountRef, []);
   const id = props.id;
 
   const pullReservation = () => {
     setLoading(true);
     axios
-      .get(`${ReservationUrls.APPROVAL_APPLICATION}?reservation=${id}`, {})
+      .get(`${ReservationUrls.APPROVAL_APPLICATION}${id}/`)
       .then((res) => {
-        setReservation(res.data[0]);
+        setReservation(res.data);
+        getUsage(res.data.reservation.id);
+        getAge(res.data.reservation.id);
+        getDefferdPayment(res.data.reservation.id);
         setLoading(false);
       })
       .catch((error) => {
@@ -24,15 +34,34 @@ const ApprovalInfo = (props) => {
       });
   };
 
-  const getUsage = useFetch({
-    url: `${ReservationUrls.USAGE_CATEGORY}?reservation=${id}`,
-  });
-  const getAge = useFetch({
-    url: `${ReservationUrls.AGE_CATEGORY}?reservation=${id}`,
-  });
-  const getDefferdPayment = useFetch({
-    url: `${ReservationUrls.DEFFERD_PAYMENT}?reservation=${id}`,
-  });
+  const getUsage = (reservationId) => {
+    axios
+      .get(`${ReservationUrls.USAGE_CATEGORY}?reservation=${reservationId}`)
+      .then((res) => {
+        setUsage(res.data);
+        // console.log(res.data);
+      })
+      .catch((err) => {});
+  };
+
+  const getAge = (reservationId) => {
+    axios
+      .get(`${ReservationUrls.AGE_CATEGORY}?reservation=${reservationId}`)
+      .then((res) => {
+        setAge(res.data);
+        console.log(res.data[0])
+      })
+      .catch((err) => {});
+  };
+
+  const getDefferdPayment = (reservationId) => {
+    axios
+      .get(`${ReservationUrls.DEFFERD_PAYMENT}?reservation=${reservationId}`)
+      .then((res) => {
+        setDefferdPayment(res.data);
+      })
+      .catch((err) => {});
+  };
 
   useEffect(() => {
     pullReservation();
@@ -76,15 +105,15 @@ const ApprovalInfo = (props) => {
             </li>
             <li>
               <label>年齢区分：</label>
-              {getAge[0] &&
-                getAge[0].age.map((item, index) => (
-                  <span key={index}>{item.name}　</span>
+              {age[0] &&
+                age[0].age.map((item, index) => (
+                  <span key={index}>{item.name}</span>
                 ))}
             </li>
             <li>
               <label>利用区分：</label>
-              {getUsage[0] &&
-                getUsage[0].usage.map((item, index) => (
+              {usage[0] &&
+                usage[0].usage.map((item, index) => (
                   <span key={index}>{item.name}　</span>
                 ))}
             </li>
@@ -100,8 +129,8 @@ const ApprovalInfo = (props) => {
                 {reservation.reservation.participant_number}人
               </span>
             </li>
-            {getUsage[0] &&
-              getUsage[0].usage.find(
+            {usage[0] &&
+              usage[0].usage.find(
                 (item) => item.name === "入場料を徴収する"
               ) && (
                 <li>
@@ -123,17 +152,17 @@ const ApprovalInfo = (props) => {
                 <span>{reservation.reservation.special_equipment}</span>
               </li>
             )}
-            {getDefferdPayment[0] && (
+            {defferdPayment[0] && (
               <>
                 <li>
                   <label>後納の理由：</label>
-                  <span>{getDefferdPayment[0].reason}　</span>
+                  <span>{defferdPayment[0].reason}　</span>
                 </li>
                 <li>
                   <label>後納使用料：</label>
                   <span>
-                    {getDefferdPayment[0].fee
-                      ? getDefferdPayment[0].fee + "円"
+                    {defferdPayment[0].fee
+                      ? defferdPayment[0].fee + "円"
                       : "まだ金額が確定しておりません"}
                   </span>
                 </li>

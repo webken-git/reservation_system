@@ -29,8 +29,7 @@ const SuspensionInfo = (props) => {
   const [suspension, setSuspension] = useState([]);
   const [loading, setLoading] = useState(false);
   const id = props.id;
-  const [modalIsOpenPatch, setModalIsOpenPatch] = useState(false);
-  const [modalIsOpenDelete, setModalIsOpenDelete] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [FormData, setFormData] = useRecoilState(formData);
   const setPopup = useSetRecoilState(popupState);
   // const a = new Date(suspension.start.substr(0, 4), suspension.start.substr(5, ))
@@ -63,11 +62,7 @@ const SuspensionInfo = (props) => {
   };
 
   const modalTogglePatch = () => {
-    setModalIsOpenPatch(!modalIsOpenPatch);
-  }
-
-  const modalToggleDelete = () => {
-    setModalIsOpenDelete(!modalIsOpenDelete);
+    setModalIsOpen(!modalIsOpen);
   }
 
   const onSubmitPatch = (e) => {
@@ -83,7 +78,7 @@ const SuspensionInfo = (props) => {
       end: end,
     })
     .then(res => {
-      setModalIsOpenPatch(false)
+      setModalIsOpen(false)
     })
     .catch(error => {
       console.log(error);
@@ -149,7 +144,7 @@ const SuspensionInfo = (props) => {
           </ul>
           <button type="button" className="btn" onClick={modalTogglePatch}>変更</button>
           <Modal
-            isOpen={modalIsOpenPatch}
+            isOpen={modalIsOpen}
             onRequestClose={modalTogglePatch}
             className="modal-content"
             overlayClassName="modal-overlay"
@@ -286,6 +281,9 @@ const SuspensionInfo = (props) => {
                       変更する
                     </button>
                   </div>
+                  <button type="button"className="back-btn" onClick={() => setModalIsOpen(false)}>
+                      閉じる
+                  </button>
               </form>
             </div>
           </Modal>

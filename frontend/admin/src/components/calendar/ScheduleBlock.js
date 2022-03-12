@@ -225,7 +225,7 @@ const ScheduleBlock = (props) => {
   //     }
   // }
 
-  const id = props.schedule.reservation.id;
+  const id = props.schedule.id;
 
   if (
     props.schedule.approval.name !== "不承認" &&

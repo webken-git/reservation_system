@@ -10,7 +10,7 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { Box, HStack, Stack } from "@chakra-ui/react";
+import { Box, HStack, ModalCloseButton, Stack } from "@chakra-ui/react";
 import DrawerMenu from "../sidebar/DrawerMenu";
 import "../header/header.scss";
 import UserIcon from "../header/usericon/UserIcon";
@@ -63,9 +63,9 @@ const Calendar = (props) => {
   const day = date.getDate();
   const [updateFlag, setUpdateFlag] = useState(false);
   const [st, setSt] = useState(0);
-  const [filterType, setFilterType] = useState("カーリング場");
+  const [placeFilter, setPlaceFilter] = useState();
   const [calendarType, setCalendarType] = useState("weekly");
-  const [approvalFilter, setApprovalFilter] = useState(2);
+  const [approvalFilter, setApprovalFilter] = useState();
   const [loading, setLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const isMain = true;
@@ -92,6 +92,7 @@ const Calendar = (props) => {
       .then((response) => {
         const placeLists = response.data;
         setPlace(placeLists);
+        setPlaceFilter(placeLists[0].name)
       })
       .catch((error) => {});    
   };
@@ -102,6 +103,7 @@ const Calendar = (props) => {
       .then((response) => {
         const approvalLists = response.data;
         setApprovals(approvalLists);
+        setApprovalFilter(approvalLists[0].id)
       })
       .catch((error) => {});    
   };
@@ -117,7 +119,7 @@ const Calendar = (props) => {
   // 検索する施設名を変数に代入
   const filtering = (e) => {
     console.log("filtering");
-    setFilterType(e.target.value);
+    setPlaceFilter(e.target.value);
   };
 
   const approvalFiltering = (e) => {
@@ -475,6 +477,9 @@ const Calendar = (props) => {
                       設定する
                     </button>
                   </div>
+                  <button type="button"className="back-btn" onClick={() => setModalIsOpen(false)}>
+                      閉じる
+                  </button>
                   </form>
                 </div>
               </Modal>
@@ -585,15 +590,12 @@ const Calendar = (props) => {
                     <Content
                       key={index}
                       date={date}
-                      // setScheduleDict={setScheduleDict}
-                      // openModal={openModal}
                       updateFlag={updateFlag}
                       setUpdateFlag={setUpdateFlag}
                       isMain={isMain}
-                      // individualOrGroup={props.individualOrGroup}
                       homeUpdateFlag={props.homeUpdateFlag}
                       setHomeUpdateFlag={props.setHomeUpdateFlag}
-                      filterType={filterType}
+                      placeFilter={placeFilter}
                       setLoading={setLoading}
                       approvalFilter={approvalFilter}
                       calendarType={calendarType}
@@ -613,7 +615,7 @@ const Calendar = (props) => {
                   // individualOrGroup={props.individualOrGroup}
                   homeUpdateFlag={props.homeUpdateFlag}
                   setHomeUpdateFlag={props.setHomeUpdateFlag}
-                  filterType={filterType}
+                  placeFilter={placeFilter}
                   setLoading={setLoading}
                   calendarType={calendarType}
                   approvalFilter={approvalFilter}
