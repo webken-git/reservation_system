@@ -3,9 +3,10 @@ import axios from "axios";
 import Loading from "../loading/Loading";
 import "./approvalInfo.scss";
 import { ReservationUrls } from "../../utils/reservationUrls";
-import { useFetch } from "../../hooks/useFetch";
 import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
+import ApprovalButton from "../list-buttom/ApprovalButtom";
+import DisApprovalButtom from "../list-buttom/DisApprovalButtom"
 
 const ApprovalInfo = (props) => {
   const unmountRef = useUnmountRef();
@@ -26,6 +27,7 @@ const ApprovalInfo = (props) => {
         getUsage(res.data.reservation.id);
         getAge(res.data.reservation.id);
         getDefferdPayment(res.data.reservation.id);
+        setReservationId(res.data.reservation.id);
         setLoading(false);
       })
       .catch((error) => {
@@ -204,6 +206,25 @@ const ApprovalInfo = (props) => {
               <span>{reservation.approval.name}</span>
             </li>
           </ul>
+          <div className="button-wrapper">
+            {reservation.approval.name === "未承認" ? (
+              <>
+                <ApprovalButton
+                  id={id}
+                  reservation_id={reservationId}
+                  defferd_payment={defferdPayment}
+                />
+                <DisApprovalButtom
+                  id={id}
+                  reservation_id={reservationId}
+                  defferd_payment={defferdPayment}
+                />
+              </>
+            ) : (
+              null
+            )}
+            
+          </div>
         </div>
         {loading && <Loading />}
       </>

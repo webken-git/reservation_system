@@ -496,7 +496,7 @@ const Calendar = (props) => {
                 >
                   {place.map((i, index) => {
                     return (
-                      <option value={i.name}>{i.name}</option>
+                      <option value={i.name} key={index}>{i.name}</option>
                     )                    
                   })}
                 </select>
@@ -509,7 +509,7 @@ const Calendar = (props) => {
                 >
                   {approvals.map((j, index) => {
                     return (
-                      <option value={j.id}>{j.name}</option>
+                      <option value={j.id} key={index}>{j.name}</option>
                     )
                   })}
                 </select>
