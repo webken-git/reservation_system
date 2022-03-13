@@ -137,7 +137,7 @@ const Calendar = (props) => {
           />
 
           <div className="display-change">
-            <button type="button" className="btn calendar-btn" onClick={() => displayChange()}>表示切替</button>
+            <span className="btn calendar-btn" onClick={() => displayChange()}>表示切替</span>
           </div>
 
           <div className="date-title">
