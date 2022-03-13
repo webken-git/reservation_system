@@ -3,8 +3,8 @@ import axios from "axios";
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-import HeaderRoute from "./components/rooter/HeaderRoute";
-import LoginRoute from "./components/rooter/LoginRoute";
+import HeaderRoute from "./components/routes/HeaderRoute";
+import LoginRoute from "./components/routes/LoginRoute";
 import { AccountPage } from "./pages/AccountPage";
 import { EmailChangePage } from "./pages/EmailChangePage";
 import { VerifyEmailPage } from "./pages/VerifyEmailPage";
@@ -15,8 +15,12 @@ import { ReservationDetailPage } from "./pages/ReservationDetailPage";
 import { ReservationCancelPage } from "./pages/ReservationCancelPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegistrationPage } from "./pages/RegistrationPage";
+import { RegistrationCompletePage } from "./pages/RegistrationCompletePage";
 import { AccountDeletePage } from "./pages/AccountDeletePage";
 import { ReservationStepPage } from "./pages/ReservationStepPage";
+import { ReservationCompletePage } from "./pages/ReservationCompletePage";
+import NotFound from "./pages/error/NotFound";
+import InternalServer from "./pages/error/InternalServer";
 import "./index.scss";
 
 function getCookie(name) {
@@ -49,8 +53,23 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
+        <HeaderRoute path="/" exact children={<MainPage />} />
         <Route path="/login" exact children={<LoginPage />} />
-        <Route path="/registration" exact children={<RegistrationPage />} />
+        <Route
+          path="/registration"
+          render={({ match: { url } }) => (
+            <>
+              <Switch>
+                <Route path={`${url}/`} exact children={<RegistrationPage />} />
+                <Route
+                  path={`${url}/complete/:key`}
+                  children={<RegistrationCompletePage />}
+                />
+                <HeaderRoute children={<NotFound />} />
+              </Switch>
+            </>
+          )}
+        />
         <Route
           path="/password"
           render={({ match: { url } }) => (
@@ -62,18 +81,33 @@ function App() {
                   exact
                   children={<PasswordResetPage />}
                 />
+                <HeaderRoute children={<NotFound />} />
               </Switch>
             </>
           )}
         />
-        {/* <HeaderRoute path="/sample" exact children={<Sample/>} /> */}
-        <HeaderRoute path="/" exact children={<MainPage />} />
+        <HeaderRoute path="/500" children={<InternalServer />} />
         <LoginRoute>
           <Switch>
-            <HeaderRoute
+            <Route
               path="/reserve"
-              exact
-              children={<ReservationStepPage />}
+              render={({ match: { url } }) => (
+                <>
+                  <Switch>
+                    <HeaderRoute
+                      path={`${url}/`}
+                      exact
+                      children={<ReservationStepPage />}
+                    />
+                    <HeaderRoute
+                      path={`${url}/complete`}
+                      exact
+                      children={<ReservationCompletePage />}
+                    />
+                    <HeaderRoute children={<NotFound />} />
+                  </Switch>
+                </>
+              )}
             />
             <Route
               path="/account"
@@ -108,6 +142,7 @@ function App() {
                       exact
                       children={<AccountDeletePage />}
                     />
+                    <HeaderRoute children={<NotFound />} />
                   </Switch>
                 </>
               )}
@@ -132,6 +167,7 @@ function App() {
                 </>
               )}
             />
+            <HeaderRoute children={<NotFound />} />
           </Switch>
         </LoginRoute>
       </Switch>

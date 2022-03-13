@@ -25,7 +25,7 @@ const MonthlyCalendar = (props) => {
   const calendar = createCalendar(year, month);
   const setLoading = props.setLoading;
   // const calendarType = props.calendarType;
-  // const setCalendarType = props.setCalendarType;
+  const setCalendarType = props.setCalendarType;
 
   const onClick = (n) => () => {
     const nextMonth = month + n;
@@ -42,6 +42,13 @@ const MonthlyCalendar = (props) => {
       setDate(new Date(date.getFullYear(), nextMonth - 1, 1))
     }
   };
+
+  // const dateClick = (n) => () => {
+  //   const day = n;
+  //   setDate(new Date(year, month -1, day))
+      // setCalendarType("daily")
+  //   console.log("aaa")
+  // }
 
   useEffect(() => {
     setLoading(true);

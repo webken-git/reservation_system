@@ -1,12 +1,12 @@
 // キャンセルリストのページ
 import React from "react";
-import CancelListBody from "../components/cancellist/CancelListBody"
+import CancelListBody from "../components/cancellist/CancelListBody";
 export const CancelList = () => {
-  document.title = "予約管理アプリ | キャンセルリスト";
+  document.title = "キャンセルリスト | 予約管理アプリ"; // ページタイトルを変更
   return (
     <div className="list-wrapper">
       {/* キャンセルリスト全体コンポーネント */}
-      <CancelListBody/>
+      <CancelListBody />
     </div>
-  )
-}
+  );
+};

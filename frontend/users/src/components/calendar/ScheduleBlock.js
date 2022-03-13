@@ -13,11 +13,6 @@ const ScheduleBlock = (props) => {
   const [scheduleStartDate, setScheduleStartDate] = useState(new Date());
   const [scheduleEndDate, setScheduleEndDate] = useState(new Date());
 
-  // console.log(props.schedule.reservation.start);
-  // console.log(props.contentDate);
-
-  // console.log(props.schedule)
-
   useEffect(() => {
     let unmounted = false;
     if (!unmounted) {
@@ -96,6 +91,7 @@ const ScheduleBlock = (props) => {
     styleGenerator,
     scheduleStartDate,
     scheduleEndDate,
+    props.change
   ]);
 
   return (
@@ -149,7 +145,7 @@ const ScheduleBlock = (props) => {
       {props.schedule.reservation.is_group === false ? (
         <span>
           <p>{props.schedule.reservation.place.name}</p>
-          {/* <p>{props.schedule.reservation.reader_name}</p> */}
+          {/* <p>{props.schedule.reservation.leader_name}</p> */}
         </span>
       ) : (
         <span>

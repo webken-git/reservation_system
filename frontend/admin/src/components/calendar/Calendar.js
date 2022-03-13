@@ -26,13 +26,11 @@ import {
   FormControl,
   FormControlLabel,
   TextField,
-  Checkbox,
   FormGroup,
-  RadioGroup,
-  Radio,
   MenuItem,
   styled,
   FormHelperText,
+  Checkbox,
 } from "@mui/material";
 import {
   timetable,
@@ -79,7 +77,7 @@ const Calendar = (props) => {
     handleSubmit,
     getValues,
     setValue,
-    register,
+    // register,
     reset,
     formState: { errors },
   } = useForm({
@@ -114,7 +112,7 @@ const Calendar = (props) => {
 
   const modalToggle = () => {
     setModalIsOpen(!modalIsOpen);
-  }
+  };
 
   // 検索する施設名を変数に代入
   const filtering = (e) => {
@@ -155,10 +153,14 @@ const Calendar = (props) => {
     const endTime = e.End;
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
+    const place = e.place;
+
+    console.log(e)
     
     axios.post(ReservationUrls.SUSPENSION,{
         start: start,
-        end: end
+        end: end,
+        place_id: place,
       })
     .then(res => {
       setModalIsOpen(false)
@@ -203,6 +205,23 @@ const Calendar = (props) => {
     //     message: "",
     //   });
     // }, 1500);
+  };
+
+  const handleCheck = (id, name, e) => {
+    let values = getValues(name) || [];
+
+    let newValues = [];
+    // 選択されている場合
+    if (e.target.checked) {
+      // 選択されているidを追加
+      newValues = [...values, id];
+    } else {
+      // 選択されていないidを削除
+      newValues = values.filter((value) => value !== id);
+    }
+    setValue(name, newValues);
+    console.log(newValues)
+    return newValues;
   };
 
   useEffect(() => {
@@ -296,20 +315,28 @@ const Calendar = (props) => {
                 <FontAwesomeIcon icon={faChevronLeft} size="2x" />
               </div>
               {calendarType === "daily" ? (
+                <div className="date-base">
                 <p>
                   {year}年{month}月{day}日
                 </p>
+                {/* <input type="date" className="date-input"/> */}
+              </div>
               ) : (
-                <p>
-                  {year}年{month}月
-                </p>
+                <div className="date-base">
+                  <p>
+                    {year}月{month}月
+                  </p>
+                  {/* <input type="date" className="date-input"/> */}
+                </div>
               )}
               <div className="next-button" onClick={() => dateChange("next")}>
                 <FontAwesomeIcon icon={faChevronRight} size="2x" />
               </div>
             </div>
             <div className="stop">
-              <button type="button" className="btn" onClick={modalToggle}>予約停止</button>
+              <button type="button" className="btn" onClick={modalToggle}>
+                予約停止
+              </button>
               <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={modalToggle}
@@ -321,122 +348,132 @@ const Calendar = (props) => {
                     <h2>予約停止の設定</h2>
                   </div>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                  <ul>
-                    <li>
-                      <div>
-                        <Controller
-                          name="StartDate"
-                          control={control}
-                          defaultValue={new Date()}
-                          rules={{ required: "入力" }}
-                          render={({ field }) => (
-                            <div className={form.StartDate}>
-                              <Label>開始日時：</Label>
-                              <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
-                                <DesktopDatePicker
+                    <ul>
+                      <li>
+                        <div>
+                          <Controller
+                            name="StartDate"
+                            control={control}
+                            defaultValue={new Date()}
+                            rules={{ required: "入力" }}
+                            render={({ field }) => (
+                              <div className={form.StartDate}>
+                                <Label>開始日時：</Label>
+                                <LocalizationProvider
+                                  dateAdapter={DateAdapter}
+                                  locale={ja}
+                                >
+                                  <DesktopDatePicker
+                                    {...field}
+                                    label="年/月/日"
+                                    mask="____/__/__"
+                                    renderInput={(params) => (
+                                      <TextField {...params} />
+                                    )}
+                                  />
+                                </LocalizationProvider>
+                              </div>
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <Controller
+                            name="Start"
+                            defaultValue=""
+                            control={control}
+                            rules={{ required: "選択してください" }}
+                            render={({ field }) => (
+                              <div className={form.start}>
+                                <TextField
+                                  style={{ width: "150px" }}
+                                  size="Normal"
+                                  select
+                                  defaultValue=""
+                                  label="開始時間"
+                                  error={"Start" in errors}
                                   {...field}
-                                  label="年/月/日"
-                                  mask="____/__/__"
-                                  renderInput={(params) => <TextField {...params} />}
-                                />
-                              </LocalizationProvider>
-                            </div>
-                          )}
-                        />
-                      </div>
-                      <div>
-                        <Controller
-                          name="Start"
-                          defaultValue=""
-                          control={control}
-                          rules={{ required: "選択してください" }}
-                          render={({ field }) => (
-                            <div className={form.start}>
-                              <TextField
-                                style={{ width: "150px" }}
-                                size="Normal"
-                                select
-                                defaultValue=""
-                                label="開始時間"
-                                error={"Start" in errors}
-                                {...field}
-                              >
-                                {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
-                                {placeName === "カーリング場"
-                                  ? curlingTimetable.map((timetables, id) => (
-                                      <MenuItem
-                                        key={id}
-                                        label={timetables.label}
-                                        value={
-                                          timetables.value === undefined
-                                            ? ""
-                                            : timetables.value
-                                        }
-                                      >
-                                        {timetables.label}
-                                      </MenuItem>
-                                    ))
-                                  : timetable.map((timetables, id) => (
-                                      <MenuItem
-                                        key={id}
-                                        label={timetables.label}
-                                        value={
-                                          timetables.value === undefined
-                                            ? ""
-                                            : timetables.value
-                                        }
-                                      >
-                                        {timetables.label}
-                                      </MenuItem>
-                                    ))}
-                              </TextField>
-                            </div>
-                          )}
-                        />
-                      </div>
-                    </li>
-                    <li>
-                      <div>
-                        <Controller
-                          name="EndDate"
-                          control={control}
-                          defaultValue={new Date()}
-                          rules={{ required: "入力" }}
-                          render={({ field }) => (
-                            <div className={form.EndDate}>
-                              <Label>終了日時</Label>
-                              <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
-                                <DesktopDatePicker
+                                >
+                                  {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
+                                  {placeName === "カーリング場"
+                                    ? curlingTimetable.map((timetables, id) => (
+                                        <MenuItem
+                                          key={id}
+                                          label={timetables.label}
+                                          value={
+                                            timetables.value === undefined
+                                              ? ""
+                                              : timetables.value
+                                          }
+                                        >
+                                          {timetables.label}
+                                        </MenuItem>
+                                      ))
+                                    : timetable.map((timetables, id) => (
+                                        <MenuItem
+                                          key={id}
+                                          label={timetables.label}
+                                          value={
+                                            timetables.value === undefined
+                                              ? ""
+                                              : timetables.value
+                                          }
+                                        >
+                                          {timetables.label}
+                                        </MenuItem>
+                                      ))}
+                                </TextField>
+                              </div>
+                            )}
+                          />
+                        </div>
+                      </li>
+                      <li>
+                        <div>
+                          <Controller
+                            name="EndDate"
+                            control={control}
+                            defaultValue={new Date()}
+                            rules={{ required: "入力" }}
+                            render={({ field }) => (
+                              <div className={form.EndDate}>
+                                <Label>終了日時</Label>
+                                <LocalizationProvider
+                                  dateAdapter={DateAdapter}
+                                  locale={ja}
+                                >
+                                  <DesktopDatePicker
+                                    {...field}
+                                    label="年/月/日"
+                                    mask="____/__/__"
+                                    renderInput={(params) => (
+                                      <TextField {...params} />
+                                    )}
+                                  />
+                                </LocalizationProvider>
+                              </div>
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <Controller
+                            name="End"
+                            defaultValue=""
+                            control={control}
+                            rules={{
+                              required: "選択してください",
+                            }}
+                            render={({ field }) => (
+                              <div className={form.end}>
+                                <TextField
+                                  style={{ width: "150px" }}
+                                  select
+                                  size="Normal"
+                                  defaultValue=""
+                                  label="終了時間"
+                                  error={"End" in errors}
                                   {...field}
-                                  label="年/月/日"
-                                  mask="____/__/__"
-                                  renderInput={(params) => <TextField {...params} />}
-                                />
-                              </LocalizationProvider>
-                            </div>
-                          )}
-                        />
-                      </div>
-                      <div>
-                        <Controller
-                          name="End"
-                          defaultValue=""
-                          control={control}
-                          rules={{
-                            required: "選択してください",
-                          }}
-                          render={({ field }) => (
-                            <div className={form.end}>
-                              <TextField
-                                style={{ width: "150px" }}
-                                select
-                                size="Normal"
-                                defaultValue=""
-                                label="終了時間"
-                                error={"End" in errors}
-                                {...field}
-                              >
-                                {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
+                                >
+                                  {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
 
                                 {placeName === "カーリング場"
                                   ? curlingTimetable.map((timetables, id) => (
@@ -471,15 +508,65 @@ const Calendar = (props) => {
                         />
                       </div>
                     </li>
-                  </ul>
-                  <div className="submit-btn">
-                    <button type="submit" className="btn">
-                      設定する
-                    </button>
-                  </div>
-                  <button type="button"className="back-btn" onClick={() => setModalIsOpen(false)}>
-                      閉じる
-                  </button>
+                    <li>
+                      <div>
+                        <Label>施設名：</Label>
+                        {/* <FormControl error>
+                          <FormHelperText>
+                            {errors.place && errors.place.message}
+                          </FormHelperText>
+                          <FormGroup> */}
+                            {/* <Controller
+                              control={control}
+                              id="place"
+                              name="place"
+                              defaultValue={""}
+                              rules={{ required: "選択してください" }}
+                              render={({ field }) => (
+                                <div className="">
+                                  {place.map((i, id) => (
+                                    <FormControlLabel
+                                      {...field}
+                                      key={id}
+                                      label={i.name}
+                                      value={i.id}
+                                      onChange={(e) =>
+                                        field.onChange(
+                                          handleCheck(i.id, "place", e)
+                                        )
+                                      }
+                                      control={
+                                        <Checkbox
+                                          checked={!!field.value.includes(i.id)}
+                                        />
+                                      }
+                                      labelPlaceMent="end"
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            /> */}
+                          {/* </FormGroup>
+                        </FormControl> */}
+                        {place.map((i, index) => {
+                          return (
+                            <label key={index} onChange={(e) => handleCheck(i.id, "place", e)}>
+                              <span><input name="place" type="checkbox" value={i.id}/></span>
+                              <span>{i.name}</span>
+                            </label>
+                          )
+                        })}
+                      </div>
+                    </li>
+                    </ul>
+                    <div className="submit-btn">
+                      <button type="submit" className="btn">
+                        設定する
+                      </button>
+                      <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>
+                        閉じる
+                      </button>
+                    </div>
                   </form>
                 </div>
               </Modal>
@@ -488,6 +575,29 @@ const Calendar = (props) => {
           </div>
           <div className="main">
             <div className="main-header">
+              <div className="date-selector">
+                <div className="last-button" onClick={() => dateChange("last")}>
+                  <FontAwesomeIcon icon={faChevronLeft} size="2x" />
+                </div>
+                {calendarType === "daily" ? (
+                  <div className="date-base">
+                  <p>
+                    {month}月{day}日
+                  </p>
+                  {/* <input type="date" className="date-input"/> */}
+                </div>
+                ) : (
+                  <div className="date-base">
+                    <p>
+                      {year}年{month}月
+                    </p>
+                    {/* <input type="date" className="date-input"/> */}
+                  </div>
+                )}
+                <div className="next-button" onClick={() => dateChange("next")}>
+                  <FontAwesomeIcon icon={faChevronRight} size="2x" />
+                </div>
+              </div>
               <div className="filter-base">
                 <select
                   className="filter"
@@ -507,9 +617,9 @@ const Calendar = (props) => {
                   defaultValue={approvals[0] && approvals[0].name}
                   onChange={(e) => approvalFiltering(e)}
                 >
-                  {approvals.map((j, index) => {
+                  {approvals.map((i, index) => {
                     return (
-                      <option value={j.id} key={index}>{j.name}</option>
+                      <option value={i.id} key={index}>{i.name}</option>
                     )
                   })}
                 </select>

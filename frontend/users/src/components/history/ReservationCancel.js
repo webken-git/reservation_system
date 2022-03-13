@@ -14,6 +14,8 @@ const ReservationCancel = (props) => {
   const [defferdPayment, setDefferdPayment] = useSafeState(unmountRef, []);
   const [isLoading, setIsLoading] = useSafeState(unmountRef, true);
   const [message, setMessage] = useSafeState(unmountRef, "");
+  // 現在の日時を取得(yyyy-mm-dd hh:mm:ss)
+  const now = new Date();
 
   const approvalApplication = ReservationUrls.APPROVAL_APPLICATION;
 
@@ -81,6 +83,11 @@ const ReservationCancel = (props) => {
         // 前のページに戻る
         setIsLoading(false);
         setMessage("キャンセル手続きに失敗しました。");
+        if (err.response.status === 500) {
+          setTimeout(() => {
+            window.location.href = "/500";
+          }, 500);
+        }
       });
   };
 
@@ -97,6 +104,7 @@ const ReservationCancel = (props) => {
         <div className="history-list">
           <h2 className="title">キャンセル手続き</h2>
           <p>こちらの予約をキャンセルしてもよろしいでしょうか。</p>
+          <p>キャンセル手続きは、利用開始日時の4日前まで可能です。</p>
           {message && <p className="message">{message}</p>}
           <ul>
             <li>
@@ -105,7 +113,7 @@ const ReservationCancel = (props) => {
             </li>
             <li>
               <label>代表者名：</label>
-              <span>{reservation.reservation.reader_name}</span>
+              <span>{reservation.reservation.leader_name}</span>
             </li>
             <li>
               <label>連絡者名：</label>
@@ -119,6 +127,20 @@ const ReservationCancel = (props) => {
               <label>場所：</label>
               <span>{reservation.reservation.place.name}</span>
             </li>
+            {reservation.reservation.place.min === 1 &&
+            reservation.reservation.place.max === 1 ? null : (
+              <li>
+                <label>シート数または範囲：</label>
+                <span>
+                  {(reservation.reservation.place.min === 0.5 &&
+                    (reservation.reservation.place_number === 0.5
+                      ? "半面"
+                      : "全面")) ||
+                    (reservation.reservation.place.max > 1 &&
+                      reservation.reservation.place_number)}
+                </span>
+              </li>
+            )}
             <li>
               <label>利用開始日時：</label>
               <span>{reservation.reservation.start}</span>
@@ -237,13 +259,25 @@ const ReservationCancel = (props) => {
               戻る
             </button>
             <span>　</span>
-            <button
-              type="button"
-              className="btn auth-btn"
-              onClick={() => onClick()}
-            >
-              キャンセル
-            </button>
+            {
+              // 予約日時の4日以上前の場合のみキャンセルボタンを表示
+              reservation.approval.id === 4 ||
+              new Date(reservation.reservation.start).setDate(
+                new Date(reservation.reservation.start).getDate() - 4
+              ) < now.getTime() ? (
+                <button type="button" className="cancel-btn" disabled>
+                  キャンセル
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => onClick()}
+                >
+                  キャンセル
+                </button>
+              )
+            }
           </div>
         </div>
         {isLoading && <Loading />}

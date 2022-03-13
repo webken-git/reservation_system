@@ -1,23 +1,25 @@
 // 未承認リストテーブルのコンポーネント
 import React from "react";
 // import './approval.scss'
-import ApprovalButtom from "../list-buttom/ApprovalButtom";
-import DisApprovalButtom from "./../list-buttom/DisApprovalButtom";
-import DetailsButton from "./../list-buttom/DetailsButton";
+import ApprovalButtom from "../listbutton/ApprovalButtom";
+import DisApprovalButtom from "../listbutton/DisApprovalButtom";
+import DetailsButton from "../listbutton/DetailsButton";
 
 const UnApprovalTable = (props) => {
   return (
     <tr>
       {/* 予約日 */}
-      <td>{props.date}</td>
+      <td>
+        {props.date} {props.start_time}
+      </td>
       {/* 代表者名 */}
       <td>{props.group_name}</td>
       {/* 団体者名 */}
-      <td>{props.reader_name}</td>
+      <td>{props.leader_name}</td>
       {/* 予約時間 */}
-      <td>
+      {/* <td>
         {props.start_time}~{props.end_time}
-      </td>
+      </td> */}
       {/* 場所 */}
       <td>{props.place}</td>
       <td>
@@ -41,11 +43,14 @@ const UnApprovalTable = (props) => {
           id={props.id}
           reservation_id={props.reservation_id}
           group_name={props.group_name}
-          reader_name={props.reader_name}
+          leader_name={props.leader_name}
           contact_name={props.contact_name}
           tel={props.tel}
           address={props.address}
           place={props.place}
+          place_min={props.place_min}
+          place_max={props.place_max}
+          place_number={props.place_number}
           start_day={props.start_day}
           start_time={props.start_time}
           end_day={props.end_day}

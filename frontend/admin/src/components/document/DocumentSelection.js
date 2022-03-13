@@ -132,6 +132,7 @@ const DocumentSelection = (props) => {
               <input
                 type="text"
                 name="number"
+                autoComplete="off"
                 {...register("number", {
                   required: true,
                   pattern: /^[0-9]+$/,

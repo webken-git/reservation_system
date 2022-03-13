@@ -50,13 +50,15 @@ const UserDetailButton = (props) => {
           <div className="modal-title">
             <h2>詳細</h2>
           </div>
-          <p>以下のユーザーを削除場合は削除ボタンを押してください。</p>
+          <p>以下のユーザーを削除する場合は削除ボタンを押してください。</p>
           <p>
             削除すると元に戻せないため、削除する場合はよく確認してください。
             <br />
+            削除されたユーザーの予約データは削除されます。
+            <br />
             尚、ユーザーの削除はスーパーユーザー権限が必要です。
           </p>
-          {message && <p className="message">{message}</p>}
+          {message && <p className="message red">{message}</p>}
           <ul>
             <li>
               <label>メールアドレス：</label>
@@ -87,7 +89,7 @@ const UserDetailButton = (props) => {
           >
             閉じる
           </button>
-          <span>　</span>
+          <span className="btn-space"></span>
           <button type="button" className="approval-btn" onClick={deleteUser}>
             削除
           </button>

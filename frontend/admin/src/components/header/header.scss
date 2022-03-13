@@ -22,32 +22,32 @@ $main-color: #1a8d89;
 $sub-color: #707070;
 $accent-color: #233b62;
 
-.headerBox {
+.header {
   width: 100%;
-  margin: 0;
+  height: 10vh;
+  border-bottom: 1px solid #707070;
+  display: flex;
+  align-items: center;
 
-  .header {
-    height: 100px;
-    border-bottom: 1px solid #707070;
-    display: flex;
-    align-items: center;
-
-    .header_title {
-      width: 90%;
-      font-size: 30px;
-      margin-left: 50px;
-      color: #707070;
+  .header_title {
+    width: 90%;
+    font-size: 30px;
+    margin-left: 50px;
+    color: #707070;
+    @include mq(sp) {
+      font-size: 20px;
+      margin-left: 30px;
     }
-    .fabars {
-      width: 100%;
-      margin-left: 10px;
-      @include mq(sp) {
-        margin-left: 5px;
-      }
+  }
+  .fabars {
+    width: 100%;
+    margin-left: 10px;
+    @include mq(sp) {
+      margin-left: 5px;
     }
-    .fabars:hover {
-      cursor: pointer;
-      color: #707070;
-    }
+  }
+  .fabars:hover {
+    cursor: pointer;
+    color: #707070;
   }
 }

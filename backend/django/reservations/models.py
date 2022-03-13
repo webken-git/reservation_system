@@ -7,16 +7,6 @@ import uuid
 # Create your models here.
 
 
-class ReservationSuspensionSchedule(models.Model):
-  """
-  予約停止スケジュールテーブル
-  """
-  start = models.DateTimeField('開始日時')
-  end = models.DateTimeField('終了日時')
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-
-
 class Approval(models.Model):
   """
   予約承認テーブル
@@ -51,13 +41,28 @@ class Equipment(models.Model):
   place = models.ManyToManyField(
       Place,
       verbose_name='place',
-      related_name='equipment_place'
+      related_name='equipment_place',
   )
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
     return self.name
+
+
+class ReservationSuspensionSchedule(models.Model):
+  """
+  予約停止スケジュールテーブル
+  """
+  places = models.ManyToManyField(
+      Place,
+      verbose_name='place',
+      related_name='schedule_place',
+  )
+  start = models.DateTimeField('開始日時')
+  end = models.DateTimeField('終了日時')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 
 class Reservation(models.Model):
@@ -72,7 +77,7 @@ class Reservation(models.Model):
       on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
-  reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
+  leader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
   tel = models.CharField('電話番号', max_length=15, blank=True, null=True)
@@ -95,8 +100,9 @@ class Reservation(models.Model):
       blank=True, null=True,
       related_name='reservation_place', on_delete=models.SET_NULL
   )
-  place_number = models.IntegerField(
-      'シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
+  place_number = models.FloatField('シート数', default=1.0, validators=[
+      validators.MinValueValidator(0.5),
+      validators.MaxValueValidator(100.0)])
   equipment = models.ManyToManyField(
       Equipment, verbose_name='equipment',
       blank=True,
@@ -107,7 +113,7 @@ class Reservation(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
-    return self.reader_name + ' ' + self.contact_name + ' ' + self.address
+    return self.leader_name + ' ' + self.contact_name + ' ' + self.address
 
 
 class UserInfo(models.Model):
@@ -122,7 +128,7 @@ class UserInfo(models.Model):
       on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
-  reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
+  leader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
   tel = models.CharField('電話番号', max_length=15, blank=True, null=True)

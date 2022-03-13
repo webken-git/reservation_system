@@ -5,7 +5,7 @@ import Head from "./Head";
 import Content from "./Content";
 import Select from "./Select";
 import MonthlyCalendar from "./MonthlyCalendar";
-import Loading from "./../loading/Loading.js";
+import Loading from "../loading/Loading.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
@@ -30,6 +30,7 @@ const Calendar = (props) => {
   const [, setSt] = useState(0);
   const [calendarType, setCalendarType] = useSafeState(unmountRef, "weekly");
   const [loading, setLoading] = useSafeState(unmountRef, true);
+  const [change, setChange] = useState(true);
   const placeId = props.placeId;
   const isMain = true;
   const [placeName, setPlaceName] = useState();
@@ -54,6 +55,10 @@ const Calendar = (props) => {
     }
   };
 
+  const displayChange = () => {
+    setChange(!change)
+  }
+
   const placeSet = (e) => {
     axios
       .get(`${process.env.REACT_APP_API}/api/places/${e}`)
@@ -63,7 +68,7 @@ const Calendar = (props) => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -119,7 +124,7 @@ const Calendar = (props) => {
     return () => {
       unmounted = true;
     };
-  }, [date, setCalendarType]);
+  }, [date, setCalendarType, change, setChange]);
 
   return (
     <div className="calendar-base">
@@ -130,6 +135,10 @@ const Calendar = (props) => {
             calendarType={calendarType}
             setCalendarType={setCalendarType}
           />
+
+          <div className="display-change">
+            <button type="button" className="btn calendar-btn" onClick={() => displayChange()}>表示切替</button>
+          </div>
 
           <div className="date-title">
             <div className="last-button" onClick={() => dateChange("last")}>
@@ -175,31 +184,13 @@ const Calendar = (props) => {
                     key={index}
                     day={dayList[index]}
                     date={date}
-                    // setScheduleDict={setScheduleDict}
-                    // openModal={openModal}
-                    updateFlag={updateFlag}
-                    setUpdateFlag={setUpdateFlag}
-                    isMain={isMain}
-                    // individualOrGroup={props.individualOrGroup}
-                    homeUpdateFlag={props.homeUpdateFlag}
-                    setHomeUpdateFlag={props.setHomeUpdateFlag}
                     calendarType={calendarType}
                   />
                 );
               })
             ) : (
               <Head
-                // key={index}
-                // day={dayList[index]}
                 date={date}
-                // setScheduleDict={setScheduleDict}
-                // openModal={openModal}
-                updateFlag={updateFlag}
-                setUpdateFlag={setUpdateFlag}
-                isMain={isMain}
-                // individualOrGroup={props.individualOrGroup}
-                homeUpdateFlag={props.homeUpdateFlag}
-                setHomeUpdateFlag={props.setHomeUpdateFlag}
                 calendarType={calendarType}
               />
             )}
@@ -260,31 +251,20 @@ const Calendar = (props) => {
                   <Content
                     key={index}
                     date={date}
-                    updateFlag={updateFlag}
-                    setUpdateFlag={setUpdateFlag}
-                    isMain={isMain}
-                    homeUpdateFlag={props.homeUpdateFlag}
-                    setHomeUpdateFlag={props.setHomeUpdateFlag}
                     setLoading={setLoading}
                     placeName={placeName}
                     calendarType={calendarType}
+                    change={change}
                   />
                 );
               })
             ) : (
               <Content
-                // key={index}
                 date={date}
-                // setScheduleDict={setScheduleDict}
-                // openModal={openModal}
-                updateFlag={updateFlag}
-                setUpdateFlag={setUpdateFlag}
-                isMain={isMain}
-                // individualOrGroup={props.individualOrGroup}
-                homeUpdateFlag={props.homeUpdateFlag}
-                setHomeUpdateFlag={props.setHomeUpdateFlag}
                 setLoading={setLoading}
+                placeName={placeName}
                 calendarType={calendarType}
+                change={change}
               />
             )}
           </div>

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import ScheduleBlock from "./ScheduleBlock";
 import UnapprovalBlock from "./UnapprovalBlock";
 import SuspensionBlock from "./SuspensionBlock";
+import CheckBlock from "./CheckBlock";
 import { ReservationUrls } from "../../utils/reservationUrls";
 
 const Content = (props) => {
@@ -12,10 +13,6 @@ const Content = (props) => {
   const [contentDate, setContentDate] = useState(new Date());
   // const [ stringContentDate, setStringContentDate ] = useState("");
   const date = props.date;
-  const cookies = props.cookies;
-  const individualOrGroup = props.individualOrGroup;
-  const setUpdateFlag = props.setUpdateFlag;
-  const setHomeUpdateFlag = props.setHomeUpdateFlag;
   const filterType = props.filterType;
   const setLoading = props.setLoading;
   const approvalFilter = props.approvalFilter;
@@ -24,6 +21,7 @@ const Content = (props) => {
   const [count, setCount] = useState([]);
   const [suspensions, setSuspensions] = useState([]);
   const [approvalList, setApprovalList] = useState([]);
+  const change = props.change;
 
   // let suspensions = [];
   let approvals = [];
@@ -81,6 +79,28 @@ const Content = (props) => {
       });
   }
 
+  const reservationCount = (scheduleList) => {
+    let list  = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    scheduleList.map((schedule, index) => {
+      console.log(schedule)
+      let startHours = Number(schedule.reservation.start.substr(11, 2));
+      let endHours = Number(schedule.reservation.end.substr(11, 2));
+
+      if(schedule.approval.name === "キャンセル" || schedule.approval.name === "不承認"){
+      } else if (schedule.approval.name === "承認"){
+        for (let i = startHours; i < endHours; i++) {
+          list[i-9] = 2;
+        }
+      } else if (schedule.approval.name === "未承認") {
+        for (let i = startHours; i < endHours; i++) {
+          list[i-9] = 1;
+        }
+      }
+    })
+    setCount(list);
+  }
+
   const reservationPull = () => {
     let year = date.getFullYear();
     let month =
@@ -98,12 +118,14 @@ const Content = (props) => {
       .then((res) => {
         const scheduleList = res.data;
         setLoading(false);
-        if (!unmounted) {
+        if (change){
           setScheduleList(scheduleList);
-          setUpdateFlag(false);
           approvalDevide(scheduleList);
           suspensionPull();
-          // unapprovalCount(unapprovalList);
+        } else {
+          console.log("aa")
+          setScheduleList(scheduleList)
+          reservationCount(scheduleList);
         }
       })
       .catch((error) => {
@@ -121,13 +143,10 @@ const Content = (props) => {
   }, [
     placeName,
     date,
-    individualOrGroup,
-    cookies,
-    setUpdateFlag,
-    setHomeUpdateFlag,
     filterType,
     setLoading,
     approvalFilter,
+    change,
   ]);
 
   if (calendarType === "daily") {
@@ -155,24 +174,26 @@ const Content = (props) => {
           <div className="content-div"></div>
         </div>
 
-        <div className="schedule-block-column">
+        {change ? (
+          <div className="schedule-block-column">
             {approvalList.map((schedule, index) => {
               return (
                 <ScheduleBlock
-                  key={uuidv4()}
+                  key={index}
                   schedule={schedule}
-                  index={index}
-                  setScheduleDict={props.setScheduleDict}
                   contentDate={contentDate}
                   count={count}
+                  change={change}
                 />
               );
             })}
             {count.map((n, index) => {
               return (
                 <UnapprovalBlock
+                  key={index}
                   hour={index}
                   count={n}
+                  change={change}
                 />
               );
             })}
@@ -181,10 +202,25 @@ const Content = (props) => {
                 <SuspensionBlock
                   suspension={suspension}
                   key={index}
+                  change={change}
                 />
               );
             })}
-        </div>
+          </div>
+        ) : (
+          <div className="schedule-block-column">
+            {count.map((n, index) => {
+            return (
+              <UnapprovalBlock
+                key={index}
+                hour={index}
+                count={n}
+                change={change}
+              />
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }

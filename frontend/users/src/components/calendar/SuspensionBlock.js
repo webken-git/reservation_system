@@ -27,7 +27,8 @@ const SuspensionBlock = (props) => {
     styleGenerator,
     suspension,
     hour,
-    endHour
+    endHour,
+    props.change
   ]);
 
   return (

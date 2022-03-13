@@ -12,12 +12,6 @@ from django.db.models.aggregates import Count
 from users.models import User
 
 
-class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = ReservationSuspensionSchedule
-    fields = '__all__'
-
-
 class ApprovalSerializer(serializers.ModelSerializer):
   class Meta:
     model = Approval
@@ -54,6 +48,44 @@ class EquipmentSerializer(serializers.ModelSerializer):
   def update(self, instance, validated_data):
     # 更新処理
     validated_data['place'] = validated_data.get('place_id', None)
+    instance.name = validated_data.get('name', instance.name)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    instance.save()
+    instance.place.set(place_data)
+
+    return instance
+
+
+class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
+  place = PlaceSerializer(many=True, read_only=True)
+  place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), many=True, write_only=True)
+
+  class Meta:
+    model = ReservationSuspensionSchedule
+    fields = '__all__'
+
+  def create(self, validated_data):
+    validated_data['place'] = validated_data.get('place_id', None)
+
+    # PrimaryKeyRelatedFieldを削除
+    del validated_data['place_id']
+
+    place_data = validated_data.pop('place')
+    schedule = ReservationSuspensionSchedule.objects.create(**validated_data)
+    schedule.save()
+    schedule.place.set(place_data)
+
+    return schedule
+
+  def update(self, instance, validated_data):
+    # 更新処理
+    validated_data['place'] = validated_data.get('place_id', None)
+    instance.start = validated_data.get('start', instance.start)
+    instance.end = validated_data.get('end', instance.end)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['place_id']
@@ -100,7 +132,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     instance.place = validated_data.get('place_id', instance.place)
     validated_data['equipment'] = validated_data.get('equipment_id', instance.equipment)
     instance.group_name = validated_data.get('group_name', instance.group_name)
-    instance.reader_name = validated_data.get('reader_name', instance.reader_name)
+    instance.leader_name = validated_data.get('leader_name', instance.leader_name)
     instance.contact_name = validated_data.get('contact_name', instance.contact_name)
     instance.address = validated_data.get('address', instance.address)
     instance.tel = validated_data.get('tel', instance.tel)
@@ -130,10 +162,9 @@ class ReservationSerializer(serializers.ModelSerializer):
 
 
 class ReservationParameterSerializer(serializers.Serializer):
-  # reservation = ReservationSerializer(read_only=True)
-  # approval = ApprovalSerializer(read_only=True)
-  # approval_id = serializers.PrimaryKeyRelatedField(queryset=Approval.objects.all(), write_only=True)
-  # reservation_id = serializers.PrimaryKeyRelatedField(queryset=Reservation.objects.all(), write_only=True)
+  """
+  startの日付検索用
+  """
   start1 = serializers.DateTimeField(help_text='開始(yyyy-mm-ddTH:M:S.fz)', required=True)
   start2 = serializers.DateTimeField(help_text='終了(yyyy-mm-ddTH:M:S.fz)', required=True)
 
@@ -162,7 +193,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
     # 更新処理
     instance.user = validated_data.get('user_id', instance.user)
     instance.group_name = validated_data.get('group_name', instance.group_name)
-    instance.reader_name = validated_data.get('reader_name', instance.reader_name)
+    instance.leader_name = validated_data.get('leader_name', instance.leader_name)
     instance.contact_name = validated_data.get('contact_name', instance.contact_name)
     instance.address = validated_data.get('address', instance.address)
     instance.tel = validated_data.get('tel', instance.tel)
@@ -500,3 +531,23 @@ class EquipmentFeeSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class GetEquipmentFeeSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = EquipmentFee
+    fields = ['place', 'data']
+
+  place = serializers.SerializerMethodField('get_place')
+  data = serializers.SerializerMethodField('get_data')
+
+  def get_place(self, obj):
+    query = EquipmentFee.objects.filter(equipment__place__name=obj['equipment__place__name'])
+    serializer = EquipmentFeeSerializer(query, many=True)
+    return serializer.data[0]['equipment']['place'][0]['name']
+
+  def get_data(self, obj):
+    query = EquipmentFee.objects.filter(equipment__place__name=obj['equipment__place__name'])
+    serializer = EquipmentFeeSerializer(query, many=True)
+    return serializer.data

@@ -5,8 +5,8 @@ import "./approvalInfo.scss";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
-import ApprovalButton from "../list-buttom/ApprovalButtom";
-import DisApprovalButtom from "../list-buttom/DisApprovalButtom"
+import ApprovalButton from "../listbutton/ApprovalButtom";
+import DisApprovalButtom from "../listbutton/DisApprovalButtom"
 
 const ApprovalInfo = (props) => {
   const unmountRef = useUnmountRef();
@@ -83,7 +83,7 @@ const ApprovalInfo = (props) => {
             </li>
             <li>
               <label>代表者名：</label>
-              <span>{reservation.reservation.reader_name}</span>
+              <span>{reservation.reservation.leader_name}</span>
             </li>
             <li>
               <label>連絡者名：</label>

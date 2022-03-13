@@ -7,7 +7,12 @@ const UnapprovalBlock = (props) => {
   const count = props.count;
   const endHour = hour + 1;
 
-  let backgroundColor = "tomato";
+  let backgroundColor;
+  if(props.change){
+    backgroundColor = "tomato";
+  } else {
+    backgroundColor = "transparent";
+  }
 
   const styleGenerator = useCallback(
     (top, height) => ({
@@ -28,20 +33,42 @@ const UnapprovalBlock = (props) => {
     hour,
     count,
     endHour,
+    props.change
   ]);
 
-  if (count !== 0) {
-    return (
-      <div
-      className="schedule-block"
-      style={styleGeneratorHandler()}
-      >
-        <p>
-          {count}件
-        </p>
-      </div>
-    );
-  } else { return null; }
+  if (props.change) {
+    if (count !== 0) {
+      return (
+        <div
+        className="schedule-block"
+        style={styleGeneratorHandler()}
+        >
+          <p>
+            {count}件
+          </p>
+        </div>
+      );
+    } else { return null; }
+  } else {
+    if(count !== null){
+      return (
+        <div
+          className="schedule-block"
+          style={styleGeneratorHandler()}
+        >
+          {count === 0 ? (
+            <span>〇</span>
+          ) : null}
+          {count === 1 ? (
+            <span>△</span>
+          ) : null}
+          {count === 2 ? (
+            <span>×</span>
+          ) : null}
+        </div>
+      )
+    } else { return null;}
+  }
 };
 
 export default UnapprovalBlock;
