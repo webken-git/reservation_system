@@ -1,7 +1,6 @@
 from django.db import models
 from django.core import validators
 from django.db.models.fields.related import ForeignKey
-from phonenumber_field.modelfields import PhoneNumberField
 from users.models import User
 import uuid
 
@@ -35,8 +34,8 @@ class Place(models.Model):
   予約場所テーブル
   """
   name = models.CharField('利用体育施設の名称', max_length=25)
-  max = models.IntegerField(
-      '最大シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
+  min = models.FloatField('最小利用時間', default=1.0)
+  max = models.FloatField('最大利用時間', default=1.0, validators=[validators.MinValueValidator(1.0), validators.MaxValueValidator(25.0)])
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -61,18 +60,6 @@ class Equipment(models.Model):
     return self.name
 
 
-class SpecialEquipment(models.Model):
-  """
-  特別設備テーブル
-  """
-  name = models.CharField('特別設備', max_length=25, blank=True, null=True)
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-
-  def __str__(self):
-    return self.name
-
-
 class Reservation(models.Model):
   """
   予約テーブル
@@ -85,10 +72,10 @@ class Reservation(models.Model):
       on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
-  reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
+  leader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号')
+  tel = models.CharField('電話番号', max_length=15, blank=True, null=True)
   is_group = models.BooleanField('is_group', default=False)
   delete_flag = models.BooleanField('delete_flag', default=False)
   start = models.DateTimeField('利用開始日時')
@@ -108,23 +95,20 @@ class Reservation(models.Model):
       blank=True, null=True,
       related_name='reservation_place', on_delete=models.SET_NULL
   )
-  place_number = models.IntegerField(
-      'シート数', blank=True, null=True, default=1, validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
+  place_number = models.FloatField('シート数', default=1.0, validators=[
+      validators.MinValueValidator(0.5),
+      validators.MaxValueValidator(100.0)])
   equipment = models.ManyToManyField(
       Equipment, verbose_name='equipment',
       blank=True,
       related_name='reservation_equipment'
   )
-  special_equipment = models.ManyToManyField(
-      SpecialEquipment, verbose_name='special_equipment',
-      blank=True,
-      related_name='resercvation_special_equipment'
-  )
+  special_equipment = models.CharField('特別設備', max_length=50, blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
   def __str__(self):
-    return self.reader_name + ' ' + self.contact_name + ' ' + self.address
+    return self.leader_name + ' ' + self.contact_name + ' ' + self.address
 
 
 class UserInfo(models.Model):
@@ -139,10 +123,10 @@ class UserInfo(models.Model):
       on_delete=models.CASCADE
   )
   group_name = models.CharField('団体名', max_length=25, blank=True, null=True)
-  reader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
+  leader_name = models.CharField('代表者名', max_length=25, blank=True, null=True)
   contact_name = models.CharField('連絡者名', max_length=25)
   address = models.CharField('住所', max_length=125)
-  tel = PhoneNumberField('電話番号')
+  tel = models.CharField('電話番号', max_length=15, blank=True, null=True)
   is_group = models.BooleanField('is_group', default=False)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -266,6 +250,10 @@ class DefferdPayment(models.Model):
       related_name='defferd_payment_reservation',
       on_delete=models.CASCADE
   )
+  fee = models.IntegerField('後納料', validators=[
+      validators.MinValueValidator(0),
+      validators.MaxValueValidator(20000)],
+      blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 

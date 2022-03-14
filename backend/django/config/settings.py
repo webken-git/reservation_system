@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     # Local
     'announcements',
     'app_settings',
-    'application_documents',
+    'documents',
     'business_diary',
     'reservations',
     'questionnaire',
@@ -208,7 +208,7 @@ CSRF_COOKIE_SECURE = True
 
 REST_AUTH_SERIALIZERS = {
     # 'LOGIN_SERIALIZER': 'users.signin.serializers.LoginSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'users.serializers.PasswordResetSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'users.serializers.CustomPasswordResetSerializer',
 }
 
 CSRF_COOKIE_NAME = 'csrftoken'
@@ -235,8 +235,8 @@ AUTHENTICATION_BACKENDS = [
 
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None

@@ -1,0 +1,81 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+// 詳細ボタンのcss
+// .details-button {
+// font-size: 40px;
+// font-weight: 900;
+// background-color: skyblue;
+// }
+.details-button:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.modal-wrapper {
+  .modal-title {
+    border-bottom: solid 1px #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+    }
+  }
+  ul li {
+    font-size: 1.2rem;
+    position: relative;
+    list-style: none;
+    label {
+      width: 250px;
+      display: table-cell;
+      font-weight: bold;
+    }
+    span {
+      display: table-cell;
+      text-align: right;
+      @include mq(sp) {
+        // width: 100%;
+        display: block;
+        text-align: left;
+      }
+      @include mq(tab) {
+        // width: 100%;
+        display: block;
+        text-align: left;
+      }
+    }
+    .center {
+      text-align: center !important;
+    }
+  }
+  ul li::after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0.65em;
+    left: -1em;
+    width: 8px;
+    height: 2px;
+    background-color: #666;
+  }
+}

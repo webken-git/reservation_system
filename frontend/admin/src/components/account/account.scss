@@ -50,12 +50,18 @@ $accent-color: #233b62;
       }
     }
   }
+  .user-info-detail {
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
   .change-link {
     margin: 0;
   }
   .link {
     text-decoration: none;
-    color: $accent-color;
+    color: $main-color;
   }
   .link:hover {
     text-decoration: underline;
@@ -104,7 +110,7 @@ $accent-color: #233b62;
     border-radius: 100%;
     left: 0;
     top: 0;
-    z-index: 2;
+    // z-index: 2;
     background: #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     transition: 0.4s;

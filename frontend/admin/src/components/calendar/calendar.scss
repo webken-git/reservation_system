@@ -1,11 +1,55 @@
-$bordercolor: gainsboro;
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
+$bordercolor: #dadce0;
+
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})",
+  "iphonese": "screen and (max-width: 376px)"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
 
 //追加css
 .container {
   display: inline-block;
   // width: 80%;
   width: 100%;
-  height: 97vh;
+  height: 100vh;
   vertical-align: top;
 }
 
@@ -23,22 +67,30 @@ $bordercolor: gainsboro;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #707070;
+    border-bottom: 1.5px solid $bordercolor;
 
     .header_title {
       font-size: 30px;
       margin-left: 50px;
       color: #707070;
+      @include mq(sp) {
+        display: none;
+      }
     }
 
     .date-selector {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       width: fit-content;
-      .last-button:hover,
-      .next-button:hover {
-        cursor: pointer;
-        opacity: 0.5;
+
+      .last-button,
+      .next-button {
+        margin: 0 5px;
+        &:hover {
+          cursor: pointer;
+          opacity: 0.5;
+        }
       }
     }
 
@@ -49,14 +101,59 @@ $bordercolor: gainsboro;
 
     .calendar-btn {
       width: 3rem;
+      @include mq(sp) {
+        width: 2.5rem;
+        font-size: 0.8rem;
+        padding: 7px 15px;
+      }
+      @include mq(iphonese) {
+        width: 2rem;
+        font-size: 0.7rem;
+        padding: 7px 12px;
+      }
+    }
+
+    .date-title {
+      // width: 50%;
+      display: flex;
+      justify-content: center;
+      // margin: 0 auto;
+
+      // アイコンをホバーした時
+      .last-button:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+      .next-button:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+
+      p {
+        font-size: 1.1rem;
+        margin: 0 30px;
+        @include mq(sp) {
+          margin: 0 5px;
+        }
+      }
+
+      .filter-base {
+        display: flex;
+        justify-content: space-between;
+      }
     }
   }
 
-  .main,
-  .monthly-calendar {
-    height: 88%;
+  .main {
+    height: 93%;
     margin-right: 10px;
     margin-left: 10px;
+  }
+
+  .monthly-calendar {
+    height: 100vh;
+    // margin-right: 10px;
+    // margin-left: 10px;
   }
 
   .main {
@@ -76,7 +173,10 @@ $bordercolor: gainsboro;
 }
 
 .head-row {
-  height: 10%;
+  height: 100px;
+  @include mq(sp) {
+    height: 90px;
+  }
 
   ::-webkit-scrollbar {
     display: inline;
@@ -90,6 +190,9 @@ $bordercolor: gainsboro;
     width: 5.5%;
     height: 100%;
     vertical-align: top;
+    @include mq(sp) {
+      width: 10%;
+    }
   }
 
   .head {
@@ -100,6 +203,9 @@ $bordercolor: gainsboro;
     height: 100%;
     position: relative;
     text-align: center;
+    @include mq(sp) {
+      width: 12.5%;
+    }
 
     .day {
       margin-top: 1vh;
@@ -109,7 +215,7 @@ $bordercolor: gainsboro;
       font-size: 2.5vh;
       text-align: center;
       position: absolute;
-      top: 3vh;
+      top: 4.5vh;
       left: 0;
       width: 100%;
 
@@ -119,11 +225,11 @@ $bordercolor: gainsboro;
     }
 
     .today {
-      background-color: #1a8d89;
+      background-color: $main-color;
       color: white;
       display: inline-block;
-      width: 3.7vh;
-      height: 3.7vh;
+      width: 4.2vh;
+      height: 4.2vh;
       border-radius: 50%;
       line-height: 3.7vh;
       box-sizing: border-box;
@@ -169,7 +275,7 @@ $bordercolor: gainsboro;
     border-bottom: $bordercolor 1px dashed;
     box-sizing: border-box;
     display: inline-block;
-    width: 94.5%;
+    width: 90%;
     height: 100%;
     position: relative;
     text-align: center;
@@ -182,7 +288,7 @@ $bordercolor: gainsboro;
       font-size: 2.5vh;
       text-align: center;
       position: absolute;
-      top: 3vh;
+      top: 4.5vh;
       left: 0;
       width: 100%;
 
@@ -195,8 +301,8 @@ $bordercolor: gainsboro;
       background-color: #1a8d89;
       color: white;
       display: inline-block;
-      width: 3.7vh;
-      height: 3.7vh;
+      width: 4.2vh;
+      height: 4.2vh;
       border-radius: 50%;
       line-height: 3.7vh;
       box-sizing: border-box;
@@ -240,11 +346,17 @@ $bordercolor: gainsboro;
 }
 
 .content-row {
-  height: 90%;
+  height: 70vh;
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE, Edge 対応 */
   scrollbar-width: none; /* Firefox 対応 */
   position: relative;
+  @include mq(sp) {
+    height: 600px;
+  }
+  @include mq(iphonese) {
+    height: 400px;
+  }
 
   .now-time {
     width: 95.8%;
@@ -258,6 +370,9 @@ $bordercolor: gainsboro;
   .timeline {
     display: inline-block;
     width: 5.5%;
+    @include mq(sp) {
+      width: 10%;
+    }
 
     div:first-of-type {
       margin-top: 2vh;
@@ -276,6 +391,7 @@ $bordercolor: gainsboro;
       position: relative;
       top: -1.6vh;
       margin: 0;
+      padding: 0 10px;
     }
   }
 
@@ -287,6 +403,9 @@ $bordercolor: gainsboro;
     overflow: hidden;
     position: relative;
     vertical-align: top;
+    @include mq(sp) {
+      width: 12.5%;
+    }
 
     .content-div:first-of-type {
       margin-top: 2vh;
@@ -342,7 +461,7 @@ $bordercolor: gainsboro;
     border-left: $bordercolor 1px solid;
     box-sizing: border-box;
     display: inline-block;
-    width: 94.5%;
+    width: 90%;
     overflow: hidden;
     position: relative;
     vertical-align: top;
@@ -403,7 +522,7 @@ $bordercolor: gainsboro;
   height: 100%;
 
   .header {
-    height: 12%;
+    // height: 12%;
     display: flex;
     // justify-content: center; //左右中央揃え
     align-items: center; //上下中央揃え
@@ -418,15 +537,21 @@ $bordercolor: gainsboro;
 
     p {
       margin: 0;
-      font-size: 22px;
+      // font-size: 22px;
     }
   }
 
   table {
-    width: 100%;
-    height: 86%;
-    border: 2px $bordercolor solid;
+    width: 95%;
+    height: 80%;
+    margin: 1% auto;
+    border: 1px $bordercolor solid;
+    // border-top: none;
     border-collapse: collapse;
+    @include mq(sp) {
+      // width: 100%;
+      margin: 5% auto;
+    }
 
     tbody {
       width: 100%;
@@ -436,14 +561,24 @@ $bordercolor: gainsboro;
       tr {
         width: 13%;
         height: 10%;
-        border-bottom: 1.5px $bordercolor solid;
+        border-bottom: 1px $bordercolor solid;
+        font-size: 1.2rem;
 
         th {
           display: table-cell;
           vertical-align: top;
           padding-top: 3px;
-          font-size: 12px;
-          border-right: 1.5px $bordercolor solid;
+          // font-size: 12px;
+          border-right: 1px $bordercolor solid;
+          &:first-child {
+            color: #f00;
+          }
+          &:last-child {
+            color: #0000ff;
+          }
+          p {
+            color: #000;
+          }
         }
       }
 

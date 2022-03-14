@@ -14,7 +14,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from dj_rest_auth.registration.views import VerifyEmailView
@@ -31,7 +31,7 @@ from users.urls import router as users_router
 from reservations.urls import router as reservations_router
 from announcements.urls import router as announcements_router
 from app_settings.urls import router as app_settings_router
-from application_documents.urls import router as application_documents_router
+from documents.urls import router as documents_router
 from questionnaire.urls import router as questionnaire_router
 
 
@@ -40,7 +40,7 @@ router.registry.extend(users_router.registry)
 router.registry.extend(reservations_router.registry)
 router.registry.extend(announcements_router.registry)
 router.registry.extend(app_settings_router.registry)
-router.registry.extend(application_documents_router.registry)
+router.registry.extend(documents_router.registry)
 router.registry.extend(questionnaire_router.registry)
 
 reference_uris = [
@@ -70,12 +70,10 @@ account_uris = [
     path('staff-login/', views.StaffLoginView.as_view()),
     path('superuser-login/', views.SuperUserLoginView.as_view()),
     path('password/reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('confirm-email/',
+    path('confirm/',
          VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    # path('confirm/',
-    #  VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    # re_path(r'^confirm/(?P<key>[-:\w]+)/$',
-    # VerifyEmailView.as_view(), name='account_confirm_email'),
+    re_path(r'^confirm/(?P<key>[-:\w]+)/$',
+            VerifyEmailView.as_view(), name='account_confirm_email'),
     # path('token/', TokenObtainView.as_view(), name='token_obtain_pair'),
     # path('token/refresh/', refresh_get, name='token_refresh'),
     # path('token/new/', TokenRefresh.as_view(), name='token_refresh'),
@@ -84,8 +82,8 @@ account_uris = [
 ]
 
 urlpatterns = [
-    path('admin/business_diary/', include('business_diary.urls')),
-    path('admin/', admin.site.urls),
+    # path('admin/business_diary/', include('business_diary.urls')),
+    # path('admin/', admin.site.urls),
     path('api/', include(api_uris)),
     path('account/', include(account_uris)),
 ]

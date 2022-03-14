@@ -24,7 +24,7 @@ $accent-color: #233b62;
 
 .allbox {
   // width: 100vw;
-  // height: 100vh;
+  height: 100%;
   display: flex;
   overflow-x: hidden;
 
@@ -51,12 +51,13 @@ $accent-color: #233b62;
   }
 
   .sidebar {
-    min-width: fit-content;
+    width: 15%;
+    height: 100%;
     @include mq(sp) {
-      min-width: 70%;
+      display: none;
     }
     @include mq(tab) {
-      min-width: 70%;
+      display: none;
     }
   }
 
@@ -74,4 +75,8 @@ $accent-color: #233b62;
       margin: 1% 2% 0 2%;
     }
   }
+}
+
+.allbox > .sidebar {
+  height: auto;
 }

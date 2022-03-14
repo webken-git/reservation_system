@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { withCookies } from 'react-cookie'
 import {v4 as uuidv4} from 'uuid'
-
+import { ReservationUrls } from "../../utils/reservationUrls";
 import ScheduleBlock from './ScheduleBlock';
+// import { fil } from 'date-fns/locale';
 
 const Content = (props) =>{
     const [ scheduleList, setScheduleList ] = useState([]);
@@ -25,11 +26,12 @@ const Content = (props) =>{
         let year = date.getFullYear();
         let month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
         let day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
+
         if(!unmounted){
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
             // setStringContentDate(year+'-'+month+'-'+day);    
         }
-        axios.get(`${process.env.REACT_APP_API}/api/approval-applications/`,{
+        axios.get(`${ReservationUrls.APPROVAL_APPLICATION}`,{
             params: {
                 'approval': approvalFilter,
                 'reservation__start': year+'-'+month+'-'+day,
@@ -51,27 +53,16 @@ const Content = (props) =>{
         .catch( error => {
             console.log(error);
         });
-        
+
         return () => { unmounted = true }
     }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading, approvalFilter]);
 
     if (calendarType === 'weekly'){
     return (
         <div className="content">
-            <div 
-                className="content-span" 
+            <div
+                className="content-span"
             >
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
@@ -113,20 +104,9 @@ const Content = (props) =>{
     )} else if (calendarType === 'daily') {
         return (
             <div className="daily-content">
-            <div 
-                className="content-span" 
+            <div
+                className="content-span"
             >
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
-                <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>
                 <div className="content-div"></div>

@@ -28,47 +28,37 @@ $accent-color: #233b62;
     font-size: 30px;
     border-bottom: 2px solid $sub-color;
   }
-  .info-table {
-    display: inline-block;
-    text-align: left;
-
-    font-size: 20px;
-    .name-body {
-      color: $sub-color;
-    }
-    .change-link {
-      color: #2699fb;
-    }
-    tr {
-      display: block;
-      margin-bottom: 5%;
-      td {
-        width: 300px;
-        @include mq(tab) {
-          // width: 250px;
-        }
-      }
-    }
-  }
-  .change-link {
-    margin: 0;
-  }
-  .link {
-    text-decoration: none;
-    color: $accent-color;
-  }
-  .link:hover {
-    text-decoration: underline;
-  }
-  @include mq(sp) {
-    .mail-pass {
-      tr {
-        margin-bottom: 10%;
+  ul li {
+    font-size: 1.3rem;
+    position: relative;
+    list-style: none;
+    label {
+      width: 300px;
+      display: table-cell;
+      font-weight: bold;
+      @include mq(sp) {
+        width: 100%;
         display: block;
-        td {
-          display: block;
-        }
       }
     }
+    span {
+      display: table-cell;
+      text-align: right;
+      @include mq(sp) {
+        // width: 100%;
+        display: block;
+        text-align: left;
+      }
+    }
+  }
+  ul li::after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0.65em;
+    left: -1em;
+    width: 8px;
+    height: 2px;
+    background-color: #666;
   }
 }

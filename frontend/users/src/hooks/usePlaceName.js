@@ -1,6 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-// import tabState from "../recoil/tab/atom";
-import { useRecoilState, useRecoilValue } from "recoil";
 
 export const usePlaceName = (tab) => {
   const [placeName, setPlaceName] = useState("");

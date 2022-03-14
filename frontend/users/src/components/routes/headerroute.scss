@@ -1,0 +1,13 @@
+.allbox {
+  // height: 100vh;
+  // width: 100vw;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  main {
+    // height: 80%;
+    width: 100%;
+    flex: 1;
+    overflow-x: hidden;
+  }
+}
