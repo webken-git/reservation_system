@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { withCookies } from "react-cookie";
 
-const UnapprovalBlock = (props) => {
+const SuspensionBlock = (props) => {
 
-  const hour = props.hour;
-  const count = props.count;
-  const endHour = hour + 1;
+  const suspension = props.suspension;
+  const hour = suspension.start.substr(11, 2);
+  const endHour = suspension.end.substr(11, 2);
 
-  let backgroundColor = "tomato";
+  let backgroundColor = "red";
 
   const styleGenerator = useCallback(
     (top, height) => ({
@@ -19,29 +19,27 @@ const UnapprovalBlock = (props) => {
   );
 
   const styleGeneratorHandler = useCallback(() => {
-    let top = (hour) * 6 + 2;
+    let top = (hour-9) * 6 + 2;
     let height = (endHour - hour) * 6;
 
     return styleGenerator(top, height);
   }, [
     styleGenerator,
+    suspension,
     hour,
-    count,
-    endHour,
+    endHour
   ]);
 
-  if (count !== 0) {
-    return (
-      <div
-      className="schedule-block"
-      style={styleGeneratorHandler()}
-      >
-        <p>
-          {count}件
-        </p>
-      </div>
-    );
-  } else { return null; }
+  return (
+    <div
+    className="schedule-block"
+    style={styleGeneratorHandler()}
+    >
+      <p>
+        予約停止中
+      </p>
+    </div>
+  );  
 };
 
-export default UnapprovalBlock;
+export default SuspensionBlock;

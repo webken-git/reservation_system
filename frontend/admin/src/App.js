@@ -26,6 +26,7 @@ import { AddDataPage } from "./pages/AddDataPage";
 import { CalendarPage } from "./pages/CalendarPage";
 import { DocumentListPage } from "./pages/DocumentListPage";
 import { ApprovalInfoPage } from "./pages/ApprovalInfoPage";
+import { SuspensionInfoPage } from "./pages/SuspensionInfoPage";
 import { MailPage } from "./pages/MailPage";
 import { SendEmailPage } from "./pages/SendEmailPage";
 import { ReservePage } from "./pages/ReservePage";
@@ -238,7 +239,13 @@ function App() {
                           children={<ApprovalInfoPage />}
                         />
                       </Route>
-                      <Route component={NotFound} />
+                      <Route path={`${url}/suspension-info/:id`}>
+                        <SideBarAndHeaderRoute
+                          pagename={"予約停止詳細"}
+                          exact
+                          children={<SuspensionInfoPage />}
+                        />
+                      </Route>
                     </Switch>
                   </>
                 )}

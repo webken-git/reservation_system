@@ -4,6 +4,8 @@ import { withCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
 import ScheduleBlock from "./ScheduleBlock";
 import UnapprovalBlock from "./UnapprovalBlock";
+import SuspensionBlock from "./SuspensionBlock";
+import { ReservationUrls } from "../../utils/reservationUrls";
 
 const Content = (props) => {
   const [scheduleList, setScheduleList] = useState([]);
@@ -20,11 +22,13 @@ const Content = (props) => {
   const placeName = props.placeName;
   const calendarType = props.calendarType;
   const [count, setCount] = useState([]);
-
+  const [suspensions, setSuspensions] = useState([]);
   const [approvalList, setApprovalList] = useState([]);
 
+  // let suspensions = [];
   let approvals = [];
   let unapprovals = [];
+  let typeBool = true;
 
   let unmounted = false;
 
@@ -53,21 +57,29 @@ const Content = (props) => {
     })
     setCount(list);
   }
-  
-  // const unapprovalCount = (n) => {
-  //     // console.log(n)
-  //     let list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  //     n.map((unapproval, index) => {
-  //       let startHours = Number(unapproval.reservation.start.substr(11, 2));
-  //       let endHours = Number(unapproval.reservation.end.substr(11, 2));
 
-  //       for (let i = startHours; i < endHours; i ++) {
-  //         list[i-9] = list[i-9] + 1;
-  //       }
-  //     })
-  //     console.log(list)
-  //     setCount(list)
-  // }
+  const suspensionPull = () => {
+    let year = date.getFullYear();
+    let month =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+    let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+    axios
+      .get(ReservationUrls.SUSPENSION, {
+        params: {
+          start: year + "-" + month + "-" + day,
+        },
+      })
+      .then((res) => {
+        const suspensionList = res.data;
+        setSuspensions(suspensionList);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const reservationPull = () => {
     let year = date.getFullYear();
@@ -76,13 +88,9 @@ const Content = (props) => {
         ? "0" + (date.getMonth() + 1)
         : date.getMonth() + 1;
     let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    if (!unmounted) {
-      setContentDate(new Date(Number(year), Number(month) - 1, Number(day)));
-    }
     axios
-      .get(`${process.env.REACT_APP_API}/api/approval-applications/`, {
+      .get(`${ReservationUrls.APPROVAL_APPLICATION}`, {
         params: {
-          // 'approval': 2,
           reservation__start: year + "-" + month + "-" + day,
           reservation__place__name: placeName,
         },
@@ -94,6 +102,7 @@ const Content = (props) => {
           setScheduleList(scheduleList);
           setUpdateFlag(false);
           approvalDevide(scheduleList);
+          suspensionPull();
           // unapprovalCount(unapprovalList);
         }
       })
@@ -104,6 +113,7 @@ const Content = (props) => {
 
   useEffect(() => {
     reservationPull();
+    // suspensionPull();
     // approvalDevide(scheduleList);
     // unapprovalCount(unapprovalList);
 
@@ -120,14 +130,15 @@ const Content = (props) => {
     approvalFilter,
   ]);
 
-  // if(!unmounted) {
-  //   approvalDevide(scheduleList);
-  //   unapprovalCount(unapprovalList);    
-  // }
+  if (calendarType === "daily") {
+    typeBool = false;
+  } else {
+    typeBool = true;
+  }
 
-  if (calendarType === "weekly") {
     return (
-      <div className="content">
+      // <div className="content">
+      <div className={typeBool ? "content" : "daily-content"}>
         <div className="content-span">
           <div className="content-div"></div>
           <div className="content-div"></div>
@@ -165,51 +176,17 @@ const Content = (props) => {
                 />
               );
             })}
-        </div>
-      </div>
-    );
-  } else if (calendarType === "daily") {
-    return (
-      <div className="daily-content">
-        <div className="content-span">
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-          <div className="content-div"></div>
-        </div>
-        {/* <CreateModalComponent
-                    stringContentDate={stringContentDate}
-                    setHomeUpdateFlag={props.setHomeUpdateFlag}
-                /> */}
-        <div className="schedule-block-column">
-          {props.isMain
-            ? scheduleList.map((schedule, index) => {
-                return (
-                  <ScheduleBlock
-                    key={uuidv4()}
-                    schedule={schedule}
-                    index={index}
-                    // openModal={props.openModal}
-                    setScheduleDict={props.setScheduleDict}
-                    contentDate={contentDate}
-                    // individualOrGroup={props.individualOrGroup}
-                  />
-                );
-              })
-            : null}
+            {suspensions.map((suspension, index) => {
+              return (
+                <SuspensionBlock
+                  suspension={suspension}
+                  key={index}
+                />
+              );
+            })}
         </div>
       </div>
     );
   }
-};
 
 export default withCookies(Content);

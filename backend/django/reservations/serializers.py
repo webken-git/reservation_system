@@ -61,7 +61,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
 
 
 class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
-  place = PlaceSerializer(many=True, read_only=True)
+  places = PlaceSerializer(many=True, read_only=True)
   place_id = serializers.PrimaryKeyRelatedField(queryset=Place.objects.all(), many=True, write_only=True)
 
   class Meta:
@@ -69,28 +69,28 @@ class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
   def create(self, validated_data):
-    validated_data['place'] = validated_data.get('place_id', None)
+    validated_data['places'] = validated_data.get('place_id', None)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['place_id']
 
-    place_data = validated_data.pop('place')
+    place_data = validated_data.pop('places')
     schedule = ReservationSuspensionSchedule.objects.create(**validated_data)
     schedule.save()
-    schedule.place.set(place_data)
+    schedule.places.set(place_data)
 
     return schedule
 
   def update(self, instance, validated_data):
     # 更新処理
-    validated_data['place'] = validated_data.get('place_id', None)
+    validated_data['places'] = validated_data.get('place_id', None)
     instance.start = validated_data.get('start', instance.start)
     instance.end = validated_data.get('end', instance.end)
 
     # PrimaryKeyRelatedFieldを削除
     del validated_data['place_id']
 
-    place_data = validated_data.pop('place')
+    place_data = validated_data.pop('places')
     instance.save()
     instance.place.set(place_data)
 

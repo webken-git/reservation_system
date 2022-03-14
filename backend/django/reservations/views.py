@@ -54,8 +54,8 @@ class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1HOUR))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -98,8 +98,8 @@ class PlaceViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -120,8 +120,8 @@ class EquipmentViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1HOUR))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -592,8 +592,8 @@ class UsageCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -615,8 +615,8 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: []
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -677,6 +677,7 @@ class EquipmentFeeViewSet(viewsets.ModelViewSet):
   queryset = EquipmentFee.objects.all()
   serializer_class = EquipmentFeeSerializer
   filter_fields = [f.name for f in EquipmentFee._meta.fields]
+  filter_fields += ['equipment__place__' + f.name for f in Place._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],

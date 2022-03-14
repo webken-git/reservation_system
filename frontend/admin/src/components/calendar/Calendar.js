@@ -20,6 +20,8 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import { ja } from "date-fns/locale";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
 import {
   FormControl,
   FormControlLabel,
@@ -49,6 +51,7 @@ const Label = styled("p")({
 });
 
 const Calendar = (props) => {
+  const unmountRef = useUnmountRef();
   const dayList = ["日", "月", "火", "水", "木", "金", "土"];
   const [date, setDate] = useState(new Date());
   const [dateList, setDateList] = useState([]); //表示用のリスト
@@ -65,6 +68,8 @@ const Calendar = (props) => {
   const isMain = true;
   const [FormData, setFormData] = useRecoilState(formData);
   const setPopup = useSetRecoilState(popupState);
+  const [place, setPlace] = useSafeState(unmountRef, []);
+  const [approvals, setApprovals] = useSafeState(unmountRef, []);
 
   const {
     control,
@@ -77,6 +82,26 @@ const Calendar = (props) => {
   } = useForm({
     reValidateMode: "onSubmit",
   });
+
+  const getPlaceList = () => {
+    axios
+      .get(ReservationUrls.PLACE)
+      .then((response) => {
+        const placeLists = response.data;
+        setPlace(placeLists);
+      })
+      .catch((error) => {});
+  };
+
+  const getApprovalList = () => {
+    axios
+      .get(ReservationUrls.APPROVALS)
+      .then((response) => {
+        const approvalLists = response.data;
+        setApprovals(approvalLists);
+      })
+      .catch((error) => {});
+  };
 
   let tab = useRecoilValue(tabState);
 
@@ -125,22 +150,12 @@ const Calendar = (props) => {
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
 
-    // console.log(startDate)
-    // console.log(startTime)
-    console.log(start);
-
-    // const suspensionStart = new Date(start)
-    // const suspensionStart = format(start, "yyyy-LL-dd HH:mm")
-    // const suspensionEnd = format(end, "yyyy-LL-dd HH:mm")
-    // console.log(suspensionStart)
-
     axios
-      .post(`${ReservationUrls.SUSPENSION}`, {
+      .post(ReservationUrls.SUSPENSION, {
         start: start,
         end: end,
       })
       .then((res) => {
-        console.log(res.data);
         setModalIsOpen(false);
       })
       .catch((error) => {
@@ -218,6 +233,8 @@ const Calendar = (props) => {
       }
     };
     sortDateList();
+    getPlaceList();
+    getApprovalList();
 
     //現在時刻までスクロール
     let margin = window.innerHeight * 0.02;
@@ -478,26 +495,23 @@ const Calendar = (props) => {
               <div className="filter-base">
                 <select
                   className="filter"
-                  defaultValue="カーリング場"
+                  defaultValue={place[0] && place[0].name}
                   onChange={(e) => filtering(e)}
                 >
-                  <option value="カーリング場">カーリング場</option>
-                  <option value="小会議室">小会議室</option>
-                  <option value="中会議室">中会議室</option>
-                  <option value="武道場">武道場</option>
-                  <option value="多目的体育館">多目的体育館</option>
+                  {place.map((i, index) => {
+                    return <option value={i.name}>{i.name}</option>;
+                  })}
                 </select>
               </div>
               <div className="filter-base">
                 <select
                   className="filter"
-                  defaultValue="2"
+                  defaultValue={approvals[0] && approvals[0].id}
                   onChange={(e) => approvalFiltering(e)}
                 >
-                  <option value="2">承認済み</option>
-                  <option value="1">未承認</option>
-                  <option value="3">不承認</option>
-                  <option value="4">キャンセル</option>
+                  {approvals.map((j, index) => {
+                    return <option value={j.id}>{j.name}</option>;
+                  })}
                 </select>
               </div>
             </div>
