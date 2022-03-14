@@ -77,7 +77,7 @@ const Calendar = (props) => {
     handleSubmit,
     getValues,
     setValue,
-    // register,
+    register,
     reset,
     formState: { errors },
   } = useForm({
@@ -154,8 +154,6 @@ const Calendar = (props) => {
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
     const place = e.place;
-
-    console.log(e)
     
     axios.post(ReservationUrls.SUSPENSION,{
         start: start,
@@ -179,16 +177,8 @@ const Calendar = (props) => {
       ...e,
       start,
       end,
-      // equipmentName,
-      // id,
-      // age,
-      // ageName,
-      // placeId,
-      // placeName,
       startDate,
       endDate,
-      // usageList,
-      // usageName,
     };
     const list = [...FormData, data];
     setFormData(list);
@@ -220,7 +210,7 @@ const Calendar = (props) => {
       newValues = values.filter((value) => value !== id);
     }
     setValue(name, newValues);
-    console.log(newValues)
+    // console.log(newValues)
     return newValues;
   };
 
@@ -354,8 +344,8 @@ const Calendar = (props) => {
                           <Controller
                             name="StartDate"
                             control={control}
-                            defaultValue={new Date()}
-                            rules={{ required: "入力" }}
+                            defaultValue={new Date().getTime() + 1000 * 60 * 60 * 24}
+                            // rules={{ required: "入力" }}
                             render={({ field }) => (
                               <div className={form.StartDate}>
                                 <Label>開始日時：</Label>
@@ -367,8 +357,22 @@ const Calendar = (props) => {
                                     {...field}
                                     label="年/月/日"
                                     mask="____/__/__"
+                                    minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
                                     renderInput={(params) => (
-                                      <TextField {...params} />
+                                      <TextField
+                                        {...params}
+                                        {...register("startDate", {
+                                          validate: (value) => {
+                                            if (value === "") {
+                                              return "必須項目です";
+                                            }
+                                            // 現在または過去の日付を選択された場合はエラー
+                                            if (value < new Date()) {
+                                              return "現在及び過去の日付は選択できません";
+                                            }
+                                          },
+                                        })}
+                                      />
                                     )}
                                   />
                                 </LocalizationProvider>
@@ -381,7 +385,7 @@ const Calendar = (props) => {
                             name="Start"
                             defaultValue=""
                             control={control}
-                            rules={{ required: "選択してください" }}
+                            // rules={{ required: "選択してください" }}
                             render={({ field }) => (
                               <div className={form.start}>
                                 <TextField
@@ -432,8 +436,9 @@ const Calendar = (props) => {
                           <Controller
                             name="EndDate"
                             control={control}
-                            defaultValue={new Date()}
-                            rules={{ required: "入力" }}
+                            defaultValue={
+                              new Date().getTime() + 1000 * 60 * 60 * 24
+                            }
                             render={({ field }) => (
                               <div className={form.EndDate}>
                                 <Label>終了日時</Label>
@@ -445,8 +450,23 @@ const Calendar = (props) => {
                                     {...field}
                                     label="年/月/日"
                                     mask="____/__/__"
+                                    minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
                                     renderInput={(params) => (
-                                      <TextField {...params} />
+                                      <TextField
+                                        {...params}
+                                        {...register("endDate", {
+                                          validate: (value) => {
+                                            if (value === "") {
+                                              return "必須項目です";
+                                            }
+                                            // startDateより過去の日付を選択された場合はエラー
+                                            if (value < getValues("startDate")) {
+                                              return "利用開始日時より前の日付は選択できません";
+                                            }
+                                          },
+                                        })}
+                                        error={"endDate" in errors}
+                                      />
                                     )}
                                   />
                                 </LocalizationProvider>
@@ -470,6 +490,9 @@ const Calendar = (props) => {
                                   size="Normal"
                                   defaultValue=""
                                   label="終了時間"
+                                  {...register("endTime", {
+                                    required: "選択してください",
+                                  })}
                                   error={"End" in errors}
                                   {...field}
                                 >
@@ -511,43 +534,6 @@ const Calendar = (props) => {
                     <li>
                       <div>
                         <Label>施設名：</Label>
-                        {/* <FormControl error>
-                          <FormHelperText>
-                            {errors.place && errors.place.message}
-                          </FormHelperText>
-                          <FormGroup> */}
-                            {/* <Controller
-                              control={control}
-                              id="place"
-                              name="place"
-                              defaultValue={""}
-                              rules={{ required: "選択してください" }}
-                              render={({ field }) => (
-                                <div className="">
-                                  {place.map((i, id) => (
-                                    <FormControlLabel
-                                      {...field}
-                                      key={id}
-                                      label={i.name}
-                                      value={i.id}
-                                      onChange={(e) =>
-                                        field.onChange(
-                                          handleCheck(i.id, "place", e)
-                                        )
-                                      }
-                                      control={
-                                        <Checkbox
-                                          checked={!!field.value.includes(i.id)}
-                                        />
-                                      }
-                                      labelPlaceMent="end"
-                                    />
-                                  ))}
-                                </div>
-                              )}
-                            /> */}
-                          {/* </FormGroup>
-                        </FormControl> */}
                         {place.map((i, index) => {
                           return (
                             <label key={index} onChange={(e) => handleCheck(i.id, "place", e)}>
