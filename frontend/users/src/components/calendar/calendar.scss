@@ -65,6 +65,16 @@ $bordercolor: #dadce0;
       color: #707070;
     }
 
+    .annotation {
+      list-style: none;
+      ul {
+        list-style-type: none;
+        li {
+          list-style: none;
+        }
+      }
+    }
+
     .calendar-btn {
       width: 3rem;
     }
@@ -504,6 +514,16 @@ $bordercolor: #dadce0;
     width: 100%;
     margin: 0;
     // height: 50px;
+
+    .annotation {
+      list-style: none;
+      ul {
+        list-style-type: none;
+        li {
+          list-style: none;
+        }
+      }
+    }
 
     .date-title {
       // width: 50%;

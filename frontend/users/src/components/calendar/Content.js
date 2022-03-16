@@ -176,6 +176,16 @@ const Content = (props) => {
 
         {change ? (
           <div className="schedule-block-column">
+            {count.map((n, index) => {
+              return (
+                <UnapprovalBlock
+                  key={index}
+                  hour={index}
+                  count={n}
+                  change={change}
+                />
+              );
+            })}
             {approvalList.map((schedule, index) => {
               return (
                 <ScheduleBlock
@@ -183,16 +193,6 @@ const Content = (props) => {
                   schedule={schedule}
                   contentDate={contentDate}
                   count={count}
-                  change={change}
-                />
-              );
-            })}
-            {count.map((n, index) => {
-              return (
-                <UnapprovalBlock
-                  key={index}
-                  hour={index}
-                  count={n}
                   change={change}
                 />
               );

@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronLeft,
+  faSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import useSafeState from "../../hooks/useSafeState";
 import useUnmountRef from "../../hooks/useUnmountRef";
@@ -106,21 +107,6 @@ const Calendar = (props) => {
     sortDateList();
     placeSet(placeId);
 
-    //現在時刻までスクロール
-    // let margin = window.innerHeight * 0.02;
-    // let blockHeight = window.innerHeight * 0.06;
-    // let now = new Date();
-    // let hours = now.getHours() - 4;
-    // let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-    // if (!unmounted) {
-    //   setSt(margin + blockHeight * now.getHours());
-    // }
-    // document.getElementsByClassName("content-row")[0].scrollTo({
-    //   top: st,
-    //   left: 0,
-    //   behavior: "smooth",
-    // });
-
     return () => {
       unmounted = true;
     };
@@ -138,6 +124,14 @@ const Calendar = (props) => {
 
           <div className="display-change">
             <span className="btn calendar-btn" onClick={() => displayChange()}>表示切替</span>
+          </div>
+
+          <div className="annotation">
+              <ul>
+                <li><FontAwesomeIcon icon={faSquare} style={{ color: "dodgerblue" }} /> = 予約有</li>
+                <li><FontAwesomeIcon icon={faSquare} style={{ color: "tomato" }} /> = 未承認の予約有</li>
+                <li><FontAwesomeIcon icon={faSquare} style={{ color: "red" }} /> = 予約停止中</li>  
+              </ul>
           </div>
 
           <div className="date-title">

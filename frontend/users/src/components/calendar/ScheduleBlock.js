@@ -54,6 +54,7 @@ const ScheduleBlock = (props) => {
   const styleGenerator = useCallback(
     (top, height) => ({
       backgroundColor: backgroundColor,
+      width: 100 / props.length + "%",
       top: top ? top + "vh" : "0vh",
       height: height ? height + "vh" : "0vh",
     }),
@@ -132,42 +133,22 @@ const ScheduleBlock = (props) => {
           {(scheduleStartDate < props.contentDate ||
             props.contentDate < scheduleEndDate) && <br />}
           ~
-          {(scheduleStartDate < props.contentDate ||
-            props.contentDate < scheduleEndDate) &&
-            scheduleEndDate.getMonth() +
-              1 +
-              "月" +
-              scheduleEndDate.getDate() +
-              "日"}
           {props.schedule.reservation.end.substr(11, 5)}
+          <span>
+            {props.schedule.reservation.place.min === 1 &&
+            props.schedule.reservation.place.max === 1 ? null : (
+              <p>
+                {(props.schedule.reservation.place.min === 0.5 &&
+                  (props.schedule.reservation.place_number === 0.5
+                  ? "半面"
+                  : "全面")) ||
+                  (props.schedule.reservation.place.max > 1 &&
+                    props.schedule.reservation.place_number) + "シート"}
+              </p>
+            )}
+          </span>
         </p>
       )}
-      {props.schedule.reservation.is_group === false ? (
-        <span>
-          <p>{props.schedule.reservation.place.name}</p>
-          {/* <p>{props.schedule.reservation.leader_name}</p> */}
-        </span>
-      ) : (
-        <span>
-          <p>{props.schedule.reservation.place.name}</p>
-          {/* <p>{props.schedule.reservation.group_name}</p> */}
-        </span>
-      )}
-      {/* <span>
-                <p>{props.schedule.place.name}</p>
-                <p>{props.schedule.group_name}</p>
-            </span> */}
-      {/* {props.individualOrGroup === "individual" && (
-                <span>
-                    <p>{props.schedule.place.name}</p>
-                    <p>{props.schedule.content}</p>
-                </span>
-            )} */}
-      {/* {isOpen && (
-                <div style={groupScheduleAlertStyleGenerator()}>
-                    <span>グループのスケジュールを表示中なので編集できません</span>
-                </div>
-            )} */}
     </div>
   );
 };

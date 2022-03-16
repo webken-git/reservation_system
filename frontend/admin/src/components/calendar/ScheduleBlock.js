@@ -150,7 +150,7 @@ const ScheduleBlock = (props) => {
                   ? "半面"
                   : "全面")) ||
                   (props.schedule.reservation.place.max > 1 &&
-                    props.schedule.reservation.place_number)}
+                    props.schedule.reservation.place_number) + "シート"}
               </p>
             )}
             <p>{props.schedule.reservation.leader_name}</p>
