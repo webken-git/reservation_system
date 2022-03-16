@@ -22,6 +22,7 @@ import { DisapprovalList } from "./pages/DisapprovalList";
 import { CancelList } from "./pages/CancelList";
 import { UserList } from "./pages/UserList";
 import { DataList } from "./pages/DataList";
+import { AddDataPage } from "./pages/AddDataPage";
 import { CalendarPage } from "./pages/CalendarPage";
 import { DocumentListPage } from "./pages/DocumentListPage";
 import { ApprovalInfoPage } from "./pages/ApprovalInfoPage";
@@ -197,11 +198,27 @@ function App() {
                 exact
                 children={<UserList />}
               />
-              <SideBarAndHeaderRoute
+              <Route
                 path="/data-list"
-                pagename="データリスト"
-                exact
-                children={<DataList />}
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <SideBarAndHeaderRoute
+                        path={`${url}/`}
+                        pagename={"データリスト"}
+                        exact
+                        children={<DataList />}
+                      />
+                      <SideBarAndHeaderRoute
+                        path={`${url}/add`}
+                        pagename={"データ追加"}
+                        exact
+                        children={<AddDataPage />}
+                      />
+                      <Route component={NotFound} />
+                    </Switch>
+                  </>
+                )}
               />
               <Route
                 path="/calendar"

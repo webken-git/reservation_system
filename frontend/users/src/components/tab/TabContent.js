@@ -36,6 +36,7 @@ const TabContent = (props) => {
                 feelist={props.facilityFee}
                 age={props.age}
                 time={props.time}
+                placeid={place.id}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
@@ -59,6 +60,7 @@ const TabContent = (props) => {
                 feelist={props.facilityFee}
                 age={props.age}
                 time={props.time}
+                placeid={place.id}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
@@ -82,6 +84,7 @@ const TabContent = (props) => {
                 feelist={props.facilityFee}
                 age={props.age}
                 time={props.time}
+                placeid={place.id}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (

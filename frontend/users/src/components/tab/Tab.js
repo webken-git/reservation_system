@@ -11,6 +11,7 @@ import useUnmountRef from "../../hooks/useUnmountRef";
 import Loading from "../loading/Loading";
 import TabContent from "./TabContent";
 import "./tab.scss";
+import { set } from "date-fns";
 
 const TabContainer = () => {
   const unmountRef = useUnmountRef();
@@ -39,9 +40,9 @@ const TabContainer = () => {
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 500) {
-          window.location.href = "/500";
-        }
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -56,9 +57,9 @@ const TabContainer = () => {
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 500) {
-          window.location.href = "/500";
-        }
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -108,6 +109,16 @@ const TabContainer = () => {
         }
       });
   };
+
+  // setTabState({
+  //   placeId: 1,
+  //   placeName:
+  //     place.find((place) => {
+  //       place.id === 1
+  //     }).name,
+  //   min: 1,
+  //   max: 4,
+  // })
 
   useEffect(() => {
     GetPlaceList();

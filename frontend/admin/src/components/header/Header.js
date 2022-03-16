@@ -12,20 +12,18 @@ import Cart from "./cart/Cart";
 
 const Header = (props) => {
   return (
-    <div className="headerBox">
-      <div className="header">
-        <Stack>
-          <HStack p={5} className="drawer-menu">
-            <Box display={{ base: "block", md: "none" }}>
-              <DrawerMenu />
-            </Box>
-          </HStack>
-        </Stack>
-        <div className="header_title">{props.pagename}</div>
-        {/* 各ページにあった名前に変更できるようにpropsにする */}
-        <UserIcon />
-        <Cart />
-      </div>
+    <div className="header">
+      <Stack>
+        <HStack p={5} className="drawer-menu">
+          <Box display={{ base: "block", md: "none" }}>
+            <DrawerMenu />
+          </Box>
+        </HStack>
+      </Stack>
+      <div className="header_title">{props.pagename}</div>
+      {/* 各ページにあった名前に変更できるようにpropsにする */}
+      <UserIcon />
+      <Cart />
     </div>
   );
 };

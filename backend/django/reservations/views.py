@@ -99,7 +99,7 @@ class PlaceViewSet(viewsets.ModelViewSet):
   }
 
   @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  @method_decorator(cache_page(TIME_OUTS_5MINUTES))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -121,7 +121,7 @@ class EquipmentViewSet(viewsets.ModelViewSet):
   }
 
   @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
@@ -560,27 +560,6 @@ class TimeViewSet(viewsets.ModelViewSet):
   queryset = Time.objects.all()
   serializer_class = TimeSerializer
   filter_fields = [f.name for f in Time._meta.fields]
-  permission_classes = [permissions.ActionBasedPermission]
-  action_permissions = {
-      permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
-      permissions.IsAuthenticated: [],
-      permissions.AllowAny: ['list', 'retrieve']
-  }
-
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
-  def list(self, request, *args, **kwargs):
-    return super().list(request, *args, **kwargs)
-
-  # @method_decorator(vary_on_cookie)@method_decorator(cache_page(TIME_OUTS_1MONTH))
-  def retrieve(self, request, *args, **kwargs):
-    return super().retrieve(request, *args, **kwargs)
-
-
-class TimeViewSet(viewsets.ModelViewSet):
-  queryset = Time.objects.all()
-  serializer_class = TimeSerializer
-  filter_fields = [f.name for f in Time._meta.fields]
   # permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
@@ -588,13 +567,13 @@ class TimeViewSet(viewsets.ModelViewSet):
       permissions.AllowAny: ['list', 'retrieve']
   }
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def list(self, request, *args, **kwargs):
     return super().list(request, *args, **kwargs)
 
-  @method_decorator(vary_on_cookie)
-  @method_decorator(cache_page(TIME_OUTS_1MONTH))
+  # @method_decorator(vary_on_cookie)
+  # @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def retrieve(self, request, *args, **kwargs):
     return super().retrieve(request, *args, **kwargs)
 
@@ -696,6 +675,7 @@ class EquipmentFeeViewSet(viewsets.ModelViewSet):
   queryset = EquipmentFee.objects.all()
   serializer_class = EquipmentFeeSerializer
   filter_fields = [f.name for f in EquipmentFee._meta.fields]
+  filter_fields += ['equipment__place__' + f.name for f in Place._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
@@ -706,6 +686,8 @@ class EquipmentFeeViewSet(viewsets.ModelViewSet):
   # @method_decorator(vary_on_cookie)
   # @method_decorator(cache_page(TIME_OUTS_1MONTH))
   def list(self, request, *args, **kwargs):
+    self.queryset = EquipmentFee.objects.all().values('equipment__place__name').order_by('equipment__place__name').distinct()
+    self.serializer_class = GetEquipmentFeeSerializer
     return super().list(request, *args, **kwargs)
 
   # @method_decorator(vary_on_cookie)

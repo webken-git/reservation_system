@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Loading from "../../loading/Loading";
 // import EditData from "./EditData";
 import { useForm } from "react-hook-form";
 import { ReservationUrls } from "../../../utils/reservationUrls";
+import useUnmountRef from "../../../hooks/useUnmountRef";
+import useSafeState from "../../../hooks/useSafeState";
 import "./editfeelist.scss";
 
 const EditGroupFeeList = (props) => {
+  const unmountRef = useUnmountRef();
   const ageData = props.age;
   const feelistData = props.feelist;
   const placeData = props.place;
   let purposeList = [];
   let timeList = []; // 時間区分を格納する配列
   let changefeeData = []; // 変更したデータを格納する配列
+  let changeEquipmentfeeData = []; //変更した用具料金を格納する配列
+  let changeplaceName = []; // 変更した場所データを格納する配列
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const {
@@ -21,6 +26,7 @@ const EditGroupFeeList = (props) => {
     getValues,
     formState: { errors },
   } = useForm();
+  const [equipmentfeeList, setEquipmentfeeList] = useSafeState(unmountRef, []);
 
   const age1 = ageData.filter((age) => age.name === "小学生");
   const age2 = ageData.filter((age) => age.name === "中学生");
@@ -29,6 +35,23 @@ const EditGroupFeeList = (props) => {
   const age5 = ageData.filter((age) => age.name === "一般");
   const age6 = ageData.filter((age) => age.name === "高齢者");
   const age7 = ageData.filter((age) => age.name === "障がい者");
+
+  //用具料金表データの取得
+  const GetEquipmentFee = () => {
+    axios
+      .get(
+        `${ReservationUrls.EQUIPMENT_FEE}?equipment__place__id=${placeData.id}`
+      )
+      .then((response) => {
+        const equipmentfeeLists = response.data[0].data;
+        setEquipmentfeeList(equipmentfeeLists);
+      })
+      .catch((error) => { });
+  }
+
+  useEffect(() => {
+    GetEquipmentFee();
+  }, []);
 
   // feelistdataに含まれているpurposeを取得
   feelistData.map((feelist) => {
@@ -60,6 +83,7 @@ const EditGroupFeeList = (props) => {
       index === self.findIndex((t) => t.timeId === timeId.timeId)
   );
 
+  //料金表
   const onChange = (e, timeId, ageId, feeId) => {
     changefeeData.push({
       place_id: placeData.id,
@@ -80,6 +104,42 @@ const EditGroupFeeList = (props) => {
         )
     );
   };
+
+  //場所の名前
+  const onChangePlaceName = (e) => {
+    changeplaceName.push({
+      place_id: placeData.id,
+      inputName: e.target.name
+    });
+    changeplaceName = changeplaceName.filter(
+      (place, index, self) =>
+        index ===
+        self.findIndex(
+          (f) =>
+            f.place_id === place.place_id
+        )
+    );
+  };
+
+  //用具の料金表
+  const onChangeEquipment = (e, equipmentId, feeId) => {
+    changeEquipmentfeeData.push({
+      equipment_id: equipmentId,
+      inputName: e.target.name,
+      fee_id: feeId
+    })
+
+    // 重複しているデータを削除
+    changeEquipmentfeeData = changeEquipmentfeeData.filter(
+      (fee, index, self) =>
+        index ===
+        self.findIndex(
+          (f) =>
+            f.equipment_id === fee.equipment_id
+        )
+    );
+  };
+
   const onSubmit = (data) => {
     setLoading(true);
     // 料金データを更新
@@ -99,6 +159,35 @@ const EditGroupFeeList = (props) => {
         });
       return fee;
     });
+    //場所の名前の更新
+    changeplaceName.map((place) => {
+      axios
+        .patch(`${ReservationUrls.PLACE}${placeData.id}/`, {
+          name: getValues(place.inputName)
+        })
+        .then((res) => {
+          console.log("Success");
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      return place;
+    });
+    //用具料金表の更新
+    changeEquipmentfeeData.map((equipmentfee) => {
+      axios
+        .patch(`${ReservationUrls.EQUIPMENT_FEE}${equipmentfee.fee_id}/`, {
+          equipment_id: equipmentfee.equipment_id,
+          fee: getValues(equipmentfee.inputName)
+        })
+        .then((res) => {
+          console.log("Success");
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      return equipmentfee;
+    })
     setLoading(false);
     setMessage("変更しました");
     // 0.5秒後にリロード
@@ -106,6 +195,49 @@ const EditGroupFeeList = (props) => {
       window.location.reload();
     }, 500);
   };
+
+  // 用具料金表
+  const Equipment = () => {
+    if (equipmentfeeList.length === 0) {
+      return <></>
+    } else {
+      return (
+        <>
+          <h2>用具</h2>
+          <table>
+            <tbody>
+              {equipmentfeeList.map((equipment, index) => (
+                <tr key={equipment.id}>
+                  <td>{equipment.equipment.name}</td>
+                  <td>
+                    <input
+                      type="text"
+                      name={`equipmentfee1-${index}`}
+                      defaultValue={equipment.fee}
+                      {...register(`equipmentfee1-${index}`, {
+                        required: "必須項目です",
+                        pattern: {
+                          value: /^[0-9]+$/,
+                          message: "半角数字で入力してください",
+                        },
+                      })}
+                      onChange={(e) =>
+                        onChangeEquipment(
+                          e,
+                          equipment.equipment.id,
+                          equipment.id
+                        )
+                      }
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )
+    }
+  }
 
   // リストに値が入っているか確認
   if (timeList === 0) {
@@ -123,9 +255,28 @@ const EditGroupFeeList = (props) => {
             ・ 「完了」ボタンを押すと料金が変更されます。
             <br />
           </p>
-          <h2>{placeData.name}</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* {errors && <p className="red">入力内容に誤りがあります。</p>} */}
+            <p className="red">
+              ※施設名を変更した場合、反映に5分程度掛かります。<br />
+              5分程度経ったあと、リロードしてください。
+            </p>
+            <h4>施設名：</h4>
+            <input
+              type="text"
+              name="place"
+              defaultValue={placeData.name}
+              {...register(`place`, {
+                required: "必須項目です",
+                pattern: {
+                  value: String,
+                  message: "入力してください",
+                },
+              })}
+              onChange={(e) =>
+                onChangePlaceName(e)
+              }
+            />
             <h2>個人使用</h2>
             <table>
               <thead>
@@ -1023,6 +1174,7 @@ const EditGroupFeeList = (props) => {
                 ))}
               </tbody>
             </table>
+            <Equipment />
             <div className="btn-wrapper">
               <button type="submit" className="btn">
                 完了

@@ -98,10 +98,10 @@ const AutomaticMailList = () => {
         </div>
         <div className="mail-list__content">
           <Accordion allowZeroExpanded>
-            {automaticMailListData.map((val) => {
+            {automaticMailListData.map((val, index) => {
               return (
                 <>
-                  <AccordionItem key={val.id}>
+                  <AccordionItem key={index}>
                     <AccordionItemHeading>
                       <AccordionItemButton>{val.name}</AccordionItemButton>
                     </AccordionItemHeading>
@@ -184,7 +184,7 @@ const AutomaticMailList = () => {
                       <button
                         className="back-btn"
                         type="button"
-                        onClick={modalToggle}
+                        onClick={() => setModalIsOpen(false)}
                       >
                         戻る
                       </button>

@@ -38,6 +38,12 @@ $accent-color: #233b62;
       border-style: double;
       border-color: $main-color;
     }
+    // &:first-child {
+    //   &:hover {
+    //     border-style: double;
+    //     border-color: #dfdfdf;
+    //   }
+    // }
     input {
       width: 95%;
       text-align: center;

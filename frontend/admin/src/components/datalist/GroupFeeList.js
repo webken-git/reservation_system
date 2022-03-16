@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Loading from "../loading/Loading";
+import axios from "axios";
 import "./feelist.scss";
+import { ReservationUrls } from "../../utils/reservationUrls";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
 
 const GroupFeeList = (props) => {
+  const unmountRef = useUnmountRef();
   const ageData = props.age;
   const feelistData = props.feelist;
+  const placeId = props.placeid
   let purposeList = [];
   let timeList = []; // 時間区分を格納する配列
+  const [equipmentFeeList, setEquipmentFeeList] = useSafeState(unmountRef, []);
 
   const age1 = ageData.filter((age) => age.name === "小学生");
   const age2 = ageData.filter((age) => age.name === "中学生");
@@ -15,6 +22,23 @@ const GroupFeeList = (props) => {
   const age5 = ageData.filter((age) => age.name === "一般");
   const age6 = ageData.filter((age) => age.name === "高齢者");
   const age7 = ageData.filter((age) => age.name === "障がい者");
+
+  //用具料金表データの取得
+  const GetEquipmentFee = () => {
+    axios
+      .get(
+        `${ReservationUrls.EQUIPMENT_FEE}?equipment__place__id=${placeId}`
+      )
+      .then((response) => {
+        const equipmentFeelists = response.data[0].data;
+        setEquipmentFeeList(equipmentFeelists);
+      })
+      .catch((error) => { });
+  }
+
+  useEffect(() => {
+    GetEquipmentFee();
+  }, []);
 
   // feelistdataに含まれているpurposeを取得
   feelistData.map((feelist) => {
@@ -45,6 +69,31 @@ const GroupFeeList = (props) => {
     (timeId, index, self) =>
       index === self.findIndex((t) => t.timeId === timeId.timeId)
   );
+
+  // 用具料金表
+  const Equipment = () => {
+    if (equipmentFeeList.length === 0) {
+      return <></>
+    } else {
+      return (
+        <>
+          <h2>用具</h2>
+          <table>
+            <tbody>
+              {equipmentFeeList.map((equipment, index) => (
+                <tr key={equipment.id}>
+                  <td>{equipment.equipment.name}</td>
+                  <td name={`equipmentfee1-${index}`}>
+                    {equipment.fee}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )
+    }
+  }
 
   // リストに値が入っているか確認
   if (timeList === 0) {
@@ -382,6 +431,7 @@ const GroupFeeList = (props) => {
               ))}
             </tbody>
           </table>
+          <Equipment />
         </div>
       </>
     );

@@ -499,3 +499,23 @@ class EquipmentFeeSerializer(serializers.ModelSerializer):
     instance.save()
 
     return instance
+
+
+class GetEquipmentFeeSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = EquipmentFee
+    fields = ['place', 'data']
+
+  place = serializers.SerializerMethodField('get_place')
+  data = serializers.SerializerMethodField('get_data')
+
+  def get_place(self, obj):
+    query = EquipmentFee.objects.filter(equipment__place__name=obj['equipment__place__name'])
+    serializer = EquipmentFeeSerializer(query, many=True)
+    return serializer.data[0]['equipment']['place'][0]['name']
+
+  def get_data(self, obj):
+    query = EquipmentFee.objects.filter(equipment__place__name=obj['equipment__place__name'])
+    serializer = EquipmentFeeSerializer(query, many=True)
+    return serializer.data
