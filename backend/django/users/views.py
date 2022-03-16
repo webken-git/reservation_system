@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import authentication
+# from rest_framework import authentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status, viewsets
 from rest_framework.generics import (
@@ -7,8 +7,7 @@ from rest_framework.generics import (
     RetrieveAPIView, UpdateAPIView
 )
 from dj_rest_auth.jwt_auth import JWTCookieAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import response, mixins
+from rest_framework import response, mixins, status
 from dj_rest_auth.views import LoginView
 from users import permissions
 from users.models import User
@@ -26,10 +25,34 @@ class UserViewSet(mixins.RetrieveModelMixin,
   authentication_classes = [JWTCookieAuthentication]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
-      permissions.IsAdminUser: ['update', ],
+      permissions.IsSuperUser: ['update'],
+      permissions.IsAdminUser: [],
       permissions.IsAuthenticated: ['list', 'retrieve', 'partial_update', 'destroy'],
       permissions.AllowAny: []
   }
+
+  def partial_update(self, request, *args, **kwargs):
+    # リクエストしたユーザーのis_superuserがFalseの場合、is_staff及びis_superuserを試みた場合は、エラーを返す
+    if not request.user.is_superuser:
+      if 'is_staff' in request.data or 'is_superuser' in request.data:
+        return response.Response(
+            {'detail': '権限がありません'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    return super().partial_update(request, *args, **kwargs)
+
+  def destroy(self, request, *args, **kwargs):
+    """
+    本人以外のユーザーが削除する場合、is_superuserがFalseの場合は、エラーを返す
+    """
+    if str(request.user.pk) == kwargs['pk']:
+      return super().destroy(request, *args, **kwargs)
+    elif not request.user.is_superuser:
+      return response.Response(
+          {'detail': '権限がありません'},
+          status=status.HTTP_403_FORBIDDEN
+      )
+    return super().destroy(request, *args, **kwargs)
 
 
 class AuthInfoGetView(RetrieveAPIView):
@@ -37,13 +60,12 @@ class AuthInfoGetView(RetrieveAPIView):
   ログインユーザー情報を取得
   """
   serializer_class = UserSerializer
-  permission_classes = [permissions.IsAuthenticated]
-  # permission_classes = [permissions.ActionBasedPermission]
-  # action_permissions = {
-  #     permissions.IsAdminUser: [],
-  #     permissions.IsAuthenticated: ['retrieve'],
-  #     permissions.AllowAny: ['list']
-  # }
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: ['retrieve'],
+      permissions.AllowAny: ['list']
+  }
 
   def get(self, request, format=None):
     user = User.objects.get(id=request.user.id)

@@ -1,16 +1,49 @@
+// レイアウト幅
+$layout-width-inner: 1180px;
+
+// ブレークポイント
+$breakpoints: (
+  // スマホ
+  "sp": "screen and (max-width: 767px)",
+  // タブレット
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  // PC
+  "pc": "screen and (min-width: #{$layout-width-inner})",
+  "iphonese": "screen and (max-width: 376px)"
+);
+
+//mixinの引数は$breakpoint、引数の初期値はsp
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+$main-color: #1a8d89;
+$sub-color: #707070;
+$accent-color: #233b62;
+
 .sideBox {
   width: 100%;
   background-color: #233b62;
+  height: 100%;
   min-height: 100vh;
+  // @include mq(tab) {
+  //   overflow-y: scroll;
+  // }
+  // @include mq(sp) {
+  //   overflow-y: scroll;
+  // }
 }
 
 .TitleBox {
-  height: 100px;
+  height: 10vh;
   font-size: 25px;
   background-color: #1a8d89;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: sticky;
 }
 
 .TitleString {
@@ -23,6 +56,15 @@
   border-bottom: 1px solid #707070;
   color: #ffffff;
   font-size: 20px;
+  @include mq(tab) {
+    font-size: 1.2rem;
+  }
+  @include mq(sp) {
+    font-size: 1rem;
+  }
+  @include mq(iphonese) {
+    font-size: 0.9rem;
+  }
   p {
     margin-left: 15px;
   }

@@ -1,0 +1,12 @@
+.parent_elements {
+  display: flex;
+  justify-content: space-around;
+  margin-left: 30px;
+
+  .StaffNum {
+    float: left;
+  }
+  .submitbtn {
+    text-align: center;
+  }
+}

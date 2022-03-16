@@ -19,45 +19,25 @@ $breakpoints: (
 }
 
 .feelist {
-  display: flex;
+  width: 90%;
   justify-content: center;
   align-items: center;
-  details {
-    width: 100%;
-    margin: 0 5%;
-  }
-  summary {
-    font-size: 25px;
-    @include mq(sp) {
-      font-size: 18px;
-    }
-  }
-  summary:hover {
-    cursor: pointer;
-  }
-
-  //   h3,
-  //   h4,
-  //   h5 {
-  //     margin-top: 0.4em;
-  //     margin-bottom: 0;
-  //   }
+  margin: 0 auto;
 
   table {
     border-collapse: collapse;
     padding: 0;
-    width: 70vw;
+    width: 100%;
     table-layout: fixed;
   }
   table tr {
-    background-color: #fff;
     border: 1px solid #fff;
     padding: 0.35rem;
   }
   table th {
     padding: 1%;
     border-right: 1px solid #fff;
-    background-color: #dfdfdf;
+    background-color: #ddd;
     font-size: 1.2rem;
   }
   table thead {
@@ -80,7 +60,7 @@ $breakpoints: (
   table td:first-child {
     @include mq(sp) {
       text-align: center;
-      background-color: #dfdfdf;
+      background-color: #ddd;
       font-weight: bold;
     }
   }
