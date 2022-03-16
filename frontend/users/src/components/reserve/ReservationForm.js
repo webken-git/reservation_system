@@ -52,7 +52,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     reValidateMode: "onSubmit",
   });
   const error = Object.values(errors); // エラーがあるかどうか
-  // const [message, setMessage] = useState("");
   const setPopup = useSetRecoilState(popupState);
 
   const AgeData = useFetch({
@@ -171,11 +170,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               </div>
             </>
           )}
-          {/* {message && (
-            <div className="reserve-message">
-              <p>{message}</p>
-            </div>
-          )} */}
           <div>
             <Label>年齢区分：</Label>
             <FormControl error>

@@ -92,7 +92,7 @@ const Calendar = (props) => {
         setPlace(placeLists);
         setPlaceFilter(placeLists[0].name)
       })
-      .catch((error) => {});    
+      .catch((error) => {});
   };
 
   const getApprovalList = () => {
@@ -103,7 +103,7 @@ const Calendar = (props) => {
         setApprovals(approvalLists);
         setApprovalFilter(approvalLists[0].id)
       })
-      .catch((error) => {});    
+      .catch((error) => {});
   };
 
   let tab = useRecoilValue(tabState);
@@ -144,10 +144,10 @@ const Calendar = (props) => {
     }
   };
 
-
   const onSubmit = (e) => {
 
-    console.log("aaa")
+    console.log("onSubmit")
+
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
     const startDate = format(e.StartDate, "yyyy-LL-dd");
     const endDate = format(e.EndDate, "yyyy-LL-dd");
@@ -325,7 +325,7 @@ const Calendar = (props) => {
                   <div className="modal-title">
                     <h2>予約停止の設定</h2>
                   </div>
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleSubmit(onSubmit)} noValidate>
                     <ul>
                       <li>
                         <div>
@@ -565,9 +565,9 @@ const Calendar = (props) => {
                       <button type="submit" className="btn">
                         設定する
                       </button>
-                      {/* <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>
+                      <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>
                         閉じる
-                      </button> */}
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -616,7 +616,7 @@ const Calendar = (props) => {
               <div className="filter-base">
                 <select
                   className="filter"
-                  defaultValue={approvals[0] && approvals[0].name}
+                  defaultValue={approvals[0] && approvals[0].id}
                   onChange={(e) => approvalFiltering(e)}
                 >
                   {approvals.map((i, index) => {

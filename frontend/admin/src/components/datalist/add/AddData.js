@@ -1149,7 +1149,7 @@ const AddData = (props) => {
       <>
         <div className="add-data editfeelist">
           <h2>以下の項目を入力後、登録ボタンを押してください</h2>
-          <p className="red">※データ追加後、反映に5分程度掛かります。</p>
+          {/* <p className="red">※データ追加後、反映に5分程度掛かります。</p> */}
           {message && <p>{message}</p>}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="add-data__form-group">
@@ -1240,6 +1240,7 @@ const AddData = (props) => {
                   <p className="red">
                     ※「半面」の場合は、「0.5」と入力してください。
                   </p>
+                  <p className="red">※このデータは後から変更できません。</p>
                   <input
                     type="text"
                     name="min"
@@ -1265,6 +1266,7 @@ const AddData = (props) => {
                   <p className="red">
                     ※「全面」の場合は、「1」と入力してください。
                   </p>
+                  <p className="red">※このデータは後から変更できません。</p>
                   <input
                     type="text"
                     name="max"
