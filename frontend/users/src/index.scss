@@ -46,6 +46,14 @@ code {
   font-size: 0.8rem;
 }
 
+.pc {
+  @include mq("sp") {
+    display: none;
+  }
+  @include mq("tab") {
+    display: none;
+  }
+}
 .pc-tab {
   @include mq("sp") {
     display: none;
@@ -56,6 +64,12 @@ code {
     display: none;
   }
   @include mq("tab") {
+    display: none;
+  }
+}
+.sp-tab {
+  margin: 0;
+  @include mq("pc") {
     display: none;
   }
 }
@@ -129,6 +143,10 @@ code {
 .login-link {
   @extend .btn;
 }
+.btn-space {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+}
 
 // モーダルのスタイル
 .modal-content {
@@ -165,7 +183,11 @@ code {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+  z-index: 10;
+}
+.reserve-modal-overlay {
+  @extend .modal-overlay;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .modal-wrapper {
   display: inline-block;

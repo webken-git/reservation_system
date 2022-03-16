@@ -129,7 +129,10 @@ const TabContainer = () => {
     const divide_feelist = feeListData.filter((fld) => {
       return fld.place === pn;
     });
-    return setFacilityFee(divide_feelist[0].data);
+    // divide_feelistがデータを取得できた場合には、そのデータをセットする
+    if (divide_feelist.length > 0) {
+      setFacilityFee(divide_feelist[0].data);
+    }
   };
 
   // tabのスタイルをカスタマイズ

@@ -11,6 +11,7 @@ export const formData = atom({
   key: "formData",
   default: [],
   effects_UNSTABLE: [persistAtom],
+  dangerouslyAllowMutability: true,
 });
 export const formDataId = atom({
   key: "formDataId",

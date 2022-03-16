@@ -34,9 +34,17 @@ body {
 
 .red {
   color: #d32f2f;
-  // font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 
+.pc {
+  @include mq("sp") {
+    display: none;
+  }
+  @include mq("tab") {
+    display: none;
+  }
+}
 .pc-tab {
   @include mq("sp") {
     display: none;
@@ -47,6 +55,12 @@ body {
     display: none;
   }
   @include mq("tab") {
+    display: none;
+  }
+}
+.sp-tab {
+  margin: 0;
+  @include mq("pc") {
     display: none;
   }
 }
@@ -116,6 +130,7 @@ body {
 }
 .modal-open-btn {
   @extend .btn;
+  margin: 0;
   @include mq(sp) {
     width: 6rem;
     font-size: 0.8rem;
@@ -207,6 +222,10 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
+}
+.reserve-modal-overlay {
+  @extend .modal-overlay;
+  // background-color: rgba(0, 0, 0, 0.3);
 }
 
 // error page

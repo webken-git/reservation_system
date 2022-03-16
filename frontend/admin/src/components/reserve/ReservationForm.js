@@ -36,7 +36,6 @@ const Label = styled("p")({
   fontWeight: "bold",
 });
 
-// const schema = reservationSchema;
 export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
   const [FormData, setFormData] = useRecoilState(formData);
   let tab = useRecoilValue(tabState);
@@ -52,7 +51,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     reValidateMode: "onSubmit",
   });
   const error = Object.values(errors); // エラーがあるかどうか
-  // const [message, setMessage] = useState("");
   const setPopup = useSetRecoilState(popupState);
 
   const AgeData = useFetch({
@@ -67,7 +65,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
   // 選択中の施設を取得
   const placeId = parseInt(tab.placeId);
   const placeName = tab.placeName;
-
   const formRef = useRef();
   // scrollToRefの位置にスクロールする
   const scrollToElement = (element) => {
@@ -76,20 +73,15 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
       block: "start",
     });
   };
-  const scrollToTop = () => {
-    // 画面の一番上までスクロール
-    window.scrollTo(0, 0);
-  };
 
   const onSubmit = (e) => {
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
-    const startDate = format(e.startDate, "yyyy-LL-dd");
-    const endDate = format(e.endDate, "yyyy-LL-dd");
+    const startDate = format(e.startDate, "yyyy-MM-dd");
+    const endDate = format(e.endDate, "yyyy-MM-dd");
     const startTime = e.startTime;
     const endTime = e.endTime;
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
-    // const reservation = placeName;
     const age = getValues("ageGroup");
     // 配列ageに入っている値をAgeDataから取得
     const ageName = [];
@@ -107,23 +99,21 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
       return usageName;
     });
     const equipmentName = [];
-    if (e.device === "true") {
+    if (e.device === "true" && e.equipment.length > 0) {
       e.equipment.map((equipment) => {
         const equip = EquipmentData.find((data) => data.id === equipment).name;
         equipmentName.push(equip);
         return equipmentName;
       });
     }
-    const id = getId();
     delete e["ageGroup"];
-    delete e["startDate"];
-    delete e["endDate"];
+    // delete e["startDate"];
+    // delete e["endDate"];
     const data = {
       ...e,
       start,
       end,
       equipmentName,
-      id,
       age,
       ageName,
       placeId,
@@ -133,10 +123,10 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     };
     const list = [...FormData, data];
     setFormData(list);
+    // 画面上までスクロール
+    window.scrollTo(0, 0);
     // フォームをリセット
     reset();
-    // スクロール
-    scrollToTop();
     setPopup({
       isOpen: true,
       message: "予約情報を追加しました",
@@ -176,11 +166,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               </div>
             </>
           )}
-          {/* {message && (
-            <div className="reserve-message">
-              <p>{message}</p>
-            </div>
-          )} */}
           <div>
             <Label>年齢区分：</Label>
             <FormControl error>
@@ -303,7 +288,6 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
               />
             </FormControl>
           </div>
-          <div></div>
           <div>
             <FormControl error>
               <FormHelperText>
@@ -831,7 +815,7 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
                             control={control}
                             name="equipment"
                             defaultValue=""
-                            rules={{ required: "選択してください" }}
+                            // rules={{ required: "選択してください" }}
                             render={({ field }) =>
                               EquipmentData &&
                               EquipmentData.map((equipment, id) => (
@@ -959,9 +943,5 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
     </Grid>
   );
 });
-let id = 0;
-function getId() {
-  return id++;
-}
 
 export default Label;
