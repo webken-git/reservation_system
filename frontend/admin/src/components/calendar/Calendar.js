@@ -146,6 +146,8 @@ const Calendar = (props) => {
 
 
   const onSubmit = (e) => {
+
+    console.log("aaa")
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
     const startDate = format(e.StartDate, "yyyy-LL-dd");
     const endDate = format(e.EndDate, "yyyy-LL-dd");
@@ -209,6 +211,7 @@ const Calendar = (props) => {
       // 選択されていないidを削除
       newValues = values.filter((value) => value !== id);
     }
+    console.log(newValues)
     setValue(name, newValues);
     // console.log(newValues)
     return newValues;
@@ -249,21 +252,6 @@ const Calendar = (props) => {
     sortDateList();
     getPlaceList();
     getApprovalList();
-
-    //現在時刻までスクロール
-    let margin = window.innerHeight * 0.02;
-    let blockHeight = window.innerHeight * 0.06;
-    let now = new Date();
-    let hours = now.getHours() - 4;
-    let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-    if (!unmounted) {
-      setSt(margin + blockHeight * now.getHours());
-    }
-    document.getElementsByClassName("content-row")[0].scrollTo({
-      top: st,
-      left: 0,
-      behavior: "smooth",
-    });
 
     return () => {
       unmounted = true;
@@ -341,194 +329,222 @@ const Calendar = (props) => {
                     <ul>
                       <li>
                         <div>
-                          <Controller
-                            name="StartDate"
-                            control={control}
-                            defaultValue={new Date().getTime() + 1000 * 60 * 60 * 24}
-                            // rules={{ required: "入力" }}
-                            render={({ field }) => (
-                              <div className={form.StartDate}>
-                                <Label>開始日時：</Label>
-                                <LocalizationProvider
-                                  dateAdapter={DateAdapter}
-                                  locale={ja}
-                                >
-                                  <DesktopDatePicker
-                                    {...field}
-                                    label="年/月/日"
-                                    mask="____/__/__"
-                                    minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
-                                    renderInput={(params) => (
-                                      <TextField
-                                        {...params}
-                                        {...register("startDate", {
-                                          validate: (value) => {
-                                            if (value === "") {
-                                              return "必須項目です";
-                                            }
-                                            // 現在または過去の日付を選択された場合はエラー
-                                            if (value < new Date()) {
-                                              return "現在及び過去の日付は選択できません";
-                                            }
-                                          },
-                                        })}
+                          <FormControl error>
+                            <FormHelperText>
+                              {errors.StartDate && errors.StartDate.message}
+                            </FormHelperText>
+                            <FormGroup>
+                              <Controller
+                                name="StartDate"
+                                control={control}
+                                defaultValue={new Date().getTime() + 1000 * 60 * 60 * 24}
+                                // rules={{ required: "入力" }}
+                                render={({ field }) => (
+                                  <div className={form.StartDate}>
+                                    <Label>開始日時：</Label>
+                                    <LocalizationProvider
+                                      dateAdapter={DateAdapter}
+                                      locale={ja}
+                                    >
+                                      <DesktopDatePicker
+                                        {...field}
+                                        label="年/月/日"
+                                        mask="____/__/__"
+                                        minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
+                                        renderInput={(params) => (
+                                          <TextField
+                                            {...params}
+                                            {...register("startDate", {
+                                              validate: (value) => {
+                                                if (value === "") {
+                                                  return "必須項目です";
+                                                }
+                                                // 現在または過去の日付を選択された場合はエラー
+                                                if (value < new Date()) {
+                                                  return "現在及び過去の日付は選択できません";
+                                                }
+                                              },
+                                            })}
+                                          />
+                                        )}
                                       />
-                                    )}
-                                  />
-                                </LocalizationProvider>
-                              </div>
-                            )}
-                          />
+                                    </LocalizationProvider>
+                                  </div>
+                                )}
+                              />
+                            </FormGroup>
+                          </FormControl>
                         </div>
                         <div>
-                          <Controller
-                            name="Start"
-                            defaultValue=""
-                            control={control}
-                            // rules={{ required: "選択してください" }}
-                            render={({ field }) => (
-                              <div className={form.start}>
-                                <TextField
-                                  style={{ width: "150px" }}
-                                  size="Normal"
-                                  select
-                                  defaultValue=""
-                                  label="開始時間"
-                                  error={"Start" in errors}
-                                  {...field}
-                                >
-                                  {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
-                                  {placeName === "カーリング場"
-                                    ? curlingTimetable.map((timetables, id) => (
-                                        <MenuItem
-                                          key={id}
-                                          label={timetables.label}
-                                          value={
-                                            timetables.value === undefined
-                                              ? ""
-                                              : timetables.value
-                                          }
-                                        >
-                                          {timetables.label}
-                                        </MenuItem>
-                                      ))
-                                    : timetable.map((timetables, id) => (
-                                        <MenuItem
-                                          key={id}
-                                          label={timetables.label}
-                                          value={
-                                            timetables.value === undefined
-                                              ? ""
-                                              : timetables.value
-                                          }
-                                        >
-                                          {timetables.label}
-                                        </MenuItem>
-                                      ))}
-                                </TextField>
-                              </div>
-                            )}
-                          />
+                          <FormControl error>
+                            <FormHelperText>
+                              {errors.usage && errors.usage.message}
+                            </FormHelperText>
+                            <FormGroup>
+                              <Controller
+                                name="Start"
+                                defaultValue=""
+                                control={control}
+                                // rules={{ required: "選択してください" }}
+                                render={({ field }) => (
+                                  <div className={form.start}>
+                                    <TextField
+                                      style={{ width: "150px" }}
+                                      size="Normal"
+                                      select
+                                      defaultValue=""
+                                      label="開始時間"
+                                      error={"Start" in errors}
+                                      {...field}
+                                    >
+                                      {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
+                                      {placeName === "カーリング場"
+                                        ? curlingTimetable.map((timetables, id) => (
+                                            <MenuItem
+                                              key={id}
+                                              label={timetables.label}
+                                              value={
+                                                timetables.value === undefined
+                                                  ? ""
+                                                  : timetables.value
+                                              }
+                                            >
+                                              {timetables.label}
+                                            </MenuItem>
+                                          ))
+                                        : timetable.map((timetables, id) => (
+                                            <MenuItem
+                                              key={id}
+                                              label={timetables.label}
+                                              value={
+                                                timetables.value === undefined
+                                                  ? ""
+                                                  : timetables.value
+                                              }
+                                            >
+                                              {timetables.label}
+                                            </MenuItem>
+                                          ))}
+                                    </TextField>
+                                  </div>
+                                )}
+                              />
+                            </FormGroup>
+                          </FormControl>
                         </div>
                       </li>
                       <li>
                         <div>
-                          <Controller
-                            name="EndDate"
-                            control={control}
-                            defaultValue={
-                              new Date().getTime() + 1000 * 60 * 60 * 24
-                            }
-                            render={({ field }) => (
-                              <div className={form.EndDate}>
-                                <Label>終了日時</Label>
-                                <LocalizationProvider
-                                  dateAdapter={DateAdapter}
-                                  locale={ja}
-                                >
-                                  <DesktopDatePicker
-                                    {...field}
-                                    label="年/月/日"
-                                    mask="____/__/__"
-                                    minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
-                                    renderInput={(params) => (
-                                      <TextField
-                                        {...params}
-                                        {...register("endDate", {
-                                          validate: (value) => {
-                                            if (value === "") {
-                                              return "必須項目です";
-                                            }
-                                            // startDateより過去の日付を選択された場合はエラー
-                                            if (value < getValues("startDate")) {
-                                              return "利用開始日時より前の日付は選択できません";
-                                            }
-                                          },
-                                        })}
-                                        error={"endDate" in errors}
+                          <FormControl error>
+                            <FormHelperText>
+                              {errors.usage && errors.usage.message}
+                            </FormHelperText>
+                            <FormGroup>
+                              <Controller
+                                name="EndDate"
+                                control={control}
+                                defaultValue={
+                                  new Date().getTime() + 1000 * 60 * 60 * 24
+                                }
+                                render={({ field }) => (
+                                  <div className={form.EndDate}>
+                                    <Label>終了日時</Label>
+                                    <LocalizationProvider
+                                      dateAdapter={DateAdapter}
+                                      locale={ja}
+                                    >
+                                      <DesktopDatePicker
+                                        {...field}
+                                        label="年/月/日"
+                                        mask="____/__/__"
+                                        minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
+                                        renderInput={(params) => (
+                                          <TextField
+                                            {...params}
+                                            {...register("endDate", {
+                                              validate: (value) => {
+                                                if (value === "") {
+                                                  return "必須項目です";
+                                                }
+                                                // startDateより過去の日付を選択された場合はエラー
+                                                if (value < getValues("startDate")) {
+                                                  return "利用開始日時より前の日付は選択できません";
+                                                }
+                                              },
+                                            })}
+                                            error={"endDate" in errors}
+                                          />
+                                        )}
                                       />
-                                    )}
-                                  />
-                                </LocalizationProvider>
-                              </div>
-                            )}
-                          />
+                                    </LocalizationProvider>
+                                  </div>
+                                )}
+                              />
+                            </FormGroup>
+                          </FormControl>
                         </div>
                         <div>
-                          <Controller
-                            name="End"
-                            defaultValue=""
-                            control={control}
-                            rules={{
-                              required: "選択してください",
-                            }}
-                            render={({ field }) => (
-                              <div className={form.end}>
-                                <TextField
-                                  style={{ width: "150px" }}
-                                  select
-                                  size="Normal"
-                                  defaultValue=""
-                                  label="終了時間"
-                                  {...register("endTime", {
-                                    required: "選択してください",
-                                  })}
-                                  error={"End" in errors}
-                                  {...field}
-                                >
-                                  {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
+                          <FormControl error>
+                            <FormHelperText>
+                              {errors.usage && errors.usage.message}
+                            </FormHelperText>
+                            <FormGroup>
+                              <Controller
+                                name="End"
+                                defaultValue=""
+                                control={control}
+                                rules={{
+                                  required: "選択してください",
+                                }}
+                                render={({ field }) => (
+                                  <div className={form.end}>
+                                    <TextField
+                                      style={{ width: "150px" }}
+                                      select
+                                      size="Normal"
+                                      defaultValue=""
+                                      label="終了時間"
+                                      {...register("endTime", {
+                                        required: "選択してください",
+                                      })}
+                                      error={"End" in errors}
+                                      {...field}
+                                    >
+                                      {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
 
-                                {placeName === "カーリング場"
-                                  ? curlingTimetable.map((timetables, id) => (
-                                      <MenuItem
-                                        key={id}
-                                        label={timetables.label}
-                                        value={
-                                          timetables.value === undefined
-                                            ? ""
-                                            : timetables.value
-                                        }
-                                      >
-                                        {timetables.label}
-                                      </MenuItem>
-                                    ))
-                                  : timetable.map((timetables, id) => (
-                                      <MenuItem
-                                        key={id}
-                                        label={timetables.label}
-                                        value={
-                                          timetables.value === undefined
-                                            ? ""
-                                            : timetables.value
-                                        }
-                                      >
-                                        {timetables.label}
-                                      </MenuItem>
-                                    ))}
-                              </TextField>
-                            </div>
-                          )}
-                        />
+                                    {placeName === "カーリング場"
+                                      ? curlingTimetable.map((timetables, id) => (
+                                          <MenuItem
+                                            key={id}
+                                            label={timetables.label}
+                                            value={
+                                              timetables.value === undefined
+                                                ? ""
+                                                : timetables.value
+                                            }
+                                          >
+                                            {timetables.label}
+                                          </MenuItem>
+                                        ))
+                                      : timetable.map((timetables, id) => (
+                                          <MenuItem
+                                            key={id}
+                                            label={timetables.label}
+                                            value={
+                                              timetables.value === undefined
+                                                ? ""
+                                                : timetables.value
+                                            }
+                                          >
+                                            {timetables.label}
+                                          </MenuItem>
+                                        ))}
+                                  </TextField>
+                                </div>
+                              )}
+                            />
+                          </FormGroup>
+                        </FormControl>
                       </div>
                     </li>
                     <li>
@@ -549,9 +565,9 @@ const Calendar = (props) => {
                       <button type="submit" className="btn">
                         設定する
                       </button>
-                      <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>
+                      {/* <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>
                         閉じる
-                      </button>
+                      </button> */}
                     </div>
                   </form>
                 </div>

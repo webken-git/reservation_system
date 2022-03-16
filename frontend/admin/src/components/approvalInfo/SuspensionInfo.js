@@ -11,6 +11,9 @@ import DateAdapter from "@mui/lab/AdapterDateFns";
 import { ja } from "date-fns/locale";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import {
+  FormControl,
+  FormHelperText,
+  FormGroup,
   TextField,
   MenuItem,
   styled,
@@ -157,122 +160,151 @@ const SuspensionInfo = (props) => {
                 <ul>
                     <li>
                       <div>
-                        <Controller
-                          name="StartDate"
-                          control={control}
-                          defaultValue={new Date(suspension.start)}
-                          rules={{ required: "入力" }}
-                          render={({ field }) => (
-                            <div className={form.StartDate}>
-                              <Label>開始日時：</Label>
-                              <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
-                                <DesktopDatePicker
-                                  {...field}
-                                  label="年/月/日"
-                                  mask="____/__/__"
-                                  renderInput={(params) => <TextField {...params} />}
-                                />
-                              </LocalizationProvider>
-                            </div>
-                          )}
-                        />
+                        <Label>開始日時</Label>
+                        <FormControl error>
+                          <FormHelperText>
+                            {errors.StartDate.message && errors.StartDate.message}
+                          </FormHelperText>
+                          <FormGroup>
+                            <Controller
+                              name="StartDate"
+                              control={control}
+                              defaultValue={new Date(suspension.start)}
+                              rules={{ required: "入力" }}
+                              render={({ field }) => (
+                                <div className={form.StartDate}>
+                                  <Label>開始日時：</Label>
+                                  <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
+                                    <DesktopDatePicker
+                                      {...field}
+                                      label="年/月/日"
+                                      mask="____/__/__"
+                                      renderInput={(params) => <TextField {...params} />}
+                                    />
+                                  </LocalizationProvider>
+                                </div>
+                              )}
+                            />
+                          </FormGroup>
+                        </FormControl>
                       </div>
 
                       <div>
-                        <Controller
-                          name="Start"
-                          defaultValue=""
-                          control={control}
-                          rules={{ required: "選択してください" }}
-                          render={({ field }) => (
-                            <div className={form.start}>
-                              <TextField
-                                style={{ width: "150px" }}
-                                size="Normal"
-                                select
-                                defaultValue=""
-                                label={suspension.start.substr(11, 5)}
-                                error={"Start" in errors}
-                                {...field}
-                              >
-                                {timetable.map((timetables, id) => (
-                                      <MenuItem
-                                        key={id}
-                                        label={timetables.label}
-                                        value={
-                                          timetables.value === undefined
-                                            ? ""
-                                            : timetables.value
-                                        }
-                                      >
-                                        {timetables.label}
-                                      </MenuItem>
-                                    ))}
-                              </TextField>
-                            </div>
-                          )}
-                        />
+                        <FormControl error>
+                          <FormHelperText>
+                            {errors.Start && errors.Start.message}
+                          </FormHelperText>
+                          <FormGroup>
+                            <Controller
+                              name="Start"
+                              defaultValue=""
+                              control={control}
+                              rules={{ required: "選択してください" }}
+                              render={({ field }) => (
+                                <div className={form.start}>
+                                  <TextField
+                                    style={{ width: "150px" }}
+                                    size="Normal"
+                                    select
+                                    defaultValue=""
+                                    label={suspension.start.substr(11, 5)}
+                                    error={"Start" in errors}
+                                    {...field}
+                                  >
+                                    {timetable.map((timetables, id) => (
+                                          <MenuItem
+                                            key={id}
+                                            label={timetables.label}
+                                            value={
+                                              timetables.value === undefined
+                                                ? ""
+                                                : timetables.value
+                                            }
+                                          >
+                                            {timetables.label}
+                                          </MenuItem>
+                                        ))}
+                                  </TextField>
+                                </div>
+                              )}
+                            />
+                          </FormGroup>
+                        </FormControl>
                       </div>
                     </li>
                     <li>
                       <div>
-                        <Controller
-                          name="EndDate"
-                          control={control}
-                          defaultValue={new Date(suspension.end)}
-                          rules={{ required: "入力" }}
-                          render={({ field }) => (
-                            <div className={form.EndDate}>
-                              <Label>終了日時</Label>
-                              <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
-                                <DesktopDatePicker
-                                  {...field}
-                                  label="年/月/日"
-                                  mask="____/__/__"
-                                  renderInput={(params) => <TextField {...params} />}
-                                />
-                              </LocalizationProvider>
-                            </div>
-                          )}
-                        />
+                        <FormControl error>
+                          <FormHelperText>
+                            {errors.Start && errors.Start.message}
+                          </FormHelperText>
+                          <FormGroup>
+                            <Controller
+                              name="EndDate"
+                              control={control}
+                              defaultValue={new Date(suspension.end)}
+                              rules={{ required: "入力" }}
+                              render={({ field }) => (
+                                <div className={form.EndDate}>
+                                  <Label>終了日時</Label>
+                                  <LocalizationProvider dateAdapter={DateAdapter} locale={ja}>
+                                    <DesktopDatePicker
+                                      {...field}
+                                      label="年/月/日"
+                                      mask="____/__/__"
+                                      renderInput={(params) => <TextField {...params} />}
+                                    />
+                                  </LocalizationProvider>
+                                </div>
+                              )}
+                            />
+                          </FormGroup>
+                        </FormControl>
                       </div>
                       <div>
-                        <Controller
-                          name="End"
-                          defaultValue=""
-                          control={control}
-                          rules={{
-                            required: "選択してください",
-                          }}
-                          render={({ field }) => (
-                            <div className={form.end}>
-                              <TextField
-                                style={{ width: "150px" }}
-                                select
-                                size="Normal"
-                                defaultValue=""
-                                label={suspension.end.substr(11, 5)}
-                                error={"End" in errors}
-                                {...field}
-                              >
+                        <FormControl error>
+                          <FormHelperText>
+                            {errors.Start && errors.Start.message}
+                          </FormHelperText>
+                          <FormGroup>
+                            <Controller
+                              name="End"
+                              defaultValue=""
+                              control={control}
+                              rules={{
+                                required: "選択してください",
+                              }}
+                              render={({ field }) => (
+                                <div className={form.end}>
+                                  <TextField
+                                    style={{ width: "150px" }}
+                                    select
+                                    size="Normal"
+                                    defaultValue=""
+                                    label={suspension.end.substr(11, 5)}
+                                    error={"End" in errors}
+                                    {...field}
+                                  >
 
-                                {timetable.map((timetables, id) => (
-                                      <MenuItem
-                                        key={id}
-                                        label={timetables.label}
-                                        value={
-                                          timetables.value === undefined
-                                            ? ""
-                                            : timetables.value
-                                        }
-                                      >
-                                        {timetables.label}
-                                      </MenuItem>
-                                    ))}
-                              </TextField>
-                            </div>
-                          )}
-                        />
+                                    {timetable.map((timetables, id) => (
+                                          <MenuItem
+                                            key={id}
+                                            label={timetables.label}
+                                            value={
+                                              timetables.value === undefined
+                                                ? ""
+                                                : timetables.value
+                                            }
+                                          >
+                                            {timetables.label}
+                                          </MenuItem>
+                                        ))}
+                                  </TextField>
+                                </div>
+                              )}
+                            />
+                          </FormGroup>
+                        </FormControl>
                       </div>
                     </li>
                   </ul>

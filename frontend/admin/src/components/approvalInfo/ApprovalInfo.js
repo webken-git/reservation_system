@@ -97,6 +97,20 @@ const ApprovalInfo = (props) => {
               <label>場所：</label>
               <span>{reservation.reservation.place.name}</span>
             </li>
+            {reservation.reservation.place.min === 1 &&
+            reservation.reservation.place.max === 1 ? null : (
+              <li>
+                <label>シート数または範囲：</label>
+                <span>
+                  {(reservation.reservation.place.min === 0.5 &&
+                    (reservation.reservation.place_number === 0.5
+                      ? "半面"
+                      : "全面")) ||
+                    (reservation.reservation.place.max > 1 &&
+                      reservation.reservation.place_number)}
+                </span>
+              </li>
+            )}
             <li>
               <label>利用開始日時：</label>
               <span>{reservation.reservation.start}</span>

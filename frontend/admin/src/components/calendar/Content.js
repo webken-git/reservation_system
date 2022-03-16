@@ -46,7 +46,7 @@ const Content = (props) =>{
           .catch((error) => {
             console.log(error);
           });
-      }
+    }
 
     useEffect(() => {
         let unmounted = false;
@@ -121,6 +121,7 @@ const Content = (props) =>{
                         index={index}
                         setScheduleDict={props.setScheduleDict}
                         contentDate={contentDate}
+                        length={scheduleList.length}
                     />
                 )
             })}
