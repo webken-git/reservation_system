@@ -80,7 +80,6 @@ const SuspensionInfo = (props) => {
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
     const place = e.place;
-    console.log(place)
 
     axios.patch(`${ReservationUrls.SUSPENSION}${id}/`, {
       start: start,
