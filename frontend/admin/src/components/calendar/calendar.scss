@@ -89,6 +89,16 @@ $breakpoints: (
       }
     }
 
+    .annotation {
+      list-style: none;
+      ul {
+        list-style-type: none;
+        li {
+          list-style: none;
+        }
+      }
+    }
+
     .date-selector {
       display: flex;
       justify-content: space-between;

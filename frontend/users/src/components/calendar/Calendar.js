@@ -96,7 +96,6 @@ const Calendar = (props) => {
       }
       if (!unmounted) {
         setDateList(dateList);
-        // console.log('dateList:', dateList);
       }
     };
     sortDateList();

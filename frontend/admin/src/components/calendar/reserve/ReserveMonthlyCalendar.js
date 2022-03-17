@@ -92,18 +92,17 @@ const ReserveMonthlyCalendar = (props) => {
       <table>
         <tbody>
           <tr className="day-row">
-            {dayList.map((day) => {
-              return <th>{day}</th>;
+            {dayList.map((day, index) => {
+              return <th key={index}>{day}</th>;
             })}
           </tr>
           {calendar.map((week, i) => (
             <tr key={week.join("")}>
-              {week.map((day, j) => (
-                // <th key={i + j}>{day}</th>
-                <th>
+              {week.map((day, index) => (
+                <th key={index}>
                   {day}
-                  {approvalList.map((approval) =>
-                    day === approval.day ? <p>{approval.count}件</p> : null
+                  {approvalList.map((approval, index) =>
+                    day === approval.day ? <p key={index}>{approval.count}件</p> : null
                   )}
                 </th>
               ))}

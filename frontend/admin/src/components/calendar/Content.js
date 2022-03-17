@@ -15,8 +15,6 @@ const Content = (props) =>{
     const date = props.date;
     const cookies = props.cookies;
     const individualOrGroup = props.individualOrGroup;
-    const setUpdateFlag = props.setUpdateFlag;
-    const setHomeUpdateFlag = props.setHomeUpdateFlag;
     const count = props.count;
     const placeFilter = props.placeFilter;
     const setLoading = props.setLoading;
@@ -56,12 +54,7 @@ const Content = (props) =>{
 
         if(!unmounted){
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
-            // setStringContentDate(year+'-'+month+'-'+day);    
         }
-
-        // console.log(approvalFilter)
-        // console.log(filterType)
-        // console.log(year+'-'+month+'-'+day)
         axios.get(`${ReservationUrls.APPROVAL_APPLICATION}`,{
             params: {
                 approval: approvalFilter,
@@ -75,8 +68,6 @@ const Content = (props) =>{
             // console.log(unmounted);
             if(!unmounted){
                 setScheduleList(scheduleList);
-                setUpdateFlag(false);
-                setHomeUpdateFlag(false);
                 suspensionPull();
             }
         })
@@ -85,7 +76,7 @@ const Content = (props) =>{
         });
 
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, placeFilter, count, setLoading, approvalFilter]);
+    }, [date, individualOrGroup, cookies, placeFilter, count, setLoading, approvalFilter]);
 
     if (calendarType === "daily") {
         typeBool = false;

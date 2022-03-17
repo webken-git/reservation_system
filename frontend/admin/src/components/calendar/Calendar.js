@@ -318,11 +318,6 @@ const Calendar = (props) => {
                     <Content
                       key={index}
                       date={date}
-                      updateFlag={updateFlag}
-                      setUpdateFlag={setUpdateFlag}
-                      isMain={isMain}
-                      homeUpdateFlag={props.homeUpdateFlag}
-                      setHomeUpdateFlag={props.setHomeUpdateFlag}
                       placeFilter={placeFilter}
                       setLoading={setLoading}
                       approvalFilter={approvalFilter}
@@ -331,24 +326,13 @@ const Calendar = (props) => {
                   );
                 })
               ) : (
-                // <div className="daily-content">
                 <Content
-                  // key={index}
                   date={date}
-                  // setScheduleDict={setScheduleDict}
-                  // openModal={openModal}
-                  updateFlag={updateFlag}
-                  setUpdateFlag={setUpdateFlag}
-                  isMain={isMain}
-                  // individualOrGroup={props.individualOrGroup}
-                  homeUpdateFlag={props.homeUpdateFlag}
-                  setHomeUpdateFlag={props.setHomeUpdateFlag}
                   placeFilter={placeFilter}
                   setLoading={setLoading}
                   calendarType={calendarType}
                   approvalFilter={approvalFilter}
                 />
-                // </div>
               )}
             </div>
           </div>
