@@ -113,6 +113,15 @@ const Content = (props) =>{
                 <div className="content-div"></div>
             </div>
             <div className="schedule-block-column">
+            {suspensions.map((suspension, index) => {
+                return (
+                    <SuspensionBlock
+                        suspension={suspension}
+                        placeFilter={placeFilter}
+                        key={index}
+                    />
+                )
+            })}
             {scheduleList.map((schedule, index) => {
                 return (
                     <ScheduleBlock
@@ -122,15 +131,6 @@ const Content = (props) =>{
                         setScheduleDict={props.setScheduleDict}
                         contentDate={contentDate}
                         length={scheduleList.length}
-                    />
-                )
-            })}
-            {suspensions.map((suspension, index) => {
-                return (
-                    <SuspensionBlock
-                        suspension={suspension}
-                        placeFilter={placeFilter}
-                        index={index}
                     />
                 )
             })}

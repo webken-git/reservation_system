@@ -21,19 +21,14 @@ const Calendar = (props) => {
   const unmountRef = useUnmountRef();
   const [date, setDate] = useSafeState(unmountRef, new Date());
   const dayList = ["日", "月", "火", "水", "木", "金", "土"];
-  // const [ scheduleDict, setScheduleDict ] = useState({});
   const [dateList, setDateList] = useSafeState(unmountRef, []); //日付リスト
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  // const setDate = props.setDate;
-  const [updateFlag, setUpdateFlag] = useSafeState(unmountRef, false);
-  const [, setSt] = useState(0);
   const [calendarType, setCalendarType] = useSafeState(unmountRef, "weekly");
   const [loading, setLoading] = useSafeState(unmountRef, true);
   const [change, setChange] = useState(true);
   const placeId = props.placeId;
-  const isMain = true;
   const [placeName, setPlaceName] = useState();
 
   const dateChange = (e) => {
@@ -127,11 +122,21 @@ const Calendar = (props) => {
           </div>
 
           <div className="annotation">
-              <ul>
-                <li><FontAwesomeIcon icon={faSquare} style={{ color: "dodgerblue" }} /> = 予約有</li>
-                <li><FontAwesomeIcon icon={faSquare} style={{ color: "tomato" }} /> = 未承認の予約有</li>
-                <li><FontAwesomeIcon icon={faSquare} style={{ color: "red" }} /> = 予約停止中</li>  
-              </ul>
+              
+                {change ? (
+                  <ul>
+                    <li><FontAwesomeIcon icon={faSquare} style={{ color: "dodgerblue" }} /> = 予約有</li>
+                    <li><FontAwesomeIcon icon={faSquare} style={{ color: "tomato" }} /> = 未承認の予約有</li>
+                    <li><FontAwesomeIcon icon={faSquare} style={{ color: "red" }} /> = 予約停止中</li>
+                  </ul>
+                ) : (
+                  <ul>
+                    <li>〇 = 予約可</li>
+                    <li>△ = 他の予約有（抽選になる可能性があります）</li>
+                    <li>× = 予約不可</li>
+                  </ul>
+                )}
+              
           </div>
 
           <div className="date-title">

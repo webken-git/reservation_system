@@ -17,7 +17,7 @@ const MonthlyCalendar = (props) => {
   const [approvalList, setApprovalList] = useState([]);
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
-  const [approvalFilter, setApprovalFilter] = useState(2);
+  const approvalFilter = 2;
   const calendar = createCalendar(year, month);
   const setLoading = props.setLoading;
   const calendarType = props.calendarType;
@@ -74,6 +74,12 @@ const MonthlyCalendar = (props) => {
         {/* 表示するカレンダーの種類 */}
         <Select calendarType={calendarType} setCalendarType={setCalendarType} />
 
+        <div className="annotation">
+          <ul>
+            <li>※　予約が入っている件数が表示されています。</li>
+          </ul>              
+        </div>
+
         <div className="date-title">
           <div className="last-button" onClick={onClick(-1)}>
             <FontAwesomeIcon icon={faChevronLeft} size="2x" />
@@ -92,18 +98,17 @@ const MonthlyCalendar = (props) => {
       <table>
         <tbody>
           <tr className="day-row">
-            {dayList.map((day) => {
-              return <th>{day}</th>;
+            {dayList.map((day, index) => {
+              return <th key={index}>{day}</th>;
             })}
           </tr>
           {calendar.map((week, i) => (
             <tr key={week.join("")}>
-              {week.map((day, j) => (
-                // <th key={i + j}>{day}</th>
-                <th>
+              {week.map((day, index) => (
+                <th key={index}>
                   {day}
-                  {approvalList.map((approval) =>
-                    day === approval.day ? <p>{approval.count}件</p> : null
+                  {approvalList.map((approval, index) =>
+                    day === approval.day ? <p key={index}>{approval.count}件</p> : null
                   )}
                 </th>
               ))}

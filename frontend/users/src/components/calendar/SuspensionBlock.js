@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { withCookies } from "react-cookie";
+import React, { useCallback } from "react";
 
 const SuspensionBlock = (props) => {
 

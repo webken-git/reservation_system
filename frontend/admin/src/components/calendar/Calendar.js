@@ -141,6 +141,8 @@ const Calendar = (props) => {
           setCalendarType={setCalendarType}
           calendarType={calendarType}
           setLoading={setLoading}
+          approvalFilter={approvalFilter}
+          setApprovalFilter={setApprovalFilter}
         />
       ) : (
         <div className="maii">
@@ -170,14 +172,12 @@ const Calendar = (props) => {
                   <p>
                     {year}年{month}月{day}日
                   </p>
-                  {/* <input type="date" className="date-input"/> */}
                 </div>
               ) : (
                 <div className="date-base">
                   <p>
                     {year}月{month}月
                   </p>
-                  {/* <input type="date" className="date-input"/> */}
                 </div>
               )}
               <div className="next-button" onClick={() => dateChange("next")}>

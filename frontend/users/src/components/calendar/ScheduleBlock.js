@@ -32,6 +32,21 @@ const ScheduleBlock = (props) => {
         Number(props.schedule.reservation.end.substr(8, 2))
       );
       setEndDate(endDate);
+
+      let scheduleStartDate = "";
+      let scheduleEndDate = "";
+      scheduleStartDate = new Date(
+        props.contentDate.getFullYear(),
+        props.contentDate.getMonth(),
+        props.contentDate.getDate()
+      );
+      scheduleEndDate = new Date(
+        props.contentDate.getFullYear(),
+        props.contentDate.getMonth(),
+        props.contentDate.getDate()
+      );
+      setScheduleStartDate(scheduleStartDate);
+      setScheduleEndDate(scheduleEndDate);
     }
 
     return () => {
@@ -101,27 +116,8 @@ const ScheduleBlock = (props) => {
       // onClick={modalHandle}
       style={styleGeneratorHandler()}
     >
-      {props.schedule.repeat_interval === 1 ? (
-        <p>
-          {(startDate < props.contentDate || props.contentDate < endDate) &&
-            Number(props.schedule.start.substr(5, 2)) +
-              "月" +
-              Number(props.schedule.start.substr(8, 2)) +
-              "日"}
-          {props.schedule.start_time.substr(11, 5)}
-          {(startDate < props.contentDate || props.contentDate < endDate) && (
-            <br />
-          )}
-          ~
-          {(startDate < props.contentDate || props.contentDate < endDate) &&
-            Number(props.schedule.reservation.end.substr(5, 2)) +
-              "月" +
-              Number(props.schedule.reservation.end.substr(8, 2)) +
-              "日"}
-          {props.schedule.reservation.end.substr(11, 5)}
-        </p>
-      ) : (
-        <p>
+        <div>
+          <p>
           {(scheduleStartDate < props.contentDate ||
             props.contentDate < scheduleEndDate) &&
             scheduleStartDate.getMonth() +
@@ -134,6 +130,7 @@ const ScheduleBlock = (props) => {
             props.contentDate < scheduleEndDate) && <br />}
           ~
           {props.schedule.reservation.end.substr(11, 5)}
+          </p>
           <span>
             {props.schedule.reservation.place.min === 1 &&
             props.schedule.reservation.place.max === 1 ? null : (
@@ -147,8 +144,7 @@ const ScheduleBlock = (props) => {
               </p>
             )}
           </span>
-        </p>
-      )}
+        </div>
     </div>
   );
 };

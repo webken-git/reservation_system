@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { withCookies } from "react-cookie";
+import React, { useCallback } from "react";
 
 const UnapprovalBlock = (props) => {
 
@@ -57,13 +56,13 @@ const UnapprovalBlock = (props) => {
           style={styleGeneratorHandler()}
         >
           {count === 0 ? (
-            <span>〇</span>
+            <span style={{ color: "blue" }}>〇</span>
           ) : null}
           {count === 1 ? (
-            <span>△</span>
+            <span style={{ color: "green" }}>△</span>
           ) : null}
           {count === 2 ? (
-            <span>×</span>
+            <span style={{ color: "black" }}>×</span>
           ) : null}
         </div>
       )
