@@ -20,8 +20,8 @@ import {
 } from "@mui/material";
 import { timetable } from "../calendar/FormDataList";
 import { format } from "date-fns";
-import { formData, popupState } from "../../recoil/form/atom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { formData } from "../../recoil/form/atom";
+import { useRecoilState } from "recoil";
 import { useFetch } from "../../hooks/useFetch";
 
 const Label = styled("p")({
@@ -31,19 +31,16 @@ const Label = styled("p")({
 
 const SuspensionInfo = (props) => {
   const [suspension, setSuspension] = useState([]);
-  const [loading, setLoading] = useState(false);
   const id = props.id;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [FormData, setFormData] = useRecoilState(formData);
-  const setPopup = useSetRecoilState(popupState);
-  // const a = new Date(suspension.start.substr(0, 4), suspension.start.substr(5, ))
+  const [updateFlag, setUpdateFlag] = useState(true);
 
   const {
     control,
     handleSubmit,
     getValues,
     setValue,
-    register,
     reset,
     formState: { errors },
   } = useForm({
@@ -51,16 +48,13 @@ const SuspensionInfo = (props) => {
   });
 
   const pullSuspension = () => {
-    setLoading(true);
     axios
       .get(`${ReservationUrls.SUSPENSION}?id=${id}`, {})
       .then((res) => {
         setSuspension(res.data[0]);
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false);
       });
   };
 
@@ -88,6 +82,7 @@ const SuspensionInfo = (props) => {
     })
     .then(res => {
       setModalIsOpen(false)
+      setUpdateFlag(!updateFlag)
     })
     .catch(error => {
       console.log(error);
@@ -114,10 +109,6 @@ const SuspensionInfo = (props) => {
     setFormData(list);
     // フォームをリセット
     reset();
-    setPopup({
-      isOpen: true,
-      message: "予約停止情報を変更しました",
-    });
   }
 
   const suspensionDelete = () => {
@@ -151,7 +142,7 @@ const SuspensionInfo = (props) => {
   useEffect(() => {
     pullSuspension();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [updateFlag]);
 
   if (suspension.length === 0) {
     return <Loading />;
