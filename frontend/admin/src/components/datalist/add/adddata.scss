@@ -34,4 +34,12 @@ $accent-color: #233b62;
       padding: 0.5rem 0.5rem;
     }
   }
+  table td {
+    &:first-child {
+      &:hover {
+        border-style: double;
+        border-color: $main-color;
+      }
+    }
+  }
 }

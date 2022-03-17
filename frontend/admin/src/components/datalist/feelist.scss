@@ -51,6 +51,24 @@ $breakpoints: (
       display: none;
     }
   }
+  .equipment-fee td {
+    @include mq(sp) {
+      display: table-cell;
+      text-align: center;
+    }
+    &:first-child {
+      @include mq(sp) {
+        background-color: #fff;
+        font-weight: normal;
+      }
+    }
+    &:before {
+      @include mq(sp) {
+        content: "";
+        float: none;
+      }
+    }
+  }
   table td {
     text-align: center;
     border: 1px solid #dfdfdf;

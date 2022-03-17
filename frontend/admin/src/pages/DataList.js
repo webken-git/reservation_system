@@ -30,8 +30,6 @@ export const DataList = () => {
   const [editPlaceData, setEditPlaceData] = useSafeState(unmountRef, []);
   const [divideFeeList, setDivideFeeList] = useSafeState(unmountRef, []);
   const [age, setAge] = useSafeState(unmountRef, []);
-  const [, setTime] = useSafeState(unmountRef, []);
-  const [, setUsage] = useSafeState(unmountRef, []);
   const [loading, setLoading] = useSafeState(unmountRef, true);
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -67,34 +65,10 @@ export const DataList = () => {
       .catch((error) => {});
   };
 
-  //時間区分の取得
-  const GetTime = () => {
-    axios
-      .get(ReservationUrls.TIME)
-      .then((response) => {
-        const times = response.data;
-        setTime(times);
-      })
-      .catch((error) => {});
-  };
-
-  // 利用区分の取得
-  const GetUsage = () => {
-    axios
-      .get(ReservationUrls.USAGE)
-      .then((response) => {
-        const usages = response.data;
-        setUsage(usages);
-      })
-      .catch((error) => {});
-  };
-
   useEffect(() => {
     GetPlaceList();
     GetFeeList();
     GetAge();
-    GetTime();
-    GetUsage();
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -105,7 +79,11 @@ export const DataList = () => {
     const divide_feelist = feeListData.filter((fld) => {
       return fld.place === place.name;
     });
+    // const divide_equipmentfeelist = equipmentFeeList.filter((efl) => {
+    //   return efl.place === place.name;
+    // })
     setDivideFeeList(divide_feelist[0].data);
+    // setDivideEquipmentFeeList(divide_equipmentfeelist[0].data)
     setLoading(false);
   };
 
@@ -115,7 +93,6 @@ export const DataList = () => {
     });
 
     const isGroup = feeListData.filter((fld) => {
-      // console.log(fld.data);
       return (
         fld.place === place.name && fld.data.find((f) => f.is_group === true)
       );
@@ -123,13 +100,32 @@ export const DataList = () => {
 
     const FacilityFee = () => {
       if (isGroup.length === 0) {
-        return <FeeList key={p_id} feelist={feeData[0].data} age={age} />;
+        return (
+          <FeeList
+            key={p_id}
+            feelist={feeData[0].data}
+            placeid={place.id}
+            age={age}
+          />
+        );
       } else if (place.max > 1) {
         return (
-          <CurlingFeeList key={p_id} feelist={feeData[0].data} age={age} />
+          <CurlingFeeList
+            key={p_id}
+            feelist={feeData[0].data}
+            placeid={place.id}
+            age={age}
+          />
         );
       } else {
-        return <GroupFeeList key={p_id} feelist={feeData[0].data} age={age} />;
+        return (
+          <GroupFeeList
+            key={p_id}
+            feelist={feeData[0].data}
+            placeid={place.id}
+            age={age}
+          />
+        );
       }
     };
 

@@ -46,13 +46,14 @@ const DeletePlaceButton = (props) => {
         onRequestClose={() => setIsOpen(false)}
       >
         <div className="modal-wrapper data-list-modal">
-          <h2 className="modal-title">データ削除</h2>
+          <h2 className="modal-title">施設データ削除</h2>
           <p>
             ・<b>{props.placeName}</b>に関するデータを削除します。
           </p>
           <p>
             ・一度削除すると元に戻せないので、よく確認してから削除してください。
           </p>
+          <p>・削除されるデータには、料金データも含まれています。</p>
           <p>・データの削除後、データの反映に5分程度掛かります。</p>
           <div className="btn-wrapper">
             <button

@@ -20,12 +20,6 @@ const TabContent = (props) => {
     const isGroup = props.facilityFee.filter((fld) => {
       return fld.place.name === place.name && fld.is_group === true;
     });
-    // const isGroup = props.facilityFee.filter((fld) => {
-    //   // console.log(fld.data);
-    //   return (
-    //     fld.place === place.name && fld.data.find((f) => f.is_group === true)
-    //   );
-    // });
 
     if (isGroup.length === 0) {
       return (
@@ -42,6 +36,7 @@ const TabContent = (props) => {
                 feelist={props.facilityFee}
                 age={props.age}
                 time={props.time}
+                placeid={place.id}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
@@ -65,6 +60,7 @@ const TabContent = (props) => {
                 feelist={props.facilityFee}
                 age={props.age}
                 time={props.time}
+                placeid={place.id}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
@@ -88,6 +84,7 @@ const TabContent = (props) => {
                 feelist={props.facilityFee}
                 age={props.age}
                 time={props.time}
+                placeid={place.id}
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (

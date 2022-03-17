@@ -1,788 +1,1377 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Loading from "../../loading/Loading";
-import EditData from "./EditData";
+// import EditData from "./EditData";
+import { useForm } from "react-hook-form";
+import { ReservationUrls } from "../../../utils/reservationUrls";
+import useUnmountRef from "../../../hooks/useUnmountRef";
+import useSafeState from "../../../hooks/useSafeState";
 import "./editfeelist.scss";
 
-const GroupFeeList = (props) => {
-  const agedata = props.age;
-  const feelistdata = props.feelist;
+const EditGroupFeeList = (props) => {
+  const unmountRef = useUnmountRef();
+  const ageData = props.age;
+  const feelistData = props.feelist;
+  const placeData = props.place;
+  let purposeList = [];
+  let timeList = []; // 時間区分を格納する配列
+  let changefeeData = []; // 変更したデータを格納する配列
+  let changeEquipmentfeeData = []; //変更した用具料金を格納する配列
+  let changeplaceName = []; // 変更した場所データを格納する配列
+  let changeEquipmentData = []; // 変更した用具データを格納する配列
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [addEquipment, setAddEquipment] = useState(0);
+  let [createEquipmentData, setCreateEquipmentData] = useState([]);
+  let [createEquipmentFeeData, setCreateEquipmentFeeData] = useState([]);
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm();
+  const [equipmentfeeList, setEquipmentfeeList] = useSafeState(unmountRef, []);
 
-  // 表示する料金データを取得
-  const age1 = agedata.filter((age) => age.name === "小学生");
-  const age2 = agedata.filter((age) => age.name === "中学生");
-  const age3 = agedata.filter((age) => age.name === "高校生");
-  const age4 = agedata.filter((age) => age.name === "大学生");
-  const age5 = agedata.filter((age) => age.name === "一般");
-  const age6 = agedata.filter((age) => age.name === "高齢者");
+  const age1 = ageData.filter((age) => age.name === "小学生");
+  const age2 = ageData.filter((age) => age.name === "中学生");
+  const age3 = ageData.filter((age) => age.name === "高校生");
+  const age4 = ageData.filter((age) => age.name === "大学生");
+  const age5 = ageData.filter((age) => age.name === "一般");
+  const age6 = ageData.filter((age) => age.name === "高齢者");
+  const age7 = ageData.filter((age) => age.name === "障がい者");
 
-  const time1 = feelistdata.filter(
-    (feelist) => feelist.time.name.indexOf("午前") !== -1
-  );
-  const time2 = feelistdata.filter(
-    (feelist) => feelist.time.name.indexOf("午後") !== -1
-  );
-  const time3 = feelistdata.filter(
-    (feelist) => feelist.time.name.indexOf("夜間") !== -1
-  );
-  const time4 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午前") !== -1 &&
-      feelist.purpose.indexOf("一般使用") !== -1
-  );
-  const time5 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午後") !== -1 &&
-      feelist.purpose.indexOf("一般使用") !== -1
-  );
-  const time6 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("夜間") !== -1 &&
-      feelist.purpose.indexOf("一般使用") !== -1
-  );
-  const time7 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午前") !== -1 &&
-      feelist.purpose.indexOf("競技会使用") === -1
-  );
-  const time8 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午後") !== -1 &&
-      feelist.purpose.indexOf("競技会使用") === -1
-  );
-  const time9 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("夜間") !== -1 &&
-      feelist.purpose.indexOf("競技会使用") === -1
-  );
-  const time10 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午前") !== -1 &&
-      feelist.purpose.indexOf("入場料あり") !== -1
-  );
-  const time11 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午後") !== -1 &&
-      feelist.purpose.indexOf("入場料あり") !== -1
-  );
-  const time12 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("夜間") !== -1 &&
-      feelist.purpose.indexOf("入場料あり") !== -1
-  );
-  const time13 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午前") !== -1 &&
-      feelist.purpose.indexOf("入場料なし") !== -1
-  );
-  const time14 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("午後") !== -1 &&
-      feelist.purpose.indexOf("入場料なし") !== -1
-  );
-  const time15 = feelistdata.filter(
-    (feelist) =>
-      feelist.time.name.indexOf("夜間") !== -1 &&
-      feelist.purpose.indexOf("入場料なし") !== -1
+  //用具料金表データの取得
+  const GetEquipmentFee = () => {
+    axios
+      .get(
+        `${ReservationUrls.EQUIPMENT_FEE}?equipment__place__id=${placeData.id}`
+      )
+      .then((response) => {
+        const equipmentfeeLists = response.data[0].data;
+        setEquipmentfeeList(equipmentfeeLists);
+      })
+      .catch((error) => {});
+  };
+
+  useEffect(() => {
+    GetEquipmentFee();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // feelistdataに含まれているpurposeを取得
+  feelistData.map((feelist) => {
+    return purposeList.push({
+      purpose: feelist.purpose,
+    });
+  });
+  // purposeListから重複しているデータを削除
+  purposeList = purposeList.filter(
+    (purpose, index, self) =>
+      index === self.findIndex((p) => p.purpose === purpose.purpose)
   );
 
-  const fee1 = time1.filter((feelist) => feelist.age.name === "小学生");
-  const fee2 = time1.filter((feelist) => feelist.age.name === "中学生");
-  const fee3 = time1.filter((feelist) => feelist.age.name === "高校生");
-  const fee4 = time1.filter((feelist) => feelist.age.name === "大学生");
-  const fee5 = time1.filter((feelist) => feelist.age.name === "一般");
-  const fee6 = time1.filter((feelist) => feelist.age.name.indexOf("高") !== -1);
-  const fee7 = time2.filter((feelist) => feelist.age.name === "小学生");
-  const fee8 = time2.filter((feelist) => feelist.age.name === "中学生");
-  const fee9 = time2.filter((feelist) => feelist.age.name === "高校生");
-  const fee10 = time2.filter((feelist) => feelist.age.name === "大学生");
-  const fee11 = time2.filter((feelist) => feelist.age.name === "一般");
-  const fee12 = time2.filter(
-    (feelist) => feelist.age.name.indexOf("高") !== -1
+  const purpose1 = purposeList.filter(
+    (purpose) => purpose.purpose === "団体使用"
   );
-  const fee13 = time3.filter((feelist) => feelist.age.name === "小学生");
-  const fee14 = time3.filter((feelist) => feelist.age.name === "中学生");
-  const fee15 = time3.filter((feelist) => feelist.age.name === "高校生");
-  const fee16 = time3.filter((feelist) => feelist.age.name === "大学生");
-  const fee17 = time3.filter((feelist) => feelist.age.name === "一般");
-  const fee18 = time3.filter(
-    (feelist) => feelist.age.name.indexOf("高") !== -1
+  const purpose2 = purposeList.filter(
+    (purpose) => purpose.purpose === "競技会使用"
   );
-  const fee19 = time4.filter((feelist) => feelist.age.name === "小学生");
-  const fee20 = time4.filter((feelist) => feelist.age.name === "中学生");
-  const fee21 = time4.filter((feelist) => feelist.age.name === "高校生");
-  const fee22 = time4.filter((feelist) => feelist.age.name === "大学生");
-  const fee23 = time4.filter((feelist) => feelist.age.name === "一般");
-  const fee24 = time5.filter((feelist) => feelist.age.name === "小学生");
-  const fee25 = time5.filter((feelist) => feelist.age.name === "中学生");
-  const fee26 = time5.filter((feelist) => feelist.age.name === "高校生");
-  const fee27 = time5.filter((feelist) => feelist.age.name === "大学生");
-  const fee28 = time5.filter((feelist) => feelist.age.name === "一般");
-  const fee29 = time6.filter((feelist) => feelist.age.name === "小学生");
-  const fee30 = time6.filter((feelist) => feelist.age.name === "中学生");
-  const fee31 = time6.filter((feelist) => feelist.age.name === "高校生");
-  const fee32 = time6.filter((feelist) => feelist.age.name === "大学生");
-  const fee33 = time6.filter((feelist) => feelist.age.name === "一般");
-  const fee34 = time7.filter((feelist) => feelist.age.name === "小学生");
-  const fee35 = time7.filter((feelist) => feelist.age.name === "中学生");
-  const fee36 = time7.filter((feelist) => feelist.age.name === "高校生");
-  const fee37 = time7.filter((feelist) => feelist.age.name === "大学生");
-  const fee38 = time7.filter((feelist) => feelist.age.name === "一般");
-  const fee39 = time8.filter((feelist) => feelist.age.name === "小学生");
-  const fee40 = time8.filter((feelist) => feelist.age.name === "中学生");
-  const fee41 = time8.filter((feelist) => feelist.age.name === "高校生");
-  const fee42 = time8.filter((feelist) => feelist.age.name === "大学生");
-  const fee43 = time8.filter((feelist) => feelist.age.name === "一般");
-  const fee44 = time9.filter((feelist) => feelist.age.name === "小学生");
-  const fee45 = time9.filter((feelist) => feelist.age.name === "中学生");
-  const fee46 = time9.filter((feelist) => feelist.age.name === "高校生");
-  const fee47 = time9.filter((feelist) => feelist.age.name === "大学生");
-  const fee48 = time9.filter((feelist) => feelist.age.name === "一般");
-  const fee49 = time10.filter((feelist) => feelist.age.name === "一般");
-  const fee50 = time11.filter((feelist) => feelist.age.name === "一般");
-  const fee51 = time12.filter((feelist) => feelist.age.name === "一般");
-  const fee52 = time13.filter((feelist) => feelist.age.name === "一般");
-  const fee53 = time14.filter((feelist) => feelist.age.name === "一般");
-  const fee54 = time15.filter((feelist) => feelist.age.name === "一般");
+  const purpose3 = purposeList.filter(
+    (purpose) => purpose.purpose.indexOf("あり") !== -1
+  );
+  const purpose4 = purposeList.filter(
+    (purpose) => purpose.purpose.indexOf("なし") !== -1
+  );
 
-  // 各定数に値が入っているか確認
-  if (time1.length === 0 || fee1.length === 0) {
+  // feelistdataに含まれているtimeIdとnameを取得
+  feelistData.map((feelist) => {
+    return timeList.push({
+      timeId: feelist.time.id,
+      timeName: feelist.time.name,
+    });
+  });
+  // timeListから重複しているデータを削除
+  timeList = timeList.filter(
+    (timeId, index, self) =>
+      index === self.findIndex((t) => t.timeId === timeId.timeId)
+  );
+
+  //料金表
+  const onChange = (e, timeId, ageId, feeId) => {
+    changefeeData.push({
+      place_id: placeData.id,
+      time_id: timeId,
+      age_id: ageId,
+      inputName: e.target.name,
+      fee_id: feeId,
+    });
+    // 重複しているデータを削除
+    changefeeData = changefeeData.filter(
+      (fee, index, self) =>
+        index ===
+        self.findIndex(
+          (f) =>
+            f.place_id === fee.place_id &&
+            f.time_id === fee.time_id &&
+            f.age_id === fee.age_id
+        )
+    );
+  };
+
+  //場所の名前
+  const onChangePlaceName = (e) => {
+    changeplaceName.push({
+      place_id: placeData.id,
+      inputName: e.target.name,
+    });
+    changeplaceName = changeplaceName.filter(
+      (place, index, self) =>
+        index === self.findIndex((f) => f.place_id === place.place_id)
+    );
+  };
+
+  // 更新する用具データ
+  const onChangeEquipment = (e, id) => {
+    changeEquipmentData.push({
+      place_id: [placeData.id],
+      inputName: e.target.name,
+      id: id,
+    });
+    changeEquipmentData = changeEquipmentData.filter(
+      (equipment, index, self) =>
+        index === self.findIndex((f) => f.id === equipment.id)
+    );
+  };
+
+  //用具の料金表
+  const onChangeEquipmentFee = (e, equipmentId, feeId) => {
+    changeEquipmentfeeData.push({
+      equipment_id: equipmentId,
+      inputName: e.target.name,
+      fee_id: feeId,
+    });
+
+    // 重複しているデータを削除
+    changeEquipmentfeeData = changeEquipmentfeeData.filter(
+      (fee, index, self) =>
+        index === self.findIndex((f) => f.equipment_id === fee.equipment_id)
+    );
+  };
+
+  // 用具データの作成
+  const onChangeCreateEquipment = (e, index) => {
+    createEquipmentData[index] = {
+      place: [placeData.id],
+      inputName: e.target.name,
+      index: index,
+    };
+    // 重複しているデータを削除
+    createEquipmentData = createEquipmentData.filter(
+      (equipment, index, self) =>
+        index === self.findIndex((f) => f.index === equipment.index)
+    );
+    console.log(createEquipmentData);
+  };
+  const onChangeCreateEquipmentFee = (e, index) => {
+    createEquipmentFeeData[index] = {
+      inputName: e.target.name,
+      index: index,
+    };
+    // 重複しているデータを削除
+    createEquipmentFeeData = createEquipmentFeeData.filter(
+      (fee, index, self) =>
+        index === self.findIndex((f) => f.index === fee.index)
+    );
+    console.log(createEquipmentFeeData);
+  };
+
+  const onSubmit = (data) => {
+    setLoading(true);
+    // 料金データを更新
+    changefeeData.map((fee) => {
+      axios
+        .patch(`${ReservationUrls.FACILITY_FEE}${fee.fee_id}/`, {
+          place_id: fee.place_id,
+          age_id: fee.age_id,
+          time_id: fee.time_id,
+          fee: getValues(fee.inputName),
+        })
+        .then((res) => {
+          // console.log("Success");
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+      return fee;
+    });
+    //場所の名前の更新
+    changeplaceName.map((place) => {
+      axios
+        .patch(`${ReservationUrls.PLACE}${placeData.id}/`, {
+          name: getValues(place.inputName),
+        })
+        .then((res) => {
+          // console.log("Success");
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+      return place;
+    });
+    // 用具データを更新
+    changeEquipmentData.map((equipment) => {
+      axios
+        .patch(`${ReservationUrls.EQUIPMENT}${equipment.id}/`, {
+          place_id: equipment.place_id,
+          name: getValues(equipment.inputName),
+        })
+        .then((res) => {
+          // console.log("Success");
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+      return equipment;
+    });
+    //用具料金表の更新
+    changeEquipmentfeeData.map((equipmentfee) => {
+      axios
+        .patch(`${ReservationUrls.EQUIPMENT_FEE}${equipmentfee.fee_id}/`, {
+          equipment_id: equipmentfee.equipment_id,
+          fee: getValues(equipmentfee.inputName),
+          name: getValues(equipmentfee.inputName),
+        })
+        .then((res) => {
+          // console.log("Success");
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+      return equipmentfee;
+    });
+    // 用具データを追加
+    createEquipmentData.map((equipment) => {
+      axios
+        .post(ReservationUrls.EQUIPMENT, {
+          place_id: equipment.place,
+          name: getValues(equipment.inputName),
+        })
+        .then((res) => {
+          createEquipmentFeeData.map(
+            (fee) =>
+              equipment.index === fee.index &&
+              axios
+                .post(ReservationUrls.EQUIPMENT_FEE, {
+                  equipment_id: res.data.id,
+                  fee: getValues(fee.inputName),
+                })
+                .then((res) => {
+                  // console.log("Success");
+                })
+                .catch((err) => {})
+          );
+        })
+        .catch((err) => {});
+      return equipment;
+    });
+    setLoading(false);
+    setMessage("変更しました");
+    // 0.5秒後にリロード
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  };
+
+  // 用具料金表
+  const Equipment = () => {
+    return (
+      <>
+        <h2>附属設備・器具</h2>
+        <p>
+          ・「追加」ボタンを押すと、新しい附属設備・器具を追加できます。
+          <br />
+          ・「削除」ボタンを押すと、追加された附属設備・器具を削除できます。
+          <br />
+          ・一度登録した附属設備・器具を削除する場合は、<b>施設データ自体</b>
+          を削除する必要があります。
+        </p>
+        <button
+          type="button"
+          className="selection-screen-btn"
+          onClick={() => setAddEquipment(addEquipment + 1)}
+        >
+          追加
+        </button>
+        <span className="btn-space"></span>
+        <button
+          type="button"
+          className="back-btn"
+          onClick={() => {
+            setAddEquipment(0);
+            setCreateEquipmentData([]);
+            setCreateEquipmentFeeData([]);
+          }}
+        >
+          削除
+        </button>
+        <table>
+          <thead>
+            <tr>
+              <th>附属設備・器具名</th>
+              <th>料金</th>
+            </tr>
+          </thead>
+          <tbody>
+            {equipmentfeeList.length > 0 &&
+              equipmentfeeList.map((equipment, index) => (
+                <tr key={equipment.id}>
+                  <td className="none"></td>
+                  <td>
+                    <input
+                      type="text"
+                      name={`equipment-${index}`}
+                      defaultValue={equipment.equipment.name}
+                      {...register(`equipment-${index}`, {
+                        required: "※必須項目です",
+                      })}
+                      onChange={(e) => onChangeEquipment(e, equipment.id)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name={`equipmentfee1-${index}`}
+                      inputMode="numeric"
+                      defaultValue={equipment.fee}
+                      {...register(`equipmentfee1-${index}`, {
+                        required: "※必須項目です",
+                        pattern: {
+                          value: /^[0-9]+$/,
+                          message: "※半角数字で入力してください",
+                        },
+                      })}
+                      onChange={(e) =>
+                        onChangeEquipmentFee(
+                          e,
+                          equipment.equipment.id,
+                          equipment.id
+                        )
+                      }
+                    />
+                  </td>
+                </tr>
+              ))}
+            {addEquipment > 0 &&
+              Array.from({ length: addEquipment }).map((_, index) => (
+                <tr key={index}>
+                  <td className="none"></td>
+                  <td>
+                    <input
+                      type="text"
+                      name={`createequipment-${index}`}
+                      defaultValue=""
+                      {...register(`createequipment-${index}`, {
+                        required: "※必須項目です",
+                      })}
+                      onChange={(e) => onChangeCreateEquipment(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name={`createequipmentfee-${index}`}
+                      inputMode="numeric"
+                      {...register(`createequipmentfee-${index}`, {
+                        required: "※必須項目です",
+                        pattern: {
+                          value: /^[0-9]+$/,
+                          message: "※半角数字で入力してください",
+                        },
+                      })}
+                      onChange={(e) => onChangeCreateEquipmentFee(e, index)}
+                    />
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </>
+    );
+  };
+
+  // リストに値が入っているか確認
+  if (timeList === 0) {
     return <Loading />;
   } else {
     return (
-      <div className="editfeelist">
-        <div>
-          <h2>個人使用</h2>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>{age1[0].name}</th>
-                <th>{age2[0].name}</th>
-                <th>{age3[0].name}</th>
-                <th>{age4[0].name}</th>
-                <th>{age5[0].name}</th>
-                <th>{age6[0].name}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{time1[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee1[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time1[0].time.id}
-                    feeplaceid={fee1[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time1[0].time.name}
-                    tdclick={fee1[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee2[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time1[0].time.id}
-                    feeplaceid={fee2[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time1[0].time.name}
-                    tdclick={fee2[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee3[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time1[0].time.id}
-                    feeplaceid={fee3[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time1[0].time.name}
-                    tdclick={fee3[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee4[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time1[0].time.id}
-                    feeplaceid={fee4[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time1[0].time.name}
-                    tdclick={fee4[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee5[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time1[0].time.id}
-                    feeplaceid={fee5[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time1[0].time.name}
-                    tdclick={fee5[0].fee}
-                  />
-                </td>
-                <td data-label={age6[0].name}>
-                  <EditData
-                    feeid={fee6[0].id}
-                    feeageid={age6[0].id}
-                    feetimeid={time1[0].time.id}
-                    feeplaceid={fee6[0].place.id}
-                    feeage={age6[0].name}
-                    feetime={time1[0].time.name}
-                    tdclick={fee6[0].fee}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>{time2[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee7[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time2[0].time.id}
-                    feeplaceid={fee7[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time2[0].time.name}
-                    tdclick={fee7[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee8[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time2[0].time.id}
-                    feeplaceid={fee8[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time2[0].time.name}
-                    tdclick={fee8[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee9[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time2[0].time.id}
-                    feeplaceid={fee9[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time2[0].time.name}
-                    tdclick={fee9[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee10[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time2[0].time.id}
-                    feeplaceid={fee10[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time2[0].time.name}
-                    tdclick={fee10[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee11[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time2[0].time.id}
-                    feeplaceid={fee11[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time2[0].time.name}
-                    tdclick={fee11[0].fee}
-                  />
-                </td>
-                <td data-label={age6[0].name}>
-                  <EditData
-                    feeid={fee12[0].id}
-                    feeageid={age6[0].id}
-                    feetimeid={time2[0].time.id}
-                    feeplaceid={fee12[0].place.id}
-                    feeage={age6[0].name}
-                    feetime={time2[0].time.name}
-                    tdclick={fee12[0].fee}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>{time3[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee13[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time3[0].time.id}
-                    feeplaceid={fee13[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time3[0].time.name}
-                    tdclick={fee13[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee14[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time3[0].time.id}
-                    feeplaceid={fee14[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time3[0].time.name}
-                    tdclick={fee14[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee15[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time3[0].time.id}
-                    feeplaceid={fee15[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time3[0].time.name}
-                    tdclick={fee15[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee16[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time3[0].time.id}
-                    feeplaceid={fee16[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time3[0].time.name}
-                    tdclick={fee16[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee17[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time3[0].time.id}
-                    feeplaceid={fee17[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time3[0].time.name}
-                    tdclick={fee17[0].fee}
-                  />
-                </td>
-                <td data-label={age6[0].name}>
-                  <EditData
-                    feeid={fee18[0].id}
-                    feeageid={age6[0].id}
-                    feetimeid={time3[0].time.id}
-                    feeplaceid={fee18[0].place.id}
-                    feeage={age6[0].name}
-                    feetime={time3[0].time.name}
-                    tdclick={fee18[0].fee}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <h2>団体使用</h2>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>{age1[0].name}</th>
-                <th>{age2[0].name}</th>
-                <th>{age3[0].name}</th>
-                <th>{age4[0].name}</th>
-                <th>{age5[0].name}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{time4[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee19[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time4[0].time.id}
-                    feeplaceid={fee19[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time4[0].time.name}
-                    tdclick={fee19[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee20[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time4[0].time.id}
-                    feeplaceid={fee20[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time4[0].time.name}
-                    tdclick={fee20[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee21[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time4[0].time.id}
-                    feeplaceid={fee21[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time4[0].time.name}
-                    tdclick={fee21[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee22[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time4[0].time.id}
-                    feeplaceid={fee22[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time4[0].time.name}
-                    tdclick={fee22[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee23[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time4[0].time.id}
-                    feeplaceid={fee23[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time4[0].time.name}
-                    tdclick={fee23[0].fee}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>{time5[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee24[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time5[0].time.id}
-                    feeplaceid={fee24[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time5[0].time.name}
-                    tdclick={fee24[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee25[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time5[0].time.id}
-                    feeplaceid={fee25[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time5[0].time.name}
-                    tdclick={fee25[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee26[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time5[0].time.id}
-                    feeplaceid={fee26[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time5[0].time.name}
-                    tdclick={fee26[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee27[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time5[0].time.id}
-                    feeplaceid={fee27[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time5[0].time.name}
-                    tdclick={fee27[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee28[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time5[0].time.id}
-                    feeplaceid={fee28[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time5[0].time.name}
-                    tdclick={fee28[0].fee}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>{time6[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee29[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time6[0].time.id}
-                    feeplaceid={fee29[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time6[0].time.name}
-                    tdclick={fee29[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee30[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time6[0].time.id}
-                    feeplaceid={fee30[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time6[0].time.name}
-                    tdclick={fee30[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee31[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time6[0].time.id}
-                    feeplaceid={fee31[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time6[0].time.name}
-                    tdclick={fee31[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee32[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time6[0].time.id}
-                    feeplaceid={fee32[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time6[0].time.name}
-                    tdclick={fee32[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee33[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time6[0].time.id}
-                    feeplaceid={fee33[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time6[0].time.name}
-                    tdclick={fee33[0].fee}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <h2>競技会使用</h2>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>{age1[0].name}</th>
-                <th>{age2[0].name}</th>
-                <th>{age3[0].name}</th>
-                <th>{age4[0].name}</th>
-                <th>{age5[0].name}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{time7[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee34[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time7[0].time.id}
-                    feeplaceid={fee34[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time7[0].time.name}
-                    tdclick={fee34[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee35[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time7[0].time.id}
-                    feeplaceid={fee35[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time7[0].time.name}
-                    tdclick={fee35[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee36[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time7[0].time.id}
-                    feeplaceid={fee36[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time7[0].time.name}
-                    tdclick={fee36[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee37[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time7[0].time.id}
-                    feeplaceid={fee37[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time7[0].time.name}
-                    tdclick={fee37[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee38[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time7[0].time.id}
-                    feeplaceid={fee38[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time7[0].time.name}
-                    tdclick={fee38[0].fee}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>{time8[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee39[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time8[0].time.id}
-                    feeplaceid={fee39[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time8[0].time.name}
-                    tdclick={fee39[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee40[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time8[0].time.id}
-                    feeplaceid={fee40[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time8[0].time.name}
-                    tdclick={fee40[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee41[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time8[0].time.id}
-                    feeplaceid={fee41[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time8[0].time.name}
-                    tdclick={fee41[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee42[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time8[0].time.id}
-                    feeplaceid={fee42[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time8[0].time.name}
-                    tdclick={fee42[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee43[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time8[0].time.id}
-                    feeplaceid={fee43[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time8[0].time.name}
-                    tdclick={fee43[0].fee}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>{time9[0].time.name}</td>
-                <td data-label={age1[0].name}>
-                  <EditData
-                    feeid={fee44[0].id}
-                    feeageid={age1[0].id}
-                    feetimeid={time9[0].time.id}
-                    feeplaceid={fee44[0].place.id}
-                    feeage={age1[0].name}
-                    feetime={time9[0].time.name}
-                    tdclick={fee44[0].fee}
-                  />
-                </td>
-                <td data-label={age2[0].name}>
-                  <EditData
-                    feeid={fee45[0].id}
-                    feeageid={age2[0].id}
-                    feetimeid={time9[0].time.id}
-                    feeplaceid={fee45[0].place.id}
-                    feeage={age2[0].name}
-                    feetime={time9[0].time.name}
-                    tdclick={fee45[0].fee}
-                  />
-                </td>
-                <td data-label={age3[0].name}>
-                  <EditData
-                    feeid={fee46[0].id}
-                    feeageid={age3[0].id}
-                    feetimeid={time9[0].time.id}
-                    feeplaceid={fee46[0].place.id}
-                    feeage={age3[0].name}
-                    feetime={time9[0].time.name}
-                    tdclick={fee46[0].fee}
-                  />
-                </td>
-                <td data-label={age4[0].name}>
-                  <EditData
-                    feeid={fee47[0].id}
-                    feeageid={age4[0].id}
-                    feetimeid={time9[0].time.id}
-                    feeplaceid={fee47[0].place.id}
-                    feeage={age4[0].name}
-                    feetime={time9[0].time.name}
-                    tdclick={fee47[0].fee}
-                  />
-                </td>
-                <td data-label={age5[0].name}>
-                  <EditData
-                    feeid={fee48[0].id}
-                    feeageid={age5[0].id}
-                    feetimeid={time9[0].time.id}
-                    feeplaceid={fee48[0].place.id}
-                    feeage={age5[0].name}
-                    feetime={time9[0].time.name}
-                    tdclick={fee48[0].fee}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <h2>営利目的使用</h2>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>{time10[0].purpose}</th>
-                <th>{time13[0].purpose}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{time10[0].time.name}</td>
-                <td data-label={time10[0].purpose}>{fee49[0].fee}</td>
-                <td data-label={time13[0].purpose}>{fee52[0].fee}</td>
-              </tr>
-              <tr>
-                <td>{time11[0].time.name}</td>
-                <td data-label={time11[0].purpose}>{fee50[0].fee}</td>
-                <td data-label={time14[0].purpose}>{fee53[0].fee}</td>
-              </tr>
-              <tr>
-                <td>{time12[0].time.name}</td>
-                <td data-label={time12[0].purpose}>{fee51[0].fee}</td>
-                <td data-label={time15[0].purpose}>{fee54[0].fee}</td>
-              </tr>
-            </tbody>
-          </table>
+      <>
+        <div className="editfeelist">
+          {message !== "" && <p className="red">{message}</p>}
+          <p>
+            ・ 年齢区分・時間帯の部分は変更できません。
+            <br />
+            ・ 料金の部分は全て半角数字で入力してください。
+            <br />
+            ・ 「完了」ボタンを押すと料金が変更されます。
+            <br />
+          </p>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* {errors && <p className="red">入力内容に誤りがあります。</p>} */}
+            {/* <p className="red">
+              ※施設名を変更した場合、反映に5分程度掛かります。
+            </p> */}
+            <h4>施設名：</h4>
+            {errors.place && <p className="red">{errors.place.message}</p>}
+            <input
+              type="text"
+              name="place"
+              className="place-name"
+              defaultValue={placeData.name}
+              {...register(`place`, {
+                required: "※必須項目です",
+              })}
+              onChange={(e) => onChangePlaceName(e)}
+            />
+            <h2>個人使用</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{age1[0].name}</th>
+                  <th>{age2[0].name}</th>
+                  <th>{age3[0].name}</th>
+                  <th>{age4[0].name}</th>
+                  <th>{age5[0].name}</th>
+                  <th>{age6[0].name}</th>
+                  <th>{age7[0].name}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {timeList.map((time, index) => (
+                  <tr key={time.timeId}>
+                    <td>{time.timeName}</td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee1-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age1[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee1-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age1[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age1[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee2-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age2[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee2-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age2[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age2[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee3-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age3[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee3-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age3[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age3[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee4-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age4[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee4-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age4[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age4[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee5-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age5[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee5-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age5[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age5[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee6-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age6[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee6-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age6[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age6[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`fee7-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age7[0].id &&
+                              feelist.is_group === false
+                          ).fee
+                        }
+                        {...register(`fee7-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age7[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age7[0].id &&
+                                feelist.is_group === false
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <h2>団体使用</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{age1[0].name}</th>
+                  <th>{age2[0].name}</th>
+                  <th>{age3[0].name}</th>
+                  <th>{age4[0].name}</th>
+                  <th>{age5[0].name}</th>
+                  <th>{age6[0].name}</th>
+                  <th>{age7[0].name}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {timeList.map((time, index) => (
+                  <tr key={time.timeId}>
+                    <td>{time.timeName}</td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee1-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age1[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee1-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age1[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age1[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee2-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age2[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee2-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age2[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age2[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee3-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age3[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee3-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age3[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age3[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee4-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age4[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee4-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age4[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age4[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee5-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age5[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee5-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age5[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age5[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee6-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age6[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee6-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age6[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age6[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`groupfee7-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age7[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose1[0].purpose
+                          ).fee
+                        }
+                        {...register(`groupfee7-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age7[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age7[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose1[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <h2>競技会使用</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{age1[0].name}</th>
+                  <th>{age2[0].name}</th>
+                  <th>{age3[0].name}</th>
+                  <th>{age4[0].name}</th>
+                  <th>{age5[0].name}</th>
+                  <th>{age6[0].name}</th>
+                  <th>{age7[0].name}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {timeList.map((time, index) => (
+                  <tr key={time.timeId}>
+                    <td>{time.timeName}</td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee1-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age1[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee1-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age1[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age1[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee2-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age2[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee2-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age2[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age2[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee3-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age3[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee3-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age3[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age3[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee4-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age4[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee4-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age4[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age4[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee5-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age5[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee5-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age5[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age5[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee6-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age6[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee6-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age6[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age6[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`competitionfee7-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age7[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose2[0].purpose
+                          ).fee
+                        }
+                        {...register(`competitionfee7-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age7[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age7[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose2[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <h2>営利目的使用</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{purpose3[0].purpose}</th>
+                  <th>{purpose4[0].purpose}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {timeList.map((time, index) => (
+                  <tr key={time.timeId}>
+                    <td>{time.timeName}</td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`commercialfee1-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age5[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose3[0].purpose
+                          ).fee
+                        }
+                        {...register(`commercialfee1-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) =>
+                          onChange(
+                            e,
+                            time.timeId,
+                            age5[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age5[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose3[0].purpose
+                            ).id
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={`commercialfee2-${index}`}
+                        inputMode="numeric"
+                        defaultValue={
+                          feelistData.find(
+                            (feelist) =>
+                              feelist.time.id === time.timeId &&
+                              feelist.age.id === age5[0].id &&
+                              feelist.is_group === true &&
+                              feelist.purpose === purpose4[0].purpose
+                          ).fee
+                        }
+                        {...register(`commercialfee2-${index}`, {
+                          required: "※必須項目です",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "※半角数字で入力してください",
+                          },
+                        })}
+                        onChange={(e) => {
+                          onChange(
+                            e,
+                            time.timeId,
+                            age5[0].id,
+                            feelistData.find(
+                              (feelist) =>
+                                feelist.time.id === time.timeId &&
+                                feelist.age.id === age5[0].id &&
+                                feelist.is_group === true &&
+                                feelist.purpose === purpose4[0].purpose
+                            ).id
+                          );
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Equipment />
+            <div className="btn-wrapper">
+              <button type="submit" className="btn">
+                完了
+              </button>
+              <span className="btn-space"></span>
+              <button
+                type="button"
+                className="back-btn"
+                onClick={() => props.setIsOpen(false)}
+              >
+                閉じる
+              </button>
+            </div>
+          </form>
         </div>
-      </div>
+        {loading && <Loading />}
+      </>
     );
   }
 };
 
-export default GroupFeeList;
+export default EditGroupFeeList;

@@ -156,6 +156,25 @@ const ApprovalButton = (props) => {
                 })}
               />
             </div>
+            <div className="modal-form-group">
+              {errors.heating_fee && (
+                <p className="modal-error">{errors.number.message}</p>
+              )}
+              <label className="modal-label">発行番号：</label>
+              <input
+                type="text"
+                inputMode="numeric"
+                name="number"
+                className="modal-input"
+                {...register("number", {
+                  required: "必須項目です",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "数字を入力してください",
+                  },
+                })}
+              />
+            </div>
             {props.defferd_payment.length > 0 && (
               <div className="modal-form-group">
                 {errors.defferd_payment_fee && (

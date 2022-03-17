@@ -3,19 +3,8 @@ $sub-color: #707070;
 $accent-color: #233b62;
 
 .editfeelist {
-  .form-group {
-    margin-bottom: 3%;
-  }
   h2 {
     text-align: left;
-  }
-  .place-name {
-    width: 250px;
-    padding: 0.5rem 0.5rem;
-    font-size: 1.1rem;
-  }
-  .none {
-    display: none;
   }
 
   table {
@@ -49,12 +38,6 @@ $accent-color: #233b62;
       border-style: double;
       border-color: $main-color;
     }
-    &:first-child {
-      &:hover {
-        border-style: double;
-        border-color: #dfdfdf;
-      }
-    }
     input {
       width: 95%;
       text-align: center;
@@ -65,5 +48,11 @@ $accent-color: #233b62;
         outline: none;
       }
     }
+  }
+}
+
+.data-list-modal {
+  .back-btn {
+    display: block;
   }
 }

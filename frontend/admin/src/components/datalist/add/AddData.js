@@ -107,7 +107,7 @@ const AddData = (props) => {
                 age1[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee1-1")
               );
               postFacilityFee(
@@ -115,7 +115,7 @@ const AddData = (props) => {
                 age2[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee1-2")
               );
               postFacilityFee(
@@ -123,7 +123,7 @@ const AddData = (props) => {
                 age3[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee1-3")
               );
               postFacilityFee(
@@ -131,7 +131,7 @@ const AddData = (props) => {
                 age4[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee1-4")
               );
               postFacilityFee(
@@ -139,7 +139,7 @@ const AddData = (props) => {
                 age5[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee1-5")
               );
               postFacilityFee(
@@ -147,7 +147,7 @@ const AddData = (props) => {
                 age6[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee1-6")
               );
               postFacilityFee(
@@ -155,7 +155,7 @@ const AddData = (props) => {
                 age7[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee1-7")
               );
             })
@@ -173,7 +173,7 @@ const AddData = (props) => {
                 age1[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee2-1")
               );
               postFacilityFee(
@@ -181,7 +181,7 @@ const AddData = (props) => {
                 age2[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee2-2")
               );
               postFacilityFee(
@@ -189,7 +189,7 @@ const AddData = (props) => {
                 age3[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee2-3")
               );
               postFacilityFee(
@@ -197,7 +197,7 @@ const AddData = (props) => {
                 age4[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee2-4")
               );
               postFacilityFee(
@@ -205,7 +205,7 @@ const AddData = (props) => {
                 age5[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee2-5")
               );
               postFacilityFee(
@@ -213,7 +213,7 @@ const AddData = (props) => {
                 age6[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee2-6")
               );
               postFacilityFee(
@@ -221,7 +221,7 @@ const AddData = (props) => {
                 age7[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee2-7")
               );
             })
@@ -239,7 +239,7 @@ const AddData = (props) => {
                 age1[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee3-1")
               );
               postFacilityFee(
@@ -247,7 +247,7 @@ const AddData = (props) => {
                 age2[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee3-2")
               );
               postFacilityFee(
@@ -255,7 +255,7 @@ const AddData = (props) => {
                 age3[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee3-3")
               );
               postFacilityFee(
@@ -263,7 +263,7 @@ const AddData = (props) => {
                 age4[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee3-4")
               );
               postFacilityFee(
@@ -271,7 +271,7 @@ const AddData = (props) => {
                 age5[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee3-5")
               );
               postFacilityFee(
@@ -279,7 +279,7 @@ const AddData = (props) => {
                 age6[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee3-6")
               );
               postFacilityFee(
@@ -287,15 +287,16 @@ const AddData = (props) => {
                 age7[0].id,
                 timeId,
                 isGroup,
-                "個人使用",
+                "その他",
                 getValues("normal_fee3-7")
               );
             })
             .catch((error) => {});
-        } else {
+        } else if (isGroup === true) {
           // 団体料金が存在する場合
           // 施設データのidを取得
           const placeId = response.data.id;
+          const max = response.data.max;
           // 時間区分データを追加
           axios
             .post(ReservationUrls.TIME, {
@@ -495,7 +496,7 @@ const AddData = (props) => {
               );
             })
             .catch((error) => {});
-          if (maxValue > 1) {
+          if (max > 1) {
             // 団体使用
             axios
               .post(ReservationUrls.TIME, {
@@ -655,7 +656,7 @@ const AddData = (props) => {
                 );
               })
               .catch((error) => {});
-          } else if (maxValue === "1") {
+          } else if (max === 1) {
             // 団体使用
             axios
               .post(ReservationUrls.TIME, {
@@ -1134,12 +1135,16 @@ const AddData = (props) => {
           }
         }
         setMessage("登録しました");
+        setLoading(false);
+        setTimeout(() => {
+          window.location.href = "/data-list";
+        }, 1000);
       })
       .catch((error) => {
         setMessage("登録に失敗しました");
+        setLoading(false);
+        window.location.href = "/data-list";
       });
-    setLoading(false);
-    window.location.href = "/data-list";
   };
 
   if (age1.length === 0) {
@@ -1179,6 +1184,7 @@ const AddData = (props) => {
                     {...register("is_group", {
                       required: "※必須項目です",
                     })}
+                    // value={true}
                     onChange={() => setIsGroup(true)}
                   />
                   <label htmlFor="is_group_true">あり</label>
@@ -1191,6 +1197,7 @@ const AddData = (props) => {
                     {...register("is_group", {
                       required: "※必須項目です",
                     })}
+                    // value={false}
                     onChange={() => setIsGroup(false)}
                   />
                   <label htmlFor="is_group_false">なし</label>
@@ -1211,6 +1218,7 @@ const AddData = (props) => {
                     required: "※必須項目です",
                   })}
                   onChange={() => setIsSelect(true)}
+                  disabled={isGroup === false}
                 />
                 <label htmlFor="is_select_true">あり</label>
               </div>
@@ -1296,6 +1304,7 @@ const AddData = (props) => {
               </>
             )}
             <h4>料金：</h4>
+            <p className="red">※時間帯の部分は後から変更できません。</p>
             {isGroup || (
               <div className="add-data__form-group">
                 {errors.normal_fee && (
@@ -2210,10 +2219,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="competition_time-1"
+                                name="competition_fee-1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_time-1", {
+                                {...register("competition_fee-1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2225,10 +2234,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="competition_time-2"
+                                name="competition_fee-2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_time-2", {
+                                {...register("competition_fee-2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2240,10 +2249,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="competition_time-3"
+                                name="competition_fee-3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_time-3", {
+                                {...register("competition_fee-3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2255,10 +2264,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="competition_time-4"
+                                name="competition_fee-4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_time-4", {
+                                {...register("competition_fee-4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2270,10 +2279,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="competition_time-5"
+                                name="competition_fee-5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_time-5", {
+                                {...register("competition_fee-5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2285,10 +2294,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="competition_time-6"
+                                name="competition_fee-6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_time-6", {
+                                {...register("competition_fee-6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2300,10 +2309,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="competition_time-7"
+                                name="competition_fee-7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_time-7", {
+                                {...register("competition_fee-7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2341,10 +2350,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="commercial_time-1"
+                                name="commercial_fee-1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_time-1", {
+                                {...register("commercial_fee-1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2356,10 +2365,10 @@ const AddData = (props) => {
                             <td>
                               <input
                                 type="text"
-                                name="commercial_time-2"
+                                name="commercial_fee-2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_time-2", {
+                                {...register("commercial_fee-2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2374,7 +2383,7 @@ const AddData = (props) => {
                     </div>
                   </>
                 )}
-                {maxValue === "1" && (
+                {maxValue === "1" || isSelect === false ? (
                   <>
                     <div className="form-group">
                       <p>団体使用</p>
@@ -3257,7 +3266,7 @@ const AddData = (props) => {
                       </table>
                     </div>
                   </>
-                )}
+                ) : null}
               </>
             )}
             <div className="button-group">

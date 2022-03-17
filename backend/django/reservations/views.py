@@ -91,7 +91,7 @@ class PlaceViewSet(viewsets.ModelViewSet):
   queryset = Place.objects.all()
   serializer_class = PlaceSerializer
   filter_fields = [f.name for f in Place._meta.fields]
-  permission_classes = [permissions.ActionBasedPermission]
+  # permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
       permissions.IsAuthenticated: [],

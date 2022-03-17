@@ -152,10 +152,10 @@ body {
 }
 .selection-screen-btn {
   @extend .btn;
-  border: 1px solid #233b62;
-  background-color: #233b62;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
   &:hover {
-    border: 1px solid #233b62;
+    border: 1px solid $accent-color;
   }
 }
 .copy-btn {

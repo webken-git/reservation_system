@@ -15,8 +15,9 @@ import "./tab.scss";
 const TabContainer = () => {
   const unmountRef = useUnmountRef();
   const [place, setPlace] = useSafeState(unmountRef, []);
-  const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
+  // const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
   const [facilityFee, setFacilityFee] = useSafeState(unmountRef, []);
+  const [selectFeeList, setSelectFeeList] = useSafeState(unmountRef, []);
   const [age, setAge] = useSafeState(unmountRef, []);
   const [time, setTime] = useSafeState(unmountRef, []);
   const [, setUsage] = useSafeState(unmountRef, []);
@@ -39,9 +40,9 @@ const TabContainer = () => {
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 500) {
-          window.location.href = "/500";
-        }
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -51,14 +52,16 @@ const TabContainer = () => {
       .get(ReservationUrls.FACILITY_FEE)
       .then((response) => {
         const feelists = response.data;
-        setFeeListData(feelists);
-        setFacilityFee(feelists[1].data);
+        setFacilityFee(feelists);
+        setSelectFeeList(
+          feelists.filter((fee) => fee.place === tabStates.placeName)[0].data
+        );
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 500) {
-          window.location.href = "/500";
-        }
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -72,9 +75,9 @@ const TabContainer = () => {
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 500) {
-          window.location.href = "/500";
-        }
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -88,9 +91,9 @@ const TabContainer = () => {
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 500) {
-          window.location.href = "/500";
-        }
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -103,9 +106,9 @@ const TabContainer = () => {
       })
       .catch((error) => {
         setLoading(false);
-        if (error.response.status === 500) {
-          window.location.href = "/500";
-        }
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -126,12 +129,13 @@ const TabContainer = () => {
       min: min,
       max: max,
     });
-    const divide_feelist = feeListData.filter((fld) => {
+    const divide_feelist = facilityFee.filter((fld) => {
       return fld.place === pn;
     });
-    // divide_feelistがデータを取得できた場合には、そのデータをセットする
+    // divide_feelistにデータがある場合
     if (divide_feelist.length > 0) {
-      setFacilityFee(divide_feelist[0].data);
+      setSelectFeeList(divide_feelist[0].data);
+      return true;
     }
   };
 
@@ -180,7 +184,7 @@ const TabContainer = () => {
         </TabList>
         <TabContent
           place={place}
-          facilityFee={facilityFee}
+          facilityFee={selectFeeList}
           age={age}
           time={time}
           CheckAuth={CheckAuth}

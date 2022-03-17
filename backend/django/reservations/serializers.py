@@ -92,7 +92,7 @@ class ReservationSuspensionScheduleSerializer(serializers.ModelSerializer):
 
     place_data = validated_data.pop('places')
     instance.save()
-    instance.place.set(place_data)
+    instance.places.set(place_data)
 
     return instance
 
