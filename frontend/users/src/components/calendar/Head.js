@@ -3,7 +3,6 @@ import React from 'react'
 import {withCookies} from 'react-cookie'
 const Head = (props) =>{
 
-    // const date = props.date;
     const calendarType = props.calendarType;
 
     const dayOfWeek = props.date.getDay() ;

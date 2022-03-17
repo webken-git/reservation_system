@@ -22,15 +22,20 @@ import { DisapprovalList } from "./pages/DisapprovalList";
 import { CancelList } from "./pages/CancelList";
 import { UserList } from "./pages/UserList";
 import { DataList } from "./pages/DataList";
+import { AddDataPage } from "./pages/AddDataPage";
 import { CalendarPage } from "./pages/CalendarPage";
 import { DocumentListPage } from "./pages/DocumentListPage";
 import { ApprovalInfoPage } from "./pages/ApprovalInfoPage";
+import { SuspensionInfoPage } from "./pages/SuspensionInfoPage";
 import { MailPage } from "./pages/MailPage";
 import { SendEmailPage } from "./pages/SendEmailPage";
-import "./index.scss";
+import { ReservePage } from "./pages/ReservePage";
+import { CheckoutPage } from "./pages/CheckoutPage";
+import { ReserveCompletePage } from "./pages/ReserveCompletePage";
 import GetDate from "./components/toppage/GetDate";
 import NotFound from "./pages/error/NotFound";
 import InternalServer from "./pages/error/InternalServer";
+import "./index.scss";
 
 function getCookie(name) {
   var cookieValue = null;
@@ -194,11 +199,27 @@ function App() {
                 exact
                 children={<UserList />}
               />
-              <SideBarAndHeaderRoute
+              <Route
                 path="/data-list"
-                pagename="データリスト"
-                exact
-                children={<DataList />}
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <SideBarAndHeaderRoute
+                        path={`${url}/`}
+                        pagename={"データリスト"}
+                        exact
+                        children={<DataList />}
+                      />
+                      <SideBarAndHeaderRoute
+                        path={`${url}/add`}
+                        pagename={"データ追加"}
+                        exact
+                        children={<AddDataPage />}
+                      />
+                      <Route component={NotFound} />
+                    </Switch>
+                  </>
+                )}
               />
               <Route
                 path="/calendar"
@@ -216,6 +237,13 @@ function App() {
                           pagename={"予約詳細"}
                           exact
                           children={<ApprovalInfoPage />}
+                        />
+                      </Route>
+                      <Route path={`${url}/suspension-info/:id`}>
+                        <SideBarAndHeaderRoute
+                          pagename={"予約停止詳細"}
+                          exact
+                          children={<SuspensionInfoPage />}
                         />
                       </Route>
                       <Route component={NotFound} />
@@ -241,6 +269,34 @@ function App() {
                           children={<SendEmailPage />}
                         />
                       </Route>
+                      <Route component={NotFound} />
+                    </Switch>
+                  </>
+                )}
+              />
+              <Route
+                path="/reserve"
+                render={({ match: { url } }) => (
+                  <>
+                    <Switch>
+                      <SideBarAndHeaderRoute
+                        path={`${url}/`}
+                        pagename={"予約"}
+                        exact
+                        children={<ReservePage />}
+                      />
+                      <SideBarAndHeaderRoute
+                        path={`${url}/checkout`}
+                        pagename={"予約"}
+                        exact
+                        children={<CheckoutPage />}
+                      />
+                      <SideBarAndHeaderRoute
+                        path={`${url}/complete`}
+                        pagename={"予約"}
+                        exact
+                        children={<ReserveCompletePage />}
+                      />
                       <Route component={NotFound} />
                     </Switch>
                   </>

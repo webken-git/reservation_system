@@ -6,7 +6,8 @@ $breakpoints: (
   // スマホ
   "sp": "screen and (max-width: 767px)",
   // タブレット
-  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  "tab":
+    "screen and (min-width: 768px) and (max-width: #{$layout-width-inner - 1px})",
   // PC
   "pc": "screen and (min-width: #{$layout-width-inner})"
 );
@@ -18,6 +19,8 @@ $breakpoints: (
   }
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
+
 $main-color: #23ad39;
 $sub-color: #707070;
 $accent-color: #91c21f;
@@ -26,12 +29,9 @@ body,
 html {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Noto Sans JP", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Noto Sans JP", sans-serif;
   // background-color: #333;
   // color: #fff;
 }
@@ -46,6 +46,34 @@ code {
   font-size: 0.8rem;
 }
 
+.pc {
+  @include mq("sp") {
+    display: none;
+  }
+  @include mq("tab") {
+    display: none;
+  }
+}
+.pc-tab {
+  @include mq("sp") {
+    display: none;
+  }
+}
+.sp {
+  @include mq("pc") {
+    display: none;
+  }
+  @include mq("tab") {
+    display: none;
+  }
+}
+.sp-tab {
+  margin: 0;
+  @include mq("pc") {
+    display: none;
+  }
+}
+
 // ボタンのスタイル
 .btn {
   width: 7rem;
@@ -56,6 +84,7 @@ code {
   background-color: $main-color;
   margin: 3% 0;
   font-size: 1rem;
+  font-family: "Noto Sans JP", sans-serif;
   cursor: pointer;
   &:hover {
     color: #000;
@@ -100,6 +129,11 @@ code {
     font-size: 0.8rem;
     margin: 0.3rem;
   }
+  &:disabled {
+    background-color: #fff;
+    color: #000;
+    cursor: not-allowed;
+  }
 }
 .registration-link {
   @extend .btn;
@@ -108,6 +142,10 @@ code {
 }
 .login-link {
   @extend .btn;
+}
+.btn-space {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 // モーダルのスタイル
@@ -145,7 +183,11 @@ code {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+  z-index: 10;
+}
+.reserve-modal-overlay {
+  @extend .modal-overlay;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .modal-wrapper {
   display: inline-block;
@@ -196,7 +238,8 @@ code {
 }
 
 // error page
-.error-page {
+.error-page,
+.reservation-complete {
   width: 100%;
   height: 100%;
   display: flex;
@@ -209,7 +252,8 @@ code {
     margin: 0;
     padding: 0;
   }
-  .error-message {
+  .error-message,
+  .reservation-complete-message {
     font-size: 1.2rem;
     margin: 0;
     padding: 0;

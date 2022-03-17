@@ -89,7 +89,7 @@ const VerifyEmail = (props) => {
           >
             戻る
           </button>
-          <span>　</span>
+          <span className="btn-space"></span>
           <button className="verify-btn" type="submit">
             完了
           </button>

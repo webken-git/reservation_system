@@ -15,10 +15,11 @@ import "./tab.scss";
 const TabContainer = () => {
   const unmountRef = useUnmountRef();
   const [place, setPlace] = useSafeState(unmountRef, []);
-  const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
+  // const [feeListData, setFeeListData] = useSafeState(unmountRef, []);
   const [facilityFee, setFacilityFee] = useSafeState(unmountRef, []);
+  const [selectFeeList, setSelectFeeList] = useSafeState(unmountRef, []);
   const [age, setAge] = useSafeState(unmountRef, []);
-  const [, setTime] = useSafeState(unmountRef, []);
+  const [time, setTime] = useSafeState(unmountRef, []);
   const [, setUsage] = useSafeState(unmountRef, []);
   const [loading, setLoading] = useSafeState(unmountRef, true);
   const setTabState = useSetRecoilState(tabState);
@@ -37,7 +38,12 @@ const TabContainer = () => {
         const placeLists = response.data;
         setPlace(placeLists);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
+      });
   };
 
   //料金表データ取得
@@ -46,18 +52,33 @@ const TabContainer = () => {
       .get(ReservationUrls.FACILITY_FEE)
       .then((response) => {
         const feelists = response.data;
-        setFeeListData(feelists);
-        setFacilityFee(feelists[1].data);
+        setFacilityFee(feelists);
+        setSelectFeeList(
+          feelists.filter((fee) => fee.place === tabStates.placeName)[0].data
+        );
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
+      });
   };
 
   //年齢データの取得
   const GetAge = () => {
-    axios.get(ReservationUrls.AGE).then((response) => {
-      const ages = response.data;
-      setAge(ages);
-    });
+    axios
+      .get(ReservationUrls.AGE)
+      .then((response) => {
+        const ages = response.data;
+        setAge(ages);
+      })
+      .catch((error) => {
+        setLoading(false);
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
+      });
   };
 
   //時間区分の取得
@@ -68,7 +89,12 @@ const TabContainer = () => {
         const times = response.data;
         setTime(times);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setLoading(false);
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
+      });
   };
 
   const GetUsage = () => {
@@ -79,7 +105,10 @@ const TabContainer = () => {
         setUsage(usages);
       })
       .catch((error) => {
-        console.log(error);
+        setLoading(false);
+        // if (error.response.status === 500) {
+        //   window.location.href = "/500";
+        // }
       });
   };
 
@@ -100,15 +129,20 @@ const TabContainer = () => {
       min: min,
       max: max,
     });
-    const divide_feelist = feeListData.filter((fld) => {
+    const divide_feelist = facilityFee.filter((fld) => {
       return fld.place === pn;
     });
-    return setFacilityFee(divide_feelist[0].data);
+    // divide_feelistにデータがある場合
+    if (divide_feelist.length > 0) {
+      setSelectFeeList(divide_feelist[0].data);
+      return true;
+    }
   };
 
   // tabのスタイルをカスタマイズ
   const StyledTab = styled((props) => <Tab {...props} />)(() => ({
     fontSize: "1.2rem",
+    fontFamily: "Noto Sans JP",
     //   メディアクエリで指定した値を反映
     [`@media (max-width: 767px)`]: {
       fontSize: "1rem",
@@ -150,8 +184,9 @@ const TabContainer = () => {
         </TabList>
         <TabContent
           place={place}
-          facilityFee={facilityFee}
+          facilityFee={selectFeeList}
           age={age}
+          time={time}
           CheckAuth={CheckAuth}
         />
       </TabContext>

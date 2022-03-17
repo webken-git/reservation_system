@@ -83,7 +83,7 @@ export const AppSettings = () => {
               className="toggle-input"
               type="checkbox"
               checked={
-                settings.is_receive_reminder_email === undefined
+                settings[0] && settings.is_receive_reminder_email === undefined
                   ? false
                   : settings.is_receive_reminder_email
               }

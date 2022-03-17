@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios"
 import "./calendar.scss";
 import Head from "./Head";
 import Content from "./Content";
 import Select from "./Select";
 import MonthlyCalendar from "./MonthlyCalendar";
-import Loading from "./../loading/Loading.js";
+import Loading from "../loading/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
@@ -15,8 +14,14 @@ import { Box, HStack, Stack } from "@chakra-ui/react";
 import DrawerMenu from "../sidebar/DrawerMenu";
 import "../header/header.scss";
 import UserIcon from "../header/usericon/UserIcon";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
+import axios from "axios";
+import { ReservationUrls } from "../../utils/reservationUrls";
+import ReserveStopSetting from "./ReserveStopSetting";
 
 const Calendar = (props) => {
+  const unmountRef = useUnmountRef();
   const dayList = ["日", "月", "火", "水", "木", "金", "土"];
   const [date, setDate] = useState(new Date());
   const [dateList, setDateList] = useState([]); //表示用のリスト
@@ -25,16 +30,40 @@ const Calendar = (props) => {
   const day = date.getDate();
   const [updateFlag, setUpdateFlag] = useState(false);
   const [st, setSt] = useState(0);
-  const [filterType, setFilterType] = useState("カーリング場");
+  const [placeFilter, setPlaceFilter] = useState();
   const [calendarType, setCalendarType] = useState("weekly");
-  const [approvalFilter, setApprovalFilter] = useState(2);
+  const [approvalFilter, setApprovalFilter] = useState();
   const [loading, setLoading] = useState(true);
   const isMain = true;
+  const [place, setPlace] = useSafeState(unmountRef, []);
+  const [approvals, setApprovals] = useSafeState(unmountRef, []);
+
+  const getPlaceList = () => {
+    axios
+      .get(ReservationUrls.PLACE)
+      .then((response) => {
+        const placeLists = response.data;
+        setPlace(placeLists);
+        setPlaceFilter(placeLists[0].name);
+      })
+      .catch((error) => {});
+  };
+
+  const getApprovalList = () => {
+    axios
+      .get(ReservationUrls.APPROVALS)
+      .then((response) => {
+        const approvalLists = response.data;
+        setApprovals(approvalLists);
+        setApprovalFilter(approvalLists[0].id);
+      })
+      .catch((error) => {});
+  };
 
   // 検索する施設名を変数に代入
   const filtering = (e) => {
     console.log("filtering");
-    setFilterType(e.target.value);
+    setPlaceFilter(e.target.value);
   };
 
   const approvalFiltering = (e) => {
@@ -94,21 +123,8 @@ const Calendar = (props) => {
       }
     };
     sortDateList();
-
-    //現在時刻までスクロール
-    let margin = window.innerHeight * 0.02;
-    let blockHeight = window.innerHeight * 0.06;
-    let now = new Date();
-    let hours = now.getHours() - 4;
-    let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-    if (!unmounted) {
-      setSt(margin + blockHeight * now.getHours());
-    }
-    document.getElementsByClassName("content-row")[0].scrollTo({
-      top: st,
-      left: 0,
-      behavior: "smooth",
-    });
+    getPlaceList();
+    getApprovalList();
 
     return () => {
       unmounted = true;
@@ -121,9 +137,12 @@ const Calendar = (props) => {
         <MonthlyCalendar
           dayList={dayList}
           date={date}
+          setDate={setDate}
           setCalendarType={setCalendarType}
           calendarType={calendarType}
           setLoading={setLoading}
+          approvalFilter={approvalFilter}
+          setApprovalFilter={setApprovalFilter}
         />
       ) : (
         <div className="maii">
@@ -149,48 +168,78 @@ const Calendar = (props) => {
                 <FontAwesomeIcon icon={faChevronLeft} size="2x" />
               </div>
               {calendarType === "daily" ? (
-                <p>
-                  {year}年{month}月{day}日
-                </p>
+                <div className="date-base">
+                  <p>
+                    {year}年{month}月{day}日
+                  </p>
+                </div>
               ) : (
-                <p>
-                  {year}年{month}月
-                </p>
+                <div className="date-base">
+                  <p>
+                    {year}月{month}月
+                  </p>
+                </div>
               )}
               <div className="next-button" onClick={() => dateChange("next")}>
                 <FontAwesomeIcon icon={faChevronRight} size="2x" />
               </div>
             </div>
-            {/* <div className="stop">
-                            <button type="button" className="btn">予約停止</button>
-                        </div> */}
+            <ReserveStopSetting />
             <UserIcon />
           </div>
           <div className="main">
             <div className="main-header">
+              <div className="date-selector">
+                <div className="last-button" onClick={() => dateChange("last")}>
+                  <FontAwesomeIcon icon={faChevronLeft} size="2x" />
+                </div>
+                {calendarType === "daily" ? (
+                  <div className="date-base">
+                    <p>
+                      {month}月{day}日
+                    </p>
+                    {/* <input type="date" className="date-input"/> */}
+                  </div>
+                ) : (
+                  <div className="date-base">
+                    <p>
+                      {year}年{month}月
+                    </p>
+                    {/* <input type="date" className="date-input"/> */}
+                  </div>
+                )}
+                <div className="next-button" onClick={() => dateChange("next")}>
+                  <FontAwesomeIcon icon={faChevronRight} size="2x" />
+                </div>
+              </div>
               <div className="filter-base">
                 <select
                   className="filter"
-                  defaultValue="カーリング場"
+                  defaultValue={place[0] && place[0].name}
                   onChange={(e) => filtering(e)}
                 >
-                  <option value="カーリング場">カーリング場</option>
-                  <option value="小会議室">小会議室</option>
-                  <option value="中会議室">中会議室</option>
-                  <option value="武道場">武道場</option>
-                  <option value="多目的体育館">多目的体育館</option>
+                  {place.map((i, index) => {
+                    return (
+                      <option value={i.name} key={index}>
+                        {i.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div className="filter-base">
                 <select
                   className="filter"
-                  defaultValue="2"
+                  defaultValue={approvals[0] && approvals[0].id}
                   onChange={(e) => approvalFiltering(e)}
                 >
-                  <option value="2">承認済み</option>
-                  <option value="1">未承認</option>
-                  <option value="3">不承認</option>
-                  <option value="4">キャンセル</option>
+                  {approvals.map((i, index) => {
+                    return (
+                      <option value={i.id} key={index}>
+                        {i.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
             </div>
@@ -269,15 +318,7 @@ const Calendar = (props) => {
                     <Content
                       key={index}
                       date={date}
-                      // setScheduleDict={setScheduleDict}
-                      // openModal={openModal}
-                      updateFlag={updateFlag}
-                      setUpdateFlag={setUpdateFlag}
-                      isMain={isMain}
-                      // individualOrGroup={props.individualOrGroup}
-                      homeUpdateFlag={props.homeUpdateFlag}
-                      setHomeUpdateFlag={props.setHomeUpdateFlag}
-                      filterType={filterType}
+                      placeFilter={placeFilter}
                       setLoading={setLoading}
                       approvalFilter={approvalFilter}
                       calendarType={calendarType}
@@ -285,24 +326,13 @@ const Calendar = (props) => {
                   );
                 })
               ) : (
-                // <div className="daily-content">
                 <Content
-                  // key={index}
                   date={date}
-                  // setScheduleDict={setScheduleDict}
-                  // openModal={openModal}
-                  updateFlag={updateFlag}
-                  setUpdateFlag={setUpdateFlag}
-                  isMain={isMain}
-                  // individualOrGroup={props.individualOrGroup}
-                  homeUpdateFlag={props.homeUpdateFlag}
-                  setHomeUpdateFlag={props.setHomeUpdateFlag}
-                  filterType={filterType}
+                  placeFilter={placeFilter}
                   setLoading={setLoading}
                   calendarType={calendarType}
                   approvalFilter={approvalFilter}
                 />
-                // </div>
               )}
             </div>
           </div>

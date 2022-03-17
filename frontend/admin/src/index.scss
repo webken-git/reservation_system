@@ -6,9 +6,11 @@ $breakpoints: (
   // スマホ
   "sp": "screen and (max-width: 767px)",
   // タブレット
-  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  "tab":
+    "screen and (min-width: 768px) and (max-width: #{$layout-width-inner - 1px})",
   // PC
-  "pc": "screen and (min-width: #{$layout-width-inner})"
+  "pc": "screen and (min-width: #{$layout-width-inner})",
+  "iphonese": "screen and (max-width: 376px)"
 );
 
 //mixinの引数は$breakpoint、引数の初期値はsp
@@ -22,10 +24,45 @@ $main-color: #1a8d89;
 $sub-color: #707070;
 $accent-color: #233b62;
 
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
 
+html,
 body {
+  height: 100%;
   font-family: "Noto Sans JP", sans-serif;
+}
+
+.red {
+  color: #d32f2f;
+  font-size: 0.8rem;
+}
+
+.pc {
+  @include mq("sp") {
+    display: none;
+  }
+  @include mq("tab") {
+    display: none;
+  }
+}
+.pc-tab {
+  @include mq("sp") {
+    display: none;
+  }
+}
+.sp {
+  @include mq("pc") {
+    display: none;
+  }
+  @include mq("tab") {
+    display: none;
+  }
+}
+.sp-tab {
+  margin: 0;
+  @include mq("pc") {
+    display: none;
+  }
 }
 
 // ボタンのスタイル
@@ -36,8 +73,9 @@ body {
   // border-radius: 3px;
   padding: 9px 17px;
   background-color: $main-color;
-  margin: 3% 0;
+  margin: 2% 0;
   font-size: 1rem;
+  font-family: "Noto Sans JP", sans-serif;
   cursor: pointer;
   &:hover {
     color: #707070;
@@ -86,10 +124,62 @@ body {
 .registration-link {
   @extend .btn;
   width: 12rem;
-  height: 3.5rem;
 }
 .login-link {
   @extend .btn;
+}
+.modal-open-btn {
+  @extend .btn;
+  margin: 0;
+  @include mq(sp) {
+    width: 6rem;
+    font-size: 0.8rem;
+  }
+}
+.modal-close-btn {
+  @extend .btn;
+  border: 1px solid #707070;
+  background-color: #707070;
+  margin-left: 1rem;
+  @include mq(sp) {
+    width: 6rem;
+    font-size: 0.8rem;
+  }
+}
+.download-btn {
+  @extend .btn;
+  width: auto;
+}
+.selection-screen-btn {
+  @extend .btn;
+  border: 1px solid $accent-color;
+  background-color: $accent-color;
+  &:hover {
+    border: 1px solid $accent-color;
+  }
+}
+.copy-btn {
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.5;
+  }
+  &:focus {
+    outline: none;
+  }
+  .icon:hover {
+    color: #707070;
+  }
+}
+.delete-btn {
+  @extend .btn;
+  border: 1px solid rgb(185, 0, 0);
+  background-color: rgb(185, 0, 0);
+}
+.btn-space {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 // モーダルのスタイル
@@ -133,9 +223,14 @@ body {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
+.reserve-modal-overlay {
+  @extend .modal-overlay;
+  // background-color: rgba(0, 0, 0, 0.3);
+}
 
 // error page
-.error-page {
+.error-page,
+.reservation-complete {
   width: 100%;
   height: 100%;
   display: flex;
@@ -148,7 +243,8 @@ body {
     margin: 0;
     padding: 0;
   }
-  .error-message {
+  .error-message,
+  .reservation-complete-message {
     font-size: 1.2rem;
     margin: 0;
     padding: 0;

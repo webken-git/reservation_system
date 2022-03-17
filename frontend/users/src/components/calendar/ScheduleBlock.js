@@ -13,11 +13,6 @@ const ScheduleBlock = (props) => {
   const [scheduleStartDate, setScheduleStartDate] = useState(new Date());
   const [scheduleEndDate, setScheduleEndDate] = useState(new Date());
 
-  // console.log(props.schedule.reservation.start);
-  // console.log(props.contentDate);
-
-  // console.log(props.schedule)
-
   useEffect(() => {
     let unmounted = false;
     if (!unmounted) {
@@ -37,6 +32,21 @@ const ScheduleBlock = (props) => {
         Number(props.schedule.reservation.end.substr(8, 2))
       );
       setEndDate(endDate);
+
+      let scheduleStartDate = "";
+      let scheduleEndDate = "";
+      scheduleStartDate = new Date(
+        props.contentDate.getFullYear(),
+        props.contentDate.getMonth(),
+        props.contentDate.getDate()
+      );
+      scheduleEndDate = new Date(
+        props.contentDate.getFullYear(),
+        props.contentDate.getMonth(),
+        props.contentDate.getDate()
+      );
+      setScheduleStartDate(scheduleStartDate);
+      setScheduleEndDate(scheduleEndDate);
     }
 
     return () => {
@@ -59,6 +69,7 @@ const ScheduleBlock = (props) => {
   const styleGenerator = useCallback(
     (top, height) => ({
       backgroundColor: backgroundColor,
+      width: 100 / props.length + "%",
       top: top ? top + "vh" : "0vh",
       height: height ? height + "vh" : "0vh",
     }),
@@ -96,6 +107,7 @@ const ScheduleBlock = (props) => {
     styleGenerator,
     scheduleStartDate,
     scheduleEndDate,
+    props.change,
   ]);
 
   return (
@@ -104,26 +116,7 @@ const ScheduleBlock = (props) => {
       // onClick={modalHandle}
       style={styleGeneratorHandler()}
     >
-      {props.schedule.repeat_interval === 1 ? (
-        <p>
-          {(startDate < props.contentDate || props.contentDate < endDate) &&
-            Number(props.schedule.start.substr(5, 2)) +
-              "月" +
-              Number(props.schedule.start.substr(8, 2)) +
-              "日"}
-          {props.schedule.start_time.substr(11, 5)}
-          {(startDate < props.contentDate || props.contentDate < endDate) && (
-            <br />
-          )}
-          ~
-          {(startDate < props.contentDate || props.contentDate < endDate) &&
-            Number(props.schedule.reservation.end.substr(5, 2)) +
-              "月" +
-              Number(props.schedule.reservation.end.substr(8, 2)) +
-              "日"}
-          {props.schedule.reservation.end.substr(11, 5)}
-        </p>
-      ) : (
+      <div>
         <p>
           {(scheduleStartDate < props.contentDate ||
             props.contentDate < scheduleEndDate) &&
@@ -135,43 +128,22 @@ const ScheduleBlock = (props) => {
           {props.schedule.reservation.start.substr(11, 5)}
           {(scheduleStartDate < props.contentDate ||
             props.contentDate < scheduleEndDate) && <br />}
-          ~
-          {(scheduleStartDate < props.contentDate ||
-            props.contentDate < scheduleEndDate) &&
-            scheduleEndDate.getMonth() +
-              1 +
-              "月" +
-              scheduleEndDate.getDate() +
-              "日"}
-          {props.schedule.reservation.end.substr(11, 5)}
+          ~{props.schedule.reservation.end.substr(11, 5)}
         </p>
-      )}
-      {props.schedule.reservation.is_group === false ? (
         <span>
-          <p>{props.schedule.reservation.place.name}</p>
-          {/* <p>{props.schedule.reservation.reader_name}</p> */}
+          {props.schedule.reservation.place.min === 1 &&
+          props.schedule.reservation.place.max === 1 ? null : (
+            <p>
+              {(props.schedule.reservation.place.min === 0.5 &&
+                (props.schedule.reservation.place_number === 0.5
+                  ? "半面"
+                  : "全面")) ||
+                (props.schedule.reservation.place.max > 1 &&
+                  props.schedule.reservation.place_number) + "シート"}
+            </p>
+          )}
         </span>
-      ) : (
-        <span>
-          <p>{props.schedule.reservation.place.name}</p>
-          {/* <p>{props.schedule.reservation.group_name}</p> */}
-        </span>
-      )}
-      {/* <span>
-                <p>{props.schedule.place.name}</p>
-                <p>{props.schedule.group_name}</p>
-            </span> */}
-      {/* {props.individualOrGroup === "individual" && (
-                <span>
-                    <p>{props.schedule.place.name}</p>
-                    <p>{props.schedule.content}</p>
-                </span>
-            )} */}
-      {/* {isOpen && (
-                <div style={groupScheduleAlertStyleGenerator()}>
-                    <span>グループのスケジュールを表示中なので編集できません</span>
-                </div>
-            )} */}
+      </div>
     </div>
   );
 };

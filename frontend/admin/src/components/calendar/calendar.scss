@@ -49,8 +49,18 @@ $breakpoints: (
   display: inline-block;
   // width: 80%;
   width: 100%;
-  height: 97vh;
+  height: 100vh;
   vertical-align: top;
+}
+
+.modal-wrapper {
+  .place-list {
+    display: flex;
+    align-items: center;
+    input {
+      margin-right: 5px;
+    }
+  }
 }
 
 .calendar-base ::-webkit-scrollbar {
@@ -73,8 +83,19 @@ $breakpoints: (
       font-size: 30px;
       margin-left: 50px;
       color: #707070;
+      width: 20%;
       @include mq(sp) {
         display: none;
+      }
+    }
+
+    .annotation {
+      list-style: none;
+      ul {
+        list-style-type: none;
+        li {
+          list-style: none;
+        }
       }
     }
 
@@ -83,13 +104,33 @@ $breakpoints: (
       justify-content: space-between;
       align-items: center;
       width: fit-content;
+      @include mq(sp) {
+        display: none;
+      }
 
       .last-button,
       .next-button {
-        margin: 0 20px;
+        margin: 0 5px;
         &:hover {
           cursor: pointer;
           opacity: 0.5;
+        }
+      }
+
+      .date-base {
+        position: relative;
+
+        .date-input {
+          opacity: 0;
+          position: absolute;
+          margin-top: 1em;
+          top: 0;
+          left: 0;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+          width: 100%;
+          height: 100%;
         }
       }
     }
@@ -107,9 +148,39 @@ $breakpoints: (
         padding: 7px 15px;
       }
       @include mq(iphonese) {
-        width: 1.5rem;
-        font-size: 0.5rem;
+        width: 2rem;
+        font-size: 0.7rem;
         padding: 7px 12px;
+      }
+    }
+
+    .date-title {
+      // width: 50%;
+      display: flex;
+      justify-content: center;
+      // margin: 0 auto;
+
+      // アイコンをホバーした時
+      .last-button:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+      .next-button:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+
+      p {
+        font-size: 1.1rem;
+        margin: 0 30px;
+        @include mq(sp) {
+          margin: 0 5px;
+        }
+      }
+
+      .filter-base {
+        display: flex;
+        justify-content: space-between;
       }
     }
   }
@@ -122,14 +193,55 @@ $breakpoints: (
 
   .monthly-calendar {
     height: 100vh;
-    margin-right: 10px;
-    margin-left: 10px;
+    // margin-right: 10px;
+    // margin-left: 10px;
   }
 
   .main {
     .main-header {
       display: flex;
       justify-content: space-between;
+
+      .date-selector {
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        width: fit-content;
+        height: 3.5vh;
+        @include mq(sp) {
+          display: flex;
+        }
+
+        .last-button,
+        .next-button {
+          margin: 0 5px;
+          &:hover {
+            cursor: pointer;
+            opacity: 0.5;
+          }
+        }
+
+        .date-base {
+          position: relative;
+
+          p {
+            font-size: 2vh;
+          }
+
+          .date-input {
+            opacity: 0;
+            position: absolute;
+            margin-top: 1em;
+            top: 0;
+            left: 0;
+          }
+
+          input[type="date"]::-webkit-calendar-picker-indicator {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
     }
   }
 
@@ -144,6 +256,9 @@ $breakpoints: (
 
 .head-row {
   height: 100px;
+  @include mq(sp) {
+    height: 90px;
+  }
 
   ::-webkit-scrollbar {
     display: inline;
@@ -242,7 +357,7 @@ $breakpoints: (
     border-bottom: $bordercolor 1px dashed;
     box-sizing: border-box;
     display: inline-block;
-    width: 94.5%;
+    width: 90%;
     height: 100%;
     position: relative;
     text-align: center;
@@ -399,27 +514,25 @@ $breakpoints: (
       width: 100%;
       height: 100%;
       pointer-events: none;
-    }
 
-    .schedule-block {
-      background-color: tomato;
-      box-sizing: border-box;
-      border-radius: 0.3em;
-      cursor: pointer;
-      display: inline-block;
-      overflow: hidden;
-      position: absolute;
-      top: -200vh;
-      white-space: nowrap;
-      width: 100%;
-      height: 10vh;
-      vertical-align: top;
-      pointer-events: auto;
-      //z-index: 3;
-      p {
-        font-size: 0.8em;
-        margin: 0;
-        color: whitesmoke;
+      .schedule-block {
+        box-sizing: border-box;
+        border-radius: 0.3em;
+        cursor: pointer;
+        display: inline-block;
+        overflow: hidden;
+        position: relative;
+        top: -200vh;
+        white-space: nowrap;
+        height: 10vh;
+        vertical-align: top;
+        pointer-events: auto;
+
+        p {
+          font-size: 0.8em;
+          margin: 0;
+          color: whitesmoke;
+        }
       }
     }
   }
@@ -428,7 +541,7 @@ $breakpoints: (
     border-left: $bordercolor 1px solid;
     box-sizing: border-box;
     display: inline-block;
-    width: 94.5%;
+    width: 90%;
     overflow: hidden;
     position: relative;
     vertical-align: top;
@@ -455,30 +568,31 @@ $breakpoints: (
       position: absolute;
       top: 0;
       left: 0;
-      width: 30%;
+      width: 100%;
       height: 100%;
       pointer-events: none;
-    }
 
-    .schedule-block {
-      background-color: tomato;
-      box-sizing: border-box;
-      border-radius: 0.3em;
-      cursor: pointer;
-      display: inline-block;
-      overflow: hidden;
-      position: absolute;
-      top: -200vh;
-      white-space: nowrap;
-      width: 100%;
-      height: 10vh;
-      vertical-align: top;
-      pointer-events: auto;
-      //z-index: 3;
-      p {
-        font-size: 0.8em;
-        margin: 0;
-        color: whitesmoke;
+      .schedule-block {
+        background-color: tomato;
+        box-sizing: border-box;
+        border-radius: 0.3em;
+        cursor: pointer;
+        display: inline-block;
+        overflow: hidden;
+        // position: absolute;
+        position: relative;
+        top: -200vh;
+        white-space: nowrap;
+        width: 100%;
+        height: 10vh;
+        vertical-align: top;
+        pointer-events: auto;
+        //z-index: 3;
+        p {
+          font-size: 0.8em;
+          margin: 0;
+          color: whitesmoke;
+        }
       }
     }
   }
@@ -509,11 +623,16 @@ $breakpoints: (
   }
 
   table {
-    width: 100%;
-    height: 86%;
+    width: 95%;
+    height: 80%;
+    margin: 1% auto;
     border: 1px $bordercolor solid;
-    border-top: none;
+    // border-top: none;
     border-collapse: collapse;
+    @include mq(sp) {
+      // width: 100%;
+      margin: 5% auto;
+    }
 
     tbody {
       width: 100%;

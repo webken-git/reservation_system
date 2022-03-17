@@ -13,30 +13,57 @@ import { Box, HStack, Stack } from "@chakra-ui/react";
 import DrawerMenu from "../sidebar/DrawerMenu";
 import "../header/header.scss";
 import UserIcon from "../header/usericon/UserIcon";
+import ReserveStopSetting from "./ReserveStopSetting";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
+import { ReservationUrls } from "../../utils/reservationUrls";
+
+
 
 const MonthlyCalendar = (props) => {
+  const unmountRef = useUnmountRef();
   const dayList = props.dayList;
   const date = props.date;
+  const setDate = props.setDate;
   const [approvalList, setApprovalList] = useState([]);
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
-  const [approvalFilter] = useState(2);
   const calendar = createCalendar(year, month);
   const setLoading = props.setLoading;
-  // const calendarType = props.calendarType;
-  // const setCalendarType = props.setCalendarType;
+  const approvalFilter = props.approvalFilter;
+  const setApprovalFilter = props.setApprovalFilter;
+  // const [approvalFilter, setApprovalFilter] = useState();
+  const [approvals, setApprovals] = useSafeState(unmountRef, []);
 
   const onClick = (n) => () => {
     const nextMonth = month + n;
     if (12 < nextMonth) {
       setMonth(1);
       setYear(year + 1);
+      setDate(new Date(year + 1, 0, 1))
     } else if (nextMonth < 1) {
       setMonth(12);
       setYear(year - 1);
+      setDate(new Date(year - 1, 11, 1))
     } else {
       setMonth(nextMonth);
+      setDate(new Date(date.getFullYear(), nextMonth - 1, 1))
     }
+  };
+
+  const approvalFiltering = (e) => {
+    setApprovalFilter(e.target.value);
+  };
+
+  const getApprovalList = () => {
+    axios
+      .get(ReservationUrls.APPROVALS)
+      .then((response) => {
+        const approvalLists = response.data;
+        setApprovals(approvalLists);
+        setApprovalFilter(approvalLists[0].id);
+      })
+      .catch((error) => {});
   };
 
   useEffect(() => {
@@ -54,9 +81,11 @@ const MonthlyCalendar = (props) => {
         const approvalList = res.data;
         setLoading(false);
 
-        if (!unmounted) {
-          setApprovalList(approvalList);
+        setApprovalList(approvalList);
+        if(approvals.length === 0){
+          getApprovalList();
         }
+
       })
       .catch((error) => {
         console.log(error);
@@ -65,7 +94,7 @@ const MonthlyCalendar = (props) => {
     return () => {
       unmounted = true;
     };
-  }, [year, month, approvalFilter, setLoading]);
+  }, [year, month, approvalFilter, setApprovalFilter, setLoading]);
 
   return (
     <div className="monthly-calendar">
@@ -97,7 +126,24 @@ const MonthlyCalendar = (props) => {
             <FontAwesomeIcon icon={faChevronRight} size="2x" />
           </div>
         </div>
+        <ReserveStopSetting />
         <UserIcon />
+      </div>
+
+      <div className="filter-base">
+        <select
+          className="filter"
+          defaultValue={approvals[0] && approvals[0].id}
+          onChange={(e) => approvalFiltering(e)}
+        >
+          {approvals.map((i, index) => {
+            return (
+              <option value={i.id} key={index}>
+                {i.name}
+              </option>
+            );
+          })}
+        </select>
       </div>
 
       <table>

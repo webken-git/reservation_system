@@ -1,6 +1,7 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
+// approval-application idを保存するrecoil
 const { persistAtom } = recoilPersist({
   key: "select-data",
   storage: typeof window !== "undefined" ? window.localStorage : null,

@@ -2,7 +2,7 @@
 import React from "react";
 import { useSetRecoilState } from "recoil";
 // import './approval.scss'
-import DetailsButton from "../list-buttom/DetailsButton";
+import DetailsButton from "../listbutton/DetailsButton";
 import reseravationData from "../../recoil/reservation";
 
 const DisApprovalTable = (props) => {
@@ -26,7 +26,7 @@ const DisApprovalTable = (props) => {
       {/* 予約日 */}
       <td>
         <label htmlFor={props.id} className="approval-label">
-          {props.date}
+          {props.date} {props.start_time}
         </label>
       </td>
       {/* 団体者名 */}
@@ -38,15 +38,15 @@ const DisApprovalTable = (props) => {
       {/* 代表者名 */}
       <td>
         <label htmlFor={props.id} className="approval-label">
-          {props.reader_name}
+          {props.leader_name}
         </label>
       </td>
       {/* 予約時間 */}
-      <td>
+      {/* <td>
         <label htmlFor={props.id} className="approval-label">
           {props.start_time}~{props.end_time}
         </label>
-      </td>
+      </td> */}
       {/* 場所 */}
       <td>
         <label htmlFor={props.id} className="approval-label">
@@ -61,7 +61,7 @@ const DisApprovalTable = (props) => {
           id={props.id}
           reservation_id={props.reservation_id}
           group_name={props.group_name}
-          reader_name={props.reader_name}
+          leader_name={props.leader_name}
           contact_name={props.contact_name}
           tel={props.tel}
           address={props.address}

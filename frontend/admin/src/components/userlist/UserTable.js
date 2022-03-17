@@ -11,20 +11,24 @@ const UserTable = (props) => {
       <td>{props.id}</td>
       {/* メールアドレス */}
       <td>{props.email}</td>
-      <ChangePermission
-        id={props.id}
-        email={props.email}
-        password={props.password}
-        changeData={props.is_staff}
-        permission="is_staff"
-      />
-      <ChangePermission
-        id={props.id}
-        email={props.email}
-        password={props.password}
-        changeData={props.is_superuser}
-        permission="is_superuser"
-      />
+      <td>
+        <ChangePermission
+          id={props.id}
+          email={props.email}
+          password={props.password}
+          changeData={props.is_staff}
+          permission="is_staff"
+        />
+      </td>
+      <td>
+        <ChangePermission
+          id={props.id}
+          email={props.email}
+          password={props.password}
+          changeData={props.is_superuser}
+          permission="is_superuser"
+        />
+      </td>
       <td>
         <UserDetailButton
           id={props.id}

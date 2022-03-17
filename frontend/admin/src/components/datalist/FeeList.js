@@ -1,516 +1,182 @@
-import React from "react";
-import './feelist.scss'
+import React, { useEffect } from "react";
+import Loading from "../loading/Loading";
+import axios from "axios";
+import "./feelist.scss";
+import { ReservationUrls } from "../../utils/reservationUrls";
+import useUnmountRef from "../../hooks/useUnmountRef";
+import useSafeState from "../../hooks/useSafeState";
 
 const FeeList = (props) => {
-  const agedata = props.age
-  const feelistdata = props.feelist
-  const placename = props.placename
+  const unmountRef = useUnmountRef();
+  const ageData = props.age;
+  const feelistData = props.feelist;
+  const placeId = props.placeid;
+  let timeList = []; // 時間区分を格納する配列
+  const [equipmentFeeList, setEquipmentFeeList] = useSafeState(unmountRef, []);
 
-  // 小学生から一般まで
-  const divide_age = agedata.slice(1, 6)
+  const age1 = ageData.filter((age) => age.name === "小学生");
+  const age2 = ageData.filter((age) => age.name === "中学生");
+  const age3 = ageData.filter((age) => age.name === "高校生");
+  const age4 = ageData.filter((age) => age.name === "大学生");
+  const age5 = ageData.filter((age) => age.name === "一般");
+  const age6 = ageData.filter((age) => age.name === "高齢者");
+  const age7 = ageData.filter((age) => age.name === "障がい者");
 
-  // 個人の料金
-  const isgroup_false = feelistdata.filter(fld => {
-    return fld['is_group'] === false
-  })
+  //用具料金表データの取得
+  const GetEquipmentFee = () => {
+    axios
+      .get(`${ReservationUrls.EQUIPMENT_FEE}?equipment__place__id=${placeId}`)
+      .then((response) => {
+        const equipmentFeelists = response.data[0].data;
+        setEquipmentFeeList(equipmentFeelists);
+      })
+      .catch((error) => {});
+  };
 
-  // 個人の料金を時間別に分けている
-  const from9 = isgroup_false.filter((fld) => {
-    return fld['time']['name'] === '午前（09時〜13時）'
-  })
+  useEffect(() => {
+    GetEquipmentFee();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const from10 = isgroup_false.filter((fld) => {
-    return fld['time']['name'] === '午前（10時〜13時）'
-  })
+  // feelistdataに含まれているtimeIdとnameを取得
+  feelistData.map((feelist) => {
+    return timeList.push({
+      timeId: feelist.time.id,
+      timeName: feelist.time.name,
+    });
+  });
+  // timeIdListから重複しているデータを削除
+  timeList = timeList.filter(
+    (timeId, index, self) =>
+      index === self.findIndex((t) => t.timeId === timeId.timeId)
+  );
 
-  const from13 = isgroup_false.filter((fld) => {
-    return fld['time']['name'] === '午後（13時〜17時）'
-  })
+  // 用具料金表
+  const Equipment = () => {
+    if (equipmentFeeList.length === 0) {
+      return <></>;
+    } else {
+      return (
+        <>
+          <h2>附属設備・器具</h2>
+          <table className="equipment-fee">
+            <tbody>
+              {equipmentFeeList.map((equipment, index) => (
+                <tr key={equipment.id}>
+                  <td>{equipment.equipment.name}</td>
+                  <td name={`equipmentfee1-${index}`}>{equipment.fee}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      );
+    }
+  };
 
-  const from17 = isgroup_false.filter((fld) => {
-    return fld['time']['name'] === '夜間（17時〜21時）'
-  })
-
-  // 団体の料金
-  const isgroup_true = feelistdata.filter(fld => {
-    return fld['is_group'] === true
-  })
-
-  // 団体利用の一般の料金
-  const general = isgroup_true.filter((fld) => {
-    return fld['purpose'] === '一般使用'
-  })
-
-  // 団体利用で一般の時間別
-  const generalFrom9 = general.filter((fld) => {
-    return fld['time']['name'] === '午前（09時〜13時）'
-  })
-
-  const generalFrom13 = general.filter((fld) => {
-    return fld['time']['name'] === '午後（13時〜17時）'
-  })
-
-  const generalFrom17 = general.filter((fld) => {
-    return fld['time']['name'] === '夜間（17時〜21時）'
-  })
-
-  // 団体の競技会の料金
-  const competition = isgroup_true.filter((fld) => {
-    return fld['purpose'] === '競技会使用'
-  })
-
-  // 団体利用で競技会の時間別
-  const competitionFrom9 = competition.filter((fld) => {
-    return fld['time']['name'] === '午前（09時〜13時）'
-  })
-
-  const competitionFrom13 = competition.filter((fld) => {
-    return fld['time']['name'] === '午後（13時〜17時）'
-  })
-
-  const competitionFrom17 = competition.filter((fld) => {
-    return fld['time']['name'] === '夜間（17時〜21時）'
-  })
-
-  // 団体利用で営利目的の料金
-  const commercial = isgroup_true.filter((fld) => {
-    return fld['purpose'].indexOf('一般使用') && fld['purpose'].indexOf('競技会使用')
-  })
-
-  //団体利用で営利目的で入場料ありのとき
-  const commercialAvailable = commercial.filter((fld) => {
-    return fld['purpose'] === '営利目的使用（入場料あり）'
-  })
-
-  // 団体利用で営利目的で入場料なしのとき
-  const commercialNotAvailable = commercial.filter((fld) => {
-    return fld['purpose'] === '営利目的使用（入場料なし）'
-  })
-
-  // 団体利用の営利目的(入場料あり)で時間別
-  const commercialAvailableFrom9 = commercialAvailable.filter((fld) => {
-    return fld['time']['name'] === '午前（09時〜13時）'
-  })
-
-  const commercialAvailableFrom13 = commercialAvailable.filter((fld) => {
-    return fld['time']['name'] === '午後（13時〜17時）'
-  })
-
-  const commercialAvailableFrom17 = commercialAvailable.filter((fld) => {
-    return fld['time']['name'] === '夜間（17時〜21時）'
-  })
-
-  // 団体利用の営利目的(入場料なし)で時間別
-  const commercialNotAvailableFrom9 = commercialNotAvailable.filter((fld) => {
-    return fld['time']['name'] === '午前（09時〜13時）'
-  })
-
-  const commercialNotAvailableFrom13 = commercialNotAvailable.filter((fld) => {
-    return fld['time']['name'] === '午後（13時〜17時）'
-  })
-
-  const commercialNotAvailableFrom17 = commercialNotAvailable.filter((fld) => {
-    return fld['time']['name'] === '夜間（17時〜21時）'
-  })
-
-  // 表で利用する年齢
-  const agelists = divide_age.map((ages, ageid) => {
+  // リストに値が入っているか確認
+  if (age1.length === 0 || timeList === 0) {
+    return <Loading />;
+  } else {
     return (
-      <th key={ageid}>{ages.name}</th>
-    )
-  })
-
-  const IndividualFeeList = () => {
-    const individualfee_from9 = from9.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const individualfee_from10 = from10.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const individualfee_from13 = from13.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const individualfee_from17 = from17.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const Curling = () => {
-      return (
-        <div>
-          <h3>個人</h3>
+      <>
+        <div className="feelist">
           <table>
-            <tr>
-              <th></th>
-              {agelists}
-            </tr>
-            <tr>
-              {/* 10時から  */}
-              <th>午前（10時〜13時）</th>
-              {individualfee_from10}
-            </tr>
-            <tr>
-              {/* 13時から  */}
-              <th>午後（13時〜17時）</th>
-              {individualfee_from13}
-            </tr>
-            <tr>
-              {/* 17時から  */}
-              <th>夜間（17時〜21時）</th>
-              {individualfee_from17}
-            </tr>
+            <thead>
+              <tr>
+                <th></th>
+                <th>{age1[0].name}</th>
+                <th>{age2[0].name}</th>
+                <th>{age3[0].name}</th>
+                <th>{age4[0].name}</th>
+                <th>{age5[0].name}</th>
+                <th>{age6[0].name}</th>
+                <th>{age7[0].name}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {timeList.map((time, index) => (
+                <tr key={time.timeId}>
+                  <td>{time.timeName}</td>
+                  <td name={`fee1-${index}`} data-label={age1[0].name}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age1[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                  <td name={`fee2-${index}`} data-label={age2[0].name}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age2[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                  <td name={`fee3-${index}`} data-label={age3[0].name}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age3[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                  <td name={`fee4-${index}`} data-label={age4[0].name}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age4[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                  <td name={`fee5-${index}`} data-label={age5[0].name}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age5[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                  <td name={`fee6-${index}`} data-label={age6[0].name}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age6[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                  <td name={`fee7-${index}`} data-label={age7[0].name}>
+                    {
+                      feelistData.find(
+                        (feelist) =>
+                          feelist.time.id === time.timeId &&
+                          feelist.age.id === age7[0].id &&
+                          feelist.is_group === false
+                      ).fee
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
+          <Equipment />
         </div>
-      )
-    }
-
-    const ConferenceRoom = () => {
-      return (
-        <div>
-          <table>
-            <tr>
-              <th></th>
-              <th>一般</th>
-            </tr>
-            <tr>
-              {/* 9時から  */}
-              <th>午前（09時〜13時）</th>
-              {individualfee_from9}
-            </tr>
-            <tr>
-              {/* 13時から  */}
-              <th>午後（13時〜17時）</th>
-              {individualfee_from13}
-            </tr>
-            <tr>
-              {/* 17時から  */}
-              <th>夜間（17時〜21時）</th>
-              {individualfee_from17}
-            </tr>
-          </table>
-        </div>
-      )
-    }
-
-    const Various = () => {
-      return (
-        <div>
-          <h3>個人</h3>
-          <table>
-            <tr>
-              <th></th>
-              {agelists}
-            </tr>
-            <tr>
-              {/* 9時から  */}
-              <th>午前（09時〜13時）</th>
-              {individualfee_from9}
-            </tr>
-            <tr>
-              {/* 13時から  */}
-              <th>午後（13時〜17時）</th>
-              {individualfee_from13}
-            </tr>
-            <tr>
-              {/* 17時から  */}
-              <th>夜間（17時〜21時）</th>
-              {individualfee_from17}
-            </tr>
-          </table>
-        </div>
-      )
-    }
-
-    function Divide() {
-      if (placename === 'カーリング場') {
-        return (
-          <Curling />
-        )
-      } else if (placename.indexOf('会議室') > -1) {
-        return (
-          <ConferenceRoom />
-        )
-      } else if (placename === 'アーチェリー場') {
-        return (
-          <Various />
-        )
-      } else if (placename === '武道場') {
-        return (
-          <Various />
-        )
-      } else if (placename === '多目的体育館') {
-        return (
-          <Various />
-        )
-      } else {
-        return 0
-      }
-    }
-
-    return (
-      <Divide />
-    )
+      </>
+    );
   }
+};
 
-  const GroupFeeList = () => {
-    const groupFeeGeneral = general.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeCompetition = competition.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeCommercial = commercial.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeGeneralFrom9 = generalFrom9.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeGeneralFrom13 = generalFrom13.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeGeneralFrom17 = generalFrom17.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeCompetitionFrom9 = competitionFrom9.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeCompetitionFrom13 = competitionFrom13.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupFeeCompetitionFrom17 = competitionFrom17.map((fees, feeid) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupCommercialAvailableFrom9 = commercialAvailableFrom9.map((fees) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupCommercialAvailableFrom13 = commercialAvailableFrom13.map((fees) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupCommercialAvailableFrom17 = commercialAvailableFrom17.map((fees) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupCommercialNotAvailableFrom9 = commercialNotAvailableFrom9.map((fees) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupCommercialNotAvailableFrom13 = commercialNotAvailableFrom13.map((fees) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const groupCommercialNotAvailableFrom17 = commercialNotAvailableFrom17.map((fees) => {
-      return (
-        <td>{fees['fee']}</td>
-      )
-    })
-
-    const Curling = () => {
-      return (
-        <div>
-          <h3>団体</h3>
-          <h4>一般使用</h4>
-          <table>
-            <tr>
-              <th></th>
-              {agelists}
-            </tr>
-            <tr>
-              {/* 団体一般  */}
-              <th>１シート１時間につき</th>
-              {groupFeeGeneral}
-            </tr>
-          </table>
-
-          <h4>競技会使用</h4>
-          <table>
-            <tr>
-              <th></th>
-              {agelists}
-            </tr>
-            <tr>
-              {/* 競技会  */}
-              <th>１シート１時間につき</th>
-              {groupFeeCompetition}
-            </tr>
-          </table>
-
-          <h4>営利目的使用</h4>
-          <table>
-            <tr>
-              <th></th>
-              <th>入場料あり</th>
-              <th>入場料なし</th>
-            </tr>
-            <tr>
-              {/* 営利 */}
-              <th>１シート１時間につき</th>
-              {groupFeeCommercial}
-            </tr>
-          </table>
-        </div>
-      )
-    }
-
-    const Various = () => {
-      return (
-        <div>
-          <h3>団体</h3>
-          <h4>一般使用</h4>
-          <table>
-            <tr>
-              <th></th>
-              {agelists}
-            </tr>
-            <tr>
-              <th>午前（09時〜13時）</th>
-              {groupFeeGeneralFrom9}
-            </tr>
-            <tr>
-              <th>午前（13時〜17時）</th>
-              {groupFeeGeneralFrom13}
-            </tr>
-            <tr>
-              <th>午前（17時〜21時）</th>
-              {groupFeeGeneralFrom17}
-            </tr>
-          </table>
-
-          <h4>競技会使用</h4>
-          <table>
-            <tr>
-              <th></th>
-              {agelists}
-            </tr>
-            <tr>
-              <th>午前（09時〜13時）</th>
-              {groupFeeCompetitionFrom9}
-            </tr>
-            <tr>
-              <th>午前（13時〜17時）</th>
-              {groupFeeCompetitionFrom13}
-            </tr>
-            <tr>
-              <th>午前（17時〜21時）</th>
-              {groupFeeCompetitionFrom17}
-            </tr>
-          </table>
-
-          <h4>営利目的使用</h4>
-          <table>
-            <tr>
-              <th></th>
-              <th>入場あり</th>
-              <th>入場料なし</th>
-            </tr>
-            <tr>
-              <th>午前（09時〜13時）</th>
-              {groupCommercialAvailableFrom9}
-              {groupCommercialNotAvailableFrom9}
-            </tr>
-            <tr>
-              <th>午前（13時〜17時）</th>
-              {groupCommercialAvailableFrom13}
-              {groupCommercialNotAvailableFrom13}
-            </tr>
-            <tr>
-              <th>午前（17時〜21時）</th>
-              {groupCommercialAvailableFrom17}
-              {groupCommercialNotAvailableFrom17}
-            </tr>
-          </table>
-        </div>
-      )
-    }
-
-    function Divide() {
-      if (placename === 'カーリング場') {
-        return (
-          <Curling />
-        )
-      } else if (placename === 'アーチェリー場') {
-        return (
-          <Various />
-        )
-      } else if (placename === '武道場') {
-        return (
-          <Various />
-        )
-      } else if (placename === '多目的体育館') {
-        return (
-          <Various />
-        )
-      } else {
-        return (
-          <p></p>
-        )
-      }
-    }
-
-    return (
-      <Divide />
-    )
-
-  }
-
-  return (
-    <div className="feelist">
-      <div>
-        <div>
-          <IndividualFeeList />
-          <GroupFeeList />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default FeeList
+export default FeeList;

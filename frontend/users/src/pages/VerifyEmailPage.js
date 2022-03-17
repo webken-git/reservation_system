@@ -7,7 +7,10 @@ export const VerifyEmailPage = () => {
   const url = window.location.href;
   const protocol = window.location.protocol;
   const domain = url.split("/")[2];
-  let path = url.split("/").slice(3).join("/");
+  let path = url
+    .split("/")
+    .slice(3)
+    .join("/");
   if (path.includes("verify")) {
     path = path.replace("/verify", "");
   }

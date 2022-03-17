@@ -34,7 +34,7 @@ class Csv:
 
     with open(file_path, 'w', encoding='utf-8') as f:
       writer = csv.writer(f, quoting=csv.QUOTE_ALL)
-      writer.writerow(['id', '団体名', '代表者名', '連絡者名', '住所', '電話番号', '団体予約か否か', '利用開始日時', '利用終了日時', '主催関係者数', '参集人員数', '利用目的', '利用区分', '年齢区分', '入場料の徴収', '利用施設の名称', 'シート数', '附属設備・器具', '特別設備', '予約日', '予約状況'])
+      writer.writerow(['id', '団体名', '代表者名', '連絡者名', '住所', '電話番号', '利用開始日時', '利用終了日時', '主催関係者数', '参集人員数', '利用目的', '利用区分', '年齢区分', '入場料の徴収', '利用施設の名称', 'シート数', '附属設備・器具', '特別設備', '予約日', '予約状況'])
       for i in data:
         usage_category = UsageCategory.objects.get(reservation=i.reservation.id)
         age_category = AgeCategory.objects.get(reservation=i.reservation.id)
@@ -43,11 +43,11 @@ class Csv:
         equipment_list = [j.name for j in i.reservation.equipment.all()]
         pk = i.id
         group_name = i.reservation.group_name
-        reader_name = i.reservation.reader_name
+        leader_name = i.reservation.leader_name
         contact_name = i.reservation.contact_name
         address = i.reservation.address
         tel = i.reservation.tel
-        is_group = i.reservation.is_group
+        # is_group = i.reservation.is_group
         start = i.reservation.start
         end = i.reservation.end
         organizer_number = i.reservation.organizer_number
@@ -59,7 +59,7 @@ class Csv:
         special_equipment = i.reservation.special_equipment
         created_at = i.reservation.created_at
         approval = i.approval.name
-        writer.writerow([pk, group_name, reader_name, contact_name, address, tel, is_group, start, end, organizer_number, participant_number, purpose, usage_category_list, age_category_list, admission_fee, place, place_number, equipment_list, special_equipment, created_at, approval])
+        writer.writerow([pk, group_name, leader_name, contact_name, address, tel, start, end, organizer_number, participant_number, purpose, usage_category_list, age_category_list, admission_fee, place, place_number, equipment_list, special_equipment, created_at, approval])
     return '/reservations/csv/export/' + now + data[0].approval.name + 'リスト.csv'
 
 

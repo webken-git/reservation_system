@@ -65,26 +65,63 @@ $bordercolor: #dadce0;
       color: #707070;
     }
 
+    .annotation {
+      list-style: none;
+      @include mq(sp) {
+        font-size: 0.9rem;
+      }
+      ul {
+        list-style-type: none;
+        li {
+          list-style: none;
+        }
+      }
+    }
+
     .calendar-btn {
       width: 3rem;
+      @include mq(sp) {
+        // width: 2.5rem;
+        padding: 7px 2px;
+        // font-size: 0.8rem;
+      }
+    }
+    .calendar-display-btn {
+      width: 3rem;
+      background-color: $accent-color;
+      border-color: $accent-color;
+      &:hover {
+        border-color: $accent-color;
+        background-color: #fff;
+      }
+      @include mq(sp) {
+        padding: 7px 4px;
+        font-size: 0.9rem;
+      }
     }
 
     .date-title {
-      width: 50%;
+      // width: 50%;
       display: flex;
       justify-content: center;
+      // margin: 0 auto;
 
       // アイコンをホバーした時
       .last-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
       .next-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
 
       p {
-        font-size: 2.5vh;
-        margin: 0;
+        font-size: 1.1rem;
+        margin: 0 30px;
+        @include mq(sp) {
+          margin: 0 5px;
+        }
       }
 
       .filter-base {
@@ -172,7 +209,7 @@ $bordercolor: #dadce0;
       width: 4vh;
       height: 4vh;
       border-radius: 50%;
-      line-height: 4.2vh;
+      // line-height: 4.2vh;  // 不要
       box-sizing: border-box;
       padding-right: 1px;
     }
@@ -381,9 +418,10 @@ $bordercolor: #dadce0;
     }
 
     .schedule-block {
-      background-color: tomato;
+      // background-color: tomato;
       box-sizing: border-box;
-      border-radius: 0.3em;
+      // border-radius: 0.3em;
+      // border-bottom: #dadce0 1px dashed;
       cursor: pointer;
       display: inline-block;
       overflow: hidden;
@@ -394,6 +432,20 @@ $bordercolor: #dadce0;
       height: 10vh;
       vertical-align: top;
       pointer-events: auto;
+      text-align: center;
+
+      span {
+        font-size: 20px;
+        width: 50%;
+        height: 50%;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
       p {
         font-size: 0.8em;
         margin: 0;
@@ -439,9 +491,11 @@ $bordercolor: #dadce0;
     }
 
     .schedule-block {
+      text-align: center;
       background-color: tomato;
       box-sizing: border-box;
-      border-radius: 0.3em;
+      // border-radius: 0.3em;
+      // border-bottom: #dadce0 1px dashed;
       cursor: pointer;
       display: inline-block;
       overflow: hidden;
@@ -474,21 +528,39 @@ $bordercolor: #dadce0;
     margin: 0;
     // height: 50px;
 
+    .annotation {
+      list-style: none;
+      @include mq(sp) {
+        font-size: 0.8rem;
+      }
+      ul {
+        list-style-type: none;
+        li {
+          list-style: none;
+        }
+      }
+    }
+
     .date-title {
-      width: 50%;
+      // width: 50%;
       display: flex;
       justify-content: center;
 
       .last-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
       .next-button:hover {
         cursor: pointer;
+        opacity: 0.5;
       }
 
       p {
-        margin: 0;
-        font-size: 2.5vh;
+        font-size: 1.1rem;
+        margin: 0 30px;
+        @include mq(sp) {
+          margin: 0 5px;
+        }
       }
     }
   }

@@ -50,39 +50,54 @@ $accent-color: #91c21f;
     }
   }
 
-  ul li {
-    // font-size: 1.2rem;
-    position: relative;
-    list-style: none;
-    label {
-      width: fit-content;
-      display: table-cell;
-      font-weight: bold;
-    }
-    span {
-      // display: table-cell;
-      // text-align: right;
-      @include mq(sp) {
-        // width: 100%;
-        // display: block;
-        // text-align: left;
-      }
-    }
-    .table-cell {
-      display: table-cell;
-    }
-    .usage-content {
-      margin-right: 1%;
-    }
+  .notFacility {
+    margin-top: 5%;
+    font-size: 40px;
   }
-  ul li::after {
-    display: block;
-    content: "";
-    position: absolute;
-    top: 0.65em;
-    left: -1em;
-    width: 8px;
-    height: 2px;
-    background-color: #666;
+
+  .reservation {
+    font-size: 30px;
+    text-decoration: underline;
+    text-decoration-color: gray;
   }
+  .usage {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .start {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .number {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .box {
+    //    margin: 2em ;
+    padding: 1em;
+    width: fit-content;
+    background-color: #fff;
+    /* 背景色 */
+    border: 1px solid #ccc;
+    /* 枠線 */
+  }
+  .RL-btn{
+    padding-top: 10%;
+.removeBtn {
+  width: 30%;
+  height: 35px;
+  background-color: #fff;
+  border: solid 5px #fff;
+  border-width: thick;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin-left: 70%;
+}
+
+.removeBtn:hover {
+  text-decoration: underline;
+  text-decoration-color: black;
+}
+  }
+ 
 }
