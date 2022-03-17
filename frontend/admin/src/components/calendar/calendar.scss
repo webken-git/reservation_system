@@ -53,6 +53,16 @@ $breakpoints: (
   vertical-align: top;
 }
 
+.modal-wrapper {
+  .place-list {
+    display: flex;
+    align-items: center;
+    input {
+      margin-right: 5px;
+    }
+  }
+}
+
 .calendar-base ::-webkit-scrollbar {
   display: none;
 }
@@ -111,12 +121,6 @@ $breakpoints: (
         input[type="date"]::-webkit-calendar-picker-indicator {
           width: 100%;
           height: 100%;
-        }
-      }
-
-      .modal-wrapper {
-        span {
-          font-size: 17px;
         }
       }
     }
@@ -507,11 +511,9 @@ $breakpoints: (
         cursor: pointer;
         display: inline-block;
         overflow: hidden;
-        // position: absolute;
         position: relative;
         top: -200vh;
         white-space: nowrap;
-        // width: 20%;
         height: 10vh;
         vertical-align: top;
         pointer-events: auto;

@@ -94,7 +94,9 @@ const Content = (props) => {
         }
       } else if (schedule.approval.name === "未承認") {
         for (let i = startHours; i < endHours; i++) {
-          list[i-9] = 1;
+          if(list[i-9] === 0){
+            list[i-9] = 1;
+          }
         }
       }
     })

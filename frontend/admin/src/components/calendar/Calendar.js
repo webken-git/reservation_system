@@ -4,52 +4,21 @@ import Head from "./Head";
 import Content from "./Content";
 import Select from "./Select";
 import MonthlyCalendar from "./MonthlyCalendar";
-import Loading from "./../loading/Loading.js";
+import Loading from "../loading/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { Box, HStack, ModalCloseButton, Stack } from "@chakra-ui/react";
+import { Box, HStack, Stack } from "@chakra-ui/react";
 import DrawerMenu from "../sidebar/DrawerMenu";
 import "../header/header.scss";
 import UserIcon from "../header/usericon/UserIcon";
-import Modal from "react-modal";
-import { useForm, Controller } from "react-hook-form";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DateAdapter from "@mui/lab/AdapterDateFns";
-import { ja } from "date-fns/locale";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
-import {
-  FormControl,
-  FormControlLabel,
-  TextField,
-  FormGroup,
-  MenuItem,
-  styled,
-  FormHelperText,
-  Checkbox,
-} from "@mui/material";
-import {
-  timetable,
-  useDevice,
-  deferredPayment,
-  curlingTimetable,
-} from "./FormDataList";
-import form from "./ReservationForm.module.scss";
-import tabState from "../../recoil/tab";
-import { format } from "date-fns";
-import { formData, popupState } from "../../recoil/form/atom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import axios from "axios";
 import { ReservationUrls } from "../../utils/reservationUrls";
-
-const Label = styled("p")({
-  marginRight: 15,
-  fontSize: 17,
-});
+import ReserveStopSetting from "./ReserveStopSetting";
 
 const Calendar = (props) => {
   const unmountRef = useUnmountRef();
@@ -65,24 +34,9 @@ const Calendar = (props) => {
   const [calendarType, setCalendarType] = useState("weekly");
   const [approvalFilter, setApprovalFilter] = useState();
   const [loading, setLoading] = useState(true);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const isMain = true;
-  const [FormData, setFormData] = useRecoilState(formData);
-  const setPopup = useSetRecoilState(popupState);
   const [place, setPlace] = useSafeState(unmountRef, []);
   const [approvals, setApprovals] = useSafeState(unmountRef, []);
-
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    setValue,
-    register,
-    reset,
-    formState: { errors },
-  } = useForm({
-    reValidateMode: "onSubmit",
-  });
 
   const getPlaceList = () => {
     axios
@@ -90,7 +44,7 @@ const Calendar = (props) => {
       .then((response) => {
         const placeLists = response.data;
         setPlace(placeLists);
-        setPlaceFilter(placeLists[0].name)
+        setPlaceFilter(placeLists[0].name);
       })
       .catch((error) => {});
   };
@@ -101,17 +55,9 @@ const Calendar = (props) => {
       .then((response) => {
         const approvalLists = response.data;
         setApprovals(approvalLists);
-        setApprovalFilter(approvalLists[0].id)
+        setApprovalFilter(approvalLists[0].id);
       })
       .catch((error) => {});
-  };
-
-  let tab = useRecoilValue(tabState);
-
-  const placeName = tab.placeName;
-
-  const modalToggle = () => {
-    setModalIsOpen(!modalIsOpen);
   };
 
   // 検索する施設名を変数に代入
@@ -142,79 +88,6 @@ const Calendar = (props) => {
         setDate(nextDate);
       }
     }
-  };
-
-  const onSubmit = (e) => {
-
-    console.log("onSubmit")
-
-    //このままだとbackend側で使えないのでyyyy-LL-ddに変換
-    const startDate = format(e.StartDate, "yyyy-LL-dd");
-    const endDate = format(e.EndDate, "yyyy-LL-dd");
-    const startTime = e.Start;
-    const endTime = e.End;
-    const start = startDate.concat(" ", startTime);
-    const end = endDate.concat(" ", endTime);
-    const place = e.place;
-    
-    axios.post(ReservationUrls.SUSPENSION,{
-        start: start,
-        end: end,
-        place_id: place,
-      })
-    .then(res => {
-      setModalIsOpen(false)
-    })
-    .catch( error => {
-      console.log(error);
-      // setModalIsOpen(false)
-    })
-
-    // const n = new Date(start);
-    // console.log(n)
-
-    delete e["StartDate"];
-    delete e["EndDate"];
-    const data = {
-      ...e,
-      start,
-      end,
-      startDate,
-      endDate,
-    };
-    const list = [...FormData, data];
-    setFormData(list);
-    // フォームをリセット
-    reset();
-    setPopup({
-      isOpen: true,
-      message: "予約情報を追加しました",
-    });
-
-    // setTimeout(() => {
-    //   setPopup({
-    //     isOpen: false,
-    //     message: "",
-    //   });
-    // }, 1500);
-  };
-
-  const handleCheck = (id, name, e) => {
-    let values = getValues(name) || [];
-
-    let newValues = [];
-    // 選択されている場合
-    if (e.target.checked) {
-      // 選択されているidを追加
-      newValues = [...values, id];
-    } else {
-      // 選択されていないidを削除
-      newValues = values.filter((value) => value !== id);
-    }
-    console.log(newValues)
-    setValue(name, newValues);
-    // console.log(newValues)
-    return newValues;
   };
 
   useEffect(() => {
@@ -294,11 +167,11 @@ const Calendar = (props) => {
               </div>
               {calendarType === "daily" ? (
                 <div className="date-base">
-                <p>
-                  {year}年{month}月{day}日
-                </p>
-                {/* <input type="date" className="date-input"/> */}
-              </div>
+                  <p>
+                    {year}年{month}月{day}日
+                  </p>
+                  {/* <input type="date" className="date-input"/> */}
+                </div>
               ) : (
                 <div className="date-base">
                   <p>
@@ -311,268 +184,7 @@ const Calendar = (props) => {
                 <FontAwesomeIcon icon={faChevronRight} size="2x" />
               </div>
             </div>
-            <div className="stop">
-              <button type="button" className="btn" onClick={modalToggle}>
-                予約停止
-              </button>
-              <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={modalToggle}
-                className="modal-content"
-                overlayClassName="modal-overlay"
-              >
-                <div className="modal-wrapper">
-                  <div className="modal-title">
-                    <h2>予約停止の設定</h2>
-                  </div>
-                  <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                    <ul>
-                      <li>
-                        <div>
-                          <FormControl error>
-                            <FormHelperText>
-                              {errors.StartDate && errors.StartDate.message}
-                            </FormHelperText>
-                            <FormGroup>
-                              <Controller
-                                name="StartDate"
-                                control={control}
-                                defaultValue={new Date().getTime() + 1000 * 60 * 60 * 24}
-                                // rules={{ required: "入力" }}
-                                render={({ field }) => (
-                                  <div className={form.StartDate}>
-                                    <Label>開始日時：</Label>
-                                    <LocalizationProvider
-                                      dateAdapter={DateAdapter}
-                                      locale={ja}
-                                    >
-                                      <DesktopDatePicker
-                                        {...field}
-                                        label="年/月/日"
-                                        mask="____/__/__"
-                                        minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
-                                        renderInput={(params) => (
-                                          <TextField
-                                            {...params}
-                                            {...register("startDate", {
-                                              validate: (value) => {
-                                                if (value === "") {
-                                                  return "必須項目です";
-                                                }
-                                                // 現在または過去の日付を選択された場合はエラー
-                                                if (value < new Date()) {
-                                                  return "現在及び過去の日付は選択できません";
-                                                }
-                                              },
-                                            })}
-                                          />
-                                        )}
-                                      />
-                                    </LocalizationProvider>
-                                  </div>
-                                )}
-                              />
-                            </FormGroup>
-                          </FormControl>
-                        </div>
-                        <div>
-                          <FormControl error>
-                            <FormHelperText>
-                              {errors.usage && errors.usage.message}
-                            </FormHelperText>
-                            <FormGroup>
-                              <Controller
-                                name="Start"
-                                defaultValue=""
-                                control={control}
-                                // rules={{ required: "選択してください" }}
-                                render={({ field }) => (
-                                  <div className={form.start}>
-                                    <TextField
-                                      style={{ width: "150px" }}
-                                      size="Normal"
-                                      select
-                                      defaultValue=""
-                                      label="開始時間"
-                                      error={"Start" in errors}
-                                      {...field}
-                                    >
-                                      {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
-                                      {placeName === "カーリング場"
-                                        ? curlingTimetable.map((timetables, id) => (
-                                            <MenuItem
-                                              key={id}
-                                              label={timetables.label}
-                                              value={
-                                                timetables.value === undefined
-                                                  ? ""
-                                                  : timetables.value
-                                              }
-                                            >
-                                              {timetables.label}
-                                            </MenuItem>
-                                          ))
-                                        : timetable.map((timetables, id) => (
-                                            <MenuItem
-                                              key={id}
-                                              label={timetables.label}
-                                              value={
-                                                timetables.value === undefined
-                                                  ? ""
-                                                  : timetables.value
-                                              }
-                                            >
-                                              {timetables.label}
-                                            </MenuItem>
-                                          ))}
-                                    </TextField>
-                                  </div>
-                                )}
-                              />
-                            </FormGroup>
-                          </FormControl>
-                        </div>
-                      </li>
-                      <li>
-                        <div>
-                          <FormControl error>
-                            <FormHelperText>
-                              {errors.usage && errors.usage.message}
-                            </FormHelperText>
-                            <FormGroup>
-                              <Controller
-                                name="EndDate"
-                                control={control}
-                                defaultValue={
-                                  new Date().getTime() + 1000 * 60 * 60 * 24
-                                }
-                                render={({ field }) => (
-                                  <div className={form.EndDate}>
-                                    <Label>終了日時</Label>
-                                    <LocalizationProvider
-                                      dateAdapter={DateAdapter}
-                                      locale={ja}
-                                    >
-                                      <DesktopDatePicker
-                                        {...field}
-                                        label="年/月/日"
-                                        mask="____/__/__"
-                                        minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
-                                        renderInput={(params) => (
-                                          <TextField
-                                            {...params}
-                                            {...register("endDate", {
-                                              validate: (value) => {
-                                                if (value === "") {
-                                                  return "必須項目です";
-                                                }
-                                                // startDateより過去の日付を選択された場合はエラー
-                                                if (value < getValues("startDate")) {
-                                                  return "利用開始日時より前の日付は選択できません";
-                                                }
-                                              },
-                                            })}
-                                            error={"endDate" in errors}
-                                          />
-                                        )}
-                                      />
-                                    </LocalizationProvider>
-                                  </div>
-                                )}
-                              />
-                            </FormGroup>
-                          </FormControl>
-                        </div>
-                        <div>
-                          <FormControl error>
-                            <FormHelperText>
-                              {errors.usage && errors.usage.message}
-                            </FormHelperText>
-                            <FormGroup>
-                              <Controller
-                                name="End"
-                                defaultValue=""
-                                control={control}
-                                rules={{
-                                  required: "選択してください",
-                                }}
-                                render={({ field }) => (
-                                  <div className={form.end}>
-                                    <TextField
-                                      style={{ width: "150px" }}
-                                      select
-                                      size="Normal"
-                                      defaultValue=""
-                                      label="終了時間"
-                                      {...register("endTime", {
-                                        required: "選択してください",
-                                      })}
-                                      error={"End" in errors}
-                                      {...field}
-                                    >
-                                      {/* カーリング場と他の施設ではtimetableが違うので条件分岐 */}
-
-                                    {placeName === "カーリング場"
-                                      ? curlingTimetable.map((timetables, id) => (
-                                          <MenuItem
-                                            key={id}
-                                            label={timetables.label}
-                                            value={
-                                              timetables.value === undefined
-                                                ? ""
-                                                : timetables.value
-                                            }
-                                          >
-                                            {timetables.label}
-                                          </MenuItem>
-                                        ))
-                                      : timetable.map((timetables, id) => (
-                                          <MenuItem
-                                            key={id}
-                                            label={timetables.label}
-                                            value={
-                                              timetables.value === undefined
-                                                ? ""
-                                                : timetables.value
-                                            }
-                                          >
-                                            {timetables.label}
-                                          </MenuItem>
-                                        ))}
-                                  </TextField>
-                                </div>
-                              )}
-                            />
-                          </FormGroup>
-                        </FormControl>
-                      </div>
-                    </li>
-                    <li>
-                      <div>
-                        <Label>施設名：</Label>
-                        {place.map((i, index) => {
-                          return (
-                            <label key={index} onChange={(e) => handleCheck(i.id, "place", e)}>
-                              <span><input name="place" type="checkbox" value={i.id}/></span>
-                              <span>{i.name}</span>
-                            </label>
-                          )
-                        })}
-                      </div>
-                    </li>
-                    </ul>
-                    <div className="submit-btn">
-                      <button type="submit" className="btn">
-                        設定する
-                      </button>
-                      <button type="button" className="back-btn" onClick={() => setModalIsOpen(false)}>
-                        閉じる
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </Modal>
-            </div>
+            <ReserveStopSetting />
             <UserIcon />
           </div>
           <div className="main">
@@ -583,11 +195,11 @@ const Calendar = (props) => {
                 </div>
                 {calendarType === "daily" ? (
                   <div className="date-base">
-                  <p>
-                    {month}月{day}日
-                  </p>
-                  {/* <input type="date" className="date-input"/> */}
-                </div>
+                    <p>
+                      {month}月{day}日
+                    </p>
+                    {/* <input type="date" className="date-input"/> */}
+                  </div>
                 ) : (
                   <div className="date-base">
                     <p>
@@ -608,8 +220,10 @@ const Calendar = (props) => {
                 >
                   {place.map((i, index) => {
                     return (
-                      <option value={i.name} key={index}>{i.name}</option>
-                    )                    
+                      <option value={i.name} key={index}>
+                        {i.name}
+                      </option>
+                    );
                   })}
                 </select>
               </div>
@@ -621,8 +235,10 @@ const Calendar = (props) => {
                 >
                   {approvals.map((i, index) => {
                     return (
-                      <option value={i.id} key={index}>{i.name}</option>
-                    )
+                      <option value={i.id} key={index}>
+                        {i.name}
+                      </option>
+                    );
                   })}
                 </select>
               </div>

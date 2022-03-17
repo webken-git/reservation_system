@@ -126,12 +126,13 @@ const Content = (props) =>{
                 )
             })}
             {suspensions.map((suspension, index) => {
-              return (
-                <SuspensionBlock
-                  suspension={suspension}
-                  key={index}
-                />
-              );
+                return (
+                    <SuspensionBlock
+                        suspension={suspension}
+                        placeFilter={placeFilter}
+                        index={index}
+                    />
+                )
             })}
             </div>
         </div>

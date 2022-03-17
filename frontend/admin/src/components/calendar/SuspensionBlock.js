@@ -7,12 +7,20 @@ const SuspensionBlock = (props) => {
   const suspension = props.suspension;
   const hour = suspension.start.substr(11, 2);
   const endHour = suspension.end.substr(11, 2);
+  let placeFlag = false;
+
+  suspension.places.map((place, index) => {
+    if(place.name === props.placeFilter){
+      placeFlag = true;
+    }
+  })
 
   let backgroundColor = "red";
 
   const styleGenerator = useCallback(
     (top, height) => ({
       backgroundColor: backgroundColor,
+      width: "100%",
       top: top ? top + "vh" : "0vh",
       height: height ? height + "vh" : "0vh",
     }),
@@ -33,17 +41,21 @@ const SuspensionBlock = (props) => {
 
   const id = suspension.id;
 
-  return (
-    <Link
-    className="schedule-block"
-    style={styleGeneratorHandler()}
-    to={`/calendar/suspension-info/${id}`}
-    >
+  if (placeFlag){
+    return (
+      <Link
+        className="schedule-block"
+        style={styleGeneratorHandler()}
+        to={`/calendar/suspension-info/${id}`}
+      >
       <p>
         予約停止中
       </p>
     </Link>
-  );  
+    )
+  } else {
+    return null;
+  }
 };
 
 export default SuspensionBlock;

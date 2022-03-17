@@ -191,12 +191,6 @@ const Calendar = (props) => {
           </div>
 
           <div className="content-row">
-            {/* 現在時刻を表示する */}
-            {/* <div className="now-time" style={{ top: st }}>
-              <div className="circle"></div>
-              <div className="border"></div>
-            </div> */}
-
             <div className="timeline">
               <div>
                 <p>9</p>

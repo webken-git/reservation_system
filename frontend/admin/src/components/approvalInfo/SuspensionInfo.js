@@ -22,6 +22,7 @@ import { timetable } from "../calendar/FormDataList";
 import { format } from "date-fns";
 import { formData, popupState } from "../../recoil/form/atom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useFetch } from "../../hooks/useFetch";
 
 const Label = styled("p")({
   marginRight: 15,
@@ -36,7 +37,6 @@ const SuspensionInfo = (props) => {
   const [FormData, setFormData] = useRecoilState(formData);
   const setPopup = useSetRecoilState(popupState);
   // const a = new Date(suspension.start.substr(0, 4), suspension.start.substr(5, ))
-
 
   const {
     control,
@@ -64,6 +64,10 @@ const SuspensionInfo = (props) => {
       });
   };
 
+  const getPlaceList = useFetch({
+    url: ReservationUrls.PLACE,
+  });
+
   const modalTogglePatch = () => {
     setModalIsOpen(!modalIsOpen);
   }
@@ -75,10 +79,12 @@ const SuspensionInfo = (props) => {
     const endTime = e.End;
     const start = startDate.concat(" ", startTime);
     const end = endDate.concat(" ", endTime);
+    const place = e.place;
 
     axios.patch(`${ReservationUrls.SUSPENSION}${id}/`, {
       start: start,
       end: end,
+      place_id: place,
     })
     .then(res => {
       setModalIsOpen(false)
@@ -124,12 +130,30 @@ const SuspensionInfo = (props) => {
     })
   }
 
+  const handleCheck = (id, name, e) => {
+    let values = getValues(name) || [];
+
+    let newValues = [];
+    // 選択されている場合
+    if (e.target.checked) {
+      // 選択されているidを追加
+      newValues = [...values, id];
+    } else {
+      // 選択されていないidを削除
+      newValues = values.filter((value) => value !== id);
+    }
+    console.log(newValues);
+    setValue(name, newValues);
+    // console.log(newValues)
+    return newValues;
+  };
+
   useEffect(() => {
     pullSuspension();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (suspension === null) {
+  if (suspension.length === 0) {
     return <Loading />;
   } else {
     return (
@@ -143,6 +167,14 @@ const SuspensionInfo = (props) => {
             <li>
               <label>利用終了日時：</label>
               <span>{suspension.end}</span>
+            </li>
+            <li>
+              <label>場所：</label>
+              {suspension.places.map((place, index) => {
+                return (
+                  <span key={index}>{place.name},</span>
+                )
+              })}
             </li>
           </ul>
           <button type="button" className="btn" onClick={modalTogglePatch}>変更</button>
@@ -163,7 +195,7 @@ const SuspensionInfo = (props) => {
                         <Label>開始日時</Label>
                         <FormControl error>
                           <FormHelperText>
-                            {errors.StartDate.message && errors.StartDate.message}
+                            {errors.StartDate && errors.StartDate.message}
                           </FormHelperText>
                           <FormGroup>
                             <Controller
@@ -236,7 +268,7 @@ const SuspensionInfo = (props) => {
                       <div>
                         <FormControl error>
                           <FormHelperText>
-                            {errors.Start && errors.Start.message}
+                            {errors.EndDate && errors.EndDate.message}
                           </FormHelperText>
                           <FormGroup>
                             <Controller
@@ -264,7 +296,7 @@ const SuspensionInfo = (props) => {
                       <div>
                         <FormControl error>
                           <FormHelperText>
-                            {errors.Start && errors.Start.message}
+                            {errors.End && errors.End.message}
                           </FormHelperText>
                           <FormGroup>
                             <Controller
@@ -306,6 +338,29 @@ const SuspensionInfo = (props) => {
                           </FormGroup>
                         </FormControl>
                       </div>
+                    </li>
+                    <li>
+                    <div>
+                    <p>施設名：</p>
+                    {getPlaceList &&
+                      getPlaceList.map((i, index) => {
+                        return (
+                          <p
+                            key={index}
+                            onChange={(e) => handleCheck(i.id, "place", e)}
+                            className="place-list"
+                          >
+                            <input
+                              name="place"
+                              id={i.id}
+                              type="checkbox"
+                              value={i.id}
+                            />
+                            <label htmlFor={i.id} className="modal-label">{i.name}</label>
+                          </p>
+                        );
+                      })}
+                  </div>
                     </li>
                   </ul>
                   <div className="submit-btn">
