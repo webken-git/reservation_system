@@ -133,9 +133,7 @@ const SuspensionInfo = (props) => {
       // 選択されていないidを削除
       newValues = values.filter((value) => value !== id);
     }
-    console.log(newValues);
     setValue(name, newValues);
-    // console.log(newValues)
     return newValues;
   };
 
