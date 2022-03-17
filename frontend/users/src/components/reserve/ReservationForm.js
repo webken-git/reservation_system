@@ -76,8 +76,9 @@ export const ReservationForm = React.forwardRef(({ placeLists }, ref) => {
 
   const onSubmit = (e) => {
     //このままだとbackend側で使えないのでyyyy-LL-ddに変換
-    const startDate = format(e.startDate, "yyyy-MM-dd");
-    const endDate = format(e.endDate, "yyyy-MM-dd");
+    console.log(e.startDate);
+    const startDate = format(e.startDate, "yyyy-LL-dd");
+    const endDate = format(e.endDate, "yyyy-LL-dd");
     const startTime = e.startTime;
     const endTime = e.endTime;
     const start = startDate.concat(" ", startTime);

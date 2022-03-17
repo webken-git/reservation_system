@@ -246,6 +246,7 @@ function App() {
                           children={<SuspensionInfoPage />}
                         />
                       </Route>
+                      <Route component={NotFound} />
                     </Switch>
                   </>
                 )}

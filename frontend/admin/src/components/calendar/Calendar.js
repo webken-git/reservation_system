@@ -141,6 +141,8 @@ const Calendar = (props) => {
           setCalendarType={setCalendarType}
           calendarType={calendarType}
           setLoading={setLoading}
+          approvalFilter={approvalFilter}
+          setApprovalFilter={setApprovalFilter}
         />
       ) : (
         <div className="maii">
@@ -170,14 +172,12 @@ const Calendar = (props) => {
                   <p>
                     {year}年{month}月{day}日
                   </p>
-                  {/* <input type="date" className="date-input"/> */}
                 </div>
               ) : (
                 <div className="date-base">
                   <p>
                     {year}月{month}月
                   </p>
-                  {/* <input type="date" className="date-input"/> */}
                 </div>
               )}
               <div className="next-button" onClick={() => dateChange("next")}>
@@ -189,6 +189,29 @@ const Calendar = (props) => {
           </div>
           <div className="main">
             <div className="main-header">
+              <div className="date-selector">
+                <div className="last-button" onClick={() => dateChange("last")}>
+                  <FontAwesomeIcon icon={faChevronLeft} size="2x" />
+                </div>
+                {calendarType === "daily" ? (
+                  <div className="date-base">
+                    <p>
+                      {month}月{day}日
+                    </p>
+                    {/* <input type="date" className="date-input"/> */}
+                  </div>
+                ) : (
+                  <div className="date-base">
+                    <p>
+                      {year}年{month}月
+                    </p>
+                    {/* <input type="date" className="date-input"/> */}
+                  </div>
+                )}
+                <div className="next-button" onClick={() => dateChange("next")}>
+                  <FontAwesomeIcon icon={faChevronRight} size="2x" />
+                </div>
+              </div>
               <div className="filter-base">
                 <select
                   className="filter"
@@ -295,11 +318,6 @@ const Calendar = (props) => {
                     <Content
                       key={index}
                       date={date}
-                      updateFlag={updateFlag}
-                      setUpdateFlag={setUpdateFlag}
-                      isMain={isMain}
-                      homeUpdateFlag={props.homeUpdateFlag}
-                      setHomeUpdateFlag={props.setHomeUpdateFlag}
                       placeFilter={placeFilter}
                       setLoading={setLoading}
                       approvalFilter={approvalFilter}
@@ -308,24 +326,13 @@ const Calendar = (props) => {
                   );
                 })
               ) : (
-                // <div className="daily-content">
                 <Content
-                  // key={index}
                   date={date}
-                  // setScheduleDict={setScheduleDict}
-                  // openModal={openModal}
-                  updateFlag={updateFlag}
-                  setUpdateFlag={setUpdateFlag}
-                  isMain={isMain}
-                  // individualOrGroup={props.individualOrGroup}
-                  homeUpdateFlag={props.homeUpdateFlag}
-                  setHomeUpdateFlag={props.setHomeUpdateFlag}
                   placeFilter={placeFilter}
                   setLoading={setLoading}
                   calendarType={calendarType}
                   approvalFilter={approvalFilter}
                 />
-                // </div>
               )}
             </div>
           </div>

@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { withCookies } from "react-cookie";
-import { v4 as uuidv4 } from "uuid";
 import ScheduleBlock from "./ScheduleBlock";
 import UnapprovalBlock from "./UnapprovalBlock";
 import SuspensionBlock from "./SuspensionBlock";
 import { ReservationUrls } from "../../utils/reservationUrls";
 
 const Content = (props) => {
-  const [scheduleList, setScheduleList] = useState([]);
   const [contentDate, setContentDate] = useState(new Date());
-  // const [ stringContentDate, setStringContentDate ] = useState("");
   const date = props.date;
-  const cookies = props.cookies;
-  const individualOrGroup = props.individualOrGroup;
-  const setUpdateFlag = props.setUpdateFlag;
-  const setHomeUpdateFlag = props.setHomeUpdateFlag;
   const filterType = props.filterType;
   const setLoading = props.setLoading;
   const approvalFilter = props.approvalFilter;
@@ -24,15 +17,11 @@ const Content = (props) => {
   const [count, setCount] = useState([]);
   const [suspensions, setSuspensions] = useState([]);
   const [approvalList, setApprovalList] = useState([]);
-
-  // let suspensions = [];
+  const change = props.change;
+  let unmounted = false;
   let approvals = [];
   let unapprovals = [];
   let typeBool = true;
-
-  let unmounted = false;
-
-  // console.log(placeName)
 
   const approvalDevide = (scheduleList) => {
     scheduleList.map((schedule, index) => {
@@ -41,10 +30,9 @@ const Content = (props) => {
       } else if (schedule.approval.name === "承認") {
         approvals.push(schedule);
       }
+      return null;
     })
     setApprovalList(approvals);
-    // setUnapprovalList(unapprovals);
-    // console.log(unapprovals)
 
     let list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     unapprovals.map((unapproval, index) => {
@@ -54,6 +42,7 @@ const Content = (props) => {
       for (let i = startHours; i < endHours; i ++) {
         list[i-9] = list[i-9] + 1;
       }
+      return null;
     })
     setCount(list);
   }
@@ -65,6 +54,9 @@ const Content = (props) => {
         ? "0" + (date.getMonth() + 1)
         : date.getMonth() + 1;
     let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    if(!unmounted){
+      setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
+    }
 
     axios
       .get(ReservationUrls.SUSPENSION, {
@@ -79,6 +71,30 @@ const Content = (props) => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  const reservationCount = (scheduleList) => {
+    let list  = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    scheduleList.map((schedule, index) => {
+      let startHours = Number(schedule.reservation.start.substr(11, 2));
+      let endHours = Number(schedule.reservation.end.substr(11, 2));
+
+      if(schedule.approval.name === "キャンセル" || schedule.approval.name === "不承認"){
+      } else if (schedule.approval.name === "承認"){
+        for (let i = startHours; i < endHours; i++) {
+          list[i-9] = 2;
+        }
+      } else if (schedule.approval.name === "未承認") {
+        for (let i = startHours; i < endHours; i++) {
+          if(list[i-9] === 0){
+            list[i-9] = 1;
+          }
+        }
+      }
+      return null;
+    })
+    setCount(list);
   }
 
   const reservationPull = () => {
@@ -98,12 +114,11 @@ const Content = (props) => {
       .then((res) => {
         const scheduleList = res.data;
         setLoading(false);
-        if (!unmounted) {
-          setScheduleList(scheduleList);
-          setUpdateFlag(false);
+        if (change){
           approvalDevide(scheduleList);
           suspensionPull();
-          // unapprovalCount(unapprovalList);
+        } else {
+          reservationCount(scheduleList);
         }
       })
       .catch((error) => {
@@ -121,13 +136,10 @@ const Content = (props) => {
   }, [
     placeName,
     date,
-    individualOrGroup,
-    cookies,
-    setUpdateFlag,
-    setHomeUpdateFlag,
     filterType,
     setLoading,
     approvalFilter,
+    change,
   ]);
 
   if (calendarType === "daily") {
@@ -155,24 +167,26 @@ const Content = (props) => {
           <div className="content-div"></div>
         </div>
 
-        <div className="schedule-block-column">
-            {approvalList.map((schedule, index) => {
-              return (
-                <ScheduleBlock
-                  key={uuidv4()}
-                  schedule={schedule}
-                  index={index}
-                  setScheduleDict={props.setScheduleDict}
-                  contentDate={contentDate}
-                  count={count}
-                />
-              );
-            })}
+        {change ? (
+          <div className="schedule-block-column">
             {count.map((n, index) => {
               return (
                 <UnapprovalBlock
+                  key={index}
                   hour={index}
                   count={n}
+                  change={change}
+                />
+              );
+            })}
+            {approvalList.map((schedule, index) => {
+              return (
+                <ScheduleBlock
+                  key={index}
+                  schedule={schedule}
+                  contentDate={contentDate}
+                  count={count}
+                  change={change}
                 />
               );
             })}
@@ -181,10 +195,25 @@ const Content = (props) => {
                 <SuspensionBlock
                   suspension={suspension}
                   key={index}
+                  change={change}
                 />
               );
             })}
-        </div>
+          </div>
+        ) : (
+          <div className="schedule-block-column">
+            {count.map((n, index) => {
+            return (
+              <UnapprovalBlock
+                key={index}
+                hour={index}
+                count={n}
+                change={change}
+              />
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }

@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronLeft,
+  faSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import useSafeState from "../../../hooks/useSafeState";
 import useUnmountRef from "../../../hooks/useUnmountRef";
@@ -20,18 +21,13 @@ const ReserveCalendar = (props) => {
   const unmountRef = useUnmountRef();
   const [date, setDate] = useSafeState(unmountRef, new Date());
   const dayList = ["日", "月", "火", "水", "木", "金", "土"];
-  // const [ scheduleDict, setScheduleDict ] = useState({});
   const [dateList, setDateList] = useSafeState(unmountRef, []); //日付リスト
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  // const setDate = props.setDate;
-  const [updateFlag, setUpdateFlag] = useSafeState(unmountRef, false);
-  const [, setSt] = useState(0);
   const [calendarType, setCalendarType] = useSafeState(unmountRef, "weekly");
   const [loading, setLoading] = useSafeState(unmountRef, true);
   const placeId = props.placeId;
-  const isMain = true;
   const [placeName, setPlaceName] = useState();
 
   const dateChange = (e) => {
@@ -95,26 +91,10 @@ const ReserveCalendar = (props) => {
       }
       if (!unmounted) {
         setDateList(dateList);
-        // console.log('dateList:', dateList);
       }
     };
     sortDateList();
     placeSet(placeId);
-
-    //現在時刻までスクロール
-    // let margin = window.innerHeight * 0.02;
-    // let blockHeight = window.innerHeight * 0.06;
-    // let now = new Date();
-    // let hours = now.getHours() - 4;
-    // let st = now.getHours() < 4 ? 0 : margin + blockHeight * hours;
-    // if (!unmounted) {
-    //   setSt(margin + blockHeight * now.getHours());
-    // }
-    // document.getElementsByClassName("content-row")[0].scrollTo({
-    //   top: st,
-    //   left: 0,
-    //   behavior: "smooth",
-    // });
 
     return () => {
       unmounted = true;
@@ -124,35 +104,86 @@ const ReserveCalendar = (props) => {
   return (
     <div className="calendar-base">
       {calendarType !== "monthly" ? (
-        <div className="header">
-          {/* 表示するカレンダーの種類 */}
-          <Select
-            calendarType={calendarType}
-            setCalendarType={setCalendarType}
-          />
+        <>
+          <div className="header">
+            {/* 表示するカレンダーの種類 */}
+            <Select
+              calendarType={calendarType}
+              setCalendarType={setCalendarType}
+            />
 
-          <div className="date-title">
-            <div className="last-button" onClick={() => dateChange("last")}>
-              <FontAwesomeIcon icon={faChevronLeft} size="2x" />
+            <div className="annotation pc-tab">
+              <ul>
+                <li>
+                  <FontAwesomeIcon
+                    icon={faSquare}
+                    style={{ color: "dodgerblue" }}
+                  />{" "}
+                  = 承認済みの予約
+                </li>
+                <li>
+                  <FontAwesomeIcon
+                    icon={faSquare}
+                    style={{ color: "tomato" }}
+                  />{" "}
+                  = 未承認の予約
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faSquare} style={{ color: "red" }} /> =
+                  予約停止中
+                </li>
+              </ul>
             </div>
 
             <div className="date-title">
-              {calendarType === "daily" ? (
-                <p>
-                  {year}年{month}月{day}日
-                </p>
-              ) : (
-                <p>
-                  {year}年{month}月
-                </p>
-              )}
-            </div>
+              <div className="last-button" onClick={() => dateChange("last")}>
+                <FontAwesomeIcon icon={faChevronLeft} size="2x" />
+              </div>
 
-            <div className="next-button" onClick={() => dateChange("next")}>
-              <FontAwesomeIcon icon={faChevronRight} size="2x" />
+              <div className="date-title">
+                {calendarType === "daily" ? (
+                  <p>
+                    {year}年{month}月{day}日
+                  </p>
+                ) : (
+                  <p>
+                    {year}年{month}月
+                  </p>
+                )}
+              </div>
+
+              <div className="next-button" onClick={() => dateChange("next")}>
+                <FontAwesomeIcon icon={faChevronRight} size="2x" />
+              </div>
             </div>
           </div>
-        </div>
+          <div className="sp">
+            <div className="header">
+              <div className="annotation">
+                <ul>
+                  <li>
+                    <FontAwesomeIcon
+                      icon={faSquare}
+                      style={{ color: "dodgerblue" }}
+                    />{" "}
+                    = 承認済みの予約
+                  </li>
+                  <li>
+                    <FontAwesomeIcon
+                      icon={faSquare}
+                      style={{ color: "tomato" }}
+                    />{" "}
+                    = 未承認の予約
+                  </li>
+                  <li>
+                    <FontAwesomeIcon icon={faSquare} style={{ color: "red" }} />{" "}
+                    = 予約停止中
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </>
       ) : null}
 
       {calendarType === "monthly" ? (
@@ -175,33 +206,12 @@ const ReserveCalendar = (props) => {
                     key={index}
                     day={dayList[index]}
                     date={date}
-                    // setScheduleDict={setScheduleDict}
-                    // openModal={openModal}
-                    updateFlag={updateFlag}
-                    setUpdateFlag={setUpdateFlag}
-                    isMain={isMain}
-                    // individualOrGroup={props.individualOrGroup}
-                    homeUpdateFlag={props.homeUpdateFlag}
-                    setHomeUpdateFlag={props.setHomeUpdateFlag}
                     calendarType={calendarType}
                   />
                 );
               })
             ) : (
-              <Head
-                // key={index}
-                // day={dayList[index]}
-                date={date}
-                // setScheduleDict={setScheduleDict}
-                // openModal={openModal}
-                updateFlag={updateFlag}
-                setUpdateFlag={setUpdateFlag}
-                isMain={isMain}
-                // individualOrGroup={props.individualOrGroup}
-                homeUpdateFlag={props.homeUpdateFlag}
-                setHomeUpdateFlag={props.setHomeUpdateFlag}
-                calendarType={calendarType}
-              />
+              <Head date={date} calendarType={calendarType} />
             )}
           </div>
 
@@ -260,33 +270,17 @@ const ReserveCalendar = (props) => {
                   <Content
                     key={index}
                     date={date}
-                    // setScheduleDict={setScheduleDict}
-                    // openModal={openModal}
-                    updateFlag={updateFlag}
-                    setUpdateFlag={setUpdateFlag}
-                    isMain={isMain}
-                    // individualOrGroup={props.individualOrGroup}
-                    homeUpdateFlag={props.homeUpdateFlag}
-                    setHomeUpdateFlag={props.setHomeUpdateFlag}
                     setLoading={setLoading}
-                    placeName={placeName}
+                    placeFilter={placeName}
                     calendarType={calendarType}
                   />
                 );
               })
             ) : (
               <Content
-                // key={index}
                 date={date}
-                // setScheduleDict={setScheduleDict}
-                // openModal={openModal}
-                updateFlag={updateFlag}
-                setUpdateFlag={setUpdateFlag}
-                isMain={isMain}
-                // individualOrGroup={props.individualOrGroup}
-                homeUpdateFlag={props.homeUpdateFlag}
-                setHomeUpdateFlag={props.setHomeUpdateFlag}
                 setLoading={setLoading}
+                placeFilter={placeName}
                 calendarType={calendarType}
               />
             )}

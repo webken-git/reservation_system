@@ -41,6 +41,7 @@ const ReserveStopSetting = () => {
   const getPlaceList = useFetch({
     url: ReservationUrls.PLACE,
   });
+
   const onSubmit = (e) => {
     console.log("onSubmit");
     setLoading(true);
@@ -315,6 +316,7 @@ const ReserveStopSetting = () => {
                           <p
                             key={index}
                             onChange={(e) => handleCheck(i.id, "place", e)}
+                            className="place-list"
                           >
                             <input
                               name="place"
@@ -322,7 +324,9 @@ const ReserveStopSetting = () => {
                               type="checkbox"
                               value={i.id}
                             />
-                            <label htmlFor={i.id}>{i.name}</label>
+                            <label htmlFor={i.id} className="modal-label">
+                              {i.name}
+                            </label>
                           </p>
                         );
                       })}
@@ -333,6 +337,7 @@ const ReserveStopSetting = () => {
                 <button type="submit" className="btn">
                   設定する
                 </button>
+                <span className="btn-space"></span>
                 <button
                   type="button"
                   className="back-btn"

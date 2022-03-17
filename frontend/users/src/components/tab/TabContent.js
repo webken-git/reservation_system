@@ -25,7 +25,7 @@ const TabContent = (props) => {
       return (
         <TabPanel key={p_id} value={place.id.toString()}>
           <div className="tab-content">
-            <details open={true}>
+            <details open={true} className="calendar">
               <summary>カレンダー</summary>
               <Calendar placeId={place.id.toString()} />
             </details>
@@ -49,7 +49,7 @@ const TabContent = (props) => {
       return (
         <TabPanel key={p_id} value={place.id.toString()}>
           <div className="tab-content">
-            <details open={true}>
+            <details open={true} className="calendar">
               <summary>カレンダー</summary>
               <Calendar placeId={place.id.toString()} />
             </details>
@@ -73,7 +73,7 @@ const TabContent = (props) => {
       return (
         <TabPanel key={p_id} value={place.id.toString()}>
           <div className="tab-content">
-            <details open={true}>
+            <details open={true} className="calendar">
               <summary>カレンダー</summary>
               <Calendar placeId={place.id.toString()} />
             </details>

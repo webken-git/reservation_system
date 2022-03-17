@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { withCookies } from "react-cookie";
+import React, { useCallback } from "react";
 
 const UnapprovalBlock = (props) => {
 
@@ -7,7 +6,12 @@ const UnapprovalBlock = (props) => {
   const count = props.count;
   const endHour = hour + 1;
 
-  let backgroundColor = "tomato";
+  let backgroundColor;
+  if(props.change){
+    backgroundColor = "tomato";
+  } else {
+    backgroundColor = "transparent";
+  }
 
   const styleGenerator = useCallback(
     (top, height) => ({
@@ -28,20 +32,42 @@ const UnapprovalBlock = (props) => {
     hour,
     count,
     endHour,
+    props.change
   ]);
 
-  if (count !== 0) {
-    return (
-      <div
-      className="schedule-block"
-      style={styleGeneratorHandler()}
-      >
-        <p>
-          {count}件
-        </p>
-      </div>
-    );
-  } else { return null; }
+  if (props.change) {
+    if (count !== 0) {
+      return (
+        <div
+        className="schedule-block"
+        style={styleGeneratorHandler()}
+        >
+          <p>
+            {count}件
+          </p>
+        </div>
+      );
+    } else { return null; }
+  } else {
+    if(count !== null){
+      return (
+        <div
+          className="schedule-block"
+          style={styleGeneratorHandler()}
+        >
+          {count === 0 ? (
+            <span style={{ color: "blue" }}>〇</span>
+          ) : null}
+          {count === 1 ? (
+            <span style={{ color: "green" }}>△</span>
+          ) : null}
+          {count === 2 ? (
+            <span style={{ color: "black" }}>×</span>
+          ) : null}
+        </div>
+      )
+    } else { return null;}
+  }
 };
 
 export default UnapprovalBlock;

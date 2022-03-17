@@ -15,10 +15,8 @@ const Content = (props) =>{
     const date = props.date;
     const cookies = props.cookies;
     const individualOrGroup = props.individualOrGroup;
-    const setUpdateFlag = props.setUpdateFlag;
-    const setHomeUpdateFlag = props.setHomeUpdateFlag;
     const count = props.count;
-    const filterType = props.filterType;
+    const placeFilter = props.placeFilter;
     const setLoading = props.setLoading;
     const approvalFilter = props.approvalFilter;
     const calendarType = props.calendarType;
@@ -46,7 +44,7 @@ const Content = (props) =>{
           .catch((error) => {
             console.log(error);
           });
-      }
+    }
 
     useEffect(() => {
         let unmounted = false;
@@ -56,13 +54,12 @@ const Content = (props) =>{
 
         if(!unmounted){
             setContentDate(new Date(Number(year), Number(month)-1, Number(day)));
-            // setStringContentDate(year+'-'+month+'-'+day);    
         }
         axios.get(`${ReservationUrls.APPROVAL_APPLICATION}`,{
             params: {
                 approval: approvalFilter,
                 reservation__start: year+'-'+month+'-'+day,
-                reservation__place__name: filterType
+                reservation__place__name: placeFilter
             }
         })
         .then(res => {
@@ -71,8 +68,6 @@ const Content = (props) =>{
             // console.log(unmounted);
             if(!unmounted){
                 setScheduleList(scheduleList);
-                setUpdateFlag(false);
-                setHomeUpdateFlag(false);
                 suspensionPull();
             }
         })
@@ -81,7 +76,7 @@ const Content = (props) =>{
         });
 
         return () => { unmounted = true }
-    }, [date, individualOrGroup, cookies, setUpdateFlag, setHomeUpdateFlag, filterType, count, setLoading, approvalFilter]);
+    }, [date, individualOrGroup, cookies, placeFilter, count, setLoading, approvalFilter]);
 
     if (calendarType === "daily") {
         typeBool = false;
@@ -109,6 +104,15 @@ const Content = (props) =>{
                 <div className="content-div"></div>
             </div>
             <div className="schedule-block-column">
+            {suspensions.map((suspension, index) => {
+                return (
+                    <SuspensionBlock
+                        suspension={suspension}
+                        placeFilter={placeFilter}
+                        key={index}
+                    />
+                )
+            })}
             {scheduleList.map((schedule, index) => {
                 return (
                     <ScheduleBlock
@@ -117,16 +121,9 @@ const Content = (props) =>{
                         index={index}
                         setScheduleDict={props.setScheduleDict}
                         contentDate={contentDate}
+                        length={scheduleList.length}
                     />
                 )
-            })}
-            {suspensions.map((suspension, index) => {
-              return (
-                <SuspensionBlock
-                  suspension={suspension}
-                  key={index}
-                />
-              );
             })}
             </div>
         </div>
