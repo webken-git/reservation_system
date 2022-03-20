@@ -30,9 +30,9 @@ const Calendar = (props) => {
   const day = date.getDate();
   const [updateFlag, setUpdateFlag] = useState(false);
   const [st, setSt] = useState(0);
-  const [placeFilter, setPlaceFilter] = useState();
+  const [placeFilter, setPlaceFilter] = useState("");
   const [calendarType, setCalendarType] = useState("weekly");
-  const [approvalFilter, setApprovalFilter] = useState();
+  const [approvalFilter, setApprovalFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const isMain = true;
   const [place, setPlace] = useSafeState(unmountRef, []);
@@ -44,7 +44,9 @@ const Calendar = (props) => {
       .then((response) => {
         const placeLists = response.data;
         setPlace(placeLists);
-        setPlaceFilter(placeLists[0].name);
+        if(placeFilter === ""){
+          setPlaceFilter(placeLists[0].name);
+        }
       })
       .catch((error) => {});
   };
@@ -55,14 +57,15 @@ const Calendar = (props) => {
       .then((response) => {
         const approvalLists = response.data;
         setApprovals(approvalLists);
-        setApprovalFilter(approvalLists[0].id);
+        if(approvalFilter === ""){
+          setApprovalFilter(approvalLists[0].id);
+        }
       })
       .catch((error) => {});
   };
 
   // 検索する施設名を変数に代入
   const filtering = (e) => {
-    console.log("filtering");
     setPlaceFilter(e.target.value);
   };
 

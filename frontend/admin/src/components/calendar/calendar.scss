@@ -529,9 +529,12 @@ $breakpoints: (
         pointer-events: auto;
 
         p {
-          font-size: 0.8em;
+          font-size: 1.2rem;
           margin: 0;
           color: whitesmoke;
+          @include mq(sp) {
+            font-size: 0.8rem;
+          }
         }
       }
     }
@@ -589,7 +592,7 @@ $breakpoints: (
         pointer-events: auto;
         //z-index: 3;
         p {
-          font-size: 0.8em;
+          font-size: 1.2rem;
           margin: 0;
           color: whitesmoke;
         }
