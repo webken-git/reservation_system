@@ -7,6 +7,7 @@ import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
 import ApprovalButton from "../listbutton/ApprovalButtom";
 import DisApprovalButtom from "../listbutton/DisApprovalButtom";
+import DocumentLayout from "../document/DocumentLayout";
 
 const ApprovalInfo = (props) => {
   const unmountRef = useUnmountRef();
@@ -235,6 +236,9 @@ const ApprovalInfo = (props) => {
                   defferd_payment={defferdPayment}
                 />
               </>
+            ) : null}
+            {reservation.approval.name === "承認" ? (
+              <DocumentLayout />
             ) : null}
           </div>
         </div>
