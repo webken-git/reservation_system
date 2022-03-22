@@ -25,8 +25,8 @@ from reservations.funcs.filters import (
 from reservations.funcs.csv import csv_export
 from app_settings.models import AutoMail
 from documents.views import create_new_word
-from docx2pdf import convert
-import pythoncom
+# from docx2pdf import convert
+# import pythoncom
 from documents.models import Document
 
 
@@ -286,7 +286,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       # 承認された場合
       # 承認通知書を発行する場合
       if request.data['is_issued'] is True:
-        pythoncom.CoInitialize()
+        # pythoncom.CoInitialize()
         BASE_DIR = settings.BASE_DIR
         file, file_name = create_new_word(self.request)
         word = '{}/static/documents/docx/{}'.format(BASE_DIR, file)
@@ -321,20 +321,20 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           # wordファイルをpdfに変換
           f = open(pdf, 'w')
           f.close()
-          convert(word, pdf)
+          # convert(word, pdf)
           # 承認通知書を発行している場合は、添付ファイルを追加
-          email.attach_file(pdf)
+          # email.attach_file(pdf)
           email.send()
         else:
           email.send()
       # メール送信後にファイルを削除
       if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         os.remove(pdf)
-        pythoncom.CoUninitialize()
+        # pythoncom.CoUninitialize()
     elif request.data['approval_id'] == 3:
       # 予約が不承認された場合
       if request.data['is_issued'] is True:
-        pythoncom.CoInitialize()
+        # pythoncom.CoInitialize()
         BASE_DIR = settings.BASE_DIR
         file, file_name = create_new_word(self.request)
         word = '{}/static/documents/docx/{}'.format(BASE_DIR, file)
@@ -369,16 +369,16 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           # wordファイルをpdfに変換
           f = open(pdf, 'w')
           f.close()
-          convert(word, pdf)
+          # convert(word, pdf)
           # 承認通知書を発行している場合は、添付ファイルを追加
-          email.attach_file(pdf)
+          # email.attach_file(pdf)
           email.send()
         else:
           email.send()
       # メール送信後にファイルを削除
       if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         os.remove(pdf)
-        pythoncom.CoUninitialize()
+        # pythoncom.CoUninitialize()
     elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == "4":
       # 施設側からキャンセルされた場合
       # 施設側からのキャンセルメール送信

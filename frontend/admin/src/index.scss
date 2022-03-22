@@ -108,6 +108,11 @@ body {
   width: 4.5rem;
   border: #f00 solid 1px;
   background-color: #f00;
+  &:disabled {
+    background-color: #fff;
+    color: #000;
+    cursor: not-allowed;
+  }
 }
 .disapproval-btn {
   @extend .btn;

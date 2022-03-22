@@ -28,13 +28,10 @@ const Calendar = (props) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  const [updateFlag, setUpdateFlag] = useState(false);
-  const [st, setSt] = useState(0);
   const [placeFilter, setPlaceFilter] = useState();
   const [calendarType, setCalendarType] = useState("weekly");
   const [approvalFilter, setApprovalFilter] = useState();
   const [loading, setLoading] = useState(true);
-  const isMain = true;
   const [place, setPlace] = useSafeState(unmountRef, []);
   const [approvals, setApprovals] = useSafeState(unmountRef, []);
 
@@ -129,6 +126,7 @@ const Calendar = (props) => {
     return () => {
       unmounted = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, setDate, setCalendarType]);
 
   return (
@@ -267,7 +265,7 @@ const Calendar = (props) => {
             </div>
             <div className="content-row">
               {/* 現在時刻を表示する */}
-              <div className="now-time" style={{ top: st }}>
+              <div className="now-time" style={{ top: 0 }}>
                 <div className="circle"></div>
                 <div className="border"></div>
               </div>

@@ -62,6 +62,7 @@ export const ReservationList = () => {
     //modalIsOpenの値が変わる度にformをresetする
     //resetしないとdefaultValueが前の値のままになる
     reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalIsOpen]);
   const checkIndex = (index) => {
     editPlaceData(data[index].placeId);

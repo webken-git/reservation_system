@@ -99,6 +99,7 @@ const ReserveCalendar = (props) => {
     return () => {
       unmounted = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, setCalendarType]);
 
   return (

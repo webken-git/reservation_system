@@ -69,6 +69,25 @@ function App() {
         <Switch>
           <Route path="/login" exact children={<LoginPage />} />
           <Route
+            path="/registration"
+            render={({ match: { url } }) => (
+              <>
+                <Switch>
+                  <Route
+                    path={`${url}/`}
+                    exact
+                    children={<RegistrationPage />}
+                  />
+                  <Route
+                    path={`${url}/complete/:key`}
+                    children={<RegistrationCompletePage />}
+                  />
+                  <Route children={<NotFound />} />
+                </Switch>
+              </>
+            )}
+          />
+          <Route
             path="/password"
             render={({ match: { url } }) => (
               <>
@@ -96,25 +115,6 @@ function App() {
                 path="/"
                 exact
                 children={<Route path="/" exact children={<TopPage />} />}
-              />
-              <Route
-                path="/registration"
-                render={({ match: { url } }) => (
-                  <>
-                    <Switch>
-                      <Route
-                        path={`${url}/`}
-                        exact
-                        children={<RegistrationPage />}
-                      />
-                      <Route
-                        path={`${url}/complete/:key`}
-                        children={<RegistrationCompletePage />}
-                      />
-                      <Route children={<NotFound />} />
-                    </Switch>
-                  </>
-                )}
               />
               {/* ネストされたルーティングを定義 */}
               <Route

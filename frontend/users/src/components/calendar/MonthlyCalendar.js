@@ -74,7 +74,7 @@ const MonthlyCalendar = (props) => {
         {/* 表示するカレンダーの種類 */}
         <Select calendarType={calendarType} setCalendarType={setCalendarType} />
 
-        <div className="annotation">
+        <div className="annotation pc">
           <ul>
             <li>※　予約が入っている件数が表示されています。</li>
           </ul>
@@ -91,6 +91,15 @@ const MonthlyCalendar = (props) => {
           </div>
           <div className="next-button" onClick={onClick(1)}>
             <FontAwesomeIcon icon={faChevronRight} size="2x" />
+          </div>
+        </div>
+      </div>
+      <div className="sp-tab">
+        <div className="header">
+          <div className="annotation">
+            <ul>
+              <li>※　予約が入っている件数が表示されています。</li>
+            </ul>
           </div>
         </div>
       </div>

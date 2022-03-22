@@ -45,6 +45,7 @@ export const ChangePermission = (props) => {
         className="permission"
         checked={data}
         onChange={() => onChange(props.permission)}
+        disabled={props.auth.userId === props.id}
       />
     </>
   );

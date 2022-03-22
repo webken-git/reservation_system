@@ -19,9 +19,9 @@ const UserListBody = () => {
       .then((response) => {
         const data = response.data;
         // 自分のデータを削除する
-        const myData = data.filter((user) => user.id !== auth.userId);
+        // const myData = data.filter((user) => user.id !== auth.userId);
         // ユーザーリストのデータをuseStateに入れている
-        setUserListData(myData);
+        setUserListData(data);
       })
       .catch((error) => {});
   };
@@ -47,6 +47,7 @@ const UserListBody = () => {
           is_superuser={val.is_superuser}
           last_login={val.last_login}
           created_at={val.created_at}
+          auth={auth}
         />
       );
     });

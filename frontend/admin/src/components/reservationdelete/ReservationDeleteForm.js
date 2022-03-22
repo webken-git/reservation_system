@@ -55,8 +55,8 @@ const ReservationDeleteForm = (props) => {
           />
         </div>
         <br />
-        <button type="submit" className="modal-open-btn">
-          発行
+        <button type="submit" className="approval-btn">
+          削除
         </button>
         <button
           type="button"

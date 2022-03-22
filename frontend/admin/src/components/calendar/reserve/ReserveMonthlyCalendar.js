@@ -17,7 +17,7 @@ const ReserveMonthlyCalendar = (props) => {
   const [approvalList, setApprovalList] = useState([]);
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
-  const [approvalFilter, setApprovalFilter] = useState(2);
+  const [approvalFilter] = useState(2);
   const calendar = createCalendar(year, month);
   const setLoading = props.setLoading;
   const calendarType = props.calendarType;
@@ -66,6 +66,7 @@ const ReserveMonthlyCalendar = (props) => {
     return () => {
       unmounted = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month, approvalFilter]);
 
   return (
@@ -102,7 +103,9 @@ const ReserveMonthlyCalendar = (props) => {
                 <th key={index}>
                   {day}
                   {approvalList.map((approval, index) =>
-                    day === approval.day ? <p key={index}>{approval.count}件</p> : null
+                    day === approval.day ? (
+                      <p key={index}>{approval.count}件</p>
+                    ) : null
                   )}
                 </th>
               ))}

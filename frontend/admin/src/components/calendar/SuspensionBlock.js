@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
-import { withCookies } from "react-cookie";
 
 const SuspensionBlock = (props) => {
-
   const suspension = props.suspension;
   const hour = suspension.start.substr(11, 2);
   const endHour = suspension.end.substr(11, 2);
@@ -13,11 +11,9 @@ const SuspensionBlock = (props) => {
   // console.log(hour)
   // console.log(endHour)
 
-  suspension.places.map((place, index) => {
-    if(place.name === props.placeFilter){
-      placeFlag = true;
-    }
-  })
+  suspension.places.map((place, index) =>
+    place.name === props.placeFilter ? (placeFlag = true) : null
+  );
 
   let backgroundColor = "red";
 
@@ -34,31 +30,25 @@ const SuspensionBlock = (props) => {
   );
 
   const styleGeneratorHandler = useCallback(() => {
-    let top = (hour-9) * 6 + 2;
+    let top = (hour - 9) * 6 + 2;
     let height = (endHour - hour) * 6;
 
     return styleGenerator(top, height);
-  }, [
-    styleGenerator,
-    suspension,
-    hour,
-    endHour
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [styleGenerator, suspension, hour, endHour]);
 
   const id = suspension.id;
 
-  if (placeFlag){
+  if (placeFlag) {
     return (
       <Link
         className="schedule-block"
         style={styleGeneratorHandler()}
         to={`/calendar/suspension-info/${id}`}
       >
-      <p>
-        予約停止中
-      </p>
-    </Link>
-    )
+        <p>予約停止中</p>
+      </Link>
+    );
   } else {
     return null;
   }

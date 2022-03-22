@@ -71,6 +71,7 @@ const ScheduleBlock = (props) => {
       top: top ? top + "vh" : "0vh",
       height: height ? height + "vh" : "0vh",
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [backgroundColor]
   );
 
@@ -94,6 +95,7 @@ const ScheduleBlock = (props) => {
     }
 
     return styleGenerator(top, height);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     startDate,
     endDate,
@@ -111,69 +113,68 @@ const ScheduleBlock = (props) => {
 
   // document.getElementById('style-add').style.width = `${100 / props.index}%`;
 
-    return (
-      <Link
-        className="schedule-block"
-        id="style-add"
-        style={styleGeneratorHandler()}
-        to={`/calendar/approval-info/${id}`}
-      >
-        <p>
-          {(scheduleStartDate < props.contentDate ||
-            props.contentDate < scheduleEndDate) &&
-            scheduleStartDate.getMonth() +
-              1 +
-              "月" +
-              scheduleStartDate.getDate() +
-              "日"}
-          {props.schedule.reservation.start.substr(11, 5)}
-          {(scheduleStartDate < props.contentDate ||
-            props.contentDate < scheduleEndDate) && <br />}
-          ~
-          {(scheduleStartDate < props.contentDate ||
-            props.contentDate < scheduleEndDate) &&
-            scheduleEndDate.getMonth() +
-              1 +
-              "月" +
-              scheduleEndDate.getDate() +
-              "日"}
-          {props.schedule.reservation.end.substr(11, 5)}
-        </p>
-        {/* 個人か団体かで表示する名前を変更 */}
-        {props.schedule.reservation.is_group === false ? (
-          <span>
-            {props.schedule.reservation.place.min === 1 &&
-            props.schedule.reservation.place.max === 1 ? null : (
-              <p>
-                {(props.schedule.reservation.place.min === 0.5 &&
-                  (props.schedule.reservation.place_number === 0.5
+  return (
+    <Link
+      className="schedule-block"
+      id="style-add"
+      style={styleGeneratorHandler()}
+      to={`/calendar/approval-info/${id}`}
+    >
+      <p>
+        {(scheduleStartDate < props.contentDate ||
+          props.contentDate < scheduleEndDate) &&
+          scheduleStartDate.getMonth() +
+            1 +
+            "月" +
+            scheduleStartDate.getDate() +
+            "日"}
+        {props.schedule.reservation.start.substr(11, 5)}
+        {(scheduleStartDate < props.contentDate ||
+          props.contentDate < scheduleEndDate) && <br />}
+        ~
+        {(scheduleStartDate < props.contentDate ||
+          props.contentDate < scheduleEndDate) &&
+          scheduleEndDate.getMonth() +
+            1 +
+            "月" +
+            scheduleEndDate.getDate() +
+            "日"}
+        {props.schedule.reservation.end.substr(11, 5)}
+      </p>
+      {/* 個人か団体かで表示する名前を変更 */}
+      {props.schedule.reservation.is_group === false ? (
+        <span>
+          {props.schedule.reservation.place.min === 1 &&
+          props.schedule.reservation.place.max === 1 ? null : (
+            <p>
+              {(props.schedule.reservation.place.min === 0.5 &&
+                (props.schedule.reservation.place_number === 0.5
                   ? "半面"
                   : "全面")) ||
-                  (props.schedule.reservation.place.max > 1 &&
-                    props.schedule.reservation.place_number) + "シート"}
-              </p>
-            )}
-            <p>{props.schedule.reservation.leader_name}</p>
-          </span>
-        ) : (
-          <span>
-            {props.schedule.reservation.place.min === 1 &&
-            props.schedule.reservation.place.max === 1 ? null : (
-              <p>
-                {(props.schedule.reservation.place.min === 0.5 &&
-                  (props.schedule.reservation.place_number === 0.5
+                (props.schedule.reservation.place.max > 1 &&
+                  props.schedule.reservation.place_number) + "シート"}
+            </p>
+          )}
+          <p>{props.schedule.reservation.leader_name}</p>
+        </span>
+      ) : (
+        <span>
+          {props.schedule.reservation.place.min === 1 &&
+          props.schedule.reservation.place.max === 1 ? null : (
+            <p>
+              {(props.schedule.reservation.place.min === 0.5 &&
+                (props.schedule.reservation.place_number === 0.5
                   ? "半面"
                   : "全面")) ||
-                  (props.schedule.reservation.place.max > 1 &&
-                    props.schedule.reservation.place_number) + "シート"}
-              </p>
-            )}
-            <p>{props.schedule.reservation.group_name}</p>
-          </span>
-        )}
-      </Link>
-    );
-
+                (props.schedule.reservation.place.max > 1 &&
+                  props.schedule.reservation.place_number) + "シート"}
+            </p>
+          )}
+          <p>{props.schedule.reservation.group_name}</p>
+        </span>
+      )}
+    </Link>
+  );
 };
 
 export default ScheduleBlock;

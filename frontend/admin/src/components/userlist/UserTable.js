@@ -18,6 +18,7 @@ const UserTable = (props) => {
           password={props.password}
           changeData={props.is_staff}
           permission="is_staff"
+          auth={props.auth}
         />
       </td>
       <td>
@@ -27,17 +28,11 @@ const UserTable = (props) => {
           password={props.password}
           changeData={props.is_superuser}
           permission="is_superuser"
+          auth={props.auth}
         />
       </td>
       <td>
-        <UserDetailButton
-          id={props.id}
-          email={props.email}
-          is_staff={props.is_staff}
-          is_superuser={props.is_superuser}
-          last_login={props.last_login}
-          created_at={props.created_at}
-        />
+        <UserDetailButton id={props.id} auth={props.auth} />
       </td>
     </tr>
   );
