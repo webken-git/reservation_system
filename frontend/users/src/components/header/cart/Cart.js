@@ -52,9 +52,27 @@ const Cart = (props) => {
         onRequestClose={() => setPopup({ isOpen: false, message: "" })}
       >
         <p>{popup.message}</p>
-        <p>
-          上のアイコンをクリックすることで、予約手続きを進めることができます。
-        </p>
+        <p>他に予約情報を追加しますか？</p>
+        <p>また、追加せず予約手続きを進めますか？</p>
+        <button
+          type="button"
+          className="back-btn"
+          onClick={() => setPopup({ isOpen: false, message: "" })}
+          style={{ fontSize: "0.8rem" }}
+        >
+          追加する
+        </button>
+        <span className="btn-space"></span>
+        <Link to="/reserve">
+          <button
+            type="button"
+            className="btn"
+            onClick={() => setPopup({ isOpen: false, message: "" })}
+            style={{ width: "10rem", fontSize: "0.8rem" }}
+          >
+            予約手続きを進める
+          </button>
+        </Link>
       </Modal>
     </div>
   );

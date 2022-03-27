@@ -27,6 +27,7 @@ class ReservationSuspensionScheduleFilter(filters.FilterSet):
     model = ReservationSuspensionSchedule
     # フィルタを列挙
     fields = [f.name for f in ReservationSuspensionSchedule._meta.fields]
+    fields += ['places__' + f.name for f in Place._meta.fields]
 
 
 class ApprovalApplicationFilter(filters.FilterSet):

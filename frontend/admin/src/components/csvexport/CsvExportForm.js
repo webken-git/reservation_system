@@ -108,14 +108,11 @@ const CsvExportForm = (props) => {
           </div>
         </div>
         <br />
-        <button type="submit" className="modal-open-btn">
+        <button type="submit" className="btn">
           発行
         </button>
-        <button
-          type="button"
-          onClick={props.modalToggle}
-          className="modal-close-btn"
-        >
+        <span className="btn-space"></span>
+        <button type="button" onClick={props.modalToggle} className="back-btn">
           閉じる
         </button>
       </form>

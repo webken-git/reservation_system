@@ -21,6 +21,8 @@ const TabContainer = () => {
   const [age, setAge] = useSafeState(unmountRef, []);
   const [time, setTime] = useSafeState(unmountRef, []);
   const [, setUsage] = useSafeState(unmountRef, []);
+  const [equipment, setEquipment] = useSafeState(unmountRef, []);
+  const [selectEquipment, setSelectEquipment] = useSafeState(unmountRef, []);
   const [loading, setLoading] = useSafeState(unmountRef, true);
   const setTabState = useSetRecoilState(tabState);
   const tabStates = useRecoilValue(tabState);
@@ -112,11 +114,27 @@ const TabContainer = () => {
       });
   };
 
+  const GetEquipment = () => {
+    axios
+      .get(ReservationUrls.EQUIPMENT)
+      .then((response) => {
+        const equipments = response.data;
+        setEquipment(equipments);
+        setSelectEquipment(
+          equipments.filter(
+            (equipment) => equipment.place[0].name === tabStates.placeName
+          )
+        );
+      })
+      .catch((error) => {});
+  };
+
   useEffect(() => {
     GetPlaceList();
     GetFeeList();
     GetAge();
     GetTime();
+    GetEquipment();
     GetUsage();
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,6 +155,10 @@ const TabContainer = () => {
       setSelectFeeList(divide_feelist[0].data);
       return true;
     }
+    const selectEquipment = equipment.filter((eq) => {
+      return eq.place[0].name === pn;
+    });
+    setSelectEquipment(selectEquipment);
   };
 
   // tabのスタイルをカスタマイズ
@@ -187,6 +209,7 @@ const TabContainer = () => {
           facilityFee={selectFeeList}
           age={age}
           time={time}
+          equipment={selectEquipment}
           CheckAuth={CheckAuth}
         />
       </TabContext>

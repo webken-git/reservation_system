@@ -108,6 +108,14 @@ const ReservationCancel = (props) => {
           {message && <p className="message">{message}</p>}
           <ul>
             <li>
+              <label>利用開始日時：</label>
+              <span>{reservation.reservation.start}</span>
+            </li>
+            <li>
+              <label>利用終了日時：</label>
+              <span>{reservation.reservation.end}</span>
+            </li>
+            <li>
               <label>団体名：</label>
               <span>{reservation.reservation.group_name}</span>
             </li>
@@ -141,14 +149,6 @@ const ReservationCancel = (props) => {
                 </span>
               </li>
             )}
-            <li>
-              <label>利用開始日時：</label>
-              <span>{reservation.reservation.start}</span>
-            </li>
-            <li>
-              <label>利用終了日時：</label>
-              <span>{reservation.reservation.end}</span>
-            </li>
             <li>
               <label>年齢区分：</label>
               {age[0] &&
@@ -215,36 +215,24 @@ const ReservationCancel = (props) => {
               </>
             )}
             {reservation.usage_fee ? (
-              <>
-                <li>
-                  <label>利用料：</label>
-                  <span>{reservation.usage_fee}円</span>
-                </li>
-                <li>
-                  <label>電気料：</label>
-                  <span>{reservation.electric_fee}円</span>
-                </li>
-                <li>
-                  <label>暖房料：</label>
-                  <span>{reservation.heating_fee}円</span>
-                </li>
-              </>
+              <li>
+                <label>利用料：</label>
+                <span>{reservation.usage_fee}円</span>
+              </li>
             ) : (
-              <>
-                <li>
-                  <label>利用料：</label>
-                  <span>まだ金額が確定しておりません</span>
-                </li>
-                <li>
-                  <label>電気料：</label>
-                  <span>まだ金額が確定しておりません</span>
-                </li>
-                <li>
-                  <label>暖房料：</label>
-                  <span>まだ金額が確定しておりません</span>
-                </li>
-              </>
+              <li>
+                <label>利用料：</label>
+                <span>まだ金額が確定しておりません</span>
+              </li>
             )}
+            <li>
+              <label>電気料：</label>
+              <span>{reservation.electric_fee}円</span>
+            </li>
+            <li>
+              <label>暖房料：</label>
+              <span>{reservation.heating_fee}円</span>
+            </li>
             <li>
               <label>ステータス：</label>
               <span>{reservation.approval.name}</span>
@@ -271,7 +259,7 @@ const ReservationCancel = (props) => {
               ) : (
                 <button
                   type="button"
-                  className="cancel-btn"
+                  className="auth-btn"
                   onClick={() => onClick()}
                 >
                   キャンセル

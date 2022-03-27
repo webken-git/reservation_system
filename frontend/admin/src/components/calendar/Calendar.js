@@ -59,7 +59,6 @@ const Calendar = (props) => {
 
   // 検索する施設名を変数に代入
   const filtering = (e) => {
-    console.log("filtering");
     setPlaceFilter(e.target.value);
   };
 

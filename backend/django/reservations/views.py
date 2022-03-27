@@ -1,3 +1,4 @@
+from tracemalloc import start
 from django.db.models.aggregates import Count
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -44,9 +45,10 @@ TIME_OUTS_1MONTH = TIME_OUTS_1DAY * 30
 class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
   queryset = ReservationSuspensionSchedule.objects.all()
   serializer_class = ReservationSuspensionScheduleSerializer
-  # filter_fields = [f.name for f in Reservation._meta.fields]
-  filter_backends = [filters.DjangoFilterBackend]
-  filter_class = ReservationSuspensionScheduleFilter
+  # filter_fields = [f.name for f in ReservationSuspensionSchedule._meta.fields]
+  filter_fields = ['places__' + f.name for f in Place._meta.fields]
+  # filter_backends = [filters.DjangoFilterBackend]
+  # filter_class = ReservationSuspensionScheduleFilter
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
@@ -57,6 +59,14 @@ class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
   # @method_decorator(vary_on_cookie)
   # @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def list(self, request, *args, **kwargs):
+    start = request.query_params.get('start', None)
+    if start:
+      queryset = self.filter_queryset(self.get_queryset())
+      for item in queryset:
+        if str(item.start.strftime('%Y-%m-%d')) <= start <= str(item.end):
+          serializer = self.get_serializer(item)
+          return response.Response([serializer.data])
+      return response.Response([], status=status.HTTP_204_NO_CONTENT)
     return super().list(request, *args, **kwargs)
 
   # @method_decorator(vary_on_cookie)
@@ -113,6 +123,7 @@ class EquipmentViewSet(viewsets.ModelViewSet):
   queryset = Equipment.objects.all()
   serializer_class = EquipmentSerializer
   filter_fields = [f.name for f in Equipment._meta.fields]
+  filter_fields += ['place__' + f.name for f in Place._meta.fields]
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
@@ -153,11 +164,10 @@ class ReservationViewSet(viewsets.ModelViewSet):
       return super().create(request, *args, **kwargs)
     for schedule in schedules:
       if str(schedule.start) <= request.data['start'] <= str(schedule.end):
-        return response.Response({'error': {'入力された日時は予約できません。'}})
+        return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
       elif str(schedule.start) <= request.data['end'] <= str(schedule.end):
-        return response.Response({'error': {'入力された日時は予約できません。'}})
-      else:
-        return super().create(request, *args, **kwargs)
+        return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
+    return super().create(request, *args, **kwargs)
 
   # @method_decorator(vary_on_cookie)
   # @method_decorator(cache_page(TIME_OUTS_5MINUTES))
@@ -195,6 +205,87 @@ class UserInfoViewSet(viewsets.ModelViewSet):
 def extract_date(entity):
   'extracts the starting date from an entity'
   return entity.reservation.start.date()
+
+
+class ReserveCheckViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+  予約手続きの際、予約可能かどうかをチェックするAPI
+  承認済みの予約データと日付が重複している場合は、予約不可
+  """
+  queryset = ApprovalApplication.objects.all()
+  serializer_class = ApprovalApplicationSerializer
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_fields = [f.name for f in ApprovalApplication._meta.fields]
+  filter_fields += ['reservation__' + f.name for f in Reservation._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
+
+  def get_queryset(self):
+    now = str(datetime.datetime.now(pytz.timezone('Asia/Tokyo')).strftime('%Y-%m-%dT%H:%M'))
+    queryset = super().get_queryset()
+    queryset = queryset.filter(approval=2, reservation__start__gte=now)
+    return queryset
+
+  def list(self, request, *args, **kwargs):
+    start = request.query_params.get('reservation__start', None)
+    end = request.query_params.get('reservation__end', None)
+    place = request.query_params.get('reservation__place', None)
+    if start and end and place:
+      queryset = self.get_queryset().filter(reservation__place=place)
+      for entity in queryset:
+        if str(entity.reservation.start - datetime.timedelta(hours=1)) <= start <= str(entity.reservation.end + datetime.timedelta(hours=1)):
+          return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
+        elif str(entity.reservation.start - datetime.timedelta(hours=1)) <= end <= str(entity.reservation.end + datetime.timedelta(hours=1)):
+          return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
+      return super().list(request, *args, **kwargs)
+    else:
+      return super().list(request, *args, **kwargs)
+
+  def retrieve(self, request, *args, **kwargs):
+    return super().retrieve(request, *args, **kwargs)
+
+
+class SuspentionCheckViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+  予約手続きの際、予約可能かどうかをチェックするAPI
+  予約停止期間と日付が重複している場合は、予約不可
+  """
+  queryset = ReservationSuspensionSchedule.objects.all()
+  serializer_class = ReservationSuspensionScheduleSerializer
+  filter_backends = [filters.DjangoFilterBackend]
+  filter_fields = [f.name for f in ReservationSuspensionSchedule._meta.fields]
+  filter_fields += ['places__' + f.name for f in Place._meta.fields]
+  permission_classes = [permissions.ActionBasedPermission]
+  action_permissions = {
+      permissions.IsAdminUser: [],
+      permissions.IsAuthenticated: [],
+      permissions.AllowAny: ['list', 'retrieve']
+  }
+
+  def get_queryset(self):
+    now = str(datetime.datetime.now(pytz.timezone('Asia/Tokyo')).strftime('%Y-%m-%dT%H:%M'))
+    queryset = super().get_queryset()
+    queryset = queryset.filter(start__gte=now)
+    return queryset
+
+  def list(self, request, *args, **kwargs):
+    start = request.query_params.get('start', None)
+    end = request.query_params.get('end', None)
+    place_id = request.query_params.get('places__id', None)
+    if start and end and place_id:
+      queryset = self.get_queryset().filter(places__id=place_id)
+      for entity in queryset:
+        if str(entity.start - datetime.timedelta(hours=1)) <= start <= str(entity.end + datetime.timedelta(hours=1)):
+          return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
+        elif str(entity.start - datetime.timedelta(hours=1)) <= end <= str(entity.end + datetime.timedelta(hours=1)):
+          return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
+      return super().list(request, *args, **kwargs)
+    else:
+      return super().list(request, *args, **kwargs)
 
 
 class ApprovalApplicationViewSet(viewsets.ModelViewSet):
@@ -290,7 +381,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         BASE_DIR = settings.BASE_DIR
         file, file_name = create_new_word(self.request)
         word = '{}/static/documents/docx/{}'.format(BASE_DIR, file)
-        pdf = '{}/static/documents/pdf/{}'.format(BASE_DIR, file).replace('.docx', '.pdf')
+        # pdf = '{}/static/documents/pdf/{}'.format(BASE_DIR, file).replace('.docx', '.pdf')
         # Documentテーブルに登録
         document = Document(
             number=self.request.data['number'],
@@ -319,17 +410,17 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         )
         if request.data['is_issued'] is True:
           # wordファイルをpdfに変換
-          f = open(pdf, 'w')
-          f.close()
+          # f = open(pdf, 'w')
+          # f.close()
           # convert(word, pdf)
           # 承認通知書を発行している場合は、添付ファイルを追加
-          # email.attach_file(pdf)
+          email.attach_file(word)
           email.send()
         else:
           email.send()
       # メール送信後にファイルを削除
-      if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
-        os.remove(pdf)
+      # if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
+        # os.remove(pdf)
         # pythoncom.CoUninitialize()
     elif request.data['approval_id'] == 3:
       # 予約が不承認された場合
@@ -338,7 +429,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         BASE_DIR = settings.BASE_DIR
         file, file_name = create_new_word(self.request)
         word = '{}/static/documents/docx/{}'.format(BASE_DIR, file)
-        pdf = '{}/static/documents/pdf/{}'.format(BASE_DIR, file).replace('.docx', '.pdf')
+        # pdf = '{}/static/documents/pdf/{}'.format(BASE_DIR, file).replace('.docx', '.pdf')
         # Documentテーブルに登録
         document = Document(
             number=self.request.data['number'],
@@ -367,17 +458,17 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
         )
         if request.data['is_issued'] is True:
           # wordファイルをpdfに変換
-          f = open(pdf, 'w')
-          f.close()
+          # f = open(pdf, 'w')
+          # f.close()
           # convert(word, pdf)
           # 承認通知書を発行している場合は、添付ファイルを追加
-          # email.attach_file(pdf)
+          email.attach_file(word)
           email.send()
         else:
           email.send()
       # メール送信後にファイルを削除
-      if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
-        os.remove(pdf)
+      # if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
+        # os.remove(pdf)
         # pythoncom.CoUninitialize()
     elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == "4":
       # 施設側からキャンセルされた場合

@@ -17,7 +17,7 @@ import "./adddata.scss";
 5. 貸出する道具がある場合は、道具を入力
 6. 施設のデータ追加を実行 (api/places)
 7. 時間区分のデータ追加を実行 (api/times)
-8. 料金のデータ追加を実行 (api/facility-fees)
+8. 料金のデータ追加を実行 (api/facility_fees)
 */
 
 const AddData = (props) => {
@@ -28,7 +28,7 @@ const AddData = (props) => {
     register,
     formState: { errors },
   } = useForm({
-    // reValidateMode: "onSubmit",
+    reValidateMode: "onSubmit",
   });
   const [ageData, setAgeData] = useState([]);
   const [isGroup, setIsGroup] = useState(true);
@@ -36,6 +36,7 @@ const AddData = (props) => {
   const [maxValue, setMaxValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const error = Object.values(errors); // エラーがあるかどうか
 
   const getAgeData = async () => {
     const response = await axios.get(ReservationUrls.AGE);
@@ -108,7 +109,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1-1")
+                getValues("normal_fee1_1")
               );
               postFacilityFee(
                 placeId,
@@ -116,7 +117,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1-2")
+                getValues("normal_fee1_2")
               );
               postFacilityFee(
                 placeId,
@@ -124,7 +125,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1-3")
+                getValues("normal_fee1_3")
               );
               postFacilityFee(
                 placeId,
@@ -132,7 +133,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1-4")
+                getValues("normal_fee1_4")
               );
               postFacilityFee(
                 placeId,
@@ -140,7 +141,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1-5")
+                getValues("normal_fee1_5")
               );
               postFacilityFee(
                 placeId,
@@ -148,7 +149,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1-6")
+                getValues("normal_fee1_6")
               );
               postFacilityFee(
                 placeId,
@@ -156,7 +157,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1-7")
+                getValues("normal_fee1_7")
               );
             })
             .catch((error) => {});
@@ -174,7 +175,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee2-1")
+                getValues("normal_fee2_1")
               );
               postFacilityFee(
                 placeId,
@@ -182,7 +183,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee2-2")
+                getValues("normal_fee2_2")
               );
               postFacilityFee(
                 placeId,
@@ -190,7 +191,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee2-3")
+                getValues("normal_fee2_3")
               );
               postFacilityFee(
                 placeId,
@@ -198,7 +199,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee2-4")
+                getValues("normal_fee2_4")
               );
               postFacilityFee(
                 placeId,
@@ -206,7 +207,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee2-5")
+                getValues("normal_fee2_5")
               );
               postFacilityFee(
                 placeId,
@@ -214,7 +215,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee2-6")
+                getValues("normal_fee2_6")
               );
               postFacilityFee(
                 placeId,
@@ -222,7 +223,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee2-7")
+                getValues("normal_fee2_7")
               );
             })
             .catch((error) => {});
@@ -240,7 +241,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee3-1")
+                getValues("normal_fee3_1")
               );
               postFacilityFee(
                 placeId,
@@ -248,7 +249,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee3-2")
+                getValues("normal_fee3_2")
               );
               postFacilityFee(
                 placeId,
@@ -256,7 +257,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee3-3")
+                getValues("normal_fee3_3")
               );
               postFacilityFee(
                 placeId,
@@ -264,7 +265,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee3-4")
+                getValues("normal_fee3_4")
               );
               postFacilityFee(
                 placeId,
@@ -272,7 +273,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee3-5")
+                getValues("normal_fee3_5")
               );
               postFacilityFee(
                 placeId,
@@ -280,7 +281,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee3-6")
+                getValues("normal_fee3_6")
               );
               postFacilityFee(
                 placeId,
@@ -288,7 +289,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee3-7")
+                getValues("normal_fee3_7")
               );
             })
             .catch((error) => {});
@@ -312,7 +313,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee1-1")
+                getValues("private_fee1_1")
               );
               postFacilityFee(
                 placeId,
@@ -320,7 +321,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee1-2")
+                getValues("private_fee1_2")
               );
               postFacilityFee(
                 placeId,
@@ -328,7 +329,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee1-3")
+                getValues("private_fee1_3")
               );
               postFacilityFee(
                 placeId,
@@ -336,7 +337,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee1-4")
+                getValues("private_fee1_4")
               );
               postFacilityFee(
                 placeId,
@@ -344,7 +345,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee1-5")
+                getValues("private_fee1_5")
               );
               postFacilityFee(
                 placeId,
@@ -352,7 +353,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee1-6")
+                getValues("private_fee1_6")
               );
               postFacilityFee(
                 placeId,
@@ -360,7 +361,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee1-7")
+                getValues("private_fee1_7")
               );
             })
             .catch((error) => {});
@@ -378,7 +379,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee2-1")
+                getValues("private_fee2_1")
               );
               postFacilityFee(
                 placeId,
@@ -386,7 +387,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee2-2")
+                getValues("private_fee2_2")
               );
               postFacilityFee(
                 placeId,
@@ -394,7 +395,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee2-3")
+                getValues("private_fee2_3")
               );
               postFacilityFee(
                 placeId,
@@ -402,7 +403,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee2-4")
+                getValues("private_fee2_4")
               );
               postFacilityFee(
                 placeId,
@@ -410,7 +411,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee2-5")
+                getValues("private_fee2_5")
               );
               postFacilityFee(
                 placeId,
@@ -418,7 +419,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee2-6")
+                getValues("private_fee2_6")
               );
               postFacilityFee(
                 placeId,
@@ -426,7 +427,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee2-7")
+                getValues("private_fee2_7")
               );
             })
             .catch((error) => {});
@@ -444,7 +445,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee3-1")
+                getValues("private_fee3_1")
               );
               postFacilityFee(
                 placeId,
@@ -452,7 +453,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee3-2")
+                getValues("private_fee3_2")
               );
               postFacilityFee(
                 placeId,
@@ -460,7 +461,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee3-3")
+                getValues("private_fee3_3")
               );
               postFacilityFee(
                 placeId,
@@ -468,7 +469,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee3-4")
+                getValues("private_fee3_4")
               );
               postFacilityFee(
                 placeId,
@@ -476,7 +477,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee3-5")
+                getValues("private_fee3_5")
               );
               postFacilityFee(
                 placeId,
@@ -484,7 +485,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee3-6")
+                getValues("private_fee3_6")
               );
               postFacilityFee(
                 placeId,
@@ -492,7 +493,7 @@ const AddData = (props) => {
                 timeId,
                 false,
                 "個人使用",
-                getValues("private_fee3-7")
+                getValues("private_fee3_7")
               );
             })
             .catch((error) => {});
@@ -512,7 +513,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee-1")
+                  getValues("group_fee_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -520,7 +521,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee-2")
+                  getValues("group_fee_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -528,7 +529,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee-3")
+                  getValues("group_fee_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -536,7 +537,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee-4")
+                  getValues("group_fee_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -544,7 +545,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee-5")
+                  getValues("group_fee_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -552,7 +553,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee-6")
+                  getValues("group_fee_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -560,7 +561,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee-7")
+                  getValues("group_fee_7")
                 );
               })
               .catch((error) => {});
@@ -578,7 +579,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee-1")
+                  getValues("competition_fee_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -586,7 +587,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee-2")
+                  getValues("competition_fee_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -594,7 +595,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee-3")
+                  getValues("competition_fee_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -602,7 +603,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee-4")
+                  getValues("competition_fee_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -610,7 +611,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee-5")
+                  getValues("competition_fee_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -618,7 +619,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee-6")
+                  getValues("competition_fee_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -626,7 +627,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee-7")
+                  getValues("competition_fee_7")
                 );
               })
               .catch((error) => {});
@@ -644,7 +645,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料あり）",
-                  getValues("commercial_fee-1")
+                  getValues("commercial_fee_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -652,7 +653,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料なし）",
-                  getValues("commercial_fee-2")
+                  getValues("commercial_fee_2")
                 );
               })
               .catch((error) => {});
@@ -672,7 +673,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee1-1")
+                  getValues("group_fee1_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -680,7 +681,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee1-2")
+                  getValues("group_fee1_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -688,7 +689,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee1-3")
+                  getValues("group_fee1_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -696,7 +697,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee1-4")
+                  getValues("group_fee1_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -704,7 +705,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee1-5")
+                  getValues("group_fee1_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -712,7 +713,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee1-6")
+                  getValues("group_fee1_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -720,7 +721,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee1-7")
+                  getValues("group_fee1_7")
                 );
               })
               .catch((error) => {});
@@ -738,7 +739,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee2-1")
+                  getValues("group_fee2_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -746,7 +747,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee2-2")
+                  getValues("group_fee2_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -754,7 +755,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee2-3")
+                  getValues("group_fee2_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -762,7 +763,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee2-4")
+                  getValues("group_fee2_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -770,7 +771,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee2-5")
+                  getValues("group_fee2_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -778,7 +779,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee2-6")
+                  getValues("group_fee2_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -786,7 +787,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee2-7")
+                  getValues("group_fee2_7")
                 );
               })
               .catch((error) => {});
@@ -804,7 +805,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee3-1")
+                  getValues("group_fee3_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -812,7 +813,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee3-2")
+                  getValues("group_fee3_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -820,7 +821,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee3-3")
+                  getValues("group_fee3_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -828,7 +829,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee3-4")
+                  getValues("group_fee3_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -836,7 +837,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee3-5")
+                  getValues("group_fee3_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -844,7 +845,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee3-6")
+                  getValues("group_fee3_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -852,7 +853,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "団体使用",
-                  getValues("group_fee3-7")
+                  getValues("group_fee3_7")
                 );
               })
               .catch((error) => {});
@@ -870,7 +871,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee1-1")
+                  getValues("competition_fee1_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -878,7 +879,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee1-2")
+                  getValues("competition_fee1_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -886,7 +887,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee1-3")
+                  getValues("competition_fee1_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -894,7 +895,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee1-4")
+                  getValues("competition_fee1_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -902,7 +903,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee1-5")
+                  getValues("competition_fee1_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -910,7 +911,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee1-6")
+                  getValues("competition_fee1_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -918,7 +919,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee1-7")
+                  getValues("competition_fee1_7")
                 );
               })
               .catch((error) => {});
@@ -936,7 +937,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee2-1")
+                  getValues("competition_fee2_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -944,7 +945,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee2-2")
+                  getValues("competition_fee2_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -952,7 +953,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee2-3")
+                  getValues("competition_fee2_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -960,7 +961,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee2-4")
+                  getValues("competition_fee2_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -968,7 +969,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee2-5")
+                  getValues("competition_fee2_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -976,7 +977,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee2-6")
+                  getValues("competition_fee2_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -984,7 +985,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee2-7")
+                  getValues("competition_fee2_7")
                 );
               })
               .catch((error) => {});
@@ -1002,7 +1003,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee3-1")
+                  getValues("competition_fee3_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -1010,7 +1011,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee3-2")
+                  getValues("competition_fee3_2")
                 );
                 postFacilityFee(
                   placeId,
@@ -1018,7 +1019,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee3-3")
+                  getValues("competition_fee3_3")
                 );
                 postFacilityFee(
                   placeId,
@@ -1026,7 +1027,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee3-4")
+                  getValues("competition_fee3_4")
                 );
                 postFacilityFee(
                   placeId,
@@ -1034,7 +1035,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee3-5")
+                  getValues("competition_fee3_5")
                 );
                 postFacilityFee(
                   placeId,
@@ -1042,7 +1043,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee3-6")
+                  getValues("competition_fee3_6")
                 );
                 postFacilityFee(
                   placeId,
@@ -1050,7 +1051,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "競技会使用",
-                  getValues("competition_fee3-7")
+                  getValues("competition_fee3_7")
                 );
               })
               .catch((error) => {});
@@ -1068,7 +1069,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料あり）",
-                  getValues("commercial_fee1-1")
+                  getValues("commercial_fee1_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -1076,7 +1077,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料なし）",
-                  getValues("commercial_fee1-2")
+                  getValues("commercial_fee1_2")
                 );
               })
               .catch((error) => {});
@@ -1094,7 +1095,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料あり）",
-                  getValues("commercial_fee2-1")
+                  getValues("commercial_fee2_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -1102,7 +1103,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料なし）",
-                  getValues("commercial_fee2-2")
+                  getValues("commercial_fee2_2")
                 );
               })
               .catch((error) => {});
@@ -1120,7 +1121,7 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料あり）",
-                  getValues("commercial_fee3-1")
+                  getValues("commercial_fee3_1")
                 );
                 postFacilityFee(
                   placeId,
@@ -1128,17 +1129,17 @@ const AddData = (props) => {
                   timeId,
                   true,
                   "営利目的使用（入場料なし）",
-                  getValues("commercial_fee3-2")
+                  getValues("commercial_fee3_2")
                 );
               })
               .catch((error) => {});
           }
         }
-        setMessage("登録しました");
-        setLoading(false);
         setTimeout(() => {
+          setMessage("登録しました");
+          setLoading(false);
           window.location.href = "/data-list";
-        }, 1000);
+        }, 2000);
       })
       .catch((error) => {
         setMessage("登録に失敗しました");
@@ -1155,11 +1156,24 @@ const AddData = (props) => {
         <div className="add-data editfeelist">
           <h2>以下の項目を入力後、登録ボタンを押してください</h2>
           {/* <p className="red">※データ追加後、反映に5分程度掛かります。</p> */}
+          {error.length > 0 && (
+            <>
+              {window.scrollTo(0, 0)}
+
+              <div className="red">
+                <p>
+                  正しく入力されていない項目があります。
+                  <br />
+                  メッセージをご確認の上、もう一度ご入力ください。
+                </p>
+              </div>
+            </>
+          )}
           {message && <p>{message}</p>}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="add-data__form-group">
-              {errors.name && <p className="red">{errors.name.message}</p>}
               <h4>施設名：</h4>
+              {errors.name && <p className="red">{errors.name.message}</p>}
               <input
                 type="text"
                 name="name"
@@ -1171,10 +1185,10 @@ const AddData = (props) => {
               />
             </div>
             <div className="add-data__form-group">
+              <h4>団体料金の有無：</h4>
               {errors.is_group && (
                 <p className="red">{errors.is_group.message}</p>
               )}
-              <h4>団体料金の有無：</h4>
               <div className="add-data__form-group__radio">
                 <div className="add-data__form-group__select">
                   <input
@@ -1205,10 +1219,10 @@ const AddData = (props) => {
               </div>
             </div>
             <div className="add-data__form-group">
+              <h4>「シート数」または「全面/半面」の選択の有無：</h4>
               {errors.is_select && (
                 <p className="red">{errors.is_select.message}</p>
               )}
-              <h4>「シート数」または「全面/半面」の選択の有無：</h4>
               <div className="add-data__form-group__select">
                 <input
                   type="radio"
@@ -1243,12 +1257,12 @@ const AddData = (props) => {
             {isSelect && (
               <>
                 <div className="add-data__form-group">
-                  {errors.min && <p className="red">{errors.min.message}</p>}
                   <h4>予約可能なシート数の最小値：</h4>
+                  {errors.min && <p className="red">{errors.min.message}</p>}
                   <p className="red">
                     ※「半面」の場合は、「0.5」と入力してください。
                   </p>
-                  <p className="red">※このデータは後から変更できません。</p>
+                  <p className="red">※「半面」の場合は後から変更できません。</p>
                   <input
                     type="text"
                     name="min"
@@ -1269,12 +1283,12 @@ const AddData = (props) => {
                   />
                 </div>
                 <div className="add-data__form-group">
-                  {errors.max && <p className="red">{errors.max.message}</p>}
                   <h4>予約可能なシート数の最大値：</h4>
+                  {errors.max && <p className="red">{errors.max.message}</p>}
                   <p className="red">
                     ※「全面」の場合は、「1」と入力してください。
                   </p>
-                  <p className="red">※このデータは後から変更できません。</p>
+                  <p className="red">※「全面」の場合は後から変更できません。</p>
                   <input
                     type="text"
                     name="max"
@@ -1305,11 +1319,14 @@ const AddData = (props) => {
             )}
             <h4>料金：</h4>
             <p className="red">※時間帯の部分は後から変更できません。</p>
+            <p className="red">
+              ※赤枠で囲まれている項目がある場合は、正しく入力されているか確認してください。
+            </p>
             {isGroup || (
               <div className="add-data__form-group">
-                {errors.normal_fee && (
+                {/* {errors.normal_fee && (
                   <p className="red">{errors.normal_fee.message}</p>
-                )}
+                )} */}
                 <table>
                   <thead>
                     <tr>
@@ -1325,7 +1342,14 @@ const AddData = (props) => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_time1 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
                           name="normal_time1"
@@ -1335,13 +1359,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee1_1 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee1-1"
+                          name="normal_fee1_1"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee1-1", {
+                          {...register("normal_fee1_1", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1350,13 +1381,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee1_2 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee1-2"
+                          name="normal_fee1_2"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee1-2", {
+                          {...register("normal_fee1_2", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1365,13 +1403,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee1_3 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee1-3"
+                          name="normal_fee1_3"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee1-3", {
+                          {...register("normal_fee1_3", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1380,13 +1425,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee1_4 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee1-4"
+                          name="normal_fee1_4"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee1-4", {
+                          {...register("normal_fee1_4", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1395,13 +1447,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee1_5 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee1-5"
+                          name="normal_fee1_5"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee1-5", {
+                          {...register("normal_fee1_5", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1410,13 +1469,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee1_6 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee1-6"
+                          name="normal_fee1_6"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee1-6", {
+                          {...register("normal_fee1_6", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1425,13 +1491,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee1_7 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee1-7"
+                          name="normal_fee1_7"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee1-7", {
+                          {...register("normal_fee1_7", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1442,7 +1515,14 @@ const AddData = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_time2 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
                           name="normal_time2"
@@ -1452,13 +1532,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee2_1 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee2-1"
+                          name="normal_fee2_1"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee2-1", {
+                          {...register("normal_fee2_1", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1467,13 +1554,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee2_2 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee2-2"
+                          name="normal_fee2_2"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee2-2", {
+                          {...register("normal_fee2_2", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1482,13 +1576,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee2_3 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee2-3"
+                          name="normal_fee2_3"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee2-3", {
+                          {...register("normal_fee2_3", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1497,13 +1598,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee2_4 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee2-4"
+                          name="normal_fee2_4"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee2-4", {
+                          {...register("normal_fee2_4", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1512,13 +1620,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee2_5 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee2-5"
+                          name="normal_fee2_5"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee2-5", {
+                          {...register("normal_fee2_5", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1527,13 +1642,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee2_6 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee2-6"
+                          name="normal_fee2_6"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee2-6", {
+                          {...register("normal_fee2_6", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1542,13 +1664,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee2_7 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee2-7"
+                          name="normal_fee2_7"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee2-7", {
+                          {...register("normal_fee2_7", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1559,7 +1688,14 @@ const AddData = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_time3 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
                           name="normal_time3"
@@ -1569,13 +1705,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee3_1 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee3-1"
+                          name="normal_fee3_1"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee3-1", {
+                          {...register("normal_fee3_1", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1584,13 +1727,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee3_2 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee3-2"
+                          name="normal_fee3_2"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee3-2", {
+                          {...register("normal_fee3_2", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1599,13 +1749,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee3_3 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee3-3"
+                          name="normal_fee3_3"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee3-3", {
+                          {...register("normal_fee3_3", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1614,13 +1771,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee3_4 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee3-4"
+                          name="normal_fee3_4"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee3-4", {
+                          {...register("normal_fee3_4", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1629,13 +1793,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee3_5 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee3-5"
+                          name="normal_fee3_5"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee3-5", {
+                          {...register("normal_fee3_5", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1644,13 +1815,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee3_6 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee3-6"
+                          name="normal_fee3_6"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee3-6", {
+                          {...register("normal_fee3_6", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1659,13 +1837,20 @@ const AddData = (props) => {
                           })}
                         />
                       </td>
-                      <td>
+                      <td
+                        style={
+                          errors.normal_fee3_7 && {
+                            borderStyle: "double",
+                            borderColor: "#d32f2f",
+                          }
+                        }
+                      >
                         <input
                           type="text"
-                          name="normal_fee3-7"
+                          name="normal_fee3_7"
                           inputMode="numeric"
                           autoComplete="off"
-                          {...register("normal_fee3-7", {
+                          {...register("normal_fee3_7", {
                             required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
@@ -1698,7 +1883,14 @@ const AddData = (props) => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>
+                        <td
+                          style={
+                            errors.private_time1 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
                             name="private_time1"
@@ -1708,13 +1900,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee1_1 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee1-1"
+                            name="private_fee1_1"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee1-1", {
+                            {...register("private_fee1_1", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1723,13 +1922,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee1_2 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee1-2"
+                            name="private_fee1_2"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee1-2", {
+                            {...register("private_fee1_2", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1738,13 +1944,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee1_3 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee1-3"
+                            name="private_fee1_3"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee1-3", {
+                            {...register("private_fee1_3", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1753,13 +1966,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee1_4 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee1-4"
+                            name="private_fee1_4"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee1-4", {
+                            {...register("private_fee1_4", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1768,13 +1988,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee1_5 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee1-5"
+                            name="private_fee1_5"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee1-5", {
+                            {...register("private_fee1_5", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1783,13 +2010,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee1_6 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee1-6"
+                            name="private_fee1_6"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee1-6", {
+                            {...register("private_fee1_6", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1798,13 +2032,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee1_7 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee1-7"
+                            name="private_fee1_7"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee1-7", {
+                            {...register("private_fee1_7", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1815,7 +2056,14 @@ const AddData = (props) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td
+                          style={
+                            errors.private_time2 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
                             name="private_time2"
@@ -1825,13 +2073,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee2_1 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee2-1"
+                            name="private_fee2_1"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee2-1", {
+                            {...register("private_fee2_1", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1840,13 +2095,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee2_2 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee2-2"
+                            name="private_fee2_2"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee2-2", {
+                            {...register("private_fee2_2", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1855,13 +2117,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee2_3 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee2-3"
+                            name="private_fee2_3"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee2-3", {
+                            {...register("private_fee2_3", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1870,13 +2139,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee2_4 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee2-4"
+                            name="private_fee2_4"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee2-4", {
+                            {...register("private_fee2_4", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1885,13 +2161,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee2_5 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee2-5"
+                            name="private_fee2_5"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee2-5", {
+                            {...register("private_fee2_5", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1900,13 +2183,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee2_6 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee2-6"
+                            name="private_fee2_6"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee2-6", {
+                            {...register("private_fee2_6", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1915,13 +2205,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee2_7 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee2-7"
+                            name="private_fee2_7"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee2-7", {
+                            {...register("private_fee2_7", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1932,7 +2229,14 @@ const AddData = (props) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td
+                          style={
+                            errors.private_time3 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
                             name="private_time3"
@@ -1942,13 +2246,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee3_1 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee3-1"
+                            name="private_fee3_1"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee3-1", {
+                            {...register("private_fee3_1", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1957,13 +2268,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee3_2 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee3-2"
+                            name="private_fee3_2"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee3-2", {
+                            {...register("private_fee3_2", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1972,13 +2290,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee3_3 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee3-3"
+                            name="private_fee3_3"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee3-3", {
+                            {...register("private_fee3_3", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -1987,13 +2312,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee3_4 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee3-4"
+                            name="private_fee3_4"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee3-4", {
+                            {...register("private_fee3_4", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -2002,13 +2334,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee3_5 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee3-5"
+                            name="private_fee3_5"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee3-5", {
+                            {...register("private_fee3_5", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -2017,13 +2356,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee3_6 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee3-6"
+                            name="private_fee3_6"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee3-6", {
+                            {...register("private_fee3_6", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -2032,13 +2378,20 @@ const AddData = (props) => {
                             })}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={
+                            errors.private_fee3_7 && {
+                              borderStyle: "double",
+                              borderColor: "#d32f2f",
+                            }
+                          }
+                        >
                           <input
                             type="text"
-                            name="private_fee3-7"
+                            name="private_fee3_7"
                             inputMode="numeric"
                             autoComplete="off"
-                            {...register("private_fee3-7", {
+                            {...register("private_fee3_7", {
                               required: "※必須項目です",
                               pattern: {
                                 value: /^[0-9]+$/,
@@ -2070,7 +2423,14 @@ const AddData = (props) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.group_time && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="group_time"
@@ -2080,13 +2440,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee-1"
+                                name="group_fee_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee-1", {
+                                {...register("group_fee_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2095,13 +2462,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee-2"
+                                name="group_fee_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee-2", {
+                                {...register("group_fee_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2110,13 +2484,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee-3"
+                                name="group_fee_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee-3", {
+                                {...register("group_fee_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2125,13 +2506,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee-4"
+                                name="group_fee_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee-4", {
+                                {...register("group_fee_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2140,13 +2528,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee-5"
+                                name="group_fee_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee-5", {
+                                {...register("group_fee_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2155,13 +2550,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee-6"
+                                name="group_fee_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee-6", {
+                                {...register("group_fee_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2170,13 +2572,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee-7"
+                                name="group_fee_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee-7", {
+                                {...register("group_fee_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2206,7 +2615,14 @@ const AddData = (props) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_time && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="competition_time"
@@ -2216,13 +2632,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee-1"
+                                name="competition_fee_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee-1", {
+                                {...register("competition_fee_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2231,13 +2654,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee-2"
+                                name="competition_fee_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee-2", {
+                                {...register("competition_fee_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2246,13 +2676,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee-3"
+                                name="competition_fee_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee-3", {
+                                {...register("competition_fee_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2261,13 +2698,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee-4"
+                                name="competition_fee_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee-4", {
+                                {...register("competition_fee_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2276,13 +2720,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee-5"
+                                name="competition_fee_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee-5", {
+                                {...register("competition_fee_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2291,13 +2742,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee-6"
+                                name="competition_fee_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee-6", {
+                                {...register("competition_fee_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2306,13 +2764,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee-7"
+                                name="competition_fee_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee-7", {
+                                {...register("competition_fee_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2337,7 +2802,14 @@ const AddData = (props) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_time && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="commercial_time"
@@ -2347,13 +2819,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee-1"
+                                name="commercial_fee_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee-1", {
+                                {...register("commercial_fee_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2362,13 +2841,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee-2"
+                                name="commercial_fee_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee-2", {
+                                {...register("commercial_fee_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2402,7 +2888,14 @@ const AddData = (props) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.group_time1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="group_time1"
@@ -2412,13 +2905,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee1_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee1-1"
+                                name="group_fee1_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee1-1", {
+                                {...register("group_fee1_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2427,13 +2927,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee1_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee1-2"
+                                name="group_fee1_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee1-2", {
+                                {...register("group_fee1_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2442,13 +2949,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee1_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee1-3"
+                                name="group_fee1_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee1-3", {
+                                {...register("group_fee1_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2457,13 +2971,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee1_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee1-4"
+                                name="group_fee1_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee1-4", {
+                                {...register("group_fee1_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2472,13 +2993,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee1_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee1-5"
+                                name="group_fee1_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee1-5", {
+                                {...register("group_fee1_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2487,13 +3015,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee1_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee1-6"
+                                name="group_fee1_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee1-6", {
+                                {...register("group_fee1_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2502,13 +3037,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee1_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee1-7"
+                                name="group_fee1_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee1-7", {
+                                {...register("group_fee1_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2519,7 +3061,14 @@ const AddData = (props) => {
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.group_time2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="group_time2"
@@ -2529,13 +3078,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee2_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee2-1"
+                                name="group_fee2_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee2-1", {
+                                {...register("group_fee2_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2544,13 +3100,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee2_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee2-2"
+                                name="group_fee2_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee2-2", {
+                                {...register("group_fee2_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2559,13 +3122,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee2_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee2-3"
+                                name="group_fee2_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee2-3", {
+                                {...register("group_fee2_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2574,13 +3144,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee2_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee2-4"
+                                name="group_fee2_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee2-4", {
+                                {...register("group_fee2_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2589,13 +3166,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee2_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee2-5"
+                                name="group_fee2_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee2-5", {
+                                {...register("group_fee2_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2604,13 +3188,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee2_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee2-6"
+                                name="group_fee2_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee2-6", {
+                                {...register("group_fee2_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2619,13 +3210,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee2_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee2-7"
+                                name="group_fee2_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee2-7", {
+                                {...register("group_fee2_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2636,7 +3234,14 @@ const AddData = (props) => {
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.group_time3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="group_time3"
@@ -2646,13 +3251,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee3_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee3-1"
+                                name="group_fee3_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee3-1", {
+                                {...register("group_fee3_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2661,13 +3273,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee3_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee3-2"
+                                name="group_fee3_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee3-2", {
+                                {...register("group_fee3_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2676,13 +3295,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee3_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee3-3"
+                                name="group_fee3_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee3-3", {
+                                {...register("group_fee3_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2691,13 +3317,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee3_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee3-4"
+                                name="group_fee3_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee3-4", {
+                                {...register("group_fee3_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2706,13 +3339,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee3_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee3-5"
+                                name="group_fee3_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee3-5", {
+                                {...register("group_fee3_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2721,13 +3361,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee3_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee3-6"
+                                name="group_fee3_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee3-6", {
+                                {...register("group_fee3_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2736,13 +3383,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.group_fee3_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="group_fee3-7"
+                                name="group_fee3_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("group_fee3-7", {
+                                {...register("group_fee3_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2772,7 +3426,14 @@ const AddData = (props) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_time1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="competition_time1"
@@ -2782,13 +3443,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee1_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee1-1"
+                                name="competition_fee1_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee1-1", {
+                                {...register("competition_fee1_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2797,13 +3465,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee1_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee1-2"
+                                name="competition_fee1_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee1-2", {
+                                {...register("competition_fee1_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2812,13 +3487,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee1_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee1-3"
+                                name="competition_fee1_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee1-3", {
+                                {...register("competition_fee1_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2827,13 +3509,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee1_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee1-4"
+                                name="competition_fee1_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee1-4", {
+                                {...register("competition_fee1_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2842,13 +3531,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee1_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee1-5"
+                                name="competition_fee1_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee1-5", {
+                                {...register("competition_fee1_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2857,13 +3553,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee1_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee1-6"
+                                name="competition_fee1_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee1-6", {
+                                {...register("competition_fee1_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2872,13 +3575,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee1_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee1-7"
+                                name="competition_fee1_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee1-7", {
+                                {...register("competition_fee1_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2889,7 +3599,14 @@ const AddData = (props) => {
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_time2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="competition_time2"
@@ -2899,13 +3616,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee2_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee2-1"
+                                name="competition_fee2_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee2-1", {
+                                {...register("competition_fee2_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2914,13 +3638,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee2_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee2-2"
+                                name="competition_fee2_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee2-2", {
+                                {...register("competition_fee2_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2929,13 +3660,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee2_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee2-3"
+                                name="competition_fee2_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee2-3", {
+                                {...register("competition_fee2_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2944,13 +3682,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee2_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee2-4"
+                                name="competition_fee2_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee2-4", {
+                                {...register("competition_fee2_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2959,13 +3704,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee2_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee2-5"
+                                name="competition_fee2_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee2-5", {
+                                {...register("competition_fee2_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2974,13 +3726,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee2_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee2-6"
+                                name="competition_fee2_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee2-6", {
+                                {...register("competition_fee2_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -2989,13 +3748,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee2_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee2-7"
+                                name="competition_fee2_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee2-7", {
+                                {...register("competition_fee2_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3006,7 +3772,14 @@ const AddData = (props) => {
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_time3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="competition_time3"
@@ -3016,13 +3789,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee3_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee3-1"
+                                name="competition_fee3_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee3-1", {
+                                {...register("competition_fee3_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3031,13 +3811,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee3_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee3-2"
+                                name="competition_fee3_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee3-2", {
+                                {...register("competition_fee3_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3046,13 +3833,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee3_3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee3-3"
+                                name="competition_fee3_3"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee3-3", {
+                                {...register("competition_fee3_3", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3061,13 +3855,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee3_4 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee3-4"
+                                name="competition_fee3_4"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee3-4", {
+                                {...register("competition_fee3_4", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3076,13 +3877,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee3_5 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee3-5"
+                                name="competition_fee3_5"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee3-5", {
+                                {...register("competition_fee3_5", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3091,13 +3899,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee3_6 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee3-6"
+                                name="competition_fee3_6"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee3-6", {
+                                {...register("competition_fee3_6", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3106,13 +3921,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.competition_fee3_7 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="competition_fee3-7"
+                                name="competition_fee3_7"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("competition_fee3-7", {
+                                {...register("competition_fee3_7", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3137,7 +3959,14 @@ const AddData = (props) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_time1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="commercial_time1"
@@ -3147,13 +3976,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee1_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee1-1"
+                                name="commercial_fee1_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee1-1", {
+                                {...register("commercial_fee1_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3162,13 +3998,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee1_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee1-2"
+                                name="commercial_fee1_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee1-2", {
+                                {...register("commercial_fee1_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3179,7 +4022,14 @@ const AddData = (props) => {
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_time2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="commercial_time2"
@@ -3189,13 +4039,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee2_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee2-1"
+                                name="commercial_fee2_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee2-1", {
+                                {...register("commercial_fee2_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3204,13 +4061,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee2_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee2-2"
+                                name="commercial_fee2_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee2-2", {
+                                {...register("commercial_fee2_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3221,7 +4085,14 @@ const AddData = (props) => {
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_time3 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
                                 name="commercial_time3"
@@ -3231,13 +4102,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee3_1 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee3-1"
+                                name="commercial_fee3_1"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee3-1", {
+                                {...register("commercial_fee3_1", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,
@@ -3246,13 +4124,20 @@ const AddData = (props) => {
                                 })}
                               />
                             </td>
-                            <td>
+                            <td
+                              style={
+                                errors.commercial_fee3_2 && {
+                                  borderStyle: "double",
+                                  borderColor: "#d32f2f",
+                                }
+                              }
+                            >
                               <input
                                 type="text"
-                                name="commercial_fee3-2"
+                                name="commercial_fee3_2"
                                 inputMode="numeric"
                                 autoComplete="off"
-                                {...register("commercial_fee3-2", {
+                                {...register("commercial_fee3_2", {
                                   required: "※必須項目です",
                                   pattern: {
                                     value: /^[0-9]+$/,

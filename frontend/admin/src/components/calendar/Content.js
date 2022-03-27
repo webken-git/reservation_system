@@ -5,12 +5,15 @@ import { v4 as uuidv4 } from "uuid";
 import { ReservationUrls } from "../../utils/reservationUrls";
 import ScheduleBlock from "./ScheduleBlock";
 import SuspensionBlock from "./SuspensionBlock";
+import useSafeState from "../../hooks/useSafeState";
+import useUnmountRef from "../../hooks/useUnmountRef";
 // import { fil } from 'date-fns/locale';
 
 const Content = (props) => {
+  const unmountRef = useUnmountRef();
   const [scheduleList, setScheduleList] = useState([]);
   const [contentDate, setContentDate] = useState(new Date());
-  const [suspensions, setSuspensions] = useState([]);
+  const [suspensions, setSuspensions] = useSafeState(unmountRef, []);
   // const [ stringContentDate, setStringContentDate ] = useState("");
   const date = props.date;
   const cookies = props.cookies;
@@ -35,6 +38,7 @@ const Content = (props) => {
       .get(ReservationUrls.SUSPENSION, {
         params: {
           start: year + "-" + month + "-" + day,
+          places__name: placeFilter,
         },
       })
       .then((res) => {
@@ -117,15 +121,16 @@ const Content = (props) => {
         <div className="content-div"></div>
       </div>
       <div className="schedule-block-column">
-        {suspensions.map((suspension, index) => {
-          return (
-            <SuspensionBlock
-              suspension={suspension}
-              placeFilter={placeFilter}
-              key={index}
-            />
-          );
-        })}
+        {suspensions &&
+          suspensions.map((suspension, index) => {
+            return (
+              <SuspensionBlock
+                suspension={suspension}
+                placeFilter={placeFilter}
+                key={index}
+              />
+            );
+          })}
         {scheduleList.map((schedule, index) => {
           return (
             <ScheduleBlock

@@ -10,10 +10,10 @@ const ReservationDeleteForm = (props) => {
   } = useForm();
 
   const onSubmit = (e) => {
-    const start1 = `${e.start1} 00:00:00`;
-    const start2 = `${e.start2} 00:00:00`;
-    props.setStart1(start1);
-    props.setStart2(start2);
+    // const start1 = `${e.start1} 00:00:00`;
+    // const start2 = `${e.start2} 00:00:00`;
+    props.setStart1(e.start1);
+    props.setStart2(e.start2);
     props.changeState("complete");
   };
 
@@ -30,7 +30,7 @@ const ReservationDeleteForm = (props) => {
         <div>
           <label>期間1：</label>
           <input
-            type="date"
+            type="datetime-local"
             name="start1"
             {...register("start1", {
               required: "※必須項目です",
@@ -40,7 +40,7 @@ const ReservationDeleteForm = (props) => {
         <div>
           <label>期間2：</label>
           <input
-            type="date"
+            type="datetime-local"
             name="start2"
             {...register("start2", {
               validate: (value) => {
@@ -58,11 +58,8 @@ const ReservationDeleteForm = (props) => {
         <button type="submit" className="approval-btn">
           削除
         </button>
-        <button
-          type="button"
-          onClick={props.modalToggle}
-          className="modal-close-btn"
-        >
+        <span className="btn-space"></span>
+        <button type="button" onClick={props.modalToggle} className="back-btn">
           閉じる
         </button>
       </form>

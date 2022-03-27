@@ -314,6 +314,7 @@ const Calendar = (props) => {
                     placeName={placeName}
                     calendarType={calendarType}
                     change={change}
+                    placeId={placeId}
                   />
                 );
               })
@@ -324,6 +325,7 @@ const Calendar = (props) => {
                 placeName={placeName}
                 calendarType={calendarType}
                 change={change}
+                placeId={placeId}
               />
             )}
           </div>

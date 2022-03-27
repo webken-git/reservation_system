@@ -166,7 +166,7 @@ SESSION_COOKIE_AGE = 86400  # 1日経ったら強制的にセッションタイ�
 # DRF settings
 
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M",
     # 'DEFAULT_PAGINATION_CLASS': 'reservations.funcs.paginations.CustomPagination',
     # 'PAGE_SIZE': 20,
 

@@ -112,6 +112,7 @@ const ReserveStopSetting = () => {
               <ul>
                 <li>
                   <div>
+                    <p>開始日時：</p>
                     <FormControl error>
                       <FormHelperText>
                         {errors.StartDate && errors.StartDate.message}
@@ -126,7 +127,6 @@ const ReserveStopSetting = () => {
                           // rules={{ required: "入力" }}
                           render={({ field }) => (
                             <div>
-                              <p>開始日時：</p>
                               <LocalizationProvider
                                 dateAdapter={DateAdapter}
                                 locale={ja}
@@ -210,6 +210,7 @@ const ReserveStopSetting = () => {
                 </li>
                 <li>
                   <div>
+                    <p>終了日時</p>
                     <FormControl error>
                       <FormHelperText>
                         {errors.EndDate && errors.EndDate.message}
@@ -223,7 +224,6 @@ const ReserveStopSetting = () => {
                           }
                           render={({ field }) => (
                             <div>
-                              <p>終了日時</p>
                               <LocalizationProvider
                                 dateAdapter={DateAdapter}
                                 locale={ja}

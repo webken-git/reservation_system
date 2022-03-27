@@ -20,4 +20,6 @@ export const ReservationUrls = {
   RESERVATION_DELETE: `${ROOT_URL}/api/reservation-lists/1/`,
   SUSPENSION: `${ROOT_URL}/api/reservation-suspension-schedules/`,
   APPROVALS: `${ROOT_URL}/api/approvals/`,
+  RESERVE_CHECK: `${ROOT_URL}/api/reserve-check/`,
+  SUSPENSION_CHECK: `${ROOT_URL}/api/suspention-check/`,
 };

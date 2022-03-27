@@ -31,7 +31,6 @@ const ApprovalInfo = (props) => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setLoading(false);
       });
   };
@@ -51,7 +50,6 @@ const ApprovalInfo = (props) => {
       .get(`${ReservationUrls.AGE_CATEGORY}?reservation=${reservationId}`)
       .then((res) => {
         setAge(res.data);
-        console.log(res.data[0]);
       })
       .catch((err) => {});
   };

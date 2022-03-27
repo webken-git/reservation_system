@@ -18,10 +18,10 @@ const TabContent = (props) => {
 
   return props.place.map((place, p_id) => {
     const isGroup = props.facilityFee.filter((fld) => {
-      return fld.place.name === place.name && fld.is_group === true;
+      return fld.place.name === place.name && fld.purpose === "その他";
     });
 
-    if (isGroup.length === 0) {
+    if (isGroup.length > 0) {
       return (
         <TabPanel key={p_id} value={place.id.toString()}>
           <div className="tab-content">

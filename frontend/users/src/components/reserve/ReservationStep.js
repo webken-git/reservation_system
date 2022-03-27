@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { useRecoilState, useRecoilValue } from "recoil";
-import "./Content.scss";
-// import { useFetch } from "../../hooks/useFetch";
 import { formData, stepValue } from "../../recoil/form/atom";
 import { ReservationList } from "./ReservationList";
 import { PersonalForm } from "./PersonalForm";
@@ -17,15 +15,12 @@ export const ReservationStep = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [step, setStep] = useRecoilState(stepValue);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const Step1 = () => {
     setActiveStep(step);
     setStep(1);
     scrollToTop();
   };
-
-  // const Step3 = () => {
-  //   setActiveStep(3);
-  // };
 
   const scrollToTop = () => {
     // 画面の一番上までスクロール
@@ -106,10 +101,11 @@ export const ReservationStep = () => {
             <br />
             入力内容を確認後、「予約する」ボタンを押してください。
           </h2>
+          <p className="red">{error}</p>
         </Grid>
         <PersonalData />
         <ReservationList />
-        <ReservationPost setLoading={setLoading} />
+        <ReservationPost setLoading={setLoading} setError={setError} />
       </div>
       <div style={{ display: activeStep === 3 ? "" : "none" }}>
         <Grid container alignItems="center" justifyContent={"center"}>

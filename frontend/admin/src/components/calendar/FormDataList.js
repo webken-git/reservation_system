@@ -31,8 +31,8 @@ export const nonprofit = [
 ];
 export const timetable = [
   {
-    label: "9:00",
-    value: "9:00",
+    label: "09:00",
+    value: "09:00",
     id: "0",
   },
   {

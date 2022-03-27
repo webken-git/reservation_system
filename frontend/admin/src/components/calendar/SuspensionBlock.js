@@ -8,7 +8,7 @@ const SuspensionBlock = (props) => {
   let placeFlag = false;
 
   // console.log(suspension)
-  // console.log(hour)
+  // console.log(hour);
   // console.log(endHour)
 
   suspension.places.map((place, index) =>
@@ -20,8 +20,8 @@ const SuspensionBlock = (props) => {
   const styleGenerator = useCallback(
     (top, height) => ({
       backgroundColor: backgroundColor,
-      position: "absolute",
-      zIndex: "10",
+      // position: "absolute",
+      // zIndex: "5",
       width: "100%",
       top: top ? top + "vh" : "0vh",
       height: height ? height + "vh" : "0vh",

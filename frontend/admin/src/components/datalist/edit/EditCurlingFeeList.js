@@ -17,7 +17,6 @@ const EditCurlingFeeList = (props) => {
   let timeList = []; // 時間区分を格納する配列
   let changefeeData = []; // 変更したデータを格納する配列
   let changeEquipmentfeeData = []; //変更した用具料金を格納する配列
-  let changeplaceName = []; // 変更した場所データを格納する配列
   let changeEquipmentData = []; // 変更した用具データを格納する配列
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -133,18 +132,6 @@ const EditCurlingFeeList = (props) => {
     );
   };
 
-  //場所の名前
-  const onChangePlaceName = (e) => {
-    changeplaceName.push({
-      place_id: placeData.id,
-      inputName: e.target.name,
-    });
-    changeplaceName = changeplaceName.filter(
-      (place, index, self) =>
-        index === self.findIndex((f) => f.place_id === place.place_id)
-    );
-  };
-
   // 更新する用具データ
   const onChangeEquipment = (e, id) => {
     changeEquipmentData.push({
@@ -219,20 +206,19 @@ const EditCurlingFeeList = (props) => {
         });
       return fee;
     });
-    //場所の名前の更新
-    changeplaceName.map((place) => {
-      axios
-        .patch(`${ReservationUrls.PLACE}${placeData.id}/`, {
-          name: getValues(place.inputName),
-        })
-        .then((res) => {
-          // console.log("Success");
-        })
-        .catch((err) => {
-          // console.log(err);
-        });
-      return place;
-    });
+    //施設データの更新
+    axios
+      .patch(`${ReservationUrls.PLACE}${placeData.id}/`, {
+        name: getValues("name"),
+        min: getValues("min"),
+        max: getValues("max"),
+      })
+      .then((res) => {
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
     // 用具データを更新
     changeEquipmentData.map((equipment) => {
       axios
@@ -414,7 +400,7 @@ const EditCurlingFeeList = (props) => {
   };
 
   // リストに値が入っているか確認
-  if (timeList === 0) {
+  if (timeList.length === 0) {
     return <Loading />;
   } else {
     return (
@@ -430,26 +416,68 @@ const EditCurlingFeeList = (props) => {
             <br />
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* {errors && <p className="red">入力内容に誤りがあります。</p>} */}
-            {/* <p className="red">
-              ※施設名を変更した場合、反映に5分程度掛かります。
-            </p> */}
-            <h4>施設名：</h4>
-            {errors.place && <p className="red">{errors.place.message}</p>}
-            <input
-              type="text"
-              name="place"
-              className="place-name"
-              defaultValue={placeData.name}
-              {...register(`place`, {
-                required: "必須項目です",
-                pattern: {
-                  value: String,
-                  message: "入力してください",
-                },
-              })}
-              onChange={(e) => onChangePlaceName(e)}
-            />
+            <div className="form-group">
+              <h4>施設名：</h4>
+              {errors.name && <p className="red">{errors.name.message}</p>}
+              <input
+                type="text"
+                name="name"
+                className="place-name"
+                defaultValue={placeData.name}
+                {...register(`name`, {
+                  required: "※必須項目です",
+                  pattern: {
+                    value: String,
+                    message: "入力してください",
+                  },
+                })}
+              />
+            </div>
+            <div className="form-group">
+              <h4>予約可能なシート数の最小値：</h4>
+              {errors.min && <p className="red">{errors.min.message}</p>}
+              <input
+                type="text"
+                name="min"
+                className="place-name"
+                inputMode="numeric"
+                defaultValue={placeData.min}
+                {...register(`min`, {
+                  required: "※必須項目です",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "※半角数字で入力してください",
+                  },
+                })}
+              />
+            </div>
+            <div className="form-group">
+              <h4>予約可能なシート数の最大値：</h4>
+              {errors.max && <p className="red">{errors.max.message}</p>}
+              <input
+                type="text"
+                name="max"
+                className="place-name"
+                inputMode="numeric"
+                defaultValue={placeData.max}
+                {...register("max", {
+                  required: "※必須項目です",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "※半角数字で入力してください",
+                  },
+                  min: {
+                    value: 1,
+                    message: "※1以上の値を入力してください",
+                  },
+                  validate: (value) => {
+                    if (getValues("min") > value) {
+                      return "※最小値より大きい値を入力してください";
+                    }
+                  },
+                })}
+              />
+            </div>
             <h2>個人使用</h2>
             <table>
               <thead>
@@ -472,6 +500,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee1-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -481,10 +510,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`fee1-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -506,6 +535,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee2-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -515,10 +545,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`fee2-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -540,6 +570,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee3-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -549,10 +580,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`fee3-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -574,6 +605,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee4-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -583,10 +615,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`fee4-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -608,6 +640,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee5-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -617,10 +650,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`fee5-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -642,6 +675,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee6-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -651,10 +685,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`fee6-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -676,6 +710,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee7-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -685,10 +720,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`fee7-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -732,6 +767,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`groupfee1-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -742,10 +778,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`groupfee1-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -768,6 +804,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`groupfee2-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -778,10 +815,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`groupfee2-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -804,6 +841,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`groupfee3-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -814,10 +852,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`groupfee3-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -840,6 +878,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`groupfee4-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -850,10 +889,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`groupfee4-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -876,6 +915,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`groupfee5-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -886,10 +926,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`groupfee5-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -912,6 +952,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`groupfee6-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -922,10 +963,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`groupfee6-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -948,6 +989,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`groupfee7-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -958,10 +1000,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`groupfee7-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -1006,6 +1048,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`competitionfee1-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1016,10 +1059,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`competitionfee1-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -1042,6 +1085,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`competitionfee2-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1052,10 +1096,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`competitionfee2-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -1078,6 +1122,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`competitionfee3-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1088,10 +1133,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`competitionfee3-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -1114,6 +1159,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`competitionfee4-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1124,10 +1170,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`competitionfee4-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -1150,6 +1196,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`competitionfee5-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1160,10 +1207,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`competitionfee5-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {
@@ -1186,6 +1233,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`competitionfee6-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1196,10 +1244,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`competitionfee6-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -1222,6 +1270,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`competitionfee7-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1232,10 +1281,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`competitionfee7-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -1275,6 +1324,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`commercialfee1-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1285,10 +1335,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`commercialfee1-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) =>
@@ -1311,6 +1361,7 @@ const EditCurlingFeeList = (props) => {
                       <input
                         type="text"
                         name={`commercialfee2-${index}`}
+                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -1321,10 +1372,10 @@ const EditCurlingFeeList = (props) => {
                           ).fee
                         }
                         {...register(`commercialfee2-${index}`, {
-                          required: "必須項目です",
+                          required: "※必須項目です",
                           pattern: {
                             value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
+                            message: "※半角数字で入力してください",
                           },
                         })}
                         onChange={(e) => {

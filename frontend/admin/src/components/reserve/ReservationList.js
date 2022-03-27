@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import { formData } from "../../recoil/form/atom";
@@ -37,6 +38,7 @@ export const ReservationList = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [indexCheck, setIndexCheck] = useState(0);
   const [place, setPlace] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
     reset,
@@ -94,6 +96,7 @@ export const ReservationList = () => {
   // const defaultValues = [data[0].ageName];
   const onSubmit = (e) => {
     setLoading(true);
+    setErrorMessage("");
     const formDataList = data;
     const id = indexCheck;
     // e.startDateをyyyy-mm-dd形式に変換
@@ -116,79 +119,115 @@ export const ReservationList = () => {
     const end = endDate.concat(" ", endTime);
     const placeId = e.placeId;
     const age = getValues("ageGroup");
-    //placeNameを取得
-    const a = PlaceNameData.find((i) => i.id === placeId);
-    const placeName = a.name;
-    // 配列ageに入っている値をAgeDataから取得
-    const ageName = [];
-    age.map((age) => {
-      const a = AgeData.find((data) => data.id === age).name;
-      ageName.push(a);
-      return ageName;
-    });
-    const equipmentName = [];
-    if (e.device === "true") {
-      e.equipment.map((equipment) => {
-        const equip = EquipmentData.find((data) => data.id === equipment).name;
-        equipmentName.push(equip);
-        return equipmentName;
+
+    // 予約情報が予約停止期間に含まれているかどうかチェック
+    axios
+      .get(ReservationUrls.SUSPENSION_CHECK, {
+        params: {
+          places__id: placeId,
+          start: start,
+          end: end,
+        },
+      })
+      .then((res) => {
+        // 予約情報が他の承認済みの予約と重なっているかどうかチェック
+        axios
+          .get(ReservationUrls.RESERVE_CHECK, {
+            params: {
+              reservation__place: placeId,
+              reservation__start: start,
+              reservation__end: end,
+            },
+          })
+          .then((res) => {
+            //placeNameを取得
+            const a = PlaceNameData.find((i) => i.id === placeId);
+            const placeName = a.name;
+            // 配列ageに入っている値をAgeDataから取得
+            const ageName = [];
+            age.map((age) => {
+              const a = AgeData.find((data) => data.id === age).name;
+              ageName.push(a);
+              return ageName;
+            });
+            const equipmentName = [];
+            if (e.device === "true") {
+              e.equipment.map((equipment) => {
+                const equip = EquipmentData.find(
+                  (data) => data.id === equipment
+                ).name;
+                equipmentName.push(equip);
+                return equipmentName;
+              });
+            }
+            const usageList = ["1", e.usage, e.profits, e.collect];
+            const usageName = [];
+            usageList.map((usage) => {
+              const u = UsageData.find(
+                (data) => data.id === Number(usage)
+              ).name;
+              usageName.push(u);
+              return usageName;
+            });
+            delete e["ageGroup"];
+            delete e["startDate"];
+            delete e["endDate"];
+            formDataList[id].age = age;
+            formDataList[id].ageName = ageName;
+            formDataList[id].usage = e.usage;
+            formDataList[id].profits = e.profits;
+            formDataList[id].collect = e.collect;
+            formDataList[id].usageList = usageList;
+            formDataList[id].usageName = usageName;
+            formDataList[id].startDate = startDate;
+            formDataList[id].endDate = endDate;
+            formDataList[id].start = start;
+            formDataList[id].end = end;
+            formDataList[id].equipmentName = equipmentName;
+            formDataList[id].placeId = placeId;
+            formDataList[id].placeName = placeName;
+            formDataList[id].reason = e.reason;
+            formDataList[id].staffNum = e.staffNum;
+            formDataList[id].useNum = e.useNum;
+            formDataList[id].deferredPayment = e.deferredPayment;
+            formDataList[id].device = e.device;
+            if (e.collect === "6") {
+              formDataList[id].admissionFee = e.admissionFee;
+            } else {
+              delete formDataList[id].admissionFee;
+            }
+            if (place.max - place.min > 0) {
+              formDataList[id].placeNumber = e.placeNumber;
+            } else if (place.max - place.min === 0) {
+              // formDataList[id].placeNumberを削除
+              delete formDataList[id].placeNumber;
+            }
+            if (e.specialEquipment === "" || e.specialEquipment === null) {
+              delete formDataList[id].specialEquipment;
+            } else if (e.device === "true") {
+              formDataList[id].equipment = e.equipment;
+              formDataList[id].specialEquipment = e.specialEquipment;
+            } else {
+              delete formDataList[id].equipment;
+              delete formDataList[id].specialEquipment;
+            }
+            setData([...formDataList]);
+            setLoading(false);
+            setModalIsOpen(false);
+          })
+          .catch((err) => {
+            setLoading(false);
+            setErrorMessage(
+              "既に承認済みの予約と重なっています。利用開始日時及び利用終了日時を変更してください。"
+            );
+          });
+      })
+      .catch((err) => {
+        setLoading(false);
+        setErrorMessage(
+          "予約停止期間に予約することはできません。利用開始日時及び利用終了日時を変更してください。"
+        );
       });
-    }
-    const usageList = [e.usage, e.profits, e.collect];
-    const usageName = [];
-    usageList.map((usage) => {
-      const u = UsageData.find((data) => data.id === Number(usage)).name;
-      usageName.push(u);
-      return usageName;
-    });
-    delete e["ageGroup"];
-    delete e["startDate"];
-    delete e["endDate"];
-    formDataList[id].age = age;
-    formDataList[id].ageName = ageName;
-    formDataList[id].usage = e.usage;
-    formDataList[id].profits = e.profits;
-    formDataList[id].collect = e.collect;
-    formDataList[id].usageList = usageList;
-    formDataList[id].usageName = usageName;
-    formDataList[id].start = start;
-    formDataList[id].end = end;
-    formDataList[id].equipmentName = equipmentName;
-    formDataList[id].placeId = placeId;
-    formDataList[id].placeName = placeName;
-    formDataList[id].reason = e.reason;
-    formDataList[id].staffNum = e.staffNum;
-    formDataList[id].useNum = e.useNum;
-    formDataList[id].deferredPayment = e.deferredPayment;
-    formDataList[id].device = e.device;
-    if (e.collect === "6") {
-      formDataList[id].admissionFee = e.admissionFee;
-    } else {
-      delete formDataList[id].admissionFee;
-    }
-    if (place.max - place.min > 0) {
-      formDataList[id].placeNumber = e.placeNumber;
-    } else if (place.max - place.min === 0) {
-      // formDataList[id].placeNumberを削除
-      delete formDataList[id].placeNumber;
-    }
-    if (e.specialEquipment === "" || e.specialEquipment === null) {
-      delete formDataList[id].specialEquipment;
-    } else if (e.device === "true") {
-      formDataList[id].equipment = e.equipment;
-      formDataList[id].specialEquipment = e.specialEquipment;
-    } else {
-      delete formDataList[id].equipment;
-      delete formDataList[id].specialEquipment;
-    }
-    if (e.deferredPayment === "true") {
-      formDataList[id].deferredPaymentReason = e.deferredPaymentReason;
-    } else {
-      delete formDataList[id].deferredPaymentReason;
-    }
-    setData([...formDataList]);
-    setLoading(false);
-    setModalIsOpen(false);
   };
   const remove = (index) => {
     const list = [...data];
@@ -223,26 +262,6 @@ export const ReservationList = () => {
                 return (
                   <Grid className="reserve-data" key={index} item lg={3} sm={5}>
                     <ul>
-                      <li>
-                        <div>施設名：</div>
-                        <span>{item.placeName}</span>
-                      </li>
-                      <li>
-                        <div>年齢区分：</div>
-                        {item.ageName.map((age, index) => {
-                          return <span key={index}>{age} </span>;
-                        })}
-                      </li>
-                      <li>
-                        <div>利用区分：</div>
-                        {item.usageName.map((usage, index) => {
-                          return (
-                            <span key={index} className="usage-content">
-                              {usage}
-                            </span>
-                          );
-                        })}
-                      </li>
                       <li className="start">
                         <label>開始日時：</label>
                         <span>{item.start}</span>
@@ -250,6 +269,26 @@ export const ReservationList = () => {
                       <li className="end">
                         <label>終了日時：</label>
                         <span>{item.end}</span>
+                      </li>
+                      <li>
+                        <label>施設名：</label>
+                        <span>{item.placeName}</span>
+                      </li>
+                      <li>
+                        <label>年齢区分：</label>
+                        {item.ageName.map((age, index) => {
+                          return <span key={index}>{age} </span>;
+                        })}
+                      </li>
+                      <li>
+                        <label>利用区分：</label>
+                        {item.usageName.map((usage, index) => {
+                          return (
+                            <span key={index} className="usage-content">
+                              {usage}
+                            </span>
+                          );
+                        })}
                       </li>
                       <li className="number">
                         <label>主催関係者：</label>
@@ -322,14 +361,40 @@ export const ReservationList = () => {
                       overlayClassName="reserve-modal-overlay"
                     >
                       <div className="modal-wrapper">
-                        <div className="modal-title">
-                          <h2>編集</h2>
-                        </div>
                         <form
                           onSubmit={handleSubmit(onSubmit)}
                           noValidate
                           className="reserve-modal-form"
                         >
+                          <div className="modal-title">
+                            <h2 className="modal-title-left">編集</h2>
+                            <div className="modal-title-right">
+                              <button
+                                type="button"
+                                className="back-btn"
+                                onClick={() => {
+                                  setModalIsOpen(false);
+                                  setErrorMessage("");
+                                }}
+                              >
+                                閉じる
+                              </button>
+                              <span className="btn-space"></span>
+                              <button type="submit" className="btn">
+                                完了
+                              </button>
+                            </div>
+                          </div>
+                          {errorMessage.length > 0 && (
+                            <>
+                              {
+                                // モーダル内の一番上にスクロールする
+                              }
+                              <div className="reserve-error">
+                                <p>{errorMessage}</p>
+                              </div>
+                            </>
+                          )}
                           <div className="modalPlaceName form-group">
                             <p className="form-item">施設名:</p>
                             <Controller
@@ -447,11 +512,6 @@ export const ReservationList = () => {
                                         }
                                       >
                                         <p className="pc">(1)　</p>
-                                        <FormControlLabel
-                                          value={1}
-                                          control={<Radio />}
-                                          label="アマチュアスポーツ"
-                                        />
                                         <FormControlLabel
                                           value={2}
                                           control={<Radio />}
@@ -1201,65 +1261,10 @@ export const ReservationList = () => {
                                         )
                                       )}
                                     </RadioGroup>
-                                    {field.value === "true" && (
-                                      // valueがtrueの場合
-                                      <div>
-                                        <FormControl error>
-                                          <p className="form-item">
-                                            後納の理由：
-                                          </p>
-                                          <FormHelperText>
-                                            {errors.deferredPaymentReason &&
-                                              errors.deferredPaymentReason
-                                                .message}
-                                          </FormHelperText>
-                                          <Controller
-                                            control={control}
-                                            name="deferredPaymentReason"
-                                            defaultValue={
-                                              data[indexCheck]
-                                                .deferredPaymentReason
-                                              // item.deferredPaymentReason
-                                            }
-                                            render={({ field }) => (
-                                              <TextField
-                                                {...field}
-                                                {...register(
-                                                  "deferredPaymentReason",
-                                                  {
-                                                    required: "必須項目です",
-                                                  }
-                                                )}
-                                                style={{ width: "225px" }}
-                                                error={
-                                                  "deferredPaymentReason" in
-                                                  errors
-                                                }
-                                              />
-                                            )}
-                                          />
-                                        </FormControl>
-                                      </div>
-                                    )}
                                   </>
                                 )}
                               />
                             </FormControl>
-                          </div>
-                          <div className="form-group">
-                            <button
-                              type="button"
-                              className="back-btn"
-                              onClick={() => {
-                                setModalIsOpen(false);
-                              }}
-                            >
-                              閉じる
-                            </button>
-                            <span className="btn-space"></span>
-                            <button type="submit" className="btn">
-                              完了
-                            </button>
                           </div>
                         </form>
                         {loading && <Loading />}

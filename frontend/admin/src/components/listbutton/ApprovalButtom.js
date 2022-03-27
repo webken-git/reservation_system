@@ -46,6 +46,7 @@ const ApprovalButton = (props) => {
               {
                 reservation: props.reservation_id,
                 fee: getValues("defferd_payment_fee"),
+                reason: getValues("defferd_payment_reason") || "",
               }
             )
             .then((response) => {
@@ -127,6 +128,7 @@ const ApprovalButton = (props) => {
                 type="text"
                 inputMode="numeric"
                 name="electric_fee"
+                defaultValue="0"
                 className="modal-input"
                 {...register("electric_fee", {
                   required: "必須項目です",
@@ -146,6 +148,7 @@ const ApprovalButton = (props) => {
                 type="text"
                 inputMode="numeric"
                 name="heating_fee"
+                defaultValue="0"
                 className="modal-input"
                 {...register("heating_fee", {
                   required: "必須項目です",
@@ -176,27 +179,45 @@ const ApprovalButton = (props) => {
               />
             </div>
             {props.defferd_payment.length > 0 && (
-              <div className="modal-form-group">
-                {errors.defferd_payment_fee && (
-                  <p className="modal-error">
-                    {errors.defferd_payment_fee.message}
-                  </p>
-                )}
-                <p>後納使用料金：</p>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  name="defferd_payment_fee"
-                  className="modal-input"
-                  {...register("defferd_payment_fee", {
-                    required: "必須項目です",
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: "数字を入力してください",
-                    },
-                  })}
-                />
-              </div>
+              <>
+                <div className="modal-form-group">
+                  {errors.defferd_payment_fee && (
+                    <p className="modal-error">
+                      {errors.defferd_payment_fee.message}
+                    </p>
+                  )}
+                  <p>後納使用料金：</p>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    name="defferd_payment_fee"
+                    className="modal-input"
+                    {...register("defferd_payment_fee", {
+                      required: "必須項目です",
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "数字を入力してください",
+                      },
+                    })}
+                  />
+                </div>
+                <div className="modal-form-group">
+                  {errors.defferd_payment_reason && (
+                    <p className="modal-error">
+                      {errors.defferd_payment_reason.message}
+                    </p>
+                  )}
+                  <p>後納の理由：</p>
+                  <input
+                    type="text"
+                    name="defferd_payment_reason"
+                    className="modal-input"
+                    {...register("defferd_payment_reason", {
+                      required: "必須項目です",
+                    })}
+                  />
+                </div>
+              </>
             )}
             <div className="modal-form-group">
               {errors.is_issued && (

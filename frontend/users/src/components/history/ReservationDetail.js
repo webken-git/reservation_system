@@ -72,6 +72,14 @@ const ReservationDetail = (props) => {
           <h2 className="title">予約詳細</h2>
           <ul>
             <li>
+              <label>利用開始日時：</label>
+              <span>{reservation.reservation.start}</span>
+            </li>
+            <li>
+              <label>利用終了日時：</label>
+              <span>{reservation.reservation.end}</span>
+            </li>
+            <li>
               <label>団体名：</label>
               <span>{reservation.reservation.group_name}</span>
             </li>
@@ -105,14 +113,6 @@ const ReservationDetail = (props) => {
                 </span>
               </li>
             )}
-            <li>
-              <label>利用開始日時：</label>
-              <span>{reservation.reservation.start}</span>
-            </li>
-            <li>
-              <label>利用終了日時：</label>
-              <span>{reservation.reservation.end}</span>
-            </li>
             <li>
               <label>年齢区分：</label>
               {age[0] &&
@@ -179,36 +179,24 @@ const ReservationDetail = (props) => {
               </>
             )}
             {reservation.usage_fee ? (
-              <>
-                <li>
-                  <label>利用料：</label>
-                  <span>{reservation.usage_fee}円</span>
-                </li>
-                <li>
-                  <label>電気料：</label>
-                  <span>{reservation.electric_fee}円</span>
-                </li>
-                <li>
-                  <label>暖房料：</label>
-                  <span>{reservation.heating_fee}円</span>
-                </li>
-              </>
+              <li>
+                <label>利用料：</label>
+                <span>{reservation.usage_fee}円</span>
+              </li>
             ) : (
-              <>
-                <li>
-                  <label>利用料：</label>
-                  <span>まだ金額が確定しておりません</span>
-                </li>
-                <li>
-                  <label>電気料：</label>
-                  <span>まだ金額が確定しておりません</span>
-                </li>
-                <li>
-                  <label>暖房料：</label>
-                  <span>まだ金額が確定しておりません</span>
-                </li>
-              </>
+              <li>
+                <label>利用料：</label>
+                <span>まだ金額が確定しておりません</span>
+              </li>
             )}
+            <li>
+              <label>電気料：</label>
+              <span>{reservation.electric_fee}円</span>
+            </li>
+            <li>
+              <label>暖房料：</label>
+              <span>{reservation.heating_fee}円</span>
+            </li>
             <li>
               <label>ステータス：</label>
               <span>{reservation.approval.name}</span>

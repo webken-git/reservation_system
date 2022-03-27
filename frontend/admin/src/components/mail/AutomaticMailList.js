@@ -100,8 +100,8 @@ const AutomaticMailList = () => {
           <Accordion allowZeroExpanded>
             {automaticMailListData.map((val, index) => {
               return (
-                <>
-                  <AccordionItem key={index}>
+                <div key={index}>
+                  <AccordionItem>
                     <AccordionItemHeading>
                       <AccordionItemButton>{val.name}</AccordionItemButton>
                     </AccordionItemHeading>
@@ -188,14 +188,14 @@ const AutomaticMailList = () => {
                       >
                         戻る
                       </button>
-                      <span>　</span>
+                      <span className="btn-space"></span>
                       <button className="verify-btn" type="submit">
                         完了
                       </button>
                     </form>
                     {loading && <Loading />}
                   </Modal>
-                </>
+                </div>
               );
             })}
           </Accordion>

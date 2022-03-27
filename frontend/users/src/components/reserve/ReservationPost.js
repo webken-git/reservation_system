@@ -53,13 +53,7 @@ export const ReservationPost = (props) => {
     };
     axios
       .post(ReservationUrls.USAGE_CATEGORY, data)
-      .then((response) => {
-        resetTab();
-        resetFormData();
-        resetPersonalData([]);
-        reset();
-        window.location.href = "/reserve/complete";
-      })
+      .then((response) => {})
       .catch((error) => {});
   };
   // approval-applicationsにPOSTする
@@ -67,6 +61,8 @@ export const ReservationPost = (props) => {
     const data = {
       approval_id: 1,
       reservation_id: reservation_id,
+      heating_fee: 0,
+      electric_fee: 0,
     };
     axios
       .post(ReservationUrls.APPROVAL_APPLICATION, data)
@@ -84,7 +80,6 @@ export const ReservationPost = (props) => {
         leader_name: PersonalData.leader_name,
         contact_name: PersonalData.contact_name,
         address: PersonalData.address,
-        // 国際番号で登録する必要があるため、telには+818000000000という形で入力する
         tel: PersonalData.tel,
         is_group: true,
         delete_flag: true,
@@ -107,22 +102,38 @@ export const ReservationPost = (props) => {
           if (item.deferredPayment === "true") {
             axios.post(ReservationUrls.DEFFERD_PAYMENT, {
               reservation: response.data.id,
-              reason: item.deferredPaymentReason,
+              // reason: item.deferredPaymentReason,
             });
           }
           postApprovalID(response.data.id);
           postAgeCategories(response.data.id, item.age);
           postUsageID(response.data.id, item.usageList);
+          // 最後の予約情報をPOSTしたら、リセットする
+          if (item === FormData[FormData.length - 1]) {
+            resetTab();
+            resetFormData();
+            resetPersonalData([]);
+            reset();
+            props.setLoading(false);
+            window.location.href = "/reserve/complete";
+          }
         })
         .catch((error) => {
           props.setLoading(false);
           if (error.response.status === 500) {
             window.location.href = "/500";
           }
+          if (error.response.status === 400) {
+            window.scrollTo(0, 0);
+            props.setError(
+              "※追加された予約情報の中に「予約停止期間」を含む予約があるため、予約手続きに失敗しました。"
+            );
+          }
+          // mapを終了させる
+          // return false;
         });
       return item;
     });
-    props.setLoading(false);
   };
 
   const postData = () => {

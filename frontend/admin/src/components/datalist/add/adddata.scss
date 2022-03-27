@@ -1,33 +1,33 @@
 // レイアウト幅
-$layout-width-inner: 1180px;
+$layout_width_inner: 1180px;
 
 // ブレークポイント
 $breakpoints: (
   // スマホ
-  "sp": "screen and (max-width: 767px)",
+  "sp": "screen and (max_width: 767px)",
   // タブレット
-  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  "tab": "screen and (max_width: #{$layout_width_inner _ 1px})",
   // PC
-  "pc": "screen and (min-width: #{$layout-width-inner})"
+  "pc": "screen and (min_width: #{$layout_width_inner})"
 );
 
 //mixinの引数は$breakpoint、引数の初期値はsp
 @mixin mq($breakpoint: sp) {
-  @media #{map-get($breakpoints, $breakpoint)} {
+  @media #{map_get($breakpoints, $breakpoint)} {
     @content;
   }
 }
 
-$main-color: #1a8d89;
-$sub-color: #707070;
-$accent-color: #233b62;
+$main_color: #1a8d89;
+$sub_color: #707070;
+$accent_color: #233b62;
 
 .add-data {
   .add-data__form-group {
     margin-bottom: 1%;
     .add-data__form-group__select {
       width: 100px;
-      display: inline-block;
+      display: inline_block;
     }
     .add-data__form-input {
       width: 300px;
@@ -38,7 +38,7 @@ $accent-color: #233b62;
     &:first-child {
       &:hover {
         border-style: double;
-        border-color: $main-color;
+        border-color: $main_color;
       }
     }
   }

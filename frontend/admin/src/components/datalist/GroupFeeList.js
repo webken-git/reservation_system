@@ -58,6 +58,7 @@ const GroupFeeList = (props) => {
   // console.log(timeList);
 
   const group = timeList.filter((timeList) => timeList.purpose === "団体使用");
+  group.sort((a, b) => a.timeId - b.timeId);
   const competition = timeList.filter(
     (timeList) => timeList.purpose === "競技会使用"
   );
@@ -117,7 +118,7 @@ const GroupFeeList = (props) => {
   };
 
   // リストに値が入っているか確認
-  if (age1.length === 0 || purpose1.length === 0 || timeList === 0) {
+  if (age1.length === 0 || purpose1.length === 0 || timeList.length === 0) {
     return <Loading />;
   } else {
     return (

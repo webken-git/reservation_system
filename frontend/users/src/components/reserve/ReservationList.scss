@@ -93,6 +93,19 @@ $accent-color: #91c21f;
 .reserve-modal-form {
   width: 100%;
   text-align: left;
+  .modal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .back-btn {
+    width: 5rem;
+    font-size: 0.9rem;
+  }
+  .btn {
+    width: 5rem;
+    font-size: 0.9rem;
+  }
   .form-group {
     width: 80%;
     margin: 0 auto;
@@ -106,5 +119,22 @@ $accent-color: #91c21f;
       font-weight: bold;
       font-size: 1.2rem;
     }
+  }
+}
+
+.reservation__step {
+  .title-grid {
+    width: auto;
+    display: block;
+    margin: 0 10%;
+  }
+  .verify-title {
+    font-size: 1.5rem;
+    color: #f00;
+    margin: 0 auto;
+  }
+  .red {
+    margin: 0 auto;
+    font-size: 1rem;
   }
 }

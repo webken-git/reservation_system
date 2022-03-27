@@ -20,8 +20,6 @@ import {
 } from "@mui/material";
 import { timetable } from "../calendar/FormDataList";
 import { format } from "date-fns";
-import { formData } from "../../recoil/form/atom";
-import { useRecoilState } from "recoil";
 import { useFetch } from "../../hooks/useFetch";
 
 const Label = styled("p")({
@@ -33,7 +31,6 @@ const SuspensionInfo = (props) => {
   const [suspension, setSuspension] = useState([]);
   const id = props.id;
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [FormData, setFormData] = useRecoilState(formData);
   const [updateFlag, setUpdateFlag] = useState(true);
 
   const {
@@ -41,7 +38,7 @@ const SuspensionInfo = (props) => {
     handleSubmit,
     getValues,
     setValue,
-    reset,
+    register,
     formState: { errors },
   } = useForm({
     reValidateMode: "onSubmit",
@@ -49,9 +46,10 @@ const SuspensionInfo = (props) => {
 
   const pullSuspension = () => {
     axios
-      .get(`${ReservationUrls.SUSPENSION}?id=${id}`, {})
+      .get(`${ReservationUrls.SUSPENSION}${id}/`, {})
       .then((res) => {
-        setSuspension(res.data[0]);
+        setSuspension(res.data);
+        setValue("place", res.data.place);
       })
       .catch((error) => {
         console.log(error);
@@ -88,28 +86,6 @@ const SuspensionInfo = (props) => {
       .catch((error) => {
         console.log(error);
       });
-
-    delete e["StartDate"];
-    delete e["EndDate"];
-    const data = {
-      ...e,
-      start,
-      end,
-      // equipmentName,
-      // id,
-      // age,
-      // ageName,
-      // placeId,
-      // placeName,
-      startDate,
-      endDate,
-      // usageList,
-      // usageName,
-    };
-    const list = [...FormData, data];
-    setFormData(list);
-    // フォームをリセット
-    reset();
   };
 
   const suspensionDelete = () => {
@@ -183,7 +159,7 @@ const SuspensionInfo = (props) => {
                 <ul>
                   <li>
                     <div>
-                      <Label>開始日時</Label>
+                      <Label>開始日時：</Label>
                       <FormControl error>
                         <FormHelperText>
                           {errors.StartDate && errors.StartDate.message}
@@ -196,7 +172,6 @@ const SuspensionInfo = (props) => {
                             rules={{ required: "入力" }}
                             render={({ field }) => (
                               <div className={form.StartDate}>
-                                <Label>開始日時：</Label>
                                 <LocalizationProvider
                                   dateAdapter={DateAdapter}
                                   locale={ja}
@@ -216,7 +191,6 @@ const SuspensionInfo = (props) => {
                         </FormGroup>
                       </FormControl>
                     </div>
-
                     <div>
                       <FormControl error>
                         <FormHelperText>
@@ -225,7 +199,7 @@ const SuspensionInfo = (props) => {
                         <FormGroup>
                           <Controller
                             name="Start"
-                            defaultValue=""
+                            defaultValue={suspension.start.split(" ")[1]}
                             control={control}
                             rules={{ required: "選択してください" }}
                             render={({ field }) => (
@@ -234,8 +208,6 @@ const SuspensionInfo = (props) => {
                                   style={{ width: "150px" }}
                                   size="Normal"
                                   select
-                                  defaultValue=""
-                                  label={suspension.start.substr(11, 5)}
                                   error={"Start" in errors}
                                   {...field}
                                 >
@@ -262,6 +234,7 @@ const SuspensionInfo = (props) => {
                   </li>
                   <li>
                     <div>
+                      <Label>終了日時：</Label>
                       <FormControl error>
                         <FormHelperText>
                           {errors.EndDate && errors.EndDate.message}
@@ -274,7 +247,6 @@ const SuspensionInfo = (props) => {
                             rules={{ required: "入力" }}
                             render={({ field }) => (
                               <div className={form.EndDate}>
-                                <Label>終了日時</Label>
                                 <LocalizationProvider
                                   dateAdapter={DateAdapter}
                                   locale={ja}
@@ -302,7 +274,7 @@ const SuspensionInfo = (props) => {
                         <FormGroup>
                           <Controller
                             name="End"
-                            defaultValue=""
+                            defaultValue={suspension.end.split(" ")[1]}
                             control={control}
                             rules={{
                               required: "選択してください",
@@ -313,8 +285,6 @@ const SuspensionInfo = (props) => {
                                   style={{ width: "150px" }}
                                   select
                                   size="Normal"
-                                  defaultValue=""
-                                  label={suspension.end.substr(11, 5)}
                                   error={"End" in errors}
                                   {...field}
                                 >
@@ -342,19 +312,29 @@ const SuspensionInfo = (props) => {
                   <li>
                     <div>
                       <p>施設名：</p>
+                      {errors.place && (
+                        <p className="red">{errors.place.message}</p>
+                      )}
                       {getPlaceList &&
                         getPlaceList.map((i, index) => {
                           return (
-                            <p
-                              key={index}
-                              onChange={(e) => handleCheck(i.id, "place", e)}
-                              className="place-list"
-                            >
+                            <p key={index} className="place-list">
                               <input
                                 name="place"
                                 id={i.id}
                                 type="checkbox"
                                 value={i.id}
+                                defaultChecked={
+                                  suspension.places
+                                    .map((j) => j.id)
+                                    .includes(i.id)
+                                    ? true
+                                    : false
+                                }
+                                onChange={(e) => handleCheck(i.id, "place", e)}
+                                {...register("place", {
+                                  required: "※選択してください",
+                                })}
                               />
                               <label htmlFor={i.id} className="modal-label">
                                 {i.name}
