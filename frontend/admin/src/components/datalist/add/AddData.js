@@ -159,138 +159,138 @@ const AddData = (props) => {
                 "その他",
                 getValues("normal_fee1_7")
               );
-            })
-            .catch((error) => {});
-          axios
-            .post(ReservationUrls.TIME, {
-              name: getValues("normal_time2"),
-            })
-            .then((response) => {
-              // 時間区分データのidを取得
-              const timeId = response.data.id;
-              // 料金データを追加
-              postFacilityFee(
-                placeId,
-                age1[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee2_1")
-              );
-              postFacilityFee(
-                placeId,
-                age2[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee2_2")
-              );
-              postFacilityFee(
-                placeId,
-                age3[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee2_3")
-              );
-              postFacilityFee(
-                placeId,
-                age4[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee2_4")
-              );
-              postFacilityFee(
-                placeId,
-                age5[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee2_5")
-              );
-              postFacilityFee(
-                placeId,
-                age6[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee2_6")
-              );
-              postFacilityFee(
-                placeId,
-                age7[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee2_7")
-              );
-            })
-            .catch((error) => {});
-          axios
-            .post(ReservationUrls.TIME, {
-              name: getValues("normal_time3"),
-            })
-            .then((response) => {
-              // 時間区分データのidを取得
-              const timeId = response.data.id;
-              // 料金データを追加
-              postFacilityFee(
-                placeId,
-                age1[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee3_1")
-              );
-              postFacilityFee(
-                placeId,
-                age2[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee3_2")
-              );
-              postFacilityFee(
-                placeId,
-                age3[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee3_3")
-              );
-              postFacilityFee(
-                placeId,
-                age4[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee3_4")
-              );
-              postFacilityFee(
-                placeId,
-                age5[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee3_5")
-              );
-              postFacilityFee(
-                placeId,
-                age6[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee3_6")
-              );
-              postFacilityFee(
-                placeId,
-                age7[0].id,
-                timeId,
-                isGroup,
-                "その他",
-                getValues("normal_fee3_7")
-              );
+              axios
+                .post(ReservationUrls.TIME, {
+                  name: getValues("normal_time2"),
+                })
+                .then((response) => {
+                  // 時間区分データのidを取得
+                  const timeId = response.data.id;
+                  // 料金データを追加
+                  postFacilityFee(
+                    placeId,
+                    age1[0].id,
+                    timeId,
+                    isGroup,
+                    "その他",
+                    getValues("normal_fee2_1")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age2[0].id,
+                    timeId,
+                    isGroup,
+                    "その他",
+                    getValues("normal_fee2_2")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age3[0].id,
+                    timeId,
+                    isGroup,
+                    "その他",
+                    getValues("normal_fee2_3")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age4[0].id,
+                    timeId,
+                    isGroup,
+                    "その他",
+                    getValues("normal_fee2_4")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age5[0].id,
+                    timeId,
+                    isGroup,
+                    "その他",
+                    getValues("normal_fee2_5")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age6[0].id,
+                    timeId,
+                    isGroup,
+                    "その他",
+                    getValues("normal_fee2_6")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age7[0].id,
+                    timeId,
+                    isGroup,
+                    "その他",
+                    getValues("normal_fee2_7")
+                  );
+                  axios
+                    .post(ReservationUrls.TIME, {
+                      name: getValues("normal_time3"),
+                    })
+                    .then((response) => {
+                      // 時間区分データのidを取得
+                      const timeId = response.data.id;
+                      // 料金データを追加
+                      postFacilityFee(
+                        placeId,
+                        age1[0].id,
+                        timeId,
+                        isGroup,
+                        "その他",
+                        getValues("normal_fee3_1")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age2[0].id,
+                        timeId,
+                        isGroup,
+                        "その他",
+                        getValues("normal_fee3_2")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age3[0].id,
+                        timeId,
+                        isGroup,
+                        "その他",
+                        getValues("normal_fee3_3")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age4[0].id,
+                        timeId,
+                        isGroup,
+                        "その他",
+                        getValues("normal_fee3_4")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age5[0].id,
+                        timeId,
+                        isGroup,
+                        "その他",
+                        getValues("normal_fee3_5")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age6[0].id,
+                        timeId,
+                        isGroup,
+                        "その他",
+                        getValues("normal_fee3_6")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age7[0].id,
+                        timeId,
+                        isGroup,
+                        "その他",
+                        getValues("normal_fee3_7")
+                      );
+                    })
+                    .catch((error) => {});
+                })
+                .catch((error) => {});
             })
             .catch((error) => {});
         } else if (isGroup === true) {
@@ -363,138 +363,138 @@ const AddData = (props) => {
                 "個人使用",
                 getValues("private_fee1_7")
               );
-            })
-            .catch((error) => {});
-          axios
-            .post(ReservationUrls.TIME, {
-              name: getValues("private_time2"),
-            })
-            .then((response) => {
-              // 時間区分データのidを取得
-              const timeId = response.data.id;
-              // 料金データを追加
-              postFacilityFee(
-                placeId,
-                age1[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee2_1")
-              );
-              postFacilityFee(
-                placeId,
-                age2[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee2_2")
-              );
-              postFacilityFee(
-                placeId,
-                age3[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee2_3")
-              );
-              postFacilityFee(
-                placeId,
-                age4[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee2_4")
-              );
-              postFacilityFee(
-                placeId,
-                age5[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee2_5")
-              );
-              postFacilityFee(
-                placeId,
-                age6[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee2_6")
-              );
-              postFacilityFee(
-                placeId,
-                age7[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee2_7")
-              );
-            })
-            .catch((error) => {});
-          axios
-            .post(ReservationUrls.TIME, {
-              name: getValues("private_time3"),
-            })
-            .then((response) => {
-              // 時間区分データのidを取得
-              const timeId = response.data.id;
-              // 料金データを追加
-              postFacilityFee(
-                placeId,
-                age1[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee3_1")
-              );
-              postFacilityFee(
-                placeId,
-                age2[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee3_2")
-              );
-              postFacilityFee(
-                placeId,
-                age3[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee3_3")
-              );
-              postFacilityFee(
-                placeId,
-                age4[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee3_4")
-              );
-              postFacilityFee(
-                placeId,
-                age5[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee3_5")
-              );
-              postFacilityFee(
-                placeId,
-                age6[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee3_6")
-              );
-              postFacilityFee(
-                placeId,
-                age7[0].id,
-                timeId,
-                false,
-                "個人使用",
-                getValues("private_fee3_7")
-              );
+              axios
+                .post(ReservationUrls.TIME, {
+                  name: getValues("private_time2"),
+                })
+                .then((response) => {
+                  // 時間区分データのidを取得
+                  const timeId = response.data.id;
+                  // 料金データを追加
+                  postFacilityFee(
+                    placeId,
+                    age1[0].id,
+                    timeId,
+                    false,
+                    "個人使用",
+                    getValues("private_fee2_1")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age2[0].id,
+                    timeId,
+                    false,
+                    "個人使用",
+                    getValues("private_fee2_2")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age3[0].id,
+                    timeId,
+                    false,
+                    "個人使用",
+                    getValues("private_fee2_3")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age4[0].id,
+                    timeId,
+                    false,
+                    "個人使用",
+                    getValues("private_fee2_4")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age5[0].id,
+                    timeId,
+                    false,
+                    "個人使用",
+                    getValues("private_fee2_5")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age6[0].id,
+                    timeId,
+                    false,
+                    "個人使用",
+                    getValues("private_fee2_6")
+                  );
+                  postFacilityFee(
+                    placeId,
+                    age7[0].id,
+                    timeId,
+                    false,
+                    "個人使用",
+                    getValues("private_fee2_7")
+                  );
+                  axios
+                    .post(ReservationUrls.TIME, {
+                      name: getValues("private_time3"),
+                    })
+                    .then((response) => {
+                      // 時間区分データのidを取得
+                      const timeId = response.data.id;
+                      // 料金データを追加
+                      postFacilityFee(
+                        placeId,
+                        age1[0].id,
+                        timeId,
+                        false,
+                        "個人使用",
+                        getValues("private_fee3_1")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age2[0].id,
+                        timeId,
+                        false,
+                        "個人使用",
+                        getValues("private_fee3_2")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age3[0].id,
+                        timeId,
+                        false,
+                        "個人使用",
+                        getValues("private_fee3_3")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age4[0].id,
+                        timeId,
+                        false,
+                        "個人使用",
+                        getValues("private_fee3_4")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age5[0].id,
+                        timeId,
+                        false,
+                        "個人使用",
+                        getValues("private_fee3_5")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age6[0].id,
+                        timeId,
+                        false,
+                        "個人使用",
+                        getValues("private_fee3_6")
+                      );
+                      postFacilityFee(
+                        placeId,
+                        age7[0].id,
+                        timeId,
+                        false,
+                        "個人使用",
+                        getValues("private_fee3_7")
+                      );
+                    })
+                    .catch((error) => {});
+                })
+                .catch((error) => {});
             })
             .catch((error) => {});
           if (max > 1) {
@@ -723,138 +723,138 @@ const AddData = (props) => {
                   "団体使用",
                   getValues("group_fee1_7")
                 );
-              })
-              .catch((error) => {});
-            axios
-              .post(ReservationUrls.TIME, {
-                name: getValues("group_time2"),
-              })
-              .then((response) => {
-                // 時間区分データのidを取得
-                const timeId = response.data.id;
-                // 料金データを追加
-                postFacilityFee(
-                  placeId,
-                  age1[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee2_1")
-                );
-                postFacilityFee(
-                  placeId,
-                  age2[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee2_2")
-                );
-                postFacilityFee(
-                  placeId,
-                  age3[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee2_3")
-                );
-                postFacilityFee(
-                  placeId,
-                  age4[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee2_4")
-                );
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee2_5")
-                );
-                postFacilityFee(
-                  placeId,
-                  age6[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee2_6")
-                );
-                postFacilityFee(
-                  placeId,
-                  age7[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee2_7")
-                );
-              })
-              .catch((error) => {});
-            axios
-              .post(ReservationUrls.TIME, {
-                name: getValues("group_time3"),
-              })
-              .then((response) => {
-                // 時間区分データのidを取得
-                const timeId = response.data.id;
-                // 料金データを追加
-                postFacilityFee(
-                  placeId,
-                  age1[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee3_1")
-                );
-                postFacilityFee(
-                  placeId,
-                  age2[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee3_2")
-                );
-                postFacilityFee(
-                  placeId,
-                  age3[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee3_3")
-                );
-                postFacilityFee(
-                  placeId,
-                  age4[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee3_4")
-                );
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee3_5")
-                );
-                postFacilityFee(
-                  placeId,
-                  age6[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee3_6")
-                );
-                postFacilityFee(
-                  placeId,
-                  age7[0].id,
-                  timeId,
-                  true,
-                  "団体使用",
-                  getValues("group_fee3_7")
-                );
+                axios
+                  .post(ReservationUrls.TIME, {
+                    name: getValues("group_time2"),
+                  })
+                  .then((response) => {
+                    // 時間区分データのidを取得
+                    const timeId = response.data.id;
+                    // 料金データを追加
+                    postFacilityFee(
+                      placeId,
+                      age1[0].id,
+                      timeId,
+                      true,
+                      "団体使用",
+                      getValues("group_fee2_1")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age2[0].id,
+                      timeId,
+                      true,
+                      "団体使用",
+                      getValues("group_fee2_2")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age3[0].id,
+                      timeId,
+                      true,
+                      "団体使用",
+                      getValues("group_fee2_3")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age4[0].id,
+                      timeId,
+                      true,
+                      "団体使用",
+                      getValues("group_fee2_4")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age5[0].id,
+                      timeId,
+                      true,
+                      "団体使用",
+                      getValues("group_fee2_5")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age6[0].id,
+                      timeId,
+                      true,
+                      "団体使用",
+                      getValues("group_fee2_6")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age7[0].id,
+                      timeId,
+                      true,
+                      "団体使用",
+                      getValues("group_fee2_7")
+                    );
+                    axios
+                      .post(ReservationUrls.TIME, {
+                        name: getValues("group_time3"),
+                      })
+                      .then((response) => {
+                        // 時間区分データのidを取得
+                        const timeId = response.data.id;
+                        // 料金データを追加
+                        postFacilityFee(
+                          placeId,
+                          age1[0].id,
+                          timeId,
+                          true,
+                          "団体使用",
+                          getValues("group_fee3_1")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age2[0].id,
+                          timeId,
+                          true,
+                          "団体使用",
+                          getValues("group_fee3_2")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age3[0].id,
+                          timeId,
+                          true,
+                          "団体使用",
+                          getValues("group_fee3_3")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age4[0].id,
+                          timeId,
+                          true,
+                          "団体使用",
+                          getValues("group_fee3_4")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age5[0].id,
+                          timeId,
+                          true,
+                          "団体使用",
+                          getValues("group_fee3_5")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age6[0].id,
+                          timeId,
+                          true,
+                          "団体使用",
+                          getValues("group_fee3_6")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age7[0].id,
+                          timeId,
+                          true,
+                          "団体使用",
+                          getValues("group_fee3_7")
+                        );
+                      })
+                      .catch((error) => {});
+                  })
+                  .catch((error) => {});
               })
               .catch((error) => {});
             axios
@@ -921,138 +921,138 @@ const AddData = (props) => {
                   "競技会使用",
                   getValues("competition_fee1_7")
                 );
-              })
-              .catch((error) => {});
-            axios
-              .post(ReservationUrls.TIME, {
-                name: getValues("competition_time2"),
-              })
-              .then((response) => {
-                // 時間区分データのidを取得
-                const timeId = response.data.id;
-                // 料金データを追加
-                postFacilityFee(
-                  placeId,
-                  age1[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee2_1")
-                );
-                postFacilityFee(
-                  placeId,
-                  age2[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee2_2")
-                );
-                postFacilityFee(
-                  placeId,
-                  age3[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee2_3")
-                );
-                postFacilityFee(
-                  placeId,
-                  age4[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee2_4")
-                );
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee2_5")
-                );
-                postFacilityFee(
-                  placeId,
-                  age6[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee2_6")
-                );
-                postFacilityFee(
-                  placeId,
-                  age7[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee2_7")
-                );
-              })
-              .catch((error) => {});
-            axios
-              .post(ReservationUrls.TIME, {
-                name: getValues("competition_time3"),
-              })
-              .then((response) => {
-                // 時間区分データのidを取得
-                const timeId = response.data.id;
-                // 料金データを追加
-                postFacilityFee(
-                  placeId,
-                  age1[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee3_1")
-                );
-                postFacilityFee(
-                  placeId,
-                  age2[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee3_2")
-                );
-                postFacilityFee(
-                  placeId,
-                  age3[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee3_3")
-                );
-                postFacilityFee(
-                  placeId,
-                  age4[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee3_4")
-                );
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee3_5")
-                );
-                postFacilityFee(
-                  placeId,
-                  age6[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee3_6")
-                );
-                postFacilityFee(
-                  placeId,
-                  age7[0].id,
-                  timeId,
-                  true,
-                  "競技会使用",
-                  getValues("competition_fee3_7")
-                );
+                axios
+                  .post(ReservationUrls.TIME, {
+                    name: getValues("competition_time2"),
+                  })
+                  .then((response) => {
+                    // 時間区分データのidを取得
+                    const timeId = response.data.id;
+                    // 料金データを追加
+                    postFacilityFee(
+                      placeId,
+                      age1[0].id,
+                      timeId,
+                      true,
+                      "競技会使用",
+                      getValues("competition_fee2_1")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age2[0].id,
+                      timeId,
+                      true,
+                      "競技会使用",
+                      getValues("competition_fee2_2")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age3[0].id,
+                      timeId,
+                      true,
+                      "競技会使用",
+                      getValues("competition_fee2_3")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age4[0].id,
+                      timeId,
+                      true,
+                      "競技会使用",
+                      getValues("competition_fee2_4")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age5[0].id,
+                      timeId,
+                      true,
+                      "競技会使用",
+                      getValues("competition_fee2_5")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age6[0].id,
+                      timeId,
+                      true,
+                      "競技会使用",
+                      getValues("competition_fee2_6")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age7[0].id,
+                      timeId,
+                      true,
+                      "競技会使用",
+                      getValues("competition_fee2_7")
+                    );
+                    axios
+                      .post(ReservationUrls.TIME, {
+                        name: getValues("competition_time3"),
+                      })
+                      .then((response) => {
+                        // 時間区分データのidを取得
+                        const timeId = response.data.id;
+                        // 料金データを追加
+                        postFacilityFee(
+                          placeId,
+                          age1[0].id,
+                          timeId,
+                          true,
+                          "競技会使用",
+                          getValues("competition_fee3_1")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age2[0].id,
+                          timeId,
+                          true,
+                          "競技会使用",
+                          getValues("competition_fee3_2")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age3[0].id,
+                          timeId,
+                          true,
+                          "競技会使用",
+                          getValues("competition_fee3_3")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age4[0].id,
+                          timeId,
+                          true,
+                          "競技会使用",
+                          getValues("competition_fee3_4")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age5[0].id,
+                          timeId,
+                          true,
+                          "競技会使用",
+                          getValues("competition_fee3_5")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age6[0].id,
+                          timeId,
+                          true,
+                          "競技会使用",
+                          getValues("competition_fee3_6")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age7[0].id,
+                          timeId,
+                          true,
+                          "競技会使用",
+                          getValues("competition_fee3_7")
+                        );
+                      })
+                      .catch((error) => {});
+                  })
+                  .catch((error) => {});
               })
               .catch((error) => {});
             axios
@@ -1079,58 +1079,58 @@ const AddData = (props) => {
                   "営利目的使用（入場料なし）",
                   getValues("commercial_fee1_2")
                 );
-              })
-              .catch((error) => {});
-            axios
-              .post(ReservationUrls.TIME, {
-                name: getValues("commercial_time2"),
-              })
-              .then((response) => {
-                // 時間区分データのidを取得
-                const timeId = response.data.id;
-                // 料金データを追加
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "営利目的使用（入場料あり）",
-                  getValues("commercial_fee2_1")
-                );
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "営利目的使用（入場料なし）",
-                  getValues("commercial_fee2_2")
-                );
-              })
-              .catch((error) => {});
-            axios
-              .post(ReservationUrls.TIME, {
-                name: getValues("commercial_time3"),
-              })
-              .then((response) => {
-                // 時間区分データのidを取得
-                const timeId = response.data.id;
-                // 料金データを追加
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "営利目的使用（入場料あり）",
-                  getValues("commercial_fee3_1")
-                );
-                postFacilityFee(
-                  placeId,
-                  age5[0].id,
-                  timeId,
-                  true,
-                  "営利目的使用（入場料なし）",
-                  getValues("commercial_fee3_2")
-                );
+                axios
+                  .post(ReservationUrls.TIME, {
+                    name: getValues("commercial_time2"),
+                  })
+                  .then((response) => {
+                    // 時間区分データのidを取得
+                    const timeId = response.data.id;
+                    // 料金データを追加
+                    postFacilityFee(
+                      placeId,
+                      age5[0].id,
+                      timeId,
+                      true,
+                      "営利目的使用（入場料あり）",
+                      getValues("commercial_fee2_1")
+                    );
+                    postFacilityFee(
+                      placeId,
+                      age5[0].id,
+                      timeId,
+                      true,
+                      "営利目的使用（入場料なし）",
+                      getValues("commercial_fee2_2")
+                    );
+                    axios
+                      .post(ReservationUrls.TIME, {
+                        name: getValues("commercial_time3"),
+                      })
+                      .then((response) => {
+                        // 時間区分データのidを取得
+                        const timeId = response.data.id;
+                        // 料金データを追加
+                        postFacilityFee(
+                          placeId,
+                          age5[0].id,
+                          timeId,
+                          true,
+                          "営利目的使用（入場料あり）",
+                          getValues("commercial_fee3_1")
+                        );
+                        postFacilityFee(
+                          placeId,
+                          age5[0].id,
+                          timeId,
+                          true,
+                          "営利目的使用（入場料なし）",
+                          getValues("commercial_fee3_2")
+                        );
+                      })
+                      .catch((error) => {});
+                  })
+                  .catch((error) => {});
               })
               .catch((error) => {});
           }
