@@ -7,6 +7,9 @@ import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
 import ApprovalButton from "../listbutton/ApprovalButtom";
 import DisApprovalButtom from "../listbutton/DisApprovalButtom";
+import DocumentLayout from "../document/DocumentLayout";
+import { useSetRecoilState } from "recoil";
+import reseravationData from "../../recoil/reservation";
 
 const ApprovalInfo = (props) => {
   const unmountRef = useUnmountRef();
@@ -16,6 +19,7 @@ const ApprovalInfo = (props) => {
   const [usage, setUsage] = useSafeState(unmountRef, []);
   const [age, setAge] = useSafeState(unmountRef, []);
   const [defferdPayment, setDefferdPayment] = useSafeState(unmountRef, []);
+  const setReservationState = useSetRecoilState(reseravationData);
   const id = props.id;
 
   const pullReservation = () => {
@@ -28,6 +32,7 @@ const ApprovalInfo = (props) => {
         getAge(res.data.reservation.id);
         getDefferdPayment(res.data.reservation.id);
         setReservationId(res.data.reservation.id);
+        setReservationState({ id: res.data.id });
         setLoading(false);
       })
       .catch((error) => {
@@ -233,6 +238,11 @@ const ApprovalInfo = (props) => {
                   defferd_payment={defferdPayment}
                 />
               </>
+            ) : null}
+            {reservation.approval.name === "承認" ||
+            reservation.approval.name === "キャンセル" ||
+            reservation.approval.name === "不承認" ? (
+              <DocumentLayout />
             ) : null}
           </div>
         </div>

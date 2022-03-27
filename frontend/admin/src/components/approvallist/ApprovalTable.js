@@ -13,7 +13,7 @@ const ApprovalTable = (props) => {
 
   // ラジオボタンのチェック状態をstateに保存
   const handleChange = (e) => {
-    // reservation idをreservationStateにsetする
+    // approval application idをreservationStateにsetする
     setReservation({ id: e.target.id });
   };
   return (

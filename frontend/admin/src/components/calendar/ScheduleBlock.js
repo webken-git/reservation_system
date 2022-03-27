@@ -61,7 +61,7 @@ const ScheduleBlock = (props) => {
   } else if (props.schedule.approval.name === "不承認") {
     backgroundColor = "gray";
   } else if (props.schedule.approval.name === "キャンセル") {
-    backgroundColor = "red";
+    backgroundColor = "lightsteelblue";
   }
 
   const styleGenerator = useCallback(

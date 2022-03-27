@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 
 const SuspensionBlock = (props) => {
-
   const suspension = props.suspension;
   const hour = suspension.start.substr(11, 2);
   const endHour = suspension.end.substr(11, 2);
@@ -18,28 +17,17 @@ const SuspensionBlock = (props) => {
   );
 
   const styleGeneratorHandler = useCallback(() => {
-    let top = (hour-9) * 6 + 2;
+    let top = (hour - 9) * 6 + 2;
     let height = (endHour - hour) * 6;
 
     return styleGenerator(top, height);
-  }, [
-    styleGenerator,
-    suspension,
-    hour,
-    endHour,
-    props.change
-  ]);
+  }, [styleGenerator, suspension, hour, endHour, props.change]);
 
   return (
-    <div
-    className="schedule-block"
-    style={styleGeneratorHandler()}
-    >
-      <p>
-        予約停止中
-      </p>
+    <div className="schedule-block" style={styleGeneratorHandler()}>
+      <p>予約停止中</p>
     </div>
-  );  
+  );
 };
 
 export default SuspensionBlock;

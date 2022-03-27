@@ -129,6 +129,19 @@ const MonthlyCalendar = (props) => {
       </div>
 
       <div className="filter-base">
+        <div className="sp">
+          <div className="date-selector">
+            <div className="last-button" onClick={onClick(-1)}>
+              <FontAwesomeIcon icon={faChevronLeft} size="2x" />
+            </div>
+            <p>
+              {year}年{month}月
+            </p>
+            <div className="next-button" onClick={onClick(1)}>
+              <FontAwesomeIcon icon={faChevronRight} size="2x" />
+            </div>
+          </div>
+        </div>
         <select
           className="filter"
           defaultValue={approvals[0] && approvals[0].id}

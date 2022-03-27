@@ -38,6 +38,9 @@ const UserDetailButton = (props) => {
       .then((res) => {
         setMessage("削除しました");
         setLoading(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       })
       .catch((err) => {
         if (err.response.status === 403) {

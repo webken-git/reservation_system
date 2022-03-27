@@ -67,16 +67,25 @@ const Content = (props) => {
         },
       })
       .then((res) => {
-        const suspensionList = res.data;
-        setSuspensions(suspensionList);
+        setSuspensions(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const reservationCount = (scheduleList) => {
+  const reservationCount = (scheduleList, suspensions) => {
     let list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    suspensions.map((suspension, index) => {
+      let susStartHours = Number(suspension.start.substr(11, 2));
+      let susEndHours = Number(suspension.end.substr(11, 2));
+
+      for (let i = susStartHours; i < susEndHours; i++) {
+        list[i - 9] = 2;
+      }
+      return null;
+    });
 
     scheduleList.map((schedule, index) => {
       let startHours = Number(schedule.reservation.start.substr(11, 2));
@@ -123,7 +132,8 @@ const Content = (props) => {
           approvalDevide(scheduleList);
           suspensionPull();
         } else {
-          reservationCount(scheduleList);
+          suspensionPull();
+          reservationCount(scheduleList, suspensions);
         }
       })
       .catch((error) => {

@@ -46,7 +46,7 @@ class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
   queryset = ReservationSuspensionSchedule.objects.all()
   serializer_class = ReservationSuspensionScheduleSerializer
   # filter_fields = [f.name for f in ReservationSuspensionSchedule._meta.fields]
-  filter_fields = ['places__' + f.name for f in Place._meta.fields]
+  # filter_fields = ['places__' + f.name for f in Place._meta.fields]
   # filter_backends = [filters.DjangoFilterBackend]
   # filter_class = ReservationSuspensionScheduleFilter
   permission_classes = [permissions.ActionBasedPermission]
@@ -60,10 +60,23 @@ class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
   # @method_decorator(cache_page(TIME_OUTS_1HOUR))
   def list(self, request, *args, **kwargs):
     start = request.query_params.get('start', None)
-    if start:
-      queryset = self.filter_queryset(self.get_queryset())
+    place_id = request.query_params.get('places__id', None)
+    place_name = request.query_params.get('places__name', None)
+    if start and place_id:
+      queryset = self.queryset.filter(
+          places__id=place_id
+      )
       for item in queryset:
-        if str(item.start.strftime('%Y-%m-%d')) <= start <= str(item.end):
+        if str(item.start.strftime('%Y-%m-%d')) <= start <= str(item.end.strftime('%Y-%m-%d')):
+          serializer = self.get_serializer(item)
+          return response.Response([serializer.data])
+      return response.Response([], status=status.HTTP_204_NO_CONTENT)
+    elif start and place_name:
+      queryset = self.queryset.filter(
+          places__name=place_name
+      )
+      for item in queryset:
+        if str(item.start.strftime('%Y-%m-%d')) <= start <= str(item.end.strftime('%Y-%m-%d')):
           serializer = self.get_serializer(item)
           return response.Response([serializer.data])
       return response.Response([], status=status.HTTP_204_NO_CONTENT)
@@ -470,7 +483,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       # if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         # os.remove(pdf)
         # pythoncom.CoUninitialize()
-    elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == "4":
+    elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == 4:
       # 施設側からキャンセルされた場合
       # 施設側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='施設側からのキャンセルメール')

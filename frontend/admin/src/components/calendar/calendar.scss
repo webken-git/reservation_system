@@ -533,9 +533,12 @@ $breakpoints: (
         pointer-events: auto;
 
         p {
-          font-size: 0.8em;
+          font-size: 1.2rem;
           margin: 0;
           color: whitesmoke;
+          @include mq(sp) {
+            font-size: 0.8rem;
+          }
         }
       }
     }
@@ -593,7 +596,7 @@ $breakpoints: (
         pointer-events: auto;
         //z-index: 3;
         p {
-          font-size: 0.8em;
+          font-size: 1.2rem;
           margin: 0;
           color: whitesmoke;
         }
@@ -630,6 +633,7 @@ $breakpoints: (
     margin: 1% auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     @include mq(sp) {
       // width: 100%;
       margin: 10px auto;
@@ -637,6 +641,12 @@ $breakpoints: (
     .filter {
       width: 7rem;
       height: 30px;
+    }
+    .date-selector {
+      display: flex;
+      // justify-content: space-between;
+      align-items: center;
+      width: fit-content;
     }
   }
 

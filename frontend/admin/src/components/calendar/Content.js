@@ -42,8 +42,7 @@ const Content = (props) => {
         },
       })
       .then((res) => {
-        const suspensionList = res.data;
-        setSuspensions(suspensionList);
+        setSuspensions(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -121,7 +120,7 @@ const Content = (props) => {
         <div className="content-div"></div>
       </div>
       <div className="schedule-block-column">
-        {suspensions &&
+        {suspensions[0] &&
           suspensions.map((suspension, index) => {
             return (
               <SuspensionBlock
