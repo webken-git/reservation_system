@@ -7,10 +7,6 @@ const SuspensionBlock = (props) => {
   const endHour = suspension.end.substr(11, 2);
   let placeFlag = false;
 
-  // console.log(suspension)
-  // console.log(hour)
-  // console.log(endHour)
-
   suspension.places.map((place, index) =>
     place.name === props.placeFilter ? (placeFlag = true) : null
   );
@@ -21,7 +17,6 @@ const SuspensionBlock = (props) => {
     (top, height) => ({
       backgroundColor: backgroundColor,
       position: "absolute",
-      zIndex: "10",
       width: "100%",
       top: top ? top + "vh" : "0vh",
       height: height ? height + "vh" : "0vh",

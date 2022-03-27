@@ -22,7 +22,6 @@ const Content = (props) => {
   let approvals = [];
   let unapprovals = [];
   let typeBool = true;
-  let suspensionList = [];
 
   const approvalDevide = (scheduleList) => {
     scheduleList.map((schedule, index) => {

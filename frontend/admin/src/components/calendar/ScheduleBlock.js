@@ -70,6 +70,7 @@ const ScheduleBlock = (props) => {
       width: 100 / props.length + "%",
       top: top ? top + "vh" : "0vh",
       height: height ? height + "vh" : "0vh",
+      // Zindex: "auto",
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [backgroundColor]

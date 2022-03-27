@@ -38,7 +38,22 @@ const Content = (props) => {
         },
       })
       .then((res) => {
-        const suspensionList = res.data;
+        let suspensionList = [];
+        res.data.map((i, x) => {
+          let placeFlag = false;
+
+          i.places.map((j, y) => {
+            if(j.name === placeFilter){
+              placeFlag = true;
+            }
+            return null;
+          })
+
+          if(placeFlag) {
+            suspensionList.push(i);
+          }
+          return null;
+        })
         setSuspensions(suspensionList);
       })
       .catch((error) => {
