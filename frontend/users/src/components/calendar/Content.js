@@ -68,6 +68,7 @@ const Content = (props) => {
       .then((res) => {
         res.data.map((i, x) => {
           let placeFlag = false;
+          let suspensionList = [];
 
           i.places.map((j, y) => {
             if (j.name === placeName) {
