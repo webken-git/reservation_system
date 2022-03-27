@@ -18,8 +18,6 @@ import useUnmountRef from "../../hooks/useUnmountRef";
 import useSafeState from "../../hooks/useSafeState";
 import { ReservationUrls } from "../../utils/reservationUrls";
 
-
-
 const MonthlyCalendar = (props) => {
   const unmountRef = useUnmountRef();
   const dayList = props.dayList;
@@ -40,14 +38,14 @@ const MonthlyCalendar = (props) => {
     if (12 < nextMonth) {
       setMonth(1);
       setYear(year + 1);
-      setDate(new Date(year + 1, 0, 1))
+      setDate(new Date(year + 1, 0, 1));
     } else if (nextMonth < 1) {
       setMonth(12);
       setYear(year - 1);
-      setDate(new Date(year - 1, 11, 1))
+      setDate(new Date(year - 1, 11, 1));
     } else {
       setMonth(nextMonth);
-      setDate(new Date(date.getFullYear(), nextMonth - 1, 1))
+      setDate(new Date(date.getFullYear(), nextMonth - 1, 1));
     }
   };
 
@@ -68,7 +66,7 @@ const MonthlyCalendar = (props) => {
 
   useEffect(() => {
     setLoading(true);
-    let unmounted = false;
+    unmountRef.current = false;
     axios
       .get(`${process.env.REACT_APP_API}/api/approval-count-monthly/`, {
         params: {
@@ -82,18 +80,18 @@ const MonthlyCalendar = (props) => {
         setLoading(false);
 
         setApprovalList(approvalList);
-        if(approvals.length === 0){
+        if (approvals.length === 0) {
           getApprovalList();
         }
-
       })
       .catch((error) => {
         console.log(error);
       });
 
     return () => {
-      unmounted = true;
+      unmountRef.current = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month, approvalFilter, setApprovalFilter, setLoading]);
 
   return (

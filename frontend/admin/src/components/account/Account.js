@@ -50,7 +50,7 @@ export const Account = (props) => {
           <tbody>
             <tr className="mail-address">
               <td className="mail-pass-title">メールアドレス：</td>
-              <td className="mail-pass-body">{user.email}</td>
+              <td>{user.email}</td>
               <td>
                 <Link to="/account/email" className="link">
                   <span>変更</span>
@@ -59,7 +59,7 @@ export const Account = (props) => {
             </tr>
             <tr className="pass-word">
               <td className="mail-pass-title">パスワード：</td>
-              <td className="mail-pass-body">***************</td>
+              <td>***************</td>
               <td className="change-link">
                 <Link to="/account/password" className="link">
                   <span>変更</span>
