@@ -98,7 +98,7 @@ class Reservation(models.Model):
   place = models.ForeignKey(
       Place, verbose_name='place',
       blank=True, null=True,
-      related_name='reservation_place', on_delete=models.SET_NULL
+      related_name='reservation_place', on_delete=models.CASCADE
   )
   place_number = models.FloatField('シート数', default=1.0, validators=[
       validators.MinValueValidator(0.5),
