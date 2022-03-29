@@ -5,3 +5,4 @@ pyvenv.cfg
 /config/local.py
 
 .env
+.env.bak
