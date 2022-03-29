@@ -20,7 +20,7 @@ from users.models import User
 from reservations.models import *
 from reservations.serializers import *
 from reservations.funcs.filters import (
-    ReservationFilter, ReservationSuspensionScheduleFilter,
+    ReservationFilter,
     ApprovalApplicationFilter, ApprovalFilter
 )
 from reservations.funcs.csv import csv_export
@@ -45,10 +45,6 @@ TIME_OUTS_1MONTH = TIME_OUTS_1DAY * 30
 class ReservationSuspensionScheduleViewSet(viewsets.ModelViewSet):
   queryset = ReservationSuspensionSchedule.objects.all()
   serializer_class = ReservationSuspensionScheduleSerializer
-  # filter_fields = [f.name for f in ReservationSuspensionSchedule._meta.fields]
-  # filter_fields = ['places__' + f.name for f in Place._meta.fields]
-  # filter_backends = [filters.DjangoFilterBackend]
-  # filter_class = ReservationSuspensionScheduleFilter
   permission_classes = [permissions.ActionBasedPermission]
   action_permissions = {
       permissions.IsAdminUser: ['update', 'partial_update', 'create', 'destroy'],
