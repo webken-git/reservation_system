@@ -61,12 +61,16 @@ const ApprovalButton = (props) => {
         }, 500);
       })
       .catch((error) => {
-        // console.log(error)
-        setMessage("承認に失敗しました");
+        console.log(error);
+        if (error.response.data.error) {
+          setMessage(error.response.data.error);
+        } else {
+          setMessage("承認に失敗しました。");
+        }
         setLoading(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 500);
       });
   };
 
@@ -98,7 +102,7 @@ const ApprovalButton = (props) => {
                 <br />
                 発行された承認通知書のPDFファイルを添付し、メール送信ボタンを行います。
               </p>
-              {message && <p className="message">{message}</p>}
+              {message && <p className="red message">{message}</p>}
             </div>
             <div className="modal-form-group">
               {errors.usage_fee && (

@@ -1,5 +1,3 @@
-from contextlib import nullcontext
-from tracemalloc import start
 from django.db.models.aggregates import Count
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -375,9 +373,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_200_OK)
 
   def partial_update(self, request, *args, **kwargs):
-    super().partial_update(request, *args, **kwargs)
-
-    data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'], approval=request.data['approval_id'])
+    data = ApprovalApplication.objects.filter(reservation=request.data['reservation_id'])
 
     """送信元メールアドレス"""
     load_dotenv()
@@ -398,6 +394,21 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
     if request.data['approval_id'] == 2:
       # 承認された場合
       # 承認通知書を発行する場合
+      approval_reserve = ApprovalApplication.objects.filter(approval=2, reservation__place__id=data[0].reservation.place.id)
+      request_place_number = data[0].reservation.place_number
+      request_start = data[0].reservation.start
+      request_end = data[0].reservation.end
+      max = data[0].reservation.place.max
+      counter = 0
+      for i in approval_reserve:
+        # 承認された予約が同じ場所で、開始時間や終了時間が重複していないかチェック
+        if str(i.reservation.start - datetime.timedelta(hours=1)) <= str(request_start) <= str(i.reservation.end + datetime.timedelta(hours=1)) or str(i.reservation.start - datetime.timedelta(hours=1)) <= str(request_end) <= str(i.reservation.end + datetime.timedelta(hours=1)):
+          # 重複している場合
+          counter += i.reservation.place_number
+          # 予約数が最大数を超えている場合
+          if counter + request_place_number > max:
+            return response.Response({'error': '※予約可能なシート数の上限を超えているため、承認できませんでした。'}, status=status.HTTP_400_BAD_REQUEST)
+
       if request.data['is_issued'] is True:
         # pythoncom.CoInitialize()
         BASE_DIR = settings.BASE_DIR
@@ -444,6 +455,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       # if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         # os.remove(pdf)
         # pythoncom.CoUninitialize()
+      super().partial_update(request, *args, **kwargs)
+
     elif request.data['approval_id'] == 3:
       # 予約が不承認された場合
       if request.data['is_issued'] is True:
@@ -492,6 +505,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       # if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         # os.remove(pdf)
         # pythoncom.CoUninitialize()
+      super().partial_update(request, *args, **kwargs)
     elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == 4:
       # 施設側からキャンセルされた場合
       # 施設側からのキャンセルメール送信
@@ -511,6 +525,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
+      super().partial_update(request, *args, **kwargs)
     elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == 4:
       # 利用者側からキャンセルされた場合
       # 利用者側からのキャンセルメール送信
@@ -530,6 +545,7 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
+      super().partial_update(request, *args, **kwargs)
     else:
       pass
     return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_201_CREATED)
