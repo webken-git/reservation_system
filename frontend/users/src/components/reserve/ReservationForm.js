@@ -87,6 +87,9 @@ export const ReservationForm = React.forwardRef(
       const start = startDate.concat(" ", startTime);
       const end = endDate.concat(" ", endTime);
       const age = getValues("ageGroup");
+      const placeNumber = getValues("placeNumber")
+        ? getValues("placeNumber")
+        : 0;
       // 予約情報が予約停止期間に含まれているかどうかチェック
       axios
         .get(ReservationUrls.SUSPENSION_CHECK, {
@@ -104,6 +107,7 @@ export const ReservationForm = React.forwardRef(
                 reservation__place: placeId,
                 reservation__start: start,
                 reservation__end: end,
+                reservation__place_number: placeNumber,
               },
             })
             .then((res) => {

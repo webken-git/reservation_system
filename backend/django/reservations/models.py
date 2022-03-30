@@ -287,7 +287,7 @@ class FacilityFee(models.Model):
   )
   is_group = models.BooleanField('is_group', default=False)
   purpose = models.CharField('使用目的', max_length=15, blank=True, null=True)
-  fee = models.IntegerField('料金')
+  fee = models.CharField('料金', max_length=10, blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
