@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from contextlib import nullcontext
 from tracemalloc import start
 from django.db.models.aggregates import Count
