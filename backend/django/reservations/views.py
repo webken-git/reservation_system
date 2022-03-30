@@ -1,3 +1,5 @@
+from asyncio.windows_events import NULL
+from contextlib import nullcontext
 from tracemalloc import start
 from django.db.models.aggregates import Count
 from django.utils.decorators import method_decorator
@@ -243,13 +245,25 @@ class ReserveCheckViewSet(viewsets.ReadOnlyModelViewSet):
     start = request.query_params.get('reservation__start', None)
     end = request.query_params.get('reservation__end', None)
     place = request.query_params.get('reservation__place', None)
-    if start and end and place:
+    place_number = request.query_params.get('reservation__place_number', None)
+    if start and end and place and place_number == 0:
       queryset = self.get_queryset().filter(reservation__place=place)
       for entity in queryset:
         if str(entity.reservation.start - datetime.timedelta(hours=1)) <= start <= str(entity.reservation.end + datetime.timedelta(hours=1)):
           return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
         elif str(entity.reservation.start - datetime.timedelta(hours=1)) <= end <= str(entity.reservation.end + datetime.timedelta(hours=1)):
           return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
+      return super().list(request, *args, **kwargs)
+    elif start and end and place and place_number > "0":
+      counter = 0
+      queryset = self.get_queryset().filter(reservation__place=place)
+      for entity in queryset:
+        if str(entity.reservation.start - datetime.timedelta(hours=1)) <= start <= str(entity.reservation.end + datetime.timedelta(hours=1)) or str(entity.reservation.start - datetime.timedelta(hours=1)) <= end <= str(entity.reservation.end + datetime.timedelta(hours=1)):
+          counter += entity.reservation.place_number
+          # print(counter)
+          # counterがentity.reservation.place.maxを超えたら予約不可
+          if counter >= entity.reservation.place.max:
+            return response.Response({'error': {'入力された日時は予約できません。'}}, status=status.HTTP_400_BAD_REQUEST)
       return super().list(request, *args, **kwargs)
     else:
       return super().list(request, *args, **kwargs)

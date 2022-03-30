@@ -88,12 +88,28 @@ const EditGroupFeeList = (props) => {
     return timeList.push({
       timeId: feelist.time.id,
       timeName: feelist.time.name,
+      purpose: feelist.purpose,
     });
   });
-  // timeListから重複しているデータを削除
+  // timeIdListから重複しているデータを削除
   timeList = timeList.filter(
     (timeId, index, self) =>
-      index === self.findIndex((t) => t.timeId === timeId.timeId)
+      index ===
+      self.findIndex(
+        (t) => t.timeId === timeId.timeId && t.purpose === timeId.purpose
+      )
+  );
+
+  const group = timeList.filter((timeList) => timeList.purpose === "団体使用");
+  group.sort((a, b) => a.timeId - b.timeId);
+  const competition = timeList.filter(
+    (timeList) => timeList.purpose === "競技会使用"
+  );
+  const commercial = timeList.filter(
+    (timeList) => timeList.purpose === "営利目的使用（入場料あり）"
+  );
+  const privates = timeList.filter(
+    (timeList) => timeList.purpose === "個人使用"
   );
 
   //料金表
@@ -400,7 +416,7 @@ const EditGroupFeeList = (props) => {
   };
 
   // リストに値が入っているか確認
-  if (timeList === 0) {
+  if (age1.length === 0 || purpose1.length === 0 || timeList.length === 0) {
     return <Loading />;
   } else {
     return (
@@ -447,14 +463,13 @@ const EditGroupFeeList = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {timeList.map((time, index) => (
+                {privates.map((time, index) => (
                   <tr key={time.timeId}>
                     <td>{time.timeName}</td>
                     <td>
                       <input
                         type="text"
                         name={`fee1-${index}`}
-                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -465,10 +480,6 @@ const EditGroupFeeList = (props) => {
                         }
                         {...register(`fee1-${index}`, {
                           required: "※必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "※半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) =>
                           onChange(
@@ -489,7 +500,6 @@ const EditGroupFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee2-${index}`}
-                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -500,10 +510,6 @@ const EditGroupFeeList = (props) => {
                         }
                         {...register(`fee2-${index}`, {
                           required: "※必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "※半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -524,7 +530,6 @@ const EditGroupFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee3-${index}`}
-                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -535,10 +540,6 @@ const EditGroupFeeList = (props) => {
                         }
                         {...register(`fee3-${index}`, {
                           required: "※必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "※半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -559,7 +560,6 @@ const EditGroupFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee4-${index}`}
-                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -570,10 +570,6 @@ const EditGroupFeeList = (props) => {
                         }
                         {...register(`fee4-${index}`, {
                           required: "※必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "※半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -594,7 +590,6 @@ const EditGroupFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee5-${index}`}
-                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -605,10 +600,6 @@ const EditGroupFeeList = (props) => {
                         }
                         {...register(`fee5-${index}`, {
                           required: "※必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "※半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -629,7 +620,6 @@ const EditGroupFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee6-${index}`}
-                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -640,10 +630,6 @@ const EditGroupFeeList = (props) => {
                         }
                         {...register(`fee6-${index}`, {
                           required: "※必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "※半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) =>
                           onChange(
@@ -664,7 +650,6 @@ const EditGroupFeeList = (props) => {
                       <input
                         type="text"
                         name={`fee7-${index}`}
-                        inputMode="numeric"
                         defaultValue={
                           feelistData.find(
                             (feelist) =>
@@ -675,10 +660,6 @@ const EditGroupFeeList = (props) => {
                         }
                         {...register(`fee7-${index}`, {
                           required: "※必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "※半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) =>
                           onChange(
@@ -714,7 +695,7 @@ const EditGroupFeeList = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {timeList.map((time, index) => (
+                {group.map((time, index) => (
                   <tr key={time.timeId}>
                     <td>{time.timeName}</td>
                     <td>
@@ -995,7 +976,7 @@ const EditGroupFeeList = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {timeList.map((time, index) => (
+                {competition.map((time, index) => (
                   <tr key={time.timeId}>
                     <td>{time.timeName}</td>
                     <td>
@@ -1271,7 +1252,7 @@ const EditGroupFeeList = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {timeList.map((time, index) => (
+                {commercial.map((time, index) => (
                   <tr key={time.timeId}>
                     <td>{time.timeName}</td>
                     <td>

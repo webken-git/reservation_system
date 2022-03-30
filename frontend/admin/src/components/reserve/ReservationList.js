@@ -119,6 +119,7 @@ export const ReservationList = () => {
     const end = endDate.concat(" ", endTime);
     const placeId = e.placeId;
     const age = getValues("ageGroup");
+    const placeNumber = getValues("placeNumber") ? getValues("placeNumber") : 0;
 
     // 予約情報が予約停止期間に含まれているかどうかチェック
     axios
@@ -137,6 +138,7 @@ export const ReservationList = () => {
               reservation__place: placeId,
               reservation__start: start,
               reservation__end: end,
+              reservation__place_number: placeNumber,
             },
           })
           .then((res) => {
