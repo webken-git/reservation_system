@@ -97,7 +97,7 @@ const AddData = (props) => {
           // 時間区分データを追加
           axios
             .post(ReservationUrls.TIME, {
-              name: getValues("normal_time1"),
+              name: getValues("normal_time1") ? getValues("normal_time1") : "-",
             })
             .then((response) => {
               // 時間区分データのidを取得
@@ -109,7 +109,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1_1")
+                getValues("normal_fee1_1") ? getValues("normal_fee1_1") : "-"
               );
               postFacilityFee(
                 placeId,
@@ -117,7 +117,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1_2")
+                getValues("normal_fee1_2") ? getValues("normal_fee1_2") : "-"
               );
               postFacilityFee(
                 placeId,
@@ -125,7 +125,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1_3")
+                getValues("normal_fee1_3") ? getValues("normal_fee1_3") : "-"
               );
               postFacilityFee(
                 placeId,
@@ -133,7 +133,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1_4")
+                getValues("normal_fee1_4") ? getValues("normal_fee1_4") : "-"
               );
               postFacilityFee(
                 placeId,
@@ -141,7 +141,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1_5")
+                getValues("normal_fee1_5") ? getValues("normal_fee1_5") : "-"
               );
               postFacilityFee(
                 placeId,
@@ -149,7 +149,7 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1_6")
+                getValues("normal_fee1_6") ? getValues("normal_fee1_6") : "-"
               );
               postFacilityFee(
                 placeId,
@@ -157,11 +157,13 @@ const AddData = (props) => {
                 timeId,
                 isGroup,
                 "その他",
-                getValues("normal_fee1_7")
+                getValues("normal_fee1_7") ? getValues("normal_fee1_7") : "-"
               );
               axios
                 .post(ReservationUrls.TIME, {
-                  name: getValues("normal_time2"),
+                  name: getValues("normal_time2")
+                    ? getValues("normal_time2")
+                    : "-",
                 })
                 .then((response) => {
                   // 時間区分データのidを取得
@@ -174,6 +176,8 @@ const AddData = (props) => {
                     isGroup,
                     "その他",
                     getValues("normal_fee2_1")
+                      ? getValues("normal_fee2_1")
+                      : "-"
                   );
                   postFacilityFee(
                     placeId,
@@ -182,6 +186,8 @@ const AddData = (props) => {
                     isGroup,
                     "その他",
                     getValues("normal_fee2_2")
+                      ? getValues("normal_fee2_2")
+                      : "-"
                   );
                   postFacilityFee(
                     placeId,
@@ -190,6 +196,8 @@ const AddData = (props) => {
                     isGroup,
                     "その他",
                     getValues("normal_fee2_3")
+                      ? getValues("normal_fee2_3")
+                      : "-"
                   );
                   postFacilityFee(
                     placeId,
@@ -198,6 +206,8 @@ const AddData = (props) => {
                     isGroup,
                     "その他",
                     getValues("normal_fee2_4")
+                      ? getValues("normal_fee2_4")
+                      : "-"
                   );
                   postFacilityFee(
                     placeId,
@@ -206,6 +216,8 @@ const AddData = (props) => {
                     isGroup,
                     "その他",
                     getValues("normal_fee2_5")
+                      ? getValues("normal_fee2_5")
+                      : "-"
                   );
                   postFacilityFee(
                     placeId,
@@ -214,6 +226,8 @@ const AddData = (props) => {
                     isGroup,
                     "その他",
                     getValues("normal_fee2_6")
+                      ? getValues("normal_fee2_6")
+                      : "-"
                   );
                   postFacilityFee(
                     placeId,
@@ -222,10 +236,14 @@ const AddData = (props) => {
                     isGroup,
                     "その他",
                     getValues("normal_fee2_7")
+                      ? getValues("normal_fee2_7")
+                      : "-"
                   );
                   axios
                     .post(ReservationUrls.TIME, {
-                      name: getValues("normal_time3"),
+                      name: getValues("normal_time3")
+                        ? getValues("normal_time3")
+                        : "-",
                     })
                     .then((response) => {
                       // 時間区分データのidを取得
@@ -238,6 +256,8 @@ const AddData = (props) => {
                         isGroup,
                         "その他",
                         getValues("normal_fee3_1")
+                          ? getValues("normal_fee3_1")
+                          : "-"
                       );
                       postFacilityFee(
                         placeId,
@@ -246,6 +266,8 @@ const AddData = (props) => {
                         isGroup,
                         "その他",
                         getValues("normal_fee3_2")
+                          ? getValues("normal_fee3_2")
+                          : "-"
                       );
                       postFacilityFee(
                         placeId,
@@ -254,6 +276,8 @@ const AddData = (props) => {
                         isGroup,
                         "その他",
                         getValues("normal_fee3_3")
+                          ? getValues("normal_fee3_3")
+                          : "-"
                       );
                       postFacilityFee(
                         placeId,
@@ -262,6 +286,8 @@ const AddData = (props) => {
                         isGroup,
                         "その他",
                         getValues("normal_fee3_4")
+                          ? getValues("normal_fee3_4")
+                          : "-"
                       );
                       postFacilityFee(
                         placeId,
@@ -270,6 +296,8 @@ const AddData = (props) => {
                         isGroup,
                         "その他",
                         getValues("normal_fee3_5")
+                          ? getValues("normal_fee3_5")
+                          : "-"
                       );
                       postFacilityFee(
                         placeId,
@@ -278,6 +306,8 @@ const AddData = (props) => {
                         isGroup,
                         "その他",
                         getValues("normal_fee3_6")
+                          ? getValues("normal_fee3_6")
+                          : "-"
                       );
                       postFacilityFee(
                         placeId,
@@ -286,6 +316,8 @@ const AddData = (props) => {
                         isGroup,
                         "その他",
                         getValues("normal_fee3_7")
+                          ? getValues("normal_fee3_7")
+                          : "-"
                       );
                     })
                     .catch((error) => {});
@@ -1361,6 +1393,10 @@ const AddData = (props) => {
                 {/* {errors.normal_fee && (
                   <p className="red">{errors.normal_fee.message}</p>
                 )} */}
+                <p className="red">
+                  ※以下の項目を未入力の状態で施設追加する場合、
+                  その項目は全て「-」と表示されます
+                </p>
                 <table>
                   <thead>
                     <tr>
@@ -1376,20 +1412,13 @@ const AddData = (props) => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td
-                        style={
-                          errors.normal_time1 && {
-                            borderStyle: "double",
-                            borderColor: "#d32f2f",
-                          }
-                        }
-                      >
+                      <td>
                         <input
                           type="text"
                           name="normal_time1"
                           placeholder="午前（09時〜13時）"
                           {...register("normal_time1", {
-                            required: "※必須項目です",
+                            required: false,
                           })}
                         />
                       </td>
@@ -1407,7 +1436,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee1_1", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1429,7 +1457,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee1_2", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1451,7 +1478,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee1_3", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1473,7 +1499,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee1_4", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1495,7 +1520,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee1_5", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1517,7 +1541,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee1_6", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1539,7 +1562,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee1_7", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1549,20 +1571,13 @@ const AddData = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td
-                        style={
-                          errors.normal_time2 && {
-                            borderStyle: "double",
-                            borderColor: "#d32f2f",
-                          }
-                        }
-                      >
+                      <td>
                         <input
                           type="text"
                           name="normal_time2"
                           placeholder="午後（13時〜17時）"
                           {...register("normal_time2", {
-                            required: "※必須項目です",
+                            required: false,
                           })}
                         />
                       </td>
@@ -1580,7 +1595,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee2_1", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1602,7 +1616,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee2_2", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1624,7 +1637,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee2_3", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1646,7 +1658,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee2_4", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1668,7 +1679,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee2_5", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1690,7 +1700,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee2_6", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1712,7 +1721,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee2_7", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1722,20 +1730,13 @@ const AddData = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td
-                        style={
-                          errors.normal_time3 && {
-                            borderStyle: "double",
-                            borderColor: "#d32f2f",
-                          }
-                        }
-                      >
+                      <td>
                         <input
                           type="text"
                           name="normal_time3"
                           placeholder="夜間（17時〜21時）"
                           {...register("normal_time3", {
-                            required: "※必須項目です",
+                            required: false,
                           })}
                         />
                       </td>
@@ -1753,7 +1754,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee3_1", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1775,7 +1775,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee3_2", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1797,7 +1796,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee3_3", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1819,7 +1817,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee3_4", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1841,7 +1838,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee3_5", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1863,7 +1859,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee3_6", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1885,7 +1880,6 @@ const AddData = (props) => {
                           inputMode="numeric"
                           autoComplete="off"
                           {...register("normal_fee3_7", {
-                            required: "※必須項目です",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "※半角数字で入力してください",
@@ -1926,6 +1920,9 @@ const AddData = (props) => {
                             type="text"
                             name="private_time1"
                             placeholder="午前（09時〜13時）"
+                            {...register("private_time1", {
+                              required: false,
+                            })}
                           />
                         </td>
                         <td
@@ -2082,6 +2079,9 @@ const AddData = (props) => {
                             type="text"
                             name="private_time2"
                             placeholder="午後（13時〜17時）"
+                            {...register("private_time2", {
+                              required: false,
+                            })}
                           />
                         </td>
                         <td
@@ -2238,6 +2238,9 @@ const AddData = (props) => {
                             type="text"
                             name="private_time3"
                             placeholder="夜間（17時〜21時）"
+                            {...register("private_time3", {
+                              required: false,
+                            })}
                           />
                         </td>
                         <td
