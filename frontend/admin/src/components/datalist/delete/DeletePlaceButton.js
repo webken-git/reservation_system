@@ -22,12 +22,15 @@ const DeletePlaceButton = (props) => {
     axios
       .delete(`${ReservationUrls.PLACE}${place_id}/`)
       .then((response) => {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+          window.location.reload();
+        }, 1500);
       })
       .catch((error) => {
         setLoading(false);
+        window.location.reload();
       });
-    window.location.reload();
   };
 
   return (
