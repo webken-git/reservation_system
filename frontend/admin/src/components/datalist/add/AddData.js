@@ -1201,11 +1201,12 @@ const AddData = (props) => {
               .catch((error) => {});
           }
         }
+        window.scrollTo(0, 0);
         setTimeout(() => {
           setMessage("登録しました");
           setLoading(false);
           window.location.href = "/data-list";
-        }, 2000);
+        }, 3000);
       })
       .catch((error) => {
         setMessage("登録に失敗しました");
