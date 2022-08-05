@@ -446,10 +446,6 @@ const EditFeeList = (props) => {
                         }
                         {...register(`fee1-${index}`, {
                           required: "必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) =>
                           onChange(
@@ -482,10 +478,6 @@ const EditFeeList = (props) => {
                         }
                         {...register(`fee2-${index}`, {
                           required: "必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -518,10 +510,6 @@ const EditFeeList = (props) => {
                         }
                         {...register(`fee3-${index}`, {
                           required: "必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -554,10 +542,6 @@ const EditFeeList = (props) => {
                         }
                         {...register(`fee4-${index}`, {
                           required: "必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -590,10 +574,6 @@ const EditFeeList = (props) => {
                         }
                         {...register(`fee5-${index}`, {
                           required: "必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) => {
                           onChange(
@@ -625,10 +605,6 @@ const EditFeeList = (props) => {
                         }
                         {...register(`fee6-${index}`, {
                           required: "必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) =>
                           onChange(
@@ -660,10 +636,6 @@ const EditFeeList = (props) => {
                         }
                         {...register(`fee7-${index}`, {
                           required: "必須項目です",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "半角数字で入力してください",
-                          },
                         })}
                         onChange={(e) =>
                           onChange(

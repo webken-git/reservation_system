@@ -131,6 +131,10 @@ const Login = () => {
                   value: 8,
                   message: "※パスワードは8文字以上入力してください",
                 },
+                pattern: {
+                  value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i,
+                  message: "※英字と数字の両方を含めてください",
+                },
               })}
               value={password}
               onChange={(e) => setPassword(e.target.value)}

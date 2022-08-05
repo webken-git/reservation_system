@@ -319,6 +319,12 @@ const AddData = (props) => {
                           ? getValues("normal_fee3_7")
                           : "-"
                       );
+                      window.scrollTo(0, 0);
+                      setTimeout(() => {
+                        setMessage("登録しました");
+                        setLoading(false);
+                        window.location.href = "/data-list";
+                      }, 3500);
                     })
                     .catch((error) => {});
                 })
@@ -721,6 +727,12 @@ const AddData = (props) => {
                   "営利目的使用（入場料なし）",
                   getValues("commercial_fee_2")
                 );
+                window.scrollTo(0, 0);
+                setTimeout(() => {
+                  setMessage("登録しました");
+                  setLoading(false);
+                  window.location.href = "/data-list";
+                }, 4000);
               })
               .catch((error) => {});
           } else if (max === 1) {
@@ -1193,6 +1205,12 @@ const AddData = (props) => {
                           "営利目的使用（入場料なし）",
                           getValues("commercial_fee3_2")
                         );
+                        window.scrollTo(0, 0);
+                        setTimeout(() => {
+                          setMessage("登録しました");
+                          setLoading(false);
+                          window.location.href = "/data-list";
+                        }, 3000);
                       })
                       .catch((error) => {});
                   })
@@ -1201,12 +1219,6 @@ const AddData = (props) => {
               .catch((error) => {});
           }
         }
-        window.scrollTo(0, 0);
-        setTimeout(() => {
-          setMessage("登録しました");
-          setLoading(false);
-          window.location.href = "/data-list";
-        }, 3000);
       })
       .catch((error) => {
         setMessage("登録に失敗しました");
