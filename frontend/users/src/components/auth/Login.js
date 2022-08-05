@@ -125,7 +125,7 @@ const Login = () => {
             className="auth-page__form-input"
             type="email"
             name="email"
-            placeholder="samlple@example.com"
+            placeholder="sample@example.com"
             autoComplete="off"
             // id="email"
             {...register("email", {

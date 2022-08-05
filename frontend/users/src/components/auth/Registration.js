@@ -47,7 +47,7 @@ const Registration = (props) => {
         // アカウント作成処理が失敗した場合
         // ローディング画面を非表示
         setLoading(false);
-        setSuccess("アカウント作成に失敗しました。");
+        setSuccess(err.response.data.password1);
       });
   };
 
@@ -76,7 +76,7 @@ const Registration = (props) => {
             className="auth-page__form-input"
             type="email"
             name="email"
-            placeholder="samlple@example.com"
+            placeholder="sample@example.com"
             autoComplete="off"
             // id="email"
             {...register("email", {
@@ -110,6 +110,10 @@ const Registration = (props) => {
                 minLength: {
                   value: 8,
                   message: "※パスワードは8文字以上入力してください",
+                },
+                pattern: {
+                  value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i,
+                  message: "※英字と数字の両方を含めてください",
                 },
               })}
               value={password}

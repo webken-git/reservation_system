@@ -73,6 +73,10 @@ const PassWordChange = () => {
                   value: 8,
                   message: "※パスワードは8文字以上入力してください",
                 },
+                pattern: {
+                  value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i,
+                  message: "※英字と数字の両方を含めてください",
+                },
               })}
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
@@ -119,6 +123,10 @@ const PassWordChange = () => {
                 minLength: {
                   value: 8,
                   message: "※パスワードは8文字以上入力してください",
+                },
+                pattern: {
+                  value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i,
+                  message: "※英字と数字の両方を含めてください",
                 },
               })}
               value={newPassword}

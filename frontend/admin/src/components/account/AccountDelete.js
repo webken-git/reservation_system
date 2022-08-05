@@ -106,7 +106,7 @@ const AccountDelete = (props) => {
             className="auth-page__form-input"
             type="email"
             name="email"
-            placeholder="samlple@example.com"
+            placeholder="sample@example.com"
             autoComplete="off"
             // id="email"
             {...register("email", {
@@ -138,6 +138,10 @@ const AccountDelete = (props) => {
                 minLength: {
                   value: 8,
                   message: "※パスワードは8文字以上入力してください",
+                },
+                pattern: {
+                  value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i,
+                  message: "※英字と数字の両方を含めてください",
                 },
               })}
               value={password}
