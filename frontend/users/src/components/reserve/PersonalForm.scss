@@ -4,6 +4,11 @@
   }
   .personal-input {
     width: 300px;
+    ime-mode: active;
+  }
+  .personal-input-tel {
+    width: 300px;
+    ime-mode: inactive;
   }
 }
 
