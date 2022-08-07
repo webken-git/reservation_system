@@ -261,7 +261,7 @@ export const PersonalForm = (props) => {
                   }
                   render={({ field }) => (
                     <TextField
-                      className="personal-input"
+                      className="personal-input-tel"
                       {...field}
                       inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                       variant="outlined"

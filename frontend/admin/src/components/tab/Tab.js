@@ -153,7 +153,7 @@ const TabContainer = () => {
     // divide_feelistにデータがある場合
     if (divide_feelist.length > 0) {
       setSelectFeeList(divide_feelist[0].data);
-      return true;
+      // return true;
     }
     const selectEquipment = equipment.filter((eq) => {
       return eq.place[0].name === pn;

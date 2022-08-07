@@ -40,7 +40,7 @@ const TabContent = (props) => {
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
-              <ReservationForm placeLists={place} />
+              <ReservationForm placeLists={place} equipment={props.equipment} />
             )}
           </div>
         </TabPanel>
@@ -64,7 +64,7 @@ const TabContent = (props) => {
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
-              <ReservationForm placeLists={place} />
+              <ReservationForm placeLists={place} equipment={props.equipment} />
             )}
           </div>
         </TabPanel>
@@ -88,7 +88,7 @@ const TabContent = (props) => {
               />
             </details>
             {props.CheckAuth.isAuthenticated === true && (
-              <ReservationForm placeLists={place} />
+              <ReservationForm placeLists={place} equipment={props.equipment} />
             )}
           </div>
         </TabPanel>

@@ -11,7 +11,6 @@ import {
   deferredPayment,
   curlingTimetable,
 } from "./FormDataList";
-import { format } from "date-fns";
 import form from "./ReservationForm.module.scss";
 import { formData, popupState } from "../../recoil/form/atom";
 import tabState from "../../recoil/tab";
@@ -80,8 +79,18 @@ export const ReservationForm = React.forwardRef(
     const onSubmit = (e) => {
       setErrorMessage("");
       //このままだとbackend側で使えないのでyyyy-LL-ddに変換
-      const startDate = format(e.startDate, "yyyy-LL-dd");
-      const endDate = format(e.endDate, "yyyy-LL-dd");
+      const startDate =
+        new Date(e.startDate).getFullYear() +
+        "-" +
+        (new Date(e.startDate).getMonth() + 1) +
+        "-" +
+        new Date(e.startDate).getDate();
+      const endDate =
+        new Date(e.endDate).getFullYear() +
+        "-" +
+        (new Date(e.endDate).getMonth() + 1) +
+        "-" +
+        new Date(e.endDate).getDate();
       const startTime = e.startTime;
       const endTime = e.endTime;
       const start = startDate.concat(" ", startTime);
@@ -509,6 +518,7 @@ export const ReservationForm = React.forwardRef(
                             label="年/月/日"
                             mask="____/__/__"
                             minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
+                            inputFormat="yyyy/MM/dd"
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -628,6 +638,7 @@ export const ReservationForm = React.forwardRef(
                             label="年/月/日"
                             mask="____/__/__"
                             minDate={new Date().getTime() + 1000 * 60 * 60 * 24}
+                            inputFormat="yyyy/MM/dd"
                             renderInput={(params) => (
                               <TextField
                                 {...params}

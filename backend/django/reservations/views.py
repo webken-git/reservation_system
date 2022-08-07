@@ -408,6 +408,8 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           # 予約数が最大数を超えている場合
           if counter + request_place_number > max:
             return response.Response({'error': '※予約可能なシート数の上限を超えているため、承認できませんでした。'}, status=status.HTTP_400_BAD_REQUEST)
+      # この時点でデータ更新する
+      super().partial_update(request, *args, **kwargs)
 
       if request.data['is_issued'] is True:
         # pythoncom.CoInitialize()
@@ -455,10 +457,11 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       # if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         # os.remove(pdf)
         # pythoncom.CoUninitialize()
-      super().partial_update(request, *args, **kwargs)
 
     elif request.data['approval_id'] == 3:
       # 予約が不承認された場合
+      # データ更新する
+      super().partial_update(request, *args, **kwargs)
       if request.data['is_issued'] is True:
         # pythoncom.CoInitialize()
         BASE_DIR = settings.BASE_DIR
@@ -505,9 +508,10 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
       # if request.data['is_issued'] is True and request.data['is_send_mail'] is True:
         # os.remove(pdf)
         # pythoncom.CoUninitialize()
-      super().partial_update(request, *args, **kwargs)
     elif User.objects.get(email=request.user).is_staff is True and request.data['approval_id'] == 4:
       # 施設側からキャンセルされた場合
+      # データ更新する
+      super().partial_update(request, *args, **kwargs)
       # 施設側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='施設側からのキャンセルメール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/facility_side_cancel_message.txt'
@@ -525,9 +529,10 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-      super().partial_update(request, *args, **kwargs)
     elif User.objects.get(email=request.user).is_staff is False and request.data['approval_id'] == 4:
       # 利用者側からキャンセルされた場合
+      # データ更新する
+      super().partial_update(request, *args, **kwargs)
       # 利用者側からのキャンセルメール送信
       automail = AutoMail.objects.get(name='利用者側からのキャンセルメール')
       file_path = settings.BASE_DIR + '/templates/reservations/email/user_side_cancel_message.txt'
@@ -545,7 +550,6 @@ class ApprovalApplicationViewSet(viewsets.ModelViewSet):
           bcc=[from_email]
       )
       email.send()
-      super().partial_update(request, *args, **kwargs)
     else:
       pass
     return response.Response(ApprovalApplicationSerializer(data[0]).data, status=status.HTTP_201_CREATED)
