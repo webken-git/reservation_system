@@ -39,7 +39,7 @@ INSTALLED_APPS = [
 
     # 3rd party
     'rest_framework',
-    # 'rest_framework.authtoken',
+    'rest_framework.authtoken',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'drf_spectacular',
-    'phonenumber_field',
 
     'django.contrib.admin',
     'django.contrib.auth',
